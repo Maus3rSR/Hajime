@@ -73,7 +73,7 @@
     "chai": "^4.0.0",
     "chalk": "^2.1.0",
     "copy-webpack-plugin": "^4.0.1",
-    "cross-env": "^5.0.5",
+    "cross-env": "^5.1.6",
     "css-loader": "^0.28.4",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
