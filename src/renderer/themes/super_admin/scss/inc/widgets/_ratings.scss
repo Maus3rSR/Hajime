@@ -1,0 +1,35 @@
+.widget-ratings__star {
+  font-size: 1.5rem;
+  color: rgba($white, 0.3);
+  margin: -1.7rem 0 0;
+
+  .active {
+    color: $yellow;
+  }
+}
+
+.widget-ratings__item {
+  @include clearfix();
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+
+  .float-left {
+    .zmdi {
+      font-size: 1.5rem;
+      vertical-align: top;
+      color: $yellow;
+      position: relative;
+      top: -0.05rem;
+      margin-left: 0.35rem;
+    }
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.widget-ratings__progress {
+  overflow: hidden;
+  padding: 0.65rem 1.5rem;
+}

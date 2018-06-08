@@ -1,0 +1,66 @@
+.alert {
+  padding: $alert-padding-y $alert-padding-x;
+  margin-bottom: $alert-margin-bottom;
+  border: $alert-border-width solid transparent;
+  @include border-radius($alert-border-radius);
+}
+
+.alert-link {
+  font-weight: $alert-link-font-weight;
+  color: $white;
+  border-bottom: 1px dotted rgba($white, 0.4);
+
+  &:hover,
+  &:focus {
+    opacity: 0.9;
+    color: $white;
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .alert-#{$color} {
+    @include alert-variant($value, $value, $value);
+  }
+}
+
+.alert-heading {
+  font-weight: $font-weight-bold;
+  font-size: 1.1rem;
+  margin: 0.15rem 0 1rem;
+  color: inherit;
+}
+
+.alert-dismissible {
+  .close {
+    margin-left: 2rem;
+
+    & > span:not(.sr-only) {
+      @include transition(opacity 300ms);
+      background-color: rgba($white, 0.2);
+      opacity: 0.8;
+      line-height: 17px;
+      height: 19px;
+      width: 19px;
+      border-radius: 50%;
+      font-size: 1rem;
+      display: block;
+      font-weight: $font-weight-bold;
+      color: $white;
+    }
+
+    &:hover,
+    &:focus {
+      span:not(.sr-only) {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.alert--notify {
+  &:not(.alert-info):not(.alert-success):not(.alert-warning):not(.alert-danger) {
+    background-color: $bg-highlighted-darkest;
+  }
+
+  box-shadow: 0 3px 10px rgba($black, 0.3);
+}

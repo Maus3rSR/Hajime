@@ -1,0 +1,45 @@
+.dropdown,
+.dropup {
+  position: relative;
+}
+
+.dropdown-item {
+  @include transition(background-color 300ms, color 300ms);
+  line-height: $line-height-base;
+}
+
+.dropdown-menu {
+  @include animate(fadeIn, 300ms);
+  box-shadow: $dropdown-box-shadow;
+}
+
+.dropdown-header {
+  font-size: 1rem;
+  padding: 1.1rem 1.8rem 0.9rem;
+  border-bottom: 1px solid $listview-item-hover-bg;
+
+  .actions {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.8rem;
+  }
+}
+
+.dropdown-menu--block {
+  width: 320px;
+
+  @include media-breakpoint-down(xs) {
+    width: 100%;
+  }
+}
+
+.dropdown-menu--icon {
+  .dropdown-item {
+    & > i {
+      line-height: 100%;
+      vertical-align: top;
+      font-size: 1.4rem;
+      width: 2rem;
+    }
+  }
+}

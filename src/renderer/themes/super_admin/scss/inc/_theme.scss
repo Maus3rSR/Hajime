@@ -1,0 +1,101 @@
+$theme-bgs: (
+  1: ('1.jpg', #772036),
+  2: ('2.jpg', #273C5B),
+  3: ('3.jpg', #174042),
+  4: ('4.jpg', #383844),
+  5: ('5.jpg', #49423F),
+  6: ('6.jpg', #5e3d22),
+  7: ('7.jpg', #234d6d),
+  8: ('8.jpg', #3b5e5e),
+  9: ('9.jpg', #0a4c3e),
+  10: ('10.jpg' #7b3d54)
+);
+
+[data-sa-theme] {
+  @include transition(background 300ms);
+  @include media-breakpoint-up(sm) {
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-position: center;
+  }
+}
+
+@each $bg, $value in $theme-bgs {
+  $bgimg: nth($value, 1);
+  $bgcolor: nth($value, 2);
+
+  [data-sa-theme="#{$bg}"] {
+    background-color: $bgcolor;
+
+    @include media-breakpoint-up(sm) {
+      background-image: url('../img/bg/#{$bgimg}');
+    }
+  }
+}
+
+.themes {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: $sidebar-width;
+  background-color: $bg-highlighted-darkest;
+  z-index: $sidebar-z-index;
+  transform: translate3d(($sidebar-width + 10px), 0, 0);
+  @include transition(box-shadow 300ms, transform 300ms, opacity 300ms);
+
+  &.toggled {
+    box-shadow: -5px 0 10px rgba($black, 0.25);
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.themes__item {
+  display: block;
+  padding: 1.5rem;
+  position: relative;
+  @include transition(background-color 300ms, border-color 300ms);
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $bg-highlighted-lightest;
+  }
+
+  & > img {
+    width: 100%;
+    height: 100px;
+  }
+
+  &.active,
+  &:hover {
+    background-color: $bg-highlighted-lightest;
+    border-bottom-color: transparent;
+  }
+
+  &:before {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid $border-light;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    right: 0;
+    position: absolute;
+    color: $white;
+    text-align: center;
+    line-height: 50px;
+    opacity: 0;
+    transform: scale(0);
+    @include font-icon('\f26b', 2rem);
+    @include transition(opacity 300ms, transform 300ms);
+  }
+
+  &.active {
+    &:before {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.widget-pie {
+  @include clearfix();
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.widget-pie__item {
+  padding: 20px 0;
+  text-align: center;
+
+  &:nth-child(2n) {
+    background-color: rgba($black, 0.1);
+  }
+}
+
+.widget-pie__title {
+  color: $body-color;
+}

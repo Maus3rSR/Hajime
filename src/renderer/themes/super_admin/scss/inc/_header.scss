@@ -1,0 +1,399 @@
+// Header Base
+.header {
+  position: fixed;
+  width: 100%;
+  height: $header-height;
+  color: $white;
+  z-index: $header-z-index;
+  display: flex;
+  align-items: center;
+  background-color: $header-bg;
+  top: 0;
+  left: 0;
+  padding-right: 1.5rem;
+  box-shadow: $header-shadow;
+  @include transition(background-color 1000ms, box-shadow 1000ms);
+  @include clearfix();
+
+  .sa-backdrop {
+    position: absolute;
+  }
+}
+
+.header--scrolled {
+  background-color: $header-bg-scrolled;
+  box-shadow: $header-shadow;
+}
+
+
+// Navigation trigger
+.navigation-trigger {
+  height: 100%;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.65rem;
+  @include transition(opacity 100ms);
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+
+
+// Logo
+.logo {
+  padding-left: 2.2rem;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+
+  @include media-breakpoint-up(xl) {
+    min-width: $sidebar-width;
+  }
+
+  & > h1 {
+    line-height: 100%;
+    font-size: 1.3rem;
+    font-weight: normal;
+    margin: 0;
+
+    & > a {
+      color: $white;
+    }
+  }
+}
+
+
+// Nav
+.top-nav {
+  list-style: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+
+  & > li {
+    display: inline-block;
+    vertical-align: middle;
+
+    & > a {
+      display: block;
+      color: $white;
+      border-radius: 2px;
+      text-align: center;
+      line-height: 100%;
+      position: relative;
+      @include transition(background-color 300ms);
+
+      &:not(.header__nav__text) {
+        padding: 0.65rem 0.15rem;
+        min-width: 50px;
+
+        & > .zmdi {
+          font-size: 1.65rem;
+          line-height: 100%;
+        }
+      }
+
+      &.active,
+      &:hover {
+        background-color: rgba($white, 0.2);
+      }
+    }
+
+    .dropdown-menu--block {
+      padding: 0;
+    }
+
+    @include media-breakpoint-down(xs) {
+      position: static;
+
+      .dropdown-menu--block {
+        left: 20px;
+        width: calc(100% - 40px);
+        top: $header-height - 10;
+      }
+    }
+  }
+}
+
+.top-nav__notifications {
+  .listview {
+    position: relative;
+
+    &:before {
+      @include font-icon('\f267', 2.5rem);
+      @include transition(transform 300ms, opacity 300ms);
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      width: 90px;
+      height: 90px;
+      border: 2px solid rgba($white, 0.1);
+      color: $white;
+      border-radius: 50%;
+      transform: scale(0) rotate(-360deg);
+      opacity: 0;
+      text-align: center;
+      line-height: 86px;
+    }
+  }
+
+  .listview__scroll {
+    height: 350px;
+  }
+}
+
+.top-nav__notifications--cleared {
+  .listview {
+    &:before {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+}
+
+.top-nav__notify {
+  &:before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background-color: $white;
+    color: $white;
+    border-radius: 50%;
+    position: absolute;
+    top: -3px;
+    right: 0;
+    left: 0;
+    margin: auto;
+    @include animate(flash, 2000ms);
+    animation-iteration-count: infinite;
+  }
+}
+
+
+// Search
+@mixin search-float($bg-color, $color, $placeholder-color) {
+  background-color: $bg-color;
+  color: $color;
+
+  &::placeholder {
+    color: rgba($white, 0.85);
+  }
+}
+
+.search {
+  flex: 1;
+  margin-right: 2.5rem;
+  position: relative;
+
+  @include media-breakpoint-down(lg) {
+    padding: 0 1.5rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: $white;
+    z-index: $header-z-index + 1;
+    display: flex;
+    align-items: center;
+    @include transition(transform 300ms, box-shadow 300ms, background-color 300ms);
+
+    &:not(.search--toggled) {
+      transform: translate3d(0,-105%,0);
+    }
+  }
+}
+
+.search--toggled {
+  background-color: $header-bg-scrolled;
+  box-shadow: $header-shadow;
+}
+
+.search__inner {
+  position: relative;
+
+  @include media-breakpoint-down(lg) {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+.search__text {
+  border: 0;
+  border-radius: $border-radius;
+  height: 2.9rem;
+  padding-left: 3rem;
+  width: 100%;
+  @include transition(background-color 300ms, color 300ms);
+
+  @include media-breakpoint-up(lg) {
+    @include search-float(rgba($white, 0.08), $input-color, $input-placeholder-color);
+
+    &:focus {
+      @include search-float(rgba($black, 0.2), $input-color, $input-placeholder-color);
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    @include search-float(rgba($white, 0.125), $input-color, $input-placeholder-color);
+  }
+}
+
+.header--scrolled {
+  .search__text {
+    background-color: rgba($white, 0.1);
+
+    &:focus {
+      background-color: rgba($white, 0.12);
+    }
+  }
+}
+
+.search__helper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.3rem;
+  height: 100%;
+  width: 3rem;
+  text-align: center;
+  line-height: 2.9rem;
+  cursor: pointer;
+  @include transition(color 300ms, transform 400ms);
+
+  @include media-breakpoint-down(lg) {
+    color: $body-color;
+    transform: rotate(180deg);
+    line-height: 2.9rem;
+
+    &:before {
+      content: '\f301';
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.search--focus {
+  .search__helper {
+    transform: rotate(180deg);
+    line-height: 2.9rem;
+
+    &:before {
+      content: '\f301';
+    }
+
+    @include media-breakpoint-up(lg) {
+      color: lighten($input-color, 10%);
+    }
+  }
+}
+
+
+// App shortcuts
+.app-shortcuts {
+  margin: 0;
+  padding: 1rem;
+}
+
+.app-shortcuts__item {
+  text-align: center;
+  padding: 1rem 0;
+  border-radius: $border-radius;
+  @include transition(background-color 300ms);
+
+  &:hover {
+    background-color: $bg-hover;
+
+    & > i {
+      background-color: rgba($white, 0.25);
+    }
+  }
+
+  & > i {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    color: $white;
+    line-height: 45px;
+    font-size: 1.5rem;
+    background-color: rgba($white, 0.1);
+    @include transition(background-color 300ms);
+  }
+
+  & > small {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+
+    &,
+    &:hover,
+    &:focus {
+      color: $body-color;
+    }
+  }
+}
+
+
+// Top Navigation
+.top-menu {
+  position: absolute;
+  background-color: $white;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  justify-content: center;
+  white-space: nowrap;
+
+  & > li {
+    &.active {
+      position: relative;
+      box-shadow: 0 0 0 -2px red;
+    }
+
+    & > a {
+      line-height: 100%;
+      color: lighten($body-color, 15%);
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+
+      &.active {
+        color: $headings-color;
+      }
+    }
+  }
+}
+
+
+// Clock
+.clock {
+  background: $bg-highlighted-light;
+  line-height: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  border-radius: $border-radius;
+}
+
+.time {
+  & > span {
+    &:not(:last-child):after {
+      content: ':';
+      width: 10px;
+      text-align: center;
+      display: inline-block;
+      position: relative;
+      top: -1px;
+      right: -2px;
+    }
+  }
+}

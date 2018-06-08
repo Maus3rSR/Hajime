@@ -1,0 +1,233 @@
+// Bootstrap Mixins
+@import "../../vendors/bower_components/bootstrap/scss/mixins/breakpoints";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/hover";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/image";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/badge";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/resize";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/screen-reader";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/size";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/reset-text";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/text-emphasis";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/text-hide";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/text-truncate";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/visibility";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/pagination";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/lists";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/list-group";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/nav-divider";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/table-row";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/background-variant";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/border-radius";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/box-shadow";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/gradients";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/transition";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/clearfix";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/grid-framework";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/grid";
+@import "../../vendors/bower_components/bootstrap/scss/mixins/float";
+
+
+// Custom Mixins
+
+// CSS Animations based on animate.css
+@mixin animate($name, $duration) {
+  -webkit-animation-name: $name;
+  animation-name: $name;
+  -webkit-animation-duration: $duration;
+  animation-duration: $duration;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+// Card
+@mixin card() {
+  background-color: $card-bg;
+  border-radius: $border-radius;
+  box-shadow: $card-shadow;
+}
+
+// Font Icon (for before/after content)
+@mixin font-icon($content, $font-size) {
+  font-family: $font-family-icon;
+  content: $content;
+  font-size: $font-size;
+}
+
+//  Select BG
+@mixin select-bg() {
+  &:before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    right: 1px;
+    bottom: 5px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 8px 8px;
+    border-color: transparent transparent #d1d1d1 transparent;
+  }
+}
+
+// Background Image Cover
+@mixin bg-cover($image) {
+  background-image: url($image);
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center;
+}
+
+@mixin bg-cover-inline() {
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center;
+}
+
+// Placeholder
+@mixin placeholder {
+  &::-webkit-input-placeholder { @content }
+  &:-moz-placeholder { @content }
+  &::-moz-placeholder { @content }
+  &:-ms-input-placeholder { @content }
+}
+
+// Buttons
+@mixin button-variant($background, $border, $active-background: darken($background, 7.5%), $active-border: darken($border, 10%)) {
+  @include color-yiq($background);
+  background-color: $background;
+
+  &:hover {
+    @include color-yiq($background);
+    background-color: $active-background;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    background-color: $background;
+  }
+
+  &:active,
+  &.active,
+  .show > &.dropdown-toggle {
+    background-color: $active-background;
+    background-image: none; // Remove the gradient for the pressed/active state
+  }
+}
+
+@mixin button-outline-variant($color, $color-hover: #fff) {
+  color: $color;
+  background-color: transparent;
+  background-image: none;
+  border-color: $color;
+
+  @include hover {
+    color: $color-hover;
+    background-color: $color;
+    border-color: $color;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 3px rgba($color, .5);
+  }
+
+  &.disabled,
+  &:disabled {
+    color: $color;
+    background-color: transparent;
+  }
+
+  &:active,
+  &.active,
+  .show > &.dropdown-toggle {
+    color: $color-hover;
+    background-color: $color;
+    border-color: $color;
+  }
+}
+
+// Button sizes
+@mixin button-size($padding-y, $padding-x, $font-size, $line-height, $border-radius) {
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+  line-height: $line-height;
+  @include border-radius($border-radius);
+}
+
+// Form
+@mixin form-control-focus() {
+  &:focus {
+    color: $input-focus-color;
+    background-color: $input-focus-bg;
+    border-color: $input-focus-border-color;
+    outline: none;
+    @include box-shadow($input-focus-box-shadow);
+  }
+}
+
+@mixin form-validation-state($state, $color) {
+
+  .form-control,
+  .custom-select {
+    .was-validated &:#{$state},
+    &.is-#{$state} {
+      border-color: $color;
+
+      ~ .invalid-feedback,
+      ~ .invalid-tooltip {
+        display: block;
+      }
+    }
+  }
+
+
+  // TODO: redo check markup lol crap
+  .form-check-input {
+    .was-validated &:#{$state},
+    &.is-#{$state} {
+      + .form-check-label {
+        color: $color;
+      }
+    }
+  }
+
+  // custom radios and checks
+  .custom-control-input {
+    .was-validated &:#{$state},
+    &.is-#{$state} {
+      ~ .custom-control-indicator {
+        background-color: rgba($color, .25);
+      }
+      ~ .custom-control-description {
+        color: $color;
+      }
+    }
+  }
+
+  // custom file
+  .custom-file-input {
+    .was-validated &:#{$state},
+    &.is-#{$state} {
+      ~ .custom-file-control {
+        border-color: $color;
+
+        &::before { border-color: inherit; }
+      }
+    }
+  }
+}
+
+
+// Alert
+@mixin alert-variant($background, $border, $color) {
+  background-color: rgba($background, 0.95);
+  border-color: $border;
+}

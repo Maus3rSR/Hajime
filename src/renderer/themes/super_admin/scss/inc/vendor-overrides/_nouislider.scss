@@ -1,0 +1,72 @@
+.noUi-target {
+  border-radius: 0;
+  box-shadow: none;
+  border: 0;
+  background: $bg-highlighted-light;
+  margin: 15px 0;
+}
+
+.noUi-horizontal {
+  height: 2px;
+
+  .noUi-handle {
+    top: -5px;
+    left: -1px;
+  }
+}
+
+.noUi-vertical {
+  width: 3px;
+}
+
+.noUi-connect {
+  background: $white;
+  box-shadow: none;
+}
+
+.noUi-horizontal,
+.noUi-vertical {
+  .noUi-handle {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 100%;
+    box-shadow: none;
+    cursor: pointer;
+    position: relative;
+    background-color: $white;
+    @include transition(box-shadow 200ms, transform 200ms);
+
+    &:before,
+    &:after {
+      display: none;
+    }
+
+    &.noUi-active {
+      transform: scale(1.3);
+    }
+  }
+
+  .noUi-active {
+    box-shadow: 0 0 0 10px $bg-highlighted-light;
+  }
+}
+
+// Theming
+@mixin noUiSlider-theme($color) {
+  .noUi-connect {
+    background: $color;
+  }
+
+  &.noUi-horizontal,
+  &.noUi-vertical {
+    .noUi-handle {
+      background-color: $color;
+    }
+  }
+}
+
+.input-slider--blue { @include noUiSlider-theme($blue); }
+.input-slider--red { @include noUiSlider-theme($red); }
+.input-slider--amber { @include noUiSlider-theme($yellow); }
+.input-slider--green { @include noUiSlider-theme($green); }

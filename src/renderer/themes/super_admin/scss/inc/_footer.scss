@@ -1,0 +1,34 @@
+.footer {
+  text-align: center;
+  padding: 4rem 1rem 1rem;
+
+  & > p {
+    color: $body-color;
+    margin-bottom: 0;
+  }
+}
+
+.footer__nav {
+  justify-content: center;
+  margin-top: -5px;
+
+  .nav-link {
+    color: $text-muted;
+    @include transition(color 300ms);
+
+    &:hover,
+    &:focus {
+      color: $white;
+    }
+
+    & + .nav-link {
+      &:before {
+        @include font-icon('\f26d', 4px);
+        position: relative;
+        left: -1.2rem;
+        top: -0.2rem;
+        color: $text-muted;
+      }
+    }
+  }
+}

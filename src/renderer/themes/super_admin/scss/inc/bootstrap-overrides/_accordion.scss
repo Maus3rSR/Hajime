@@ -1,0 +1,17 @@
+.accordion {
+  .card {
+    box-shadow: none;
+    margin: 0 0 1px;
+  }
+
+  .card-header {
+    & > a {
+      color: $headings-color;
+      display: block;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

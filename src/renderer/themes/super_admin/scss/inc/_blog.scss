@@ -1,0 +1,45 @@
+.blog__tags {
+  text-align: center;
+  border-top: 1px solid $border-lightest;
+  border-bottom: 1px solid $border-lightest;
+  padding: 2rem 1rem 1.5rem;
+  margin: 2rem 0 0.5rem;
+}
+
+.blog__arthur {
+  padding: 2rem 2rem 2.5rem;
+  text-align: center;
+}
+
+.blog__arthur-img {
+  margin-bottom: 1.5rem;
+
+  & > img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid $bg-highlighted-light;
+  }
+}
+
+.blog__arthur-social {
+  margin: 2rem 0 0 0;
+
+  & > a {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 35px;
+    color: $white;
+    background-color: $bg-highlighted-light;
+    font-size: 1.2rem;
+    margin: 0 1px;
+    @include transition(background-color 300ms);
+
+    &:hover {
+      background-color: rgba($white, 0.2);
+    }
+  }
+}

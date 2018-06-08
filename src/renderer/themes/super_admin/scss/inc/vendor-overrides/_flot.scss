@@ -1,0 +1,43 @@
+.flot-chart {
+  height: 200px;
+  display: block;
+}
+
+.flot-chart--sm {
+  height: 100px;
+}
+
+.flot-chart-legends {
+  text-align: center;
+  margin: 20px 0 -10px;
+
+  table {
+    display: inline-block;
+  }
+
+  .legendColorBox {
+    & > div {
+      & > div {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .legendLabel {
+    padding: 0 8px 0 3px;
+    color: $text-muted;
+  }
+}
+
+.flot-tooltip {
+  position: absolute;
+  line-height: 100%;
+  color: $body-color;
+  display: none;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 5px rgba($black, 0.1);
+  border-radius: $border-radius;
+  padding: 0.7rem 1rem;
+  background-color: rgba($black, 0.8);
+  z-index: 99999;
+}

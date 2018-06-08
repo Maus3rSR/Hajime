@@ -1,0 +1,227 @@
+.dataTable {
+  .sorting,
+  .sorting_asc,
+  .sorting_desc {
+    cursor: pointer;
+    position: relative;
+  }
+
+  .sorting_asc,
+  .sorting_desc {
+    &:before {
+      font-family: $font-family-icon;
+      font-size: 1.25rem;
+      position: absolute;
+      bottom: 8px;
+      right: 5px;
+      opacity: 0;
+      @include transition(opacity 300ms);
+    }
+
+    &:hover {
+      &:before {
+        opacity: 1;
+      }
+    }
+  }
+
+  .sorting_asc:before {
+    content: '\f1cd';
+  }
+
+  .sorting_desc:before {
+    content: '\f1ce';
+  }
+}
+
+.dataTables_wrapper {
+  margin-top: 20px;
+
+  .table {
+    margin: 40px 0 20px;
+  }
+}
+
+.dataTables_length,
+.dataTables_filter {
+  font-size: 0;
+  position: relative;
+  appearance: none;
+
+  &:after {
+    font-family: $font-family-icon;
+    position: absolute;
+    left: 1px;
+    bottom: 6px;
+    font-size: 1.3rem;
+    color: $headings-color;
+  }
+
+  & > label {
+    margin: 0;
+    width: 100%;
+
+    select,
+    input[type=search] {
+      padding-left: 28px;
+      font-size: $font-size-base;
+      background: none;
+      border: 1px solid $input-border-color;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
+      height: 35px;
+      border-radius: 0;
+      width: 100%;
+      background-color: $input-bg;
+      color: $input-color;
+      @include transition(border-color 300ms);
+
+      &:focus {
+        border-color: $input-focus-border-color;
+      }
+      
+      @include placeholder {
+        color: $input-placeholder-color;
+      }
+    }
+  }
+}
+
+.dataTables_length {
+  float: right;
+  @include select-bg();
+  margin-left: 20px;
+
+  @include media-breakpoint-up(sm) {
+    min-width: 150px;
+  }
+
+  @include media-breakpoint-down(xs) {
+    display: none;
+  }
+
+  &:after {
+    content: '\f197';
+  }
+
+  select {
+    appearance: none;
+  }
+}
+
+.dataTables_filter {
+  overflow: hidden;
+
+  &:after {
+    content: '\f1c3';
+  }
+}
+
+.dataTables_filter--toggled {
+  & > label {
+    &:before,
+    &:after {
+      width: 50%;
+    }
+  }
+}
+
+.dataTables_paginate {
+  text-align: center;
+}
+
+.paginate_button {
+  background-color: $pagination-bg;
+  display: inline-block;
+  color: $pagination-color;
+  vertical-align: top;
+  border-radius: 50%;
+  margin: 0 1px 0 2px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  text-align: center;
+  @include transition(background-color 300ms, color 300ms);
+
+  &.current {
+    background-color: $pagination-active-bg;
+    color: $pagination-active-color;
+    cursor: default;
+  }
+
+  &:not(.current):not(.disabled) {
+    &:hover,
+    &:focus {
+      background-color: $pagination-hover-bg;
+      color: $pagination-color;
+    }
+  }
+  
+  &.current,
+  &.disabled {
+    cursor: default;
+  }
+
+  &.previous,
+  &.next {
+    font-size: 0;
+    position: relative;
+
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      font-size: 1rem;
+    }
+
+    &:before {
+      font-family: $font-family-icon;
+      font-size: 1rem;
+      line-height: 2.55rem;
+    }
+  }
+
+  &.previous {
+    &:before {
+      content: '\F2FF';
+    }
+  }
+
+  &.next {
+    &:before {
+      content: '\F301';
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    
+    &:hover,
+    &:focus {
+      color: $pagination-color;
+    }
+  }
+}
+
+.dataTables_info {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: $text-muted;
+}
+
+.dt-buttons {
+  display: none;
+}
+
+.data-table-toggled {
+  overflow: hidden;
+
+  .dataTables_buttons {
+    [data-table-action="fullscreen"] {
+      &:before {
+        content: '\f16c';
+      }
+    }
+  }
+}
