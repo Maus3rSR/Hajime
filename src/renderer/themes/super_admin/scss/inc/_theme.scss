@@ -28,7 +28,7 @@ $theme-bgs: (
     background-color: $bgcolor;
 
     @include media-breakpoint-up(sm) {
-      background-image: url('../img/bg/#{$bgimg}');
+      background-image: url('~@themes/super_admin/img/bg/#{$bgimg}');
     }
   }
 }

@@ -1,30 +1,31 @@
 // Bootstrap Mixins
-@import "../../vendors/bower_components/bootstrap/scss/mixins/breakpoints";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/hover";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/image";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/badge";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/resize";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/screen-reader";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/size";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/reset-text";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/text-emphasis";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/text-hide";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/text-truncate";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/visibility";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/pagination";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/lists";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/list-group";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/nav-divider";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/table-row";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/background-variant";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/border-radius";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/box-shadow";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/gradients";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/transition";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/clearfix";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/grid-framework";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/grid";
-@import "../../vendors/bower_components/bootstrap/scss/mixins/float";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~bootstrap/scss/mixins/hover";
+@import "~bootstrap/scss/mixins/image";
+@import "~bootstrap/scss/mixins/badge";
+@import "~bootstrap/scss/mixins/resize";
+@import "~bootstrap/scss/mixins/screen-reader";
+@import "~bootstrap/scss/mixins/size";
+@import "~bootstrap/scss/mixins/reset-text";
+@import "~bootstrap/scss/mixins/text-emphasis";
+@import "~bootstrap/scss/mixins/text-hide";
+@import "~bootstrap/scss/mixins/text-truncate";
+@import "~bootstrap/scss/mixins/visibility";
+@import "~bootstrap/scss/mixins/pagination";
+@import "~bootstrap/scss/mixins/lists";
+@import "~bootstrap/scss/mixins/list-group";
+@import "~bootstrap/scss/mixins/nav-divider";
+@import "~bootstrap/scss/mixins/table-row";
+@import "~bootstrap/scss/mixins/background-variant";
+@import "~bootstrap/scss/mixins/border-radius";
+@import "~bootstrap/scss/mixins/box-shadow";
+@import "~bootstrap/scss/mixins/gradients";
+@import "~bootstrap/scss/mixins/transition";
+@import "~bootstrap/scss/mixins/clearfix";
+@import "~bootstrap/scss/mixins/grid-framework";
+@import "~bootstrap/scss/mixins/grid";
+@import "~bootstrap/scss/mixins/float";
+@import "~bootstrap/scss/mixins/caret";
 
 
 // Custom Mixins
@@ -100,11 +101,11 @@
 
 // Buttons
 @mixin button-variant($background, $border, $active-background: darken($background, 7.5%), $active-border: darken($border, 10%)) {
-  @include color-yiq($background);
+  color: color-yiq($background);
   background-color: $background;
 
   &:hover {
-    @include color-yiq($background);
+    color: color-yiq($background);
     background-color: $active-background;
   }
 

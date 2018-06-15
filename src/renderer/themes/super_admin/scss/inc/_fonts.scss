@@ -1,11 +1,11 @@
 // Nunito Regular
 @font-face {
   font-family:'Nunito';
-  src: url('../fonts/nunito/nunito-regular.eot');
-  src: url('../fonts/nunito/nunito-regular?#iefix') format('embedded-opentype'),
-  url('../fonts/nunito/nunito-regular.woff2') format('woff2'),
-  url('../fonts/nunito/nunito-regular.woff') format('woff'),
-  url('../fonts/nunito/nunito-regular.svg#Nunito Regular') format('svg');
+  src: url('~@themes/super_admin/fonts/nunito/nunito-regular.eot');
+  src: url('~@themes/super_admin/fonts/nunito/nunito-regular.eot?#iefix') format('embedded-opentype'),
+  url('~@themes/super_admin/fonts/nunito/nunito-regular.woff2') format('woff2'),
+  url('~@themes/super_admin/fonts/nunito/nunito-regular.woff') format('woff'),
+  url('~@themes/super_admin/fonts/nunito/nunito-regular.svg#Nunito Regular') format('svg');
   font-weight: 400;
   font-style: normal;
   font-stretch: normal;
@@ -14,11 +14,11 @@
 
 @font-face {
   font-family:'Nunito';
-  src: url('../fonts/nunito/nunito-semibold.eot');
-  src: url('../fonts/nunito/nunito-semibold.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/nunito/nunito-semibold.woff2') format('woff2'),
-  url('../fonts/nunito/nunito-semibold.woff') format('woff'),
-  url('../fonts/nunito/nunito-semibold.svg#Nunito SemiBold') format('svg');
+  src: url('~@themes/super_admin/fonts/nunito/nunito-semibold.eot');
+  src: url('~@themes/super_admin/fonts/nunito/nunito-semibold.eot?#iefix') format('embedded-opentype'),
+  url('~@themes/super_admin/fonts/nunito/nunito-semibold.woff2') format('woff2'),
+  url('~@themes/super_admin/fonts/nunito/nunito-semibold.woff') format('woff'),
+  url('~@themes/super_admin/fonts/nunito/nunito-semibold.svg#Nunito SemiBold') format('svg');
   font-weight: 600;
   font-style: normal;
   font-stretch: normal;
@@ -29,11 +29,11 @@
 // Nunito Bold
 @font-face {
   font-family:'Nunito';
-  src: url('../fonts/nunito/nunito-bold.eot');
-  src: url('../fonts/nunito/nunito-bold.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/nunito/nunito-bold.woff2') format('woff2'),
-  url('../fonts/nunito/nunito-bold.woff') format('woff'),
-  url('../fonts/nunito/nunito-bold.svg#Nunito Bold') format('svg');
+  src: url('~@themes/super_admin/fonts/nunito/nunito-bold.eot');
+  src: url('~@themes/super_admin/fonts/nunito/nunito-bold.eot?#iefix') format('embedded-opentype'),
+  url('~@themes/super_admin/fonts/nunito/nunito-bold.woff2') format('woff2'),
+  url('~@themes/super_admin/fonts/nunito/nunito-bold.woff') format('woff'),
+  url('~@themes/super_admin/fonts/nunito/nunito-bold.svg#Nunito Bold') format('svg');
   font-weight: 700;
   font-style: normal;
   font-stretch: normal;
