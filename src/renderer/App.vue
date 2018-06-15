@@ -1,15 +1,18 @@
-<template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
-</template>
-
 <script>
-  export default {
-    name: 'askc'
-  }
+    export default {
+        name: 'askc'
+    }
 </script>
 
-<style>
-  /* CSS */
+<template>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+</template>
+
+<style lang="scss">
+    /**
+     * @todo Le thème pourrait être variable
+     */
+    @import "~@themes/super_admin/scss/app.scss";
 </style>
