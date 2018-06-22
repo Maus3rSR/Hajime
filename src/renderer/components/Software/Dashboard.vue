@@ -5,7 +5,9 @@ export default {
 </script>
 
 <template>
-    <div>test</div>
+    <span>
+        Dashboard...
+    </span>
 </template>
 
 <style lang="scss">
