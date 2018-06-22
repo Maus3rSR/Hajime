@@ -1,6 +1,11 @@
 .footer {
   text-align: center;
-  padding: 4rem 1rem 1rem;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 10%;
 
   & > p {
     color: $body-color;

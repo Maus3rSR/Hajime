@@ -1,5 +1,6 @@
 .main {
   position: relative;
+  height: 100vh;
 }
 
 .main--alt {
@@ -7,6 +8,9 @@
 }
 
 .content {
+    height: 90%;
+    overflow-y: auto;
+
   &:not(.content--boxed):not(.content--full) {
     @include media-breakpoint-up(xl) {
       padding: ($header-height + $grid-gutter-width) $grid-gutter-width 0 ($sidebar-width + $grid-gutter-width);
