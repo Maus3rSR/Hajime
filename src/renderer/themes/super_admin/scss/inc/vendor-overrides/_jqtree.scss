@@ -1,0 +1,107 @@
+ul.jqtree-tree {
+  border-top: 1px solid $border-light;
+
+  li {
+    &.jqtree-selected {
+      & > .jqtree-element {
+        @include transition(background-color 200ms, border-color 200ms);
+        border-color: transparent;
+
+        &, &:hover {
+          background: $border-light;
+          text-shadow: none;
+        }
+      }
+    }
+
+    &:not(.jqtree-selected) {
+      & > .jqtree-element {
+        &:hover {
+          background-color: $bg-highlighted-lightest;
+        }
+      }
+    }
+
+    &.jqtree-folder {
+      margin-bottom: 0;
+
+      &:not(.jqtree-closed) {
+        & + li.jqtree_common {
+          position: relative;
+
+          &:before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            width: 30px;
+            background-color: $border-light;
+            height: 1px;
+          }
+        }
+      }
+
+      &.jqtree-closed {
+        margin: 0;
+      }
+    }
+
+    &.jqtree-ghost {
+      span.jqtree-line {
+        background-color: $white;
+      }
+
+      span.jqtree-circle {
+        border-color: $white;
+      }
+    }
+  }
+
+  .jqtree-moving > .jqtree-element .jqtree-title {
+    outline: none;
+  }
+
+  span.jqtree-border {
+    border-radius: 0;
+    border-color: $white;
+  }
+
+  .jqtree-toggler {
+    position: absolute; 
+    height: 16px;
+    width: 16px;
+    background: rgba($white, 0.75);
+    color: $color-inverse;
+    padding: 0 0 0 1px;
+    font-size: 1rem;
+    border-radius: 50%;
+    top: 12px;
+    left: -8px;
+    line-height: 16px;
+    text-align: center;
+    @include transition(background-color 300ms, color 300ms);
+
+    &:hover {
+      background-color: $white;
+      color: $black;
+    }
+  }
+
+  .jqtree-element {
+    position: relative;
+    padding: 10px 20px;
+    border: 1px solid $border-light;
+    border-top: 0;
+    margin-bottom: 0;
+  }
+
+  .jqtree-title {
+    color: $white;
+    margin-left: 0;
+  }
+
+  ul.jqtree_common {
+    margin-left: 22px;
+    padding-left: 8px;
+  }
+}

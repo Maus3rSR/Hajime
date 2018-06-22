@@ -1,0 +1,43 @@
+.widget-visitors__stats {
+  @include clearfix();
+  margin: 0 -0.5rem 2rem;
+
+  & > div {
+    padding: 1.5rem 1.5rem 1.45rem;
+    float: left;
+    margin: 0 0.5rem;
+    width: calc(50% - 1rem);
+    background-color: $bg-highlighted-light;
+    border-radius: $border-radius;
+
+    & > strong {
+      font-size: 1.3rem;
+      line-height: 100%;
+      color: $headings-color;
+      font-weight: $font-weight-bold;
+    }
+
+    & > small {
+      display: block;
+      color: $text-muted;
+      font-size: 1rem;
+      line-height: 100%;
+      margin-top: 0.45rem;
+    }
+  }
+}
+
+.widget-visitors__map {
+  width: 100%;
+  height: 250px;
+}
+
+.widget-visitors__country {
+  height: 0.88rem;
+  width: auto;
+  vertical-align: top;
+  position: relative;
+  margin-right: 0.25rem;
+  left: -0.1rem;
+  border-radius: 1px;
+}

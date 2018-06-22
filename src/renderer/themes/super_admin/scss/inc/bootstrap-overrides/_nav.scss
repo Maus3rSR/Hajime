@@ -1,0 +1,14 @@
+.nav-link {
+  color: $text-muted;
+  
+  &:not(.disabled) {
+    &:hover {
+      color: $white;
+    }
+  }
+  
+  &.disabled {
+    color: $nav-link-disabled-color;
+    cursor: default;
+  }
+}
