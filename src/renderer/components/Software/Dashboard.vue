@@ -53,7 +53,7 @@ export default {
                                 </a>
                                 <a class="card-link" href="javascript:void(0);">
                                     <i class="zmdi zmdi-search"></i>
-                                    Chercher un passage de grade existante
+                                    Chercher un passage de grade existant
                                 </a>
                             </div>
                         <!-- </div> -->
