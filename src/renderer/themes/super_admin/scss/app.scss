@@ -1,10 +1,11 @@
 // Variables
 @import "inc/variables";
 
-
 // Mixins
 @import "inc/mixins"; // This also includes Bootstrap Mixins
 
+// Material-design-iconic-font
+@import "~material-design-iconic-font/scss/material-design-iconic-font";
 
 // Bootstrap
 @import "~bootstrap/scss/functions";
