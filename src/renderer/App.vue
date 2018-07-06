@@ -15,4 +15,5 @@
      * @todo Le thème pourrait être variable
      */
     @import "~@themes/super_admin/scss/app.scss";
+    @import "~@styles/transitions.scss";
 </style>
