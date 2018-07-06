@@ -1,11 +1,24 @@
 <script>
 export default {
-    
+    beforeRouteUpdate (to, from, next) {
+        const toDepth = to.path.split('/').length
+        const fromDepth = from.path.split('/').length
+        this.transitionName = 'fade';
+        if (toDepth !== fromDepth) {
+            this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+        }
+        next()
+    },
+    data() {
+        return {
+            transitionName: 'fade'
+        }
+    }
 }
 </script>
 
 <template>
-    <main class="main" data-sa-theme="1">
+    <main id="software" class="main" data-sa-theme="1">
 
         <!-- Header -->
         <header class="header">
@@ -15,7 +28,9 @@ export default {
 
             <div class="logo hidden-sm-down">
                 <h1>
-                    <a href="javascript:void(0);">ASKC</a>
+                    <router-link to="*">
+                        ASKC
+                    </router-link>
                 </h1>
             </div>
 
@@ -30,7 +45,11 @@ export default {
 
         <!-- Content -->
         <section class="content content--full">
-            <router-view></router-view>
+            <div class="container">
+                <transition :name="transitionName" mode="out-in" appear>
+                    <router-view></router-view>
+                </transition>
+            </div>
         </section>
 
         <!-- Footer -->
@@ -42,5 +61,14 @@ export default {
 </template>
 
 <style lang="scss">
-    
+#software {
+    .content {
+        .container {
+            &>div {
+                // Pour la transition slide left/right
+                transition: all .5s cubic-bezier(.55,0,.1,1);
+            }
+        }
+    }
+}
 </style>
