@@ -28,7 +28,7 @@ export default {
 
             <div class="logo hidden-sm-down">
                 <h1>
-                    <router-link to="*">
+                    <router-link to="/">
                         ASKC
                     </router-link>
                 </h1>
@@ -46,6 +46,8 @@ export default {
         <!-- Content -->
         <section class="content content--full">
             <div class="container">
+                <breadcrumbs></breadcrumbs>
+
                 <transition :name="transitionName" mode="out-in" appear>
                     <router-view></router-view>
                 </transition>

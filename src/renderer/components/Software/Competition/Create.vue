@@ -11,9 +11,7 @@ export default {
             <h1>Nouvelle compétition</h1>
 
             <div class="actions">
-                <router-link to="*" class="actions__item zmdi zmdi-close" title="Annuler et revenir à l'écran principal">
-
-                </router-link>
+                <router-link to="/" class="actions__item zmdi zmdi-close" title="Annuler et revenir à l'écran principal"></router-link>
             </div>
         </header>
 

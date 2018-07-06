@@ -10,6 +10,9 @@ export default new Router({
             // We will be able to set a route (not children) like '/login' with a completely different layout in the future
             path: '/',
             component: require('@/components/Software').default,
+            meta: {
+                breadcrumb: 'Accueil',
+            },
             children: [
                 {
                     path: '/', // root of software
@@ -19,13 +22,12 @@ export default new Router({
                 {
                     path: '/competition/new',
                     name: 'create-competition',
-                    component: require('@/components/Software/Competition/Create').default
+                    component: require('@/components/Software/Competition/Create').default,
+                    meta: {
+                        breadcrumb: 'Nouvelle compétition',
+                    }
                 }
             ]
-        },
-        {
-            path: '*',
-            redirect: '/'
         }
     ]
 })
