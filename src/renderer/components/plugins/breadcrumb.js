@@ -21,4 +21,4 @@ function install (Vue, options) {
     Vue.use(VueBreadcrumbs, { template: template })
 }
 
-export default install
+export default { install }

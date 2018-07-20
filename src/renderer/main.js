@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
+import VeeValidate from 'vee-validate';
+import VueMask from 'v-mask'
 
 import App from './App'
 import router from './router'
@@ -13,6 +15,8 @@ Vue.config.productionTip = false
 Object.keys(plugins).forEach(key => {
     Vue.use(plugins[key])
 })
+Vue.use(VeeValidate);
+Vue.use(VueMask);
 
 /* eslint-disable no-new */
 new Vue({

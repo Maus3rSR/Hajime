@@ -24,6 +24,10 @@
 // Form Group
 .form-group {
   position: relative;
+
+  &>div {
+      position: relative;
+  }
 }
 
 select::-ms-expand {
