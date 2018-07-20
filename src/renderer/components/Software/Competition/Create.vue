@@ -35,7 +35,7 @@ export default {
                 <nav aria-label="step-wizard" role="navigation">
                     <ol class="breadcrumb mb-4">
                         <li aria-current="step" class="breadcrumb-item active">1. Formulaire</li>
-                        <li aria-current="step" class="breadcrumb-item">2. Import des combatants</li>
+                        <li aria-current="step" class="breadcrumb-item">2. Import des combattants</li>
                         <li aria-current="step" class="breadcrumb-item">3. Tirage au sort</li>
                     </ol>
                 </nav>
