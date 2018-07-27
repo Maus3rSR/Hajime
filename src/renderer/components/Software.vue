@@ -45,13 +45,11 @@ export default {
 
         <!-- Content -->
         <section class="content content--full">
-            <div class="container">
-                <breadcrumbs></breadcrumbs>
+            <breadcrumbs></breadcrumbs>
 
-                <transition :name="transitionName" mode="out-in" appear>
-                    <router-view></router-view>
-                </transition>
-            </div>
+            <transition :name="transitionName" mode="out-in" appear>
+                <router-view></router-view>
+            </transition>
         </section>
 
         <!-- Footer -->
@@ -65,11 +63,9 @@ export default {
 <style lang="scss">
 #software {
     .content {
-        .container {
-            &>div {
-                // Pour la transition slide left/right
-                transition: all .5s cubic-bezier(.55,0,.1,1);
-            }
+        &>div {
+            // Pour la transition slide left/right
+            transition: all .5s cubic-bezier(.55,0,.1,1);
         }
     }
 }
