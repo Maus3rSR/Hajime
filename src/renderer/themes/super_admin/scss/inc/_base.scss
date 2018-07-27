@@ -37,3 +37,9 @@ select,
 textarea {
   font-family: $font-family-sans-serif;
 }
+
+select {
+    option {
+        color: black;
+    }
+}
