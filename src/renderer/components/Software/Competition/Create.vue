@@ -1,7 +1,13 @@
 <script>
+import Vuex from 'vuex'
+
 export default {
     computed: {
-        formValid () {
+        ...Vuex.mapGetters({
+            type_list: "competition_type/all",
+            default_type: "competition_type/default"
+        }),
+        form_is_valid() {
             return Object.keys(this.fields).every(field => {
                 return this.fields[field] && this.fields[field].valid;
             });
@@ -12,8 +18,12 @@ export default {
             name: null,
             date: null,
             place: null,
-            owner: null
+            owner: null,
+            type: null,
         }
+    },
+    mounted() {
+        this.type = this.default_type
     }
 }
 </script>
@@ -41,14 +51,14 @@ export default {
                 </nav>
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <div>
                                 <label for="competition__name">Nom *</label>
                                 <input
                                     id="competition__name"
                                     class="form-control"
-                                    placeholder="ex.: Compétition inter-régionales"
+                                    placeholder="ex.: Compétition inter-régionales individuelle hommes"
                                     type="text"
                                     name="name"
 
@@ -62,6 +72,32 @@ export default {
                                 <i class="form-group__bar"></i>
                             </div>
                             <span class="text-danger" v-if="errors.has('name')">{{ errors.first('name') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div>
+                                <label for="competition__type">Type *</label>
+                                <select
+                                    id="competition__type"
+                                    class="form-control"
+                                    name="type"
+
+                                    required
+
+                                    v-validate
+                                    v-model="type"
+
+                                    :class="{ 'is-invalid': errors.has('type') }"
+                                >
+                                    <option :value="type.value" v-for="type in type_list" :key="type.value">
+                                        {{ type.txt }}
+                                    </option>
+                                </select>
+                                <i class="form-group__bar"></i>
+                            </div>
+                            <span class="text-danger" v-if="errors.has('type')">{{ errors.first('type') }}</span>
                         </div>
                     </div>
 
@@ -137,7 +173,7 @@ export default {
                         <span class="text-warning text-sm">Les champs * sont requis</span>
                     </div>
                     <div class="col">
-                        <button :disabled="!formValid" type="button" class="btn btn-outline-success float-right">
+                        <button :disabled="!form_is_valid" type="button" class="btn btn-outline-success float-right">
                             Etape suivante
                             <i class="zmdi zmdi-arrow-right"></i>
                         </button>
