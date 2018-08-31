@@ -13,6 +13,9 @@ export default {
     methods: {
         nextStep() {
             this.current_step = this.current_step + 1
+        },
+        previousStep() {
+            this.current_step = this.current_step - 1
         }
     },
     data() {
@@ -46,7 +49,7 @@ export default {
                 </nav>
 
                 <transition name="fade" mode="out-in">
-                    <component :is="step_component" @validate="nextStep()"></component>
+                    <component :is="step_component" @onValidate="nextStep()" @onBack="previousStep()"></component>
                 </transition>
 
             </div>
