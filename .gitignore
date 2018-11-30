@@ -1,6 +1,7 @@
 # ############
 # Project
 # ############
+*.hot*
 # ############
 # Windows
 # ############
@@ -63,8 +64,7 @@ Temporary Items
 # Electron
 # ############
 .DS_Store
-dist/electron/*
-dist/web/*
+dist/
 build/*
 !build/icons
 coverage
