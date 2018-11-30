@@ -8,7 +8,6 @@ import router from './router'
 import store from './store'
 import plugins from './components/plugins'
 
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
@@ -20,8 +19,7 @@ Vue.use(VueMask);
 
 /* eslint-disable no-new */
 new Vue({
-  components: { App },
+  render: h => h(App),
   router,
   store,
-  template: '<App/>'
 }).$mount('#app')

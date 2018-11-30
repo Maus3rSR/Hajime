@@ -1,44 +1,46 @@
-# Projet ASKC
+# electron-webpack-quick-start
+> A bare minimum project structure to get started developing with [`electron-webpack`](https://github.com/electron-userland/electron-webpack).
 
-> Application for Kenshi
+Thanks to the power of `electron-webpack` this template comes packed with...
 
-#### Dépendances et environnement
+* Use of [`webpack-dev-server`](https://github.com/webpack/webpack-dev-server) for development
+* HMR for both `renderer` and `main` processes
+* Use of [`babel-preset-env`](https://github.com/babel/babel-preset-env) that is automatically configured based on your `electron` version
+* Use of [`electron-builder`](https://github.com/electron-userland/electron-builder) to package and build a distributable electron application
 
-Ce projet utilise `electron-vue`, qui embarque `VueJS` et `Electron`.
+Make sure to check out [`electron-webpack`'s documentation](https://webpack.electron.build/) for more details.
 
-Il faut installer les dépendances liées à ces librairies :
-* [NodeJS](https://nodejs.org/fr/) `(contiendra npm)`
-* [Vue CLI](https://github.com/vuejs/vue-cli)
-* [Python](https://www.python.org/)
-* [Yarn](https://yarnpkg.com/fr/) `(optionnel, alternatif à npm)`
+## Getting Started
+Simply clone down this reposity, install dependencies, and get started on your application.
 
+The use of the [yarn](https://yarnpkg.com/) package manager is **strongly** recommended, as opposed to using `npm`.
 
+```bash
+# create a directory of your choice, and copy template using curl
+mkdir new-electron-webpack-project && cd new-electron-webpack-project
+curl -fsSL https://github.com/electron-userland/electron-webpack-quick-start/archive/master.tar.gz | tar -xz --strip-components 1
 
-#### Build Setup
+# or copy template using git clone
+git clone https://github.com/electron-userland/electron-webpack-quick-start.git
+cd electron-webpack-quick-start
+rm -rf .git
 
-``` bash
 # install dependencies
-npm install
-
-# serve with hot reload at localhost:9080
-npm run dev
-
-# build electron application for production
-npm run build
-
-# run unit & end-to-end tests
-npm test
-
-
+yarn
 ```
 
----
+### Development Scripts
 
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[7c4e3e9](https://github.com/SimulatedGREG/electron-vue/tree/7c4e3e90a772bd4c27d2dd4790f61f09bae0fcef) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+```bash
+# run application in development mode
+yarn dev
 
+# compile source code and create webpack output
+yarn compile
 
-#### Liens utiles
+# `yarn compile` & create build with electron-builder
+yarn dist
 
-* [VueJS](https://vuejs.org/)
-* [VueX](https://vuex.vuejs.org/)
-* [Electron](https://electronjs.org/)
+# `yarn compile` & create unpacked build with electron-builder
+yarn dist:dir
+```
