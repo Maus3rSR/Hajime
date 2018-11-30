@@ -10,7 +10,13 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let mainWindow
 
 function createMainWindow() {
-  const window = new BrowserWindow()
+  const window = new BrowserWindow({
+    minHeight: 800,
+    minWidth: 1200,
+    height: 800,
+    width: 1600,
+    // useContentSize: true
+  })
 
   if (isDevelopment) {
     window.webContents.openDevTools()
