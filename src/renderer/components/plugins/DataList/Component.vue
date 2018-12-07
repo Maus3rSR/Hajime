@@ -44,13 +44,17 @@ export default {
             type: Boolean,
             default: false
         },
-        fixed_header: {
+        fixedHeader: {
             type: Boolean,
             default: false
         },
         infiniteScrollDistance: {
             type: Number,
             default: 0
+        },
+        isDynamic: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -95,6 +99,12 @@ export default {
         },
         per_page_list() {
             return [PER_PAGE, PER_PAGE * 2, PER_PAGE * 2 + PER_PAGE]
+        },
+        has_filter() {
+            return this.columns.find(el => 'object' === typeof el.filterOptions && column.filterOptions.active === true)
+        },
+        mode() {
+            return this.isDynamic ? "remote" : "records"
         }
     },
     methods: {
@@ -115,9 +125,8 @@ export default {
             this.loadItems()
         },
         loadItems() {
-            if (this.loading) {
+            if (!this.isDynamic || this.loading)
                 return
-            }
 
             this.$emit('on-load', JSON.parse(JSON.stringify({
                 page: this.current_page,
@@ -130,9 +139,8 @@ export default {
             this.serverParams = Object.assign({}, this.serverParams, newProps)
         },
         onPageChange(page) {
-            if (this.loading) {
+            if (!this.isDynamic || this.loading)
                 return
-            }
 
             this.updateParams({ page: page })
             this.loadItems()
@@ -141,18 +149,16 @@ export default {
             this.updateParams({ page: first_page })
         },
         onPerPageChange(perPage) {
-            if (this.loading) {
+            if (!this.isDynamic || this.loading)
                 return
-            }
 
             this.updateParams({ perPage: perPage })
             this.resetState()
             this.loadItems()
         },
         onSortChange(params) {
-            if (this.loading) {
+            if (!this.isDynamic || this.loading)
                 return
-            }
 
             this.updateParams({
                 sort: {
@@ -171,6 +177,9 @@ export default {
     },
     watch: {
         list: function (newList, oldList) {
+            if (!this.isDynamic)
+                return
+
             if (this.is_loading_type_page) {
                 this.$refs.paginator.complete()
             }
@@ -212,9 +221,12 @@ export default {
             </div>
 
             <div class="actions">
+
                 <record-display
                     :name="name"
                     :display-by="per_page_list"
+
+                    v-if="isDynamic"
 
                     @on-display-change="onPerPageChange"
                 />
@@ -224,9 +236,13 @@ export default {
                     class="actions__item zmdi zmdi-settings"
                     title="Filtrer"
 
+                    v-if="isDynamic && has_filter"
+
                     @click.prevent="openModal"   
                 >
                 </a>
+
+                <slot name="action-bar"></slot>
             </div>
         </div>
 
@@ -239,13 +255,13 @@ export default {
                     :rows="list"
                     :totalRows="total"
                     :isLoading="loading_table"
-                    :fixed-header="fixed_header"
-                    :pagination-options="{ enabled: this.is_loading_type_page }"
+                    :fixed-header="fixedHeader"
+                    :pagination-options="{ enabled: isDynamic && this.is_loading_type_page }"
+                    :mode="mode"
 
                     @on-sort-change="onSortChange"
 
                     infinite-wrapper
-                    mode="remote"
                     styleClass="table table-sm table-striped table-responsive-sm">
                 >
 
@@ -267,7 +283,7 @@ export default {
                         <pagination
                             ref="paginator"
 
-                            v-if="is_loading_type_page"
+                            v-if="isDynamic && is_loading_type_page"
                             
                             @on-page-change="onPageChange"
                             @on-page-reset="onPageChangeReset"
@@ -314,6 +330,12 @@ export default {
         display: block;
         font-size: 3em;
         text-shadow: 0px 0px 14px rgba(150, 150, 150, 1);
+    }
+
+    .card-body {
+        .actions {
+            position: static;
+        }
     }
 </style>
 

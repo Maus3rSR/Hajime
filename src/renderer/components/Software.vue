@@ -53,7 +53,7 @@ export default {
         </section>
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer id="software__footer" class="footer">
             Copyright © ASKC
         </footer>
 

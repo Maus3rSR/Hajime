@@ -6,9 +6,7 @@ export default {
     methods: {},
     data() {
         return {
-            total: 0,
             list: [],
-            loading: false,
         }
     }
 }
@@ -25,30 +23,7 @@ export default {
             </div>
 
             <div class="col-sm-12">
-                <data-list
-                    
-                    name="fighters"
-                    title="Total de combattants"
-                    :columns="[
-                        { label: 'Combattant', field: 'name', filterOptions: { active: true, placeholder: '' } },
-                        { label: 'Date de naissance', field: 'birthdate', fieldName: 'date', filterOptions: { active: true, placeholder: '' } },
-                        { label: 'Grade', field: 'birthdate', fieldName: 'grade', filterOptions: { active: true, placeholder: '' } },
-                        { label: '', field: 'action-cell' }
-                    ]"
-                    :list="list"
-                    :total="total"
-                    :loading="loading"
-
-                    ref="FighterList"
-                >
-                    <template slot="action-cell" slot-scope="props">
-                        
-                        <button class="btn btn-sm btn-outline-danger">
-                            <i class="zmdi zmdi-close"></i>
-                        </button>
-
-                    </template>
-                </data-list>
+                <fighter-import />
             </div>
         </div>
     </div>

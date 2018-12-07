@@ -20,7 +20,7 @@ export default {
             active_lang: "lang/active"
         }),
         id_modal_filter() {
-            return "modal-filter__"+this.name
+            return "modal-filter__"+this.id
         }
     },
     methods: {
