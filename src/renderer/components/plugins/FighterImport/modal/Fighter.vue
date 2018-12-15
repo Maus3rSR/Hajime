@@ -1,12 +1,6 @@
 <script>
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 
-const getFighterTemplate = () => ({
-    name: "",
-    birthdate: "",
-    grade: "",
-})
-
 export default {
     components: { bModal },
     props: {
@@ -50,12 +44,12 @@ export default {
             this.errors.clear()
         },
         reset() {
-            this.fighter = getFighterTemplate()
+            this.fighter = {}
         }
     },
     data() {
         return {
-            fighter: getFighterTemplate()
+            fighter: {}
         }
     }
 }
@@ -65,7 +59,7 @@ export default {
     <b-modal class="modal__filter" title="Ajout d'un combattant" size="lg" hide-header-close ref="modalFighter">
         <div class="row">
             
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <div>
                         <label for="fighter__name">Nom *</label>
@@ -88,7 +82,7 @@ export default {
                 </div>
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <div>
                         <label for="fighter__birthdate">Date de naissance *</label>
@@ -113,17 +107,15 @@ export default {
                 </div>
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__grade">Grade *</label>
+                        <label for="fighter__grade">Grade</label>
                         <input
                             id="fighter__grade"
                             class="form-control"
                             type="text"
                             name="grade"
-
-                            required
 
                             v-validate
                             v-model="fighter.grade"
@@ -136,9 +128,31 @@ export default {
                 </div>
             </div>
 
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div>
+                        <label for="fighter__club">Club</label>
+                        <input
+                            id="fighter__club"
+                            class="form-control"
+                            type="text"
+                            name="club"
+
+                            v-validate
+                            v-model="fighter.club"
+
+                            :class="{ 'is-invalid': errors.has('club') }"
+                        >
+                        <i class="form-group__bar"></i>
+                    </div>
+                    <span class="text-danger" v-if="errors.has('club')">{{ errors.first('club') }}</span>
+                </div>
+            </div>
+
         </div>
 
         <template slot="modal-footer">
+            <div class="mr-auto">* Champs requis</div>
             <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyAndClose">Ajouter</button>
             <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="apply">Ajouter et saisir un nouveau combattant</button>
             <button type="button" class="btn btn-dark" @click.prevent="cancel">Annuler</button>

@@ -46,6 +46,7 @@ export default {
                 { label: 'Combattant', field: 'name' },
                 { label: 'Date de naissance', field: 'birthdate' },
                 { label: 'Grade', field: 'grade' },
+                { label: 'Club', field: 'club' },
                 { label: '', field: 'action-cell' }
             ]"
             :list="list"
