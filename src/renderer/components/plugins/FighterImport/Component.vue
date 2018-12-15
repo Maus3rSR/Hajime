@@ -1,8 +1,10 @@
 <script>
 import ModalFighter from './modal/Fighter'
+import ModalPreviewCsv from './modal/Csv'
+import Papa from 'papaparse'
 
 export default {
-    components: { ModalFighter },
+    components: { ModalFighter, ModalPreviewCsv },
     computed: {
         total() {
             return this.list.length
@@ -12,9 +14,30 @@ export default {
         openFighterModal() {
             this.$refs.modalFighter.show()
         },
+        previewImport(e) {
+            if (undefined == e.target.files[0]) {
+                this.$notify.error("Une erreur est survenue lors de la lecture du fichier à importer")
+                return
+            }
+
+            Papa.parse(e.target.files[0], {
+                complete: results => {
+                    if (results.errors.length) {
+                        this.$notify.error("Le fichier est invalide. Veuillez vérifier le format de votre fichier et le contenu des cellules")
+                        return
+                    }
+
+                    this.$refs.previewCsvModal.show(results.data)
+                }
+            })
+        },
         onFighterAdd(fighter) {
             this.list.push(fighter)
             this.$notify.success("Le combattant a bien été ajouté")
+        },
+        onFighterListImport(fighter_list) {
+            this.list = fighter_list
+            this.$notify.success("La liste des combattants a bien été ajoutée")
         },
         deleteFighter(row) {
             const index = this.list.findIndex(el => el.name+el.birthdate == row.name+row.birthdate)
@@ -66,6 +89,15 @@ export default {
                 >
                 </a>
 
+                <a
+                    href="javascript:void(0)"
+                    class="actions__item zmdi zmdi-download"
+                    title="Importer une liste existante (fichier .CSV)"
+
+                    @click.prevent="$refs.fighterFileInput.click()" 
+                >
+                </a>
+
             </template>
 
             <template slot="action-cell" slot-scope="props">
@@ -77,6 +109,8 @@ export default {
             </template>
         </data-list>
 
+        <input type="file" ref="fighterFileInput" class="d-none" @change="previewImport">
+
         <modal-fighter
             id="fighter"
             ref="modalFighter"
@@ -84,7 +118,13 @@ export default {
             @on-fighter-add="onFighterAdd"
         />
 
-    </div>    
+        <modal-preview-csv
+            id="csv-fighter-list"
+            ref="previewCsvModal"
+
+            @on-import="onFighterListImport"
+        />
+    </div>
 </template>
 
 <style lang="scss" scoped>
