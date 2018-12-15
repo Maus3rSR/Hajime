@@ -16,7 +16,7 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <a class="btn btn-dark btn--icon-text" href="javascript:void(0);" @click.prevent="$emit('onBack')">
+                <a class="btn btn-dark btn--icon-text mb-3" href="javascript:void(0);" @click.prevent="$emit('onBack')">
                     <i class="zmdi zmdi-arrow-left"></i>
                     Revenir au formulaire
                 </a>

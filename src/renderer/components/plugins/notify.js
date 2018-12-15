@@ -1,24 +1,27 @@
 import Toasted from 'vue-toasted';
 
+const getIconClass = icon => 'mr-2 zmdi zmdi-'+icon
+
 const NotifyPlugin = {
     install(Vue) {
         Vue.use(Toasted, {
-            duration: 3000
+            duration: 3000,
+            iconPack: "custom-class",
         })
 
         Vue.toasted.register('error', payload => payload, {
             type : 'error',
-            icon : 'error_outline'
+            icon : getIconClass('alert-circle-o')
         })
 
         Vue.toasted.register('success', payload => payload, {
             type : 'success',
-            icon : 'check'
+            icon : getIconClass('check')
         })
 
         Vue.toasted.register('info', payload => payload, {
             type : 'info',
-            icon : 'info_outline'
+            icon : getIconClass('alert-circle-o')
         })
 
         Vue.notify = Vue.prototype.$notify = {
