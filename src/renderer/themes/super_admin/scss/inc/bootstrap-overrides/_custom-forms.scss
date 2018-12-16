@@ -1,16 +1,31 @@
 .custom-control {
   margin-bottom: 0;
   min-height: 1.5rem;
+  display: inline-block;
 }
 
 .custom-control-indicator {
   border: 1px solid rgba($white, 0.6);
   color: $white;
   top: 0.03rem;
+  position: absolute;
+  left: 0;
+  display: block;
+  width: 1.308rem;
+  height: 1.308rem;
+  pointer-events: none;
+  user-select: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
   @include transition(border 200ms);
 }
 
 .custom-checkbox {
+  &:hover {
+      cursor: pointer;
+  }
   .custom-control-indicator {
     &:before {
       content: '\f26b';

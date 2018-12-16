@@ -21,6 +21,7 @@ export default {
             }
 
             Papa.parse(e.target.files[0], {
+                skipEmptyLines: true,
                 complete: results => {
                     if (results.errors.length) {
                         this.$notify.error("Le fichier est invalide. Veuillez vérifier le format de votre fichier et le contenu des cellules")
