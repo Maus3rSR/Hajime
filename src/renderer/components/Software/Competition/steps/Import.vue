@@ -16,13 +16,6 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <a class="btn btn-dark btn--icon-text mb-3" href="javascript:void(0);" @click.prevent="$emit('onBack')">
-                    <i class="zmdi zmdi-arrow-left"></i>
-                    Revenir au formulaire
-                </a>
-            </div>
-
-            <div class="col-sm-12">
                 <fighter-import />
             </div>
         </div>

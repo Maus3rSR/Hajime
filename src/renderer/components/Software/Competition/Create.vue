@@ -16,6 +16,12 @@ export default {
         },
         previousStep() {
             this.current_step = this.current_step - 1
+        },
+        goToStep(step) {
+            if (this.current_step <= step)
+                return
+
+            this.current_step = step
         }
     },
     data() {
@@ -33,7 +39,15 @@ export default {
             <h1>Nouvelle compétition</h1>
 
             <div class="actions">
-                <router-link to="/" class="actions__item zmdi zmdi-close" title="Annuler et revenir à l'écran principal"></router-link>
+                <router-link to="/" class="btn btn-dark btn--icon-text">
+                    <i class="zmdi zmdi-close"></i> Annuler et revenir à l'écran principal
+                </router-link>
+                
+                <transition name="fade" mode="out-in">
+                    <button v-if="current_step > 1" class="btn btn-dark btn--icon-text" @click.prevent="previousStep()">
+                        <i class="zmdi zmdi-arrow-left"></i> Revenir à l'étape précédente
+                    </button>
+                </transition>
             </div>
         </header>
 
@@ -42,9 +56,9 @@ export default {
 
                 <nav aria-label="step-wizard" role="navigation">
                     <ol class="breadcrumb mb-4">
-                        <li aria-current="step" class="breadcrumb-item" :class="{ active: current_step >= 1 }">1. Formulaire</li>
-                        <li aria-current="step" class="breadcrumb-item" :class="{ active: current_step >= 2 }">2. Import des combattants</li>
-                        <li aria-current="step" class="breadcrumb-item" :class="{ active: current_step >= 3 }">3. Tirage au sort</li>
+                        <li @click="goToStep(1)" class="breadcrumb-item" :class="{ active: current_step >= 1 }">1. Formulaire</li>
+                        <li @click="goToStep(2)" class="breadcrumb-item" :class="{ active: current_step >= 2 }">2. Import des combattants</li>
+                        <li @click="goToStep(3)" class="breadcrumb-item" :class="{ active: current_step >= 3 }">3. Tirage au sort</li>
                     </ol>
                 </nav>
 
@@ -60,5 +74,7 @@ export default {
 </template>
 
 <style lang="scss">
-
+    .breadcrumb-item.active {
+        cursor: pointer;
+    }
 </style>
