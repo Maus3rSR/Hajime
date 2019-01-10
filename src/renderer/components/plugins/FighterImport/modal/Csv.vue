@@ -145,7 +145,7 @@ export default {
         <div class="row">
             <div class="col-sm-12">
                 <transition name="fade">
-                    <div class="alert alert-danger" v-if="number_of_row_not_imported && can_do_import">
+                    <div class="alert alert-danger" v-if="number_of_row_not_imported">
                         <div class="alert-heading">
                             {{number_of_row_not_imported}} ligne(s) comportent des erreurs et ne seront pas importées
                         </div>
