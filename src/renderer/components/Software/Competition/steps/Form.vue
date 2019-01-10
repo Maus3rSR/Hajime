@@ -15,15 +15,7 @@ export default {
         },
         ...mapFields('competition', ['name', 'date', 'place', 'owner', 'type']),
     },
-    methods: {
-        ...mapActions({
-            saveCompetition: "competition/SAVE_COMPETITION"
-        }),
-        save() {
-            this.saveCompetition()
-            this.$emit('onValidate')
-        }
-    },
+    methods: {},
     mounted() {
         this.type = this.default_type
     }
@@ -152,7 +144,7 @@ export default {
                 <span class="text-warning text-sm">Les champs * sont requis</span>
             </div>
             <div class="col">
-                <button :disabled="!form_is_valid" :class="{'btn-outline-success': form_is_valid}" type="button" class="btn float-right" @click="save()">
+                <button :disabled="!form_is_valid" :class="{'btn-outline-success': form_is_valid}" type="button" class="btn float-right" @click="this.$emit('onValidate')">
                     Etape suivante
                     <i class="zmdi zmdi-arrow-right"></i>
                 </button>
