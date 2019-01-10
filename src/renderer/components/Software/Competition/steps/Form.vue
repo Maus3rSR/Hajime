@@ -1,9 +1,10 @@
 <script>
-import Vuex from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 
 export default {
     computed: {
-        ...Vuex.mapGetters({
+        ...mapGetters({
             type_list: "competition_type/all",
             default_type: "competition_type/default"
         }),
@@ -11,15 +12,16 @@ export default {
             return Object.keys(this.fields).every(field => {
                 return this.fields[field] && this.fields[field].valid;
             });
-        }
+        },
+        ...mapFields('competition', ['name', 'date', 'place', 'owner', 'type']),
     },
-    data() {
-        return {
-            name: null,
-            date: null,
-            place: null,
-            owner: null,
-            type: null,
+    methods: {
+        ...mapActions({
+            saveCompetition: "competition/SAVE_COMPETITION"
+        }),
+        save() {
+            this.saveCompetition()
+            this.$emit('onValidate')
         }
     },
     mounted() {
@@ -150,7 +152,7 @@ export default {
                 <span class="text-warning text-sm">Les champs * sont requis</span>
             </div>
             <div class="col">
-                <button :disabled="!form_is_valid" :class="{'btn-outline-success': form_is_valid}" type="button" class="btn float-right" @click="$emit('onValidate')">
+                <button :disabled="!form_is_valid" :class="{'btn-outline-success': form_is_valid}" type="button" class="btn float-right" @click="save()">
                     Etape suivante
                     <i class="zmdi zmdi-arrow-right"></i>
                 </button>

@@ -2,6 +2,7 @@
 import Vuex from 'vuex'
 import Step1 from './steps/Form'
 import Step2 from './steps/Import'
+import { mapActions } from 'vuex'
 
 export default {
     components: { Step1, Step2 },
@@ -11,6 +12,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            clearCompetition: "competition/CLEAR"
+        }),
         nextStep() {
             this.current_step = this.current_step + 1
         },
@@ -28,6 +32,9 @@ export default {
         return {
             current_step: 1
         }
+    },
+    mounted() {
+        this.clearCompetition()
     }
 }
 </script>
