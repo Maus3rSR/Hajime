@@ -15,6 +15,7 @@ const state = defaultState()
 const getters = {
     getField,
     is_locked: state => state.locked,
+    fighter_list: state => state.fighter_list
 }
 
 const mutations = {

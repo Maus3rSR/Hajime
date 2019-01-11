@@ -1,6 +1,11 @@
 <script>
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 
+const MODE_TYPE = {
+    ADD: 'ADD',
+    EDIT: 'EDIT'
+}
+
 export default {
     components: { bModal },
     props: {
@@ -14,14 +19,27 @@ export default {
             return "modal-filter__"+this.id
         },
         form_is_valid() {
-            return Object.keys(this.fields).every(field => {
-                return this.fields[field] && this.fields[field].valid;
-            });
+            return !Object.keys(this.fields).some(key => this.fields[key].invalid)
+        },
+        is_edit_mode() {
+            return this.mode == MODE_TYPE.EDIT
+        },
+        modal_title() {
+            return this.is_edit_mode ? "Modification d'un combattant" : "Ajout d'un combattant"
         }
     },
     methods: {
-        show() {
+        show(fighter) {
+            if (undefined !== fighter && null !== fighter) {
+                this.mode = MODE_TYPE.EDIT
+                this.fighter = fighter
+                this.$nextTick().then(() => this.$validator.validateAll())
+            }
+
             this.$refs.modalFighter.show()
+        },
+        handleHide(event) {
+            this.reset()
         },
         closeModal() {
             this.$refs.modalFighter.hide()
@@ -32,23 +50,30 @@ export default {
 
             this.$emit('on-fighter-add', this.fighter)
             this.reset()
-            this.errors.clear()
+        },
+        applyEditAndClose() {
+            if (!this.form_is_valid)
+                return
+
+            this.$emit('on-fighter-edit', this.fighter)
+            this.closeModal()
         },
         applyAndClose() {
             this.apply()
             this.closeModal()
         },
         cancel() {
-            this.reset()
             this.closeModal()
-            this.errors.clear()
         },
         reset() {
             this.fighter = {}
+            this.mode = MODE_TYPE.ADD
+            this.$nextTick().then(() => this.$validator.validateAll().then(() => this.errors.clear()))
         }
     },
     data() {
         return {
+            mode: MODE_TYPE.ADD,
             fighter: {}
         }
     }
@@ -56,7 +81,7 @@ export default {
 </script>
 
 <template>
-    <b-modal class="modal__filter" title="Ajout d'un combattant" size="lg" hide-header-close ref="modalFighter">
+    <b-modal class="modal__filter" :title="modal_title" size="lg" hide-header-close ref="modalFighter" @hide="handleHide">
         <div class="row">
             
             <div class="col-sm-6">
@@ -153,9 +178,16 @@ export default {
 
         <template slot="modal-footer">
             <div class="mr-auto">* Champs requis</div>
-            <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyAndClose">Ajouter</button>
-            <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="apply">Ajouter et saisir un nouveau combattant</button>
-            <button type="button" class="btn btn-dark" @click.prevent="cancel">Annuler</button>
+
+            <button type="button" class="btn btn-link" @click.prevent="cancel">Annuler</button>
+
+            <template v-if="!is_edit_mode">
+                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyAndClose">Ajouter</button>
+                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="apply">Ajouter et saisir un nouveau combattant</button>
+            </template>
+            <template v-else>
+                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyEditAndClose">Modifier</button>
+            </template>
         </template>
     </b-modal>
 </template>

@@ -1,18 +1,18 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 
 export default {
     computed: {
+        ...mapGetters({
+            fighter_list: "competition/fighter_list"
+        }),
+        ...mapFields('competition', ['fighter_list']),
         step_is_valid() {
-            return this.list.length > 0
-        }
+            return this.fighter_list.length > 0
+        },
     },
-    methods: {},
-    data() {
-        return {
-            list: [],
-        }
-    }
+    methods: {}
 }
 </script>
 
@@ -20,7 +20,7 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <fighter-import />
+                <fighter-import v-model="fighter_list" />
             </div>
         </div>
 

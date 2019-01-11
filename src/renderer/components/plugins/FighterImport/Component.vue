@@ -4,15 +4,22 @@ import ModalPreviewCsv from './modal/Csv'
 import Papa from 'papaparse'
 
 export default {
+    props: ['value'],
     components: { ModalFighter, ModalPreviewCsv },
     computed: {
         total() {
-            return this.list.length
+            return this.value.length
         }
     },
     methods: {
-        openFighterModal() {
+        addFighter() {
             this.$refs.modalFighter.show()
+        },
+        editFighter(fighter) {
+            this.$refs.modalFighter.show(JSON.parse(JSON.stringify(fighter)))
+        },
+        deleteFighter(fighter) {
+            this.$refs.modalDeleteFighter.show(fighter)
         },
         previewImport(e) {
             if (undefined == e.target.files[0]) {
@@ -33,30 +40,48 @@ export default {
             })
         },
         onFighterAdd(fighter) {
-            this.list.push(fighter)
+            let list = JSON.parse(JSON.stringify(this.value))
+            list.push(fighter)
+            this.$emit("input", list)
+
             this.$notify.success("Le combattant a bien été ajouté")
         },
-        onFighterListImport(fighter_list) {
-            this.list = fighter_list
-            this.$notify.success("La liste des combattants a bien été ajoutée")
-        },
-        deleteFighter(row) {
-            const index = this.list.findIndex(el => el.name+el.birthdate == row.name+row.birthdate)
+        onFighterEdit(fighter) {
+            const index = fighter.originalIndex
+            let list = JSON.parse(JSON.stringify(this.value))
+            
+            if (undefined == list[index]) {
+                this.$notify.error("Le combattant à modifier n'a pas été trouvé dans la liste")
+                return
+            }
 
-            if (index < 0) {
+            // provient de data-list
+            delete fighter.originalIndex
+            delete fighter.vgt_id
+
+            list[index] = fighter
+
+            this.$emit("input", list)
+            this.$notify.success("Le combattant a bien été modifié")
+        },
+        onFighterDelete(fighter) {
+            let list = JSON.parse(JSON.stringify(this.value))
+
+            if (undefined == list[fighter.originalIndex]) {
                 this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")
                 return
             }
             
-            this.list.splice(index, 1)
+            list.splice(fighter.originalIndex, 1)
+            this.$emit("input", list)
+
             this.$notify.success("Le combattant a bien été supprimé")
+        },
+        onFighterListImport(fighter_list) {
+            this.$emit("input", fighter_list)
+            this.$notify.success("La liste des combattants a bien été ajoutée")
         }
     },
-    data() {
-        return {
-            list: []
-        }
-    }
 }
 </script>
 
@@ -73,7 +98,7 @@ export default {
                 { label: 'Club', field: 'club' },
                 { label: '', field: 'action-cell' }
             ]"
-            :list="list"
+            :list="value"
             :total="total"
             :isDynamic="false"
 
@@ -86,7 +111,7 @@ export default {
                     class="actions__item zmdi zmdi-plus"
                     title="Ajouter un combattant"
 
-                    @click.prevent="openFighterModal"   
+                    @click.prevent="addFighter"
                 >
                 </a>
 
@@ -103,6 +128,10 @@ export default {
 
             <template slot="action-cell" slot-scope="props">
                 
+                <button title="Modifier ce combattant" class="btn btn-sm btn-outline-primary" @click.prevent="editFighter(props.row)">
+                    <i class="zmdi zmdi-edit"></i>
+                </button>
+
                 <button title="Supprimer ce combattant de la liste" class="btn btn-sm btn-outline-danger" @click.prevent="deleteFighter(props.row)">
                     <i class="zmdi zmdi-close"></i>
                 </button>
@@ -116,6 +145,7 @@ export default {
             id="fighter"
             ref="modalFighter"
 
+            @on-fighter-edit="onFighterEdit"
             @on-fighter-add="onFighterAdd"
         />
 
@@ -124,6 +154,13 @@ export default {
             ref="previewCsvModal"
 
             @on-import="onFighterListImport"
+        />
+
+        <modal-delete-confirmation
+            ref="modalDeleteFighter"
+            labelField="name"
+
+            @on-delete="onFighterDelete"
         />
     </div>
 </template>

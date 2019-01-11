@@ -8,12 +8,10 @@ export default {
             type_list: "competition_type/all",
             default_type: "competition_type/default"
         }),
-        form_is_valid() {
-            return Object.keys(this.fields).every(field => {
-                return this.fields[field] && this.fields[field].valid;
-            });
-        },
         ...mapFields('competition', ['name', 'date', 'place', 'owner', 'type']),
+        step_is_valid() {
+            return !Object.keys(this.fields).some(key => this.fields[key].invalid)
+        },
     },
     methods: {},
     mounted() {
@@ -144,7 +142,7 @@ export default {
                 <span class="text-warning text-sm">Les champs * sont requis</span>
             </div>
             <div class="col">
-                <button :disabled="!form_is_valid" :class="{'btn-outline-success': form_is_valid}" type="button" class="btn float-right" @click="this.$emit('onValidate')">
+                <button :disabled="!step_is_valid" :class="{'btn-outline-success': step_is_valid}" type="button" class="btn float-right" @click="$emit('onValidate')">
                     Etape suivante
                     <i class="zmdi zmdi-arrow-right"></i>
                 </button>

@@ -30,7 +30,18 @@ export default {
     },
     data() {
         return {
-            current_step: 1
+            current_step: 1,
+            step_list: [
+                {
+                    name: "Informations générales"
+                },
+                {
+                    name: "Import des combatants"
+                },
+                {
+                    name: "Formule de compétition"
+                }
+            ]
         }
     },
     mounted() {
@@ -63,9 +74,7 @@ export default {
 
                 <nav aria-label="step-wizard" role="navigation">
                     <ol class="breadcrumb mb-4">
-                        <li @click="goToStep(1)" class="breadcrumb-item" :class="{ active: current_step >= 1 }">1. Formulaire</li>
-                        <li @click="goToStep(2)" class="breadcrumb-item" :class="{ active: current_step >= 2 }">2. Import des combattants</li>
-                        <li @click="goToStep(3)" class="breadcrumb-item" :class="{ active: current_step >= 3 }">3. Tirage au sort</li>
+                        <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">{{ index+1 }}. {{ step.name }}</li>
                     </ol>
                 </nav>
 

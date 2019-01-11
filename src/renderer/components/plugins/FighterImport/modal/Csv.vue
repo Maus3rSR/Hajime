@@ -185,8 +185,8 @@ export default {
                     <span class="custom-control-description">Importer la 1ère ligne</span>
                 </label>
             </div>
+            <button type="button" class="btn btn-link" @click.prevent="cancel">Annuler</button>
             <button type="button" class="btn" :disabled="!can_do_import" :class="{'btn-outline-primary': can_do_import}" @click.prevent="applyAndClose">Importer {{ total_final_list }} combattant(s)</button>
-            <button type="button" class="btn btn-dark" @click.prevent="cancel">Annuler</button>
         </template>
     </b-modal>
 </template>
