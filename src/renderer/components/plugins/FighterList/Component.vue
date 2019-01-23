@@ -4,7 +4,14 @@ import ModalPreviewCsv from './modal/Csv'
 import Papa from 'papaparse'
 
 export default {
-    props: ['value'],
+    props: {
+        value: Array,
+        is_team: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
     components: { ModalFighter, ModalPreviewCsv },
     computed: {
         total() {
