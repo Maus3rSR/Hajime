@@ -34,6 +34,8 @@ export default {
                 </h1>
             </div>
 
+            <breadcrumbs></breadcrumbs>
+
         </header>
 
         <!-- Sidebar -->
@@ -45,8 +47,6 @@ export default {
 
         <!-- Content -->
         <section class="content content--full">
-            <breadcrumbs></breadcrumbs>
-
             <transition :name="transitionName" mode="out-in" appear>
                 <router-view></router-view>
             </transition>
