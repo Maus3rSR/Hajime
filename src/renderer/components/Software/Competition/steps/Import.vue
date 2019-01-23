@@ -24,7 +24,7 @@ export default {
             </div>
         </div>
 
-        <div class="row">
+        <div class="row software__container--offset-element">
             <div class="col">
                 <button :disabled="!step_is_valid" :class="{'btn-outline-success': step_is_valid}" class="btn float-right" @click="$emit('onValidate')">
                     Etape suivante

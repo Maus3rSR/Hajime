@@ -37,7 +37,9 @@ export default {
                 parseFloat(computedRootElement.marginTop) -
                 // Border
                 parseFloat(computedRootElement.borderTopWidth) -
-                parseFloat(computedRootElement.borderBottomWidth)
+                parseFloat(computedRootElement.borderBottomWidth) -
+                // All element offset defined manually in the page to consider in the calculation
+                this.getElementListOffsetValue()
             ) + "px"
 
             if (!this.elementScroll) {
@@ -55,6 +57,29 @@ export default {
                 element.classList.add("software__container__child")
                 element = element.parentNode
             }
+        },
+        getElementListOffsetValue() {
+            let element_list = document.getElementsByClassName("software__container--offset-element")
+
+            return Array.from(element_list).reduce((total_value, element) => {
+                
+                const computedRootElement = window.getComputedStyle(element)
+
+                return total_value += (
+                    // Height
+                    parseFloat(computedRootElement.height) +
+                    // Padding
+                    parseFloat(computedRootElement.paddingTop) +
+                    parseFloat(computedRootElement.paddingBottom) +
+                    // Margin
+                    // parseFloat(computedRootElement.marginBottom) +
+                    // parseFloat(computedRootElement.marginTop) +
+                    // Border
+                    parseFloat(computedRootElement.borderTopWidth) +
+                    parseFloat(computedRootElement.borderBottomWidth)
+                )
+
+            }, 0)
         }
     },
     data() {

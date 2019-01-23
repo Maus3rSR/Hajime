@@ -73,7 +73,7 @@ export default {
             <div class="card-body">
 
                 <nav aria-label="step-wizard" role="navigation">
-                    <ol class="breadcrumb mb-4">
+                    <ol class="breadcrumb mb-4 software__container--offset-element">
                         <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">{{ index+1 }}. {{ step.name }}</li>
                     </ol>
                 </nav>
