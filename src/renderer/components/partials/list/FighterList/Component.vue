@@ -1,4 +1,6 @@
 <script>
+import { mapGetters } from 'vuex'
+import { Dropdown } from 'bootstrap-vue/es/components'; 
 import ModalFighter from './modal/Fighter'
 import ModalPreviewCsv from './modal/Csv'
 import Papa from 'papaparse'
@@ -6,14 +8,17 @@ import Papa from 'papaparse'
 export default {
     props: {
         value: Array,
-        is_team: {
-            type: Boolean,
+        competition_type: {
+            type: String,
             required: false,
-            default: false
+            default: ""
         }
     },
-    components: { ModalFighter, ModalPreviewCsv },
+    components: { Dropdown, ModalFighter, ModalPreviewCsv },
     computed: {
+        ...mapGetters({
+            competition_type_list: "competition_type/all",
+        }),
         total() {
             return this.value.length
         }
@@ -62,7 +67,7 @@ export default {
                 return
             }
 
-            // provient de data-list
+            // from data-list component, remove artefacts
             delete fighter.originalIndex
             delete fighter.vgt_id
 
@@ -112,6 +117,18 @@ export default {
             ref="FighterList"
         >
             <template slot="action-bar">
+
+                <!-- <b-dropdown variant="link" title="Grouper les équipes par ..." no-caret>
+                    <template slot="button-content">
+                        <span class="actions__item zmdi zmdi-accounts-alt"></span>
+                    </template>
+
+                    <b-dropdown-header>Grouper les équipes par :</b-dropdown-header>
+                    
+                    <b-dropdown-item href="#">
+                        Club
+                    </b-dropdown-item>
+                </b-dropdown> -->
 
                 <a
                     href="javascript:void(0)"
@@ -172,6 +189,16 @@ export default {
     </div>
 </template>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.datalist {
+    .toolbar {
+        .actions {
+            button {
+                margin: 0;
+                padding: 0;
+                border: none;
+            }
+        }
+    }
+}
 </style>

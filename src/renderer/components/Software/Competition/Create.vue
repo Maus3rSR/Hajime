@@ -1,7 +1,7 @@
 <script>
 import Vuex from 'vuex'
 import Step1 from './steps/Form'
-import Step2 from './steps/Import'
+import Step2 from './steps/FighterImport'
 import { mapActions } from 'vuex'
 
 export default {

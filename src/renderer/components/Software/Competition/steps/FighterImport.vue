@@ -1,11 +1,12 @@
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import FighterList from '@partials/list/FighterList/Component'
 
 export default {
+    components: { FighterList },
     computed: {
         ...mapGetters({
-            competition_type_list: "competition_type/all",
             fighter_list: "competition/fighter_list"
         }),
         ...mapFields('competition', ['fighter_list']),
@@ -24,7 +25,7 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <fighter-list v-model="fighter_list" :isTeam="competition_type == competition_type_list.TEAM" />
+                <fighter-list v-model="fighter_list" :competitionType="competition_type" />
             </div>
         </div>
 
