@@ -10,15 +10,28 @@ export default {
         value: Array,
         competition_type: {
             type: String,
-            required: false,
-            default: ""
+            required: true,
         }
     },
     components: { Dropdown, ModalFighter, ModalPreviewCsv },
     computed: {
         ...mapGetters({
-            competition_type_list: "competition/type_list",
+            constant_type_list: "competition/constant_type_list"
         }),
+        column_list() {
+            let column_list = [
+                { label: 'Combattant', field: 'name' },
+                { label: 'Date de naissance', field: 'birthdate' },
+                { label: 'Grade', field: 'grade' },
+                { label: 'Club', field: 'club' },
+                { label: '', field: 'action-cell' }
+            ]
+
+            if (this.competition_type == this.constant_type_list.TEAM)
+                column_list.splice(2, 0, { label: 'Equipe', field: 'team' }) 
+
+            return column_list
+        },
         total() {
             return this.value.length
         }
@@ -103,13 +116,7 @@ export default {
             
             name="fighters"
             title="Total de combattants"
-            :columns="[
-                { label: 'Combattant', field: 'name' },
-                { label: 'Date de naissance', field: 'birthdate' },
-                { label: 'Grade', field: 'grade' },
-                { label: 'Club', field: 'club' },
-                { label: '', field: 'action-cell' }
-            ]"
+            :columns="column_list"
             :list="value"
             :total="total"
             :isDynamic="false"
@@ -117,18 +124,6 @@ export default {
             ref="FighterList"
         >
             <template slot="action-bar">
-
-                <!-- <b-dropdown variant="link" title="Grouper les équipes par ..." no-caret>
-                    <template slot="button-content">
-                        <span class="actions__item zmdi zmdi-accounts-alt"></span>
-                    </template>
-
-                    <b-dropdown-header>Grouper les équipes par :</b-dropdown-header>
-                    
-                    <b-dropdown-item href="#">
-                        Club
-                    </b-dropdown-item>
-                </b-dropdown> -->
 
                 <a
                     href="javascript:void(0)"
@@ -169,6 +164,8 @@ export default {
             id="fighter"
             ref="modalFighter"
 
+            :competition_type="competition_type"
+
             @on-fighter-edit="onFighterEdit"
             @on-fighter-add="onFighterAdd"
         />
@@ -176,6 +173,8 @@ export default {
         <modal-preview-csv
             id="csv-fighter-list"
             ref="previewCsvModal"
+
+            :competition_type="competition_type"
 
             @on-import="onFighterListImport"
         />

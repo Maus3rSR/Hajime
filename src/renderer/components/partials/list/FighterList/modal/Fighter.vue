@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 
 const MODE_TYPE = {
@@ -12,9 +13,16 @@ export default {
         id: {
             type: String,
             required: true
+        },
+        competition_type: {
+            type: String,
+            required: true,
         }
     },
     computed: {
+        ...mapGetters({
+            constant_type_list: "competition/constant_type_list"
+        }),
         id_modal_filter() {
             return "modal-filter__"+this.id
         },
@@ -129,6 +137,27 @@ export default {
                         <i class="form-group__bar"></i>
                     </div>
                     <span class="text-danger" v-if="errors.has('birthdate')">{{ errors.first('birthdate') }}</span>
+                </div>
+            </div>
+
+            <div class="col-sm-12" v-if="competition_type == constant_type_list.TEAM">
+                <div class="form-group">
+                    <div>
+                        <label for="fighter__team">Equipe</label>
+                        <input
+                            id="fighter__team"
+                            class="form-control"
+                            type="text"
+                            name="team"
+
+                            v-validate
+                            v-model="fighter.team"
+
+                            :class="{ 'is-invalid': errors.has('team') }"
+                        >
+                        <i class="form-group__bar"></i>
+                    </div>
+                    <span class="text-danger" v-if="errors.has('team')">{{ errors.first('team') }}</span>
                 </div>
             </div>
 

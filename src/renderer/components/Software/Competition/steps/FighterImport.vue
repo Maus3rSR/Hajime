@@ -6,11 +6,8 @@ import FighterList from '@partials/list/FighterList/Component'
 export default {
     components: { FighterList },
     computed: {
-        ...mapGetters({
-            fighter_list: "competition/fighter_list"
-        }),
-        ...mapFields('competition', ['fighter_list']),
         ...mapFields('competition', {
+            fighter_list: 'fighter_list',
             competition_type: 'type'
         }),
         step_is_valid() {
@@ -25,7 +22,7 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <fighter-list v-model="fighter_list" :competitionType="competition_type" />
+                <fighter-list v-model="fighter_list" :competition_type="competition_type" />
             </div>
         </div>
 

@@ -1,4 +1,5 @@
 <script>
+import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
 import { isArray } from 'util';
 
@@ -8,14 +9,45 @@ export default {
         id: {
             type: String,
             required: true
+        },
+        competition_type: {
+            type: String,
+            required: true,
         }
     },
     computed: {
+        ...mapGetters({
+            constant_type_list: "competition/constant_type_list"
+        }),
         id_modal_filter() {
             return "modal-filter__"+this.id
         },
         can_do_import() {
             return this.total_final_list > 0;
+        },
+        field_list() {
+            let field_list = {
+                "name": {
+                    label: "Nom",
+                    required: true,
+                },
+                "birthdate": {
+                    label: "Date de naissance (format DD/MM/YYYY)",
+                    required: true,
+                    validate: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+                },
+                "grade": {
+                    label: "Grade"
+                },
+                "club": {
+                    label: "Club"
+                }
+            }
+
+            if (this.competition_type == this.constant_type_list.TEAM)
+                field_list["team"] = { label: "Equipe" }
+
+            return field_list
         },
         preview_list() {
             return this.list.filter((row, index) => index+1 <= this.number_of_preview)
@@ -115,23 +147,6 @@ export default {
     data() {
         return {
             list: [],
-            field_list: {
-                "name": {
-                    label: "Nom",
-                    required: true,
-                },
-                "birthdate": {
-                    label: "Date de naissance (format DD/MM/YYYY)",
-                    required: true,
-                    validate: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
-                },
-                "grade": {
-                    label: "Grade"
-                },
-                "club": {
-                    label: "Club"
-                }
-            },
             match_field_list: {},
             import_first_line: true,
             number_of_preview: 5
