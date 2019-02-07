@@ -17,7 +17,7 @@ export default {
     components: { Dropdown, ModalFighter, ModalPreviewCsv },
     computed: {
         ...mapGetters({
-            competition_type_list: "competition_type/all",
+            competition_type_list: "competition/type_list",
         }),
         total() {
             return this.value.length

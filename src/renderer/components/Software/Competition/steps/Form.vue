@@ -5,8 +5,8 @@ import { mapFields } from 'vuex-map-fields'
 export default {
     computed: {
         ...mapGetters({
-            type_list: "competition_type/all",
-            default_type: "competition_type/default"
+            type_list: "competition/type_list",
+            default_type: "competition/default_type"
         }),
         ...mapFields('competition', ['name', 'date', 'place', 'owner', 'type']),
         step_is_valid() {
@@ -15,7 +15,7 @@ export default {
     },
     methods: {},
     mounted() {
-        this.type = this.default_type
+        this.$nextTick().then(() => this.$validator.validateAll().then(() => this.errors.clear()))
     }
 }
 </script>
@@ -26,7 +26,7 @@ export default {
             <div class="col-sm-12">
                 <div class="form-group">
                     <div>
-                        <label for="competition__name">Nom *</label>
+                        <label for="competition__name" class="card-body__title">Nom *</label>
                         <input
                             id="competition__name"
                             class="form-control"
@@ -49,21 +49,13 @@ export default {
 
             <div class="col-sm-6">
                 <div class="form-group">
-                    <div>
-                        <label for="competition__type">Type *</label>
-                        <select
-                            id="competition__type"
-                            class="form-control"
-                            name="type"
-
-                            v-model="type"
-
-                            :class="{ 'is-invalid': errors.has('type') }"
-                        >
-                            <option :value="type.value" v-for="type in type_list" :key="type.value">
-                                {{ type.txt }}
-                            </option>
-                        </select>
+                    <span class="card-body__title">Type *</span>
+                    <div class="clearfix mt-3">
+                        <label class="custom-control custom-radio" v-for="competition_type in type_list" :key="competition_type.value">
+                            <input type="radio" name="radio-inline" :value="competition_type.value" v-model="type" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">{{ competition_type.txt }}</span>
+                        </label>
                         <i class="form-group__bar"></i>
                     </div>
                     <span class="text-danger" v-if="errors.has('type')">{{ errors.first('type') }}</span>
@@ -73,7 +65,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="competition__date">Date *</label>
+                        <label for="competition__date" class="card-body__title">Date *</label>
                         <input
                             id="competition__date"
                             class="form-control"
@@ -98,7 +90,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="competition__place">Lieu</label>
+                        <label for="competition__place" class="card-body__title">Lieu</label>
                         <input
                             id="competition__place"
                             class="form-control"
@@ -118,7 +110,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="competition__owner">Organisateur</label>
+                        <label for="competition__owner" class="card-body__title">Organisateur</label>
                         <input
                             id="competition__owner"
                             class="form-control"
