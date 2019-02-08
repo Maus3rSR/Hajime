@@ -18,6 +18,28 @@ export default {
         ...mapGetters({
             constant_type_list: "competition/constant_type_list"
         }),
+        list() {
+            if (this.competition_type != this.constant_type_list.TEAM)
+                return this.value
+
+            return this.value.reduce((list, row) => {
+                let index = list.findIndex(el => el.label == row.team)
+
+                if (index == -1)
+                    index = list.push({
+                        mode: "span",
+                        label: row.team,
+                        html: false,
+                        children: []
+                    }) - 1
+
+                list[index].children.push(row)
+
+                // TODO : Si on demande à ce que la liste soit ordonnée par nom d'équipe, il faudra gérer un problème d'index lors de la suppression d'un combattant ...
+                // return list.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0))
+                return list
+            }, [])
+        },
         column_list() {
             let column_list = [
                 { label: 'Combattant', field: 'name' },
@@ -31,6 +53,9 @@ export default {
                 column_list.splice(2, 0, { label: 'Equipe', field: 'team' }) 
 
             return column_list
+        },
+        grouped_header() {
+            return this.competition_type == this.constant_type_list.TEAM
         },
         total() {
             return this.value.length
@@ -113,15 +138,15 @@ export default {
 <template>
     <div>
         <data-list
-            
             name="fighters"
             title="Total de combattants"
-            :columns="column_list"
-            :list="value"
-            :total="total"
-            :isDynamic="false"
-
             ref="FighterList"
+
+            :columns="column_list"
+            :list="list"
+            :total="total"
+            :groupedHeader="grouped_header"
+            :isDynamic="false"
         >
             <template slot="action-bar">
 

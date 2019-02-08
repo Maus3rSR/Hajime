@@ -55,6 +55,10 @@ export default {
         isDynamic: {
             type: Boolean,
             default: true
+        },
+        groupedHeader: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -67,10 +71,18 @@ export default {
         id_modal_filter() {
             return "datalist__"+this.name
         },
+        style_class() {
+            let style_class = "table table-sm table-responsive-sm"
+
+            if (!this.groupedHeader)
+                style_class += " table-striped"
+
+            return style_class
+        },
         total_page() {
-            if (this.total === 0) {
+            if (this.total === 0)
                 return 0
-            }
+            
             return parseInt(this.total / this.serverParams.perPage, 10) || 1
         },
         is_loading_type_page() {
@@ -180,13 +192,11 @@ export default {
             if (!this.isDynamic)
                 return
 
-            if (this.is_loading_type_page) {
+            if (this.is_loading_type_page)
                 this.$refs.paginator.complete()
-            }
 
-            if (newList.length > 0 && this.current_page === 1) {
+            if (newList.length > 0 && this.current_page === 1)
                 this.changeLoadingTypeTo(LOAD_TYPE.PAGE)
-            }
         },
     },
     data() {
@@ -258,11 +268,14 @@ export default {
                     :fixed-header="fixedHeader"
                     :pagination-options="{ enabled: isDynamic && this.is_loading_type_page }"
                     :mode="mode"
+                    :groupOptions="{
+                        enabled: groupedHeader
+                    }"
 
                     @on-sort-change="onSortChange"
 
                     infinite-wrapper
-                    styleClass="table table-sm table-striped table-responsive-sm">
+                    :styleClass=style_class
                 >
 
                     <span class="datalist__emptystate" slot="emptystate">
@@ -387,6 +400,11 @@ export default {
 
                     cursor: pointer;
                 }
+            }
+
+            .vgt-row-header {
+                font-weight: bold;
+                background-color: rgba(255, 255, 255, 0.04);
             }
         }
 
