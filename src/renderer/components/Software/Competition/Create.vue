@@ -1,11 +1,11 @@
 <script>
-import Vuex from 'vuex'
+import { mapActions } from 'vuex'
 import Step1 from './steps/Form'
 import Step2 from './steps/FighterImport'
-import { mapActions } from 'vuex'
+import Step3 from './steps/CompetitionFormula'
 
 export default {
-    components: { Step1, Step2 },
+    components: { Step1, Step2, Step3 },
     computed: {
         step_component() {
             return "step"+this.current_step
