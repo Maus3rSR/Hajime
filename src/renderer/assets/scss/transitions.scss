@@ -20,3 +20,16 @@
     -webkit-transform: translate(-30px, 0);
     transform: translate(-30px, 0);
 }
+/**
+ * SLIDE DOWN LIST
+ */
+.list-item {
+    transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-leave-active {
+  position: absolute;
+}
