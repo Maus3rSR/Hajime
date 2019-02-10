@@ -24,11 +24,13 @@ const getters = {
     constant_type_list: () => type_list,
     type_list: () => [
         {
-            txt: "Individuelle",
+            id: 1,
+            name: "Individuelle",
             value: type_list.INDI
         },
         {
-            txt: "Equipe",
+            id: 2,
+            name: "Equipe",
             value: type_list.TEAM
         },
     ],

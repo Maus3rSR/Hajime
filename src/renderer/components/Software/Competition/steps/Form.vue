@@ -54,7 +54,7 @@ export default {
                         <label class="custom-control custom-radio" v-for="competition_type in type_list" :key="competition_type.value">
                             <input type="radio" name="radio-inline" :value="competition_type.value" v-model="type" class="custom-control-input">
                             <span class="custom-control-indicator"></span>
-                            <span class="custom-control-description">{{ competition_type.txt }}</span>
+                            <span class="custom-control-description">{{ competition_type.name }}</span>
                         </label>
                         <i class="form-group__bar"></i>
                     </div>
