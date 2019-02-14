@@ -7,10 +7,7 @@ export default {
     computed: {
         ...mapGetters({
             formula_list: "formula/list"
-        }),
-        step_is_valid() {
-            return false
-        }
+        })
     },
     actions: {},
     data() {
@@ -26,30 +23,28 @@ export default {
 
 <template>
     <div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="competition_formula" class="card-body__title">Choisir une formule de compétition</label>
-                    <select class="form-control" id="competition_formula" v-model="formula">
-                        <option v-for="formula in formula_list" :value="formula" :key="formula.id">
-                            {{ formula.name }}
-                        </option>
-                    </select>
-                </div>
+        <div class=" form-group row">
+            <label class="col-sm-3 col-form-label card-body__title" for="competition_formula">Choisir une formule de compétition</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="competition_formula" v-model="formula">
+                    <option v-for="formula in formula_list" :value="formula" :key="formula.id">
+                        {{ formula.name }}
+                    </option>
+                </select>
             </div>
         </div>
 
         <transition-group name="list" tag="div" class="row" v-if="null != formula">
-            <div class="col-sm-3 list-item" v-for="formula_component in formula.component_list" :key="formula_component">
+            <div class="col-lg-6 col-md-12 list-item" v-for="formula_component in formula.component_list" :key="formula_component">
                 <component :is="formula_component"></component>
             </div>
         </transition-group>
 
         <div class="row">
             <div class="col">
-                <button :disabled="!step_is_valid" :class="{'btn-outline-success': step_is_valid}" type="button" class="btn float-right" @click="$emit('onValidate')">
-                    Je confirme la création de la compétition
+                <button class="btn float-right btn-outline-success" type="button" @click="$emit('onValidate')">
                     <i class="zmdi zmdi-check"></i>
+                    Je confirme la création de la compétition
                 </button>
 
                 <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">

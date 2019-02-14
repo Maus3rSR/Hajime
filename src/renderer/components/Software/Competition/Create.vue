@@ -1,5 +1,5 @@
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Step1 from './steps/Form'
 import Step2 from './steps/FighterImport'
 import Step3 from './steps/CompetitionFormula'
@@ -7,8 +7,25 @@ import Step3 from './steps/CompetitionFormula'
 export default {
     components: { Step1, Step2, Step3 },
     computed: {
+        ...mapGetters({
+            fighter_count: "competition/fighter_count"
+        }),
         step_component() {
             return "step"+this.current_step
+        },
+        step_list() {
+            return [
+                {
+                    name: "Informations générales"
+                },
+                {
+                    name: "Import des combattants",
+                    count: this.fighter_count
+                },
+                {
+                    name: "Formule de compétition"
+                }
+            ]
         }
     },
     methods: {
@@ -31,17 +48,6 @@ export default {
     data() {
         return {
             current_step: 1,
-            step_list: [
-                {
-                    name: "Informations générales"
-                },
-                {
-                    name: "Import des combatants"
-                },
-                {
-                    name: "Formule de compétition"
-                }
-            ]
         }
     },
     mounted() {
@@ -74,7 +80,9 @@ export default {
 
                 <nav aria-label="step-wizard" role="navigation">
                     <ol class="breadcrumb mb-4 software__container--offset-element">
-                        <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">{{ index+1 }}. {{ step.name }}</li>
+                        <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">
+                            {{ index+1 }}. {{ step.name }} <span v-if="null !== step.count" class="badge badge-pill badge-primary">{{ step.count }}</span>
+                        </li>
                     </ol>
                 </nav>
 

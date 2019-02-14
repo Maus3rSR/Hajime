@@ -225,7 +225,7 @@ export default {
         <div class="toolbar">
             <div class="toolbar__label h1">
                 {{ title }}
-                <span class="badge badge-pill badge-info">
+                <span class="badge badge-pill badge-primary">
                     <counter :value="total || 0" />
                 </span>
             </div>

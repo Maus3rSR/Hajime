@@ -6,8 +6,30 @@ export default {
 
 <template>
     <div class="card">
+        <div class="card-header">Configuration des matchs de poule</div>
         <div class="card-body">
-            <span class="card-title">Configuration des matchs de poule</span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="pool_configuration__number_of_fighter" class="card-body__title">Nombre de combattants qualifiés par poule</label>
+                        <input id="pool_configuration__number_of_fighter" type="number" class="form-control" value="1">
+                        <i class="form-group__bar"></i>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="ml-2 custom-control custom-checkbox">
+                        <input class="custom-control-input" type="checkbox">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Ecarter les têtes de séries</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-warning h5">
+                    <i class="zmdi zmdi-alert-circle-o"></i> Le nombre de poule et le nombre de combattant par poule seront configurables après l'appel des combattants pour le tirage au sort
+                </div>
+            </div>
         </div>
     </div>
 </template>

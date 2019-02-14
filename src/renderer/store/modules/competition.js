@@ -21,6 +21,7 @@ const getters = {
     getField,
     is_locked: state => state.locked,
     fighter_list: state => state.fighter_list,
+    fighter_count: state => state.fighter_list.length,
     constant_type_list: () => type_list,
     type_list: () => [
         {
