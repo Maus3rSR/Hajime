@@ -42,7 +42,7 @@ export default {
 
         <div class="row">
             <div class="col">
-                <button class="btn float-right btn-outline-success" type="button" @click="$emit('onValidate')">
+                <button class="btn float-right btn-outline-success animated tada" type="button" @click="$emit('onValidate')">
                     <i class="zmdi zmdi-check"></i>
                     Je confirme la création de la compétition
                 </button>

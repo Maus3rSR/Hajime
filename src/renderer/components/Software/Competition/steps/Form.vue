@@ -134,7 +134,7 @@ export default {
                 <span class="text-warning text-sm">Les champs * sont requis</span>
             </div>
             <div class="col">
-                <button :disabled="!step_is_valid" :class="{'btn-outline-success': step_is_valid}" type="button" class="btn float-right" @click="$emit('onValidate')">
+                <button :disabled="!step_is_valid" :class="{'btn-outline-success tada': step_is_valid}" type="button" class="btn float-right animated" @click="$emit('onValidate')">
                     Etape suivante
                     <i class="zmdi zmdi-arrow-right"></i>
                 </button>

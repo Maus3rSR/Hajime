@@ -17,3 +17,7 @@
     @import "~@themes/super_admin/scss/app.scss";
     @import "~@styles/transitions.scss";
 </style>
+
+<style>
+    @import "~animate.css/animate.css";
+</style>
