@@ -1,6 +1,31 @@
 <script>
 export default {
-    
+    props: {
+        value: Array
+    },
+    watch: {
+        config: {
+            handler: function () {
+                this.$emit('value', {
+                    name: this.name,
+                    ...this.config
+                })
+            },
+            deep: true,
+            immediate: true
+        }
+    },
+    data() {
+        return {
+            name: "Matchs de poule",
+            config: {
+                number_of_fighter: 1,
+                number_of_pool: 1,
+                number_of_player_per_pool: 1,
+                dismiss_favorite: false,
+            }
+        }
+    }
 }
 </script>
 
@@ -12,14 +37,14 @@ export default {
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="pool_configuration__number_of_fighter" class="card-body__title">Nombre de combattants qualifiés par poule</label>
-                        <input id="pool_configuration__number_of_fighter" type="number" class="form-control" value="1">
+                        <input id="pool_configuration__number_of_fighter" type="number" min="1" class="form-control" v-model="config.number_of_fighter">
                         <i class="form-group__bar"></i>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <label class="ml-2 custom-control custom-checkbox">
-                        <input class="custom-control-input" type="checkbox">
+                        <input class="custom-control-input" type="checkbox" v-model="config.dismiss_favorite">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">Ecarter les têtes de séries</span>
                     </label>

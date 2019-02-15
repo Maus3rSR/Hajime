@@ -11,8 +11,10 @@ const defaultState = () => ({
     date: null,
     place: null,
     owner: null,
+    choosen_formula: null,
     type: type_list.INDI,
     fighter_list: [],
+    formula_config_list: [],
 })
 
 const state = defaultState()
