@@ -1,16 +1,19 @@
 <script>
-export default {
+export default { // TODO shared parent component
     props: {
-        value: Array
+        value: Object
+    },
+    methods: {
+        update() {
+            this.$emit("input", {
+                name: this.name,
+                ...this.config
+            })
+        }
     },
     watch: {
         config: {
-            handler: function () {
-                this.$emit('value', {
-                    name: this.name,
-                    ...this.config
-                })
-            },
+            handler: function() { this.update() },
             deep: true,
             immediate: true
         }
@@ -25,6 +28,9 @@ export default {
                 dismiss_favorite: false,
             }
         }
+    },
+    mounted() {
+        this.config = Object.assign(this.config, this.value)
     }
 }
 </script>

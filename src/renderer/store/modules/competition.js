@@ -6,12 +6,12 @@ const type_list = {
 }
 
 const defaultState = () => ({
-    locked: false,
+    choosen_formula_id: null,
     name: null,
     date: null,
     place: null,
     owner: null,
-    choosen_formula: null,
+    locked: false,
     type: type_list.INDI,
     fighter_list: [],
     formula_config_list: [],
@@ -21,8 +21,6 @@ const state = defaultState()
 
 const getters = {
     getField,
-    is_locked: state => state.locked,
-    fighter_list: state => state.fighter_list,
     fighter_count: state => state.fighter_list.length,
     constant_type_list: () => type_list,
     type_list: () => [
@@ -37,11 +35,21 @@ const getters = {
             value: type_list.TEAM
         },
     ],
-    default_type: () => defaultState().type
+    default_type: () => defaultState().type,
+    findFormulaConfigIndex: state => formula_config => state.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
 
 const mutations = {
     updateField,
+    ADD_FORMULA_CONFIG(state, formula_config) {
+        state.formula_config_list.push(formula_config)
+    },
+    UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
+        state.formula_config_list.splice(index, 1, formula_config)
+    },
+    RESET_FORMULA_CONFIG_LIST(state) {
+        state.formula_config_list = []
+    },
     RESET_STATE(state) {
         Object.assign(state, defaultState())
     }
@@ -50,6 +58,14 @@ const mutations = {
 const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
+    },
+    SAVE_FORMULA_CONFIG({ getters, commit }, formula_config) {
+        const index = getters.findFormulaConfigIndex(formula_config)
+
+        if (index == -1)
+            commit("ADD_FORMULA_CONFIG", formula_config)
+        else
+            commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
     SAVE_COMPETITION() {
         // TODO API SAVE DATA
