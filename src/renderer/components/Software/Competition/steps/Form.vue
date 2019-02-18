@@ -8,7 +8,7 @@ export default {
             type_list: "competition/type_list",
             default_type: "competition/default_type"
         }),
-        ...mapFields('competition', ['name', 'date', 'place', 'owner', 'type']),
+        ...mapFields('competition', ['model.name', 'model.date', 'model.place', 'model.owner', 'model.type']),
         step_is_valid() {
             return !Object.keys(this.fields).some(key => this.fields[key].invalid)
         },

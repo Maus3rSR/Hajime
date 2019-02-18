@@ -6,22 +6,28 @@ const type_list = {
 }
 
 const defaultState = () => ({
-    choosen_formula_id: null,
-    name: null,
-    date: null,
-    place: null,
-    owner: null,
-    locked: false,
-    type: type_list.INDI,
-    fighter_list: [],
-    formula_config_list: [],
+    list: [],
+    model: {
+        choosen_formula_id: null,
+        name: null,
+        date: null,
+        place: null,
+        owner: null,
+        type: type_list.INDI,
+        locked: false,
+    },
+    model_related: {
+        fighter_list: [],
+        formula_config_list: [],
+    }
 })
 
 const state = defaultState()
 
 const getters = {
     getField,
-    fighter_count: state => state.fighter_list.length,
+    count: state => state.list.length,
+    fighter_count: state => state.model_related.fighter_list.length,
     constant_type_list: () => type_list,
     type_list: () => [
         {
@@ -36,19 +42,19 @@ const getters = {
         },
     ],
     default_type: () => defaultState().type,
-    findFormulaConfigIndex: state => formula_config => state.formula_config_list.findIndex(el => el.name == formula_config.name)
+    findFormulaConfigIndex: state => formula_config => state.model_related.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
 
 const mutations = {
     updateField,
     ADD_FORMULA_CONFIG(state, formula_config) {
-        state.formula_config_list.push(formula_config)
+        state.model_related.formula_config_list.push(formula_config)
     },
     UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
-        state.formula_config_list.splice(index, 1, formula_config)
+        state.model_related.formula_config_list.splice(index, 1, formula_config)
     },
     RESET_FORMULA_CONFIG_LIST(state) {
-        state.formula_config_list = []
+        state.model_related.formula_config_list = []
     },
     RESET_STATE(state) {
         Object.assign(state, defaultState())

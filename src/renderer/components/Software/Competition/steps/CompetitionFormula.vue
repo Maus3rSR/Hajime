@@ -7,13 +7,13 @@ export default {
     components: { ...FormulaSettingsFormList },
     computed: {
         ...mapState('competition', {
-            formula_config_list: state => state.formula_config_list
+            formula_config_list: state => state.model_related.formula_config_list
         }),
         ...mapGetters({
             formula_list: "formula/list",
             getFormula: "formula/getFormula"
         }),
-        ...mapFields('competition', ['choosen_formula_id']),
+        ...mapFields('competition', ['model.choosen_formula_id']),
     },
     methods: {
         ...mapMutations({
