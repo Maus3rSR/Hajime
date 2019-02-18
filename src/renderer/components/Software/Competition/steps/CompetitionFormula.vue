@@ -53,8 +53,8 @@ export default {
             </div>
         </div>
 
-        <transition-group name="list" tag="div" class="row" v-if="null != choosen_formula_id">
-            <div class="col-lg-6 col-md-12 list-item" v-for="(formula_component, index) in getFormula(choosen_formula_id).component_list" :key="formula_component+index">
+        <transition-group v-if="null != choosen_formula_id" name="list" tag="div" class="row">
+            <div class="col-lg-6 col-md-12 list-item" v-for="(formula_component, index) in getFormula(choosen_formula_id).component_list" :key="formula_component+index+'formula_'+choosen_formula_id">
                 <component :value="formula_config_list[index]" @input="saveFormulaConfig" :is="formula_component"></component>
             </div>
         </transition-group>
