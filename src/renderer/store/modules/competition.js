@@ -5,9 +5,12 @@ const type_list = {
     TEAM: "TEAM"
 }
 
+// TODO : Séparer en sous-module ? List / Model / ModelRelated
 const defaultState = () => ({
     list: [],
+    saving: false,
     model: {
+        id: 1, // TODO : Temporaire, mettre à null à terme
         choosen_formula_id: null,
         name: null,
         date: null,
@@ -58,6 +61,12 @@ const mutations = {
     },
     RESET_STATE(state) {
         Object.assign(state, defaultState())
+    },
+    SAVE_START(state) {
+        state.saving = true
+    },
+    SAVE_STOP(state) {
+        state.saving = false
     }
 }
 
@@ -73,8 +82,16 @@ const actions = {
         else
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
-    SAVE_COMPETITION() {
-        // TODO API SAVE DATA
+    SAVE({ dispatch, commit }) {
+        commit('SAVE_START')
+        return new Promise((resolve, reject) => {
+            // TODO API SAVE DATA
+            setTimeout(() => {
+                commit('SAVE_STOP')
+                dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
+                resolve()
+            }, 1000)
+        })
     },
 }
 

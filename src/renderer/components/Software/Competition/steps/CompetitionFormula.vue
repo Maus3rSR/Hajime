@@ -7,6 +7,7 @@ export default {
     components: { ...FormulaSettingsFormList },
     computed: {
         ...mapState('competition', {
+            competition_saving: state => state.saving,
             formula_config_list: state => state.model_related.formula_config_list
         }),
         ...mapGetters({
@@ -21,9 +22,11 @@ export default {
         }),
         ...mapActions({
             saveFormulaConfig: "competition/SAVE_FORMULA_CONFIG",
+            saveCompetition: "competition/SAVE"
         }),
-        generateId() {
-            return uuidv4()
+        save() {
+            if (this.competition_saving) return
+            this.saveCompetition().then(() => this.$emit('onValidate'))
         }
     },
     watch: {
@@ -61,8 +64,11 @@ export default {
 
         <div class="row">
             <div class="col">
-                <button class="btn float-right btn-outline-success" type="button" @click="$emit('onValidate')">
-                    <i class="zmdi zmdi-check"></i>
+                <button class="btn float-right btn-outline-success" type="button" @click="save()" :disabled="competition_saving">
+                    <transition name="fade" mode="out-in">
+                        <i v-if="!competition_saving" class="zmdi zmdi-check"></i>
+                        <clip-loader v-else :size="'14px'"></clip-loader>
+                    </transition>
                     Je confirme la création de la compétition
                 </button>
 

@@ -1,5 +1,5 @@
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import Step1 from './steps/Form'
 import Step2 from './steps/FighterImport'
 import Step3 from './steps/CompetitionFormula'
@@ -7,6 +7,9 @@ import Step3 from './steps/CompetitionFormula'
 export default {
     components: { Step1, Step2, Step3 },
     computed: {
+        ...mapState('competition', {
+            competition_id: state => state.model.id,
+        }),
         ...mapGetters({
             fighter_count: "competition/fighter_count"
         }),
@@ -26,11 +29,14 @@ export default {
                     name: "Formule de compétition"
                 }
             ]
+        },
+        is_last_step() {
+            return this.current_step == this.step_list.length
         }
     },
     methods: {
         ...mapActions({
-            clearCompetition: "competition/CLEAR"
+            clearCompetition: "competition/CLEAR",
         }),
         nextStep() {
             this.current_step = this.current_step + 1
@@ -43,6 +49,9 @@ export default {
                 return
 
             this.current_step = step
+        },
+        redirectToCompetition() {
+            this.$router.push({ name: 'competition', params: { id: this.competition_id } })
         }
     },
     data() {
@@ -87,9 +96,8 @@ export default {
                 </nav>
 
                 <transition name="fade" mode="out-in">
-                    <component :is="step_component" @onValidate="nextStep()" @onBack="previousStep()"></component>
+                    <component :is="step_component" @onValidate="is_last_step ? redirectToCompetition() : nextStep()" @onBack="previousStep()"></component>
                 </transition>
-
             </div>
         </div>
 
