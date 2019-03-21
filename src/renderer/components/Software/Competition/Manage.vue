@@ -2,7 +2,7 @@
 // import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
     props: {
-        id: String
+        id: Number
     },
     components: {},
     computed: {},
@@ -11,14 +11,14 @@ export default {
         return {}
     },
     mounted() {
-        return this.$router.push('/404')
+        
     }
 }
 </script>
 
 <template>
-    <div id="competition__process">
-        test
+    <div id="competition__manage">
+        Ecran destiné à gérer tout le déroulement de la compétition...
     </div>
 </template>
 

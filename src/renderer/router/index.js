@@ -28,17 +28,17 @@ export default new Router({
                     }
                 },
                 {
-                    name: 'competition',
+                    name: 'manage-competition',
                     path: '/competition/:id',
                     props: true,
-                    component: require('@/components/software/competition/Process').default,
+                    component: require('@/components/software/competition/Manage').default,
                     meta: {
-                        breadcrumb: 'Détails de la compétition' // @todo Dynamique
+                        breadcrumb: 'Gestion d\'une compétition' // @todo Dynamique
                     }
                 }
             ]
         },
         { path: '/404', component: require('@/components/layouts/NotFound').default },  
-        { path: '*', redirect: '/404' },  
+        { path: '*', redirect: '/404' },
     ]
 })

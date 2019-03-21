@@ -51,7 +51,7 @@ export default {
             this.current_step = step
         },
         redirectToCompetition() {
-            this.$router.push({ name: 'competition', params: { id: this.competition_id } })
+            this.$router.push({ name: 'manage-competition', params: { id: this.competition_id } })
         }
     },
     data() {
