@@ -9,25 +9,36 @@ export default new Router({
             // Software contain the default layout
             // We will be able to set a route (not children) like '/login' with a completely different layout in the future
             path: '/',
-            component: require('@/components/Software').default,
+            component: require('@/components/layouts/Software').default,
             meta: {
                 breadcrumb: 'Accueil',
             },
             children: [
                 {
-                    path: '/', // root of software
                     name: 'dashboard',
-                    component: require('@/components/Software/Dashboard').default
+                    path: '/', // root of software
+                    component: require('@/components/software/Dashboard').default
                 },
                 {
-                    path: '/competition/new',
                     name: 'create-competition',
-                    component: require('@/components/Software/Competition/Create').default,
+                    path: '/competition/new',
+                    component: require('@/components/software/competition/Create').default,
                     meta: {
                         breadcrumb: 'Nouvelle compétition',
                     }
+                },
+                {
+                    name: 'competition',
+                    path: '/competition/:id',
+                    props: true,
+                    component: require('@/components/software/competition/Process').default,
+                    meta: {
+                        breadcrumb: 'Détails de la compétition' // @todo Dynamique
+                    }
                 }
             ]
-        }
+        },
+        { path: '/404', component: require('@/components/layouts/NotFound').default },  
+        { path: '*', redirect: '/404' },  
     ]
 })
