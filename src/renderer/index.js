@@ -9,7 +9,7 @@ import store from './store'
 import plugins from './components/plugins'
 
 Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = false
+Vue.config.productionTip = process.env.NODE_ENV == 'production'
 
 Object.keys(plugins).forEach(key => {
     Vue.use(plugins[key])
