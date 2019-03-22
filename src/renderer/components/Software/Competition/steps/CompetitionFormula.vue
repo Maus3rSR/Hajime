@@ -7,10 +7,10 @@ export default {
     components: { ...FormulaSettingsFormList },
     computed: {
         ...mapState('competition', {
-            competition_saving: state => state.saving,
-            formula_config_list: state => state.model_related.formula_config_list
+            formula_config_list: state => state.model.formula_config_list
         }),
         ...mapGetters({
+            competition_saving: "competition/saving",
             formula_list: "formula/list",
             getFormula: "formula/getFormula"
         }),

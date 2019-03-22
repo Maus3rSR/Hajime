@@ -1,25 +1,32 @@
 import { getField, updateField } from 'vuex-map-fields'
+import faker from 'faker'
 
-const type_list = {
+faker.locale = 'fr'
+
+const TYPE_LIST = {
     INDI: "INDI",
     TEAM: "TEAM"
 }
 
-// TODO : Séparer en sous-module ? List / Model / ModelRelated
+const STATUS_LIST = {
+    NOTHING: "NOTHING",
+    SAVING: "SAVING",
+    LOADING: "LOADING"
+}
+
+// TODO : Séparer en sous-module ? List / Model
 const defaultState = () => ({
+    status: STATUS_LIST.NOTHING,
     list: [],
-    saving: false,
     model: {
-        id: 1, // TODO : Temporaire, mettre à null à terme
+        id: null,
         choosen_formula_id: null,
         name: null,
         date: null,
         place: null,
         owner: null,
-        type: type_list.INDI,
+        type: TYPE_LIST.INDI,
         locked: false,
-    },
-    model_related: {
         fighter_list: [],
         formula_config_list: [],
     }
@@ -29,44 +36,53 @@ const state = defaultState()
 
 const getters = {
     getField,
+    isEmpty: state => null == state.model.id,
+    loading: state => state.status == STATUS_LIST.LOADING,
+    saving: state => state.status == STATUS_LIST.SAVING,
     count: state => state.list.length,
-    fighter_count: state => state.model_related.fighter_list.length,
-    constant_type_list: () => type_list,
+    fighter_count: state => state.model.fighter_list.length,
+    constant_type_list: () => TYPE_LIST,
     type_list: () => [
         {
             id: 1,
             name: "Individuelle",
-            value: type_list.INDI
+            value: TYPE_LIST.INDI
         },
         {
             id: 2,
             name: "Equipe",
-            value: type_list.TEAM
+            value: TYPE_LIST.TEAM
         },
     ],
     default_type: () => defaultState().type,
-    findFormulaConfigIndex: state => formula_config => state.model_related.formula_config_list.findIndex(el => el.name == formula_config.name)
+    findFormulaConfigIndex: state => formula_config => state.model.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
 
 const mutations = {
     updateField,
     ADD_FORMULA_CONFIG(state, formula_config) {
-        state.model_related.formula_config_list.push(formula_config)
+        state.model.formula_config_list.push(formula_config)
     },
     UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
-        state.model_related.formula_config_list.splice(index, 1, formula_config)
+        state.model.formula_config_list.splice(index, 1, formula_config)
     },
     RESET_FORMULA_CONFIG_LIST(state) {
-        state.model_related.formula_config_list = []
+        state.model.formula_config_list = []
     },
     RESET_STATE(state) {
         Object.assign(state, defaultState())
     },
-    SAVE_START(state) {
-        state.saving = true
+    INJECT_MODEL_DATA(state, model) {
+        Object.assign(state.model, model)
     },
-    SAVE_STOP(state) {
-        state.saving = false
+    UPDATE_MODEL_ID(state, id) {
+        state.model.id = parseInt(id, 10)
+    },
+    STATUS_START(state, status) {
+        state.status = status
+    },
+    STATUS_STOP(state) {
+        state.status = STATUS_LIST.NOTHING
     }
 }
 
@@ -83,16 +99,39 @@ const actions = {
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
     SAVE({ dispatch, commit }) {
-        commit('SAVE_START')
+        commit('STATUS_START', STATUS_LIST.SAVING)
         return new Promise((resolve, reject) => {
             // TODO API SAVE DATA
             setTimeout(() => {
-                commit('SAVE_STOP')
+                commit('STATUS_STOP')
                 dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
+                commit('UPDATE_MODEL_ID', 1) // TODO DEV : Remplacer par le retour API
                 resolve()
-            }, 1000)
+            }, 1500)
         })
     },
+    LOAD({ dispatch, commit }, id) {
+        dispatch('CLEAR')
+        commit('STATUS_START', STATUS_LIST.LOADING)
+
+        // TODO DEV : Supprimer à terme
+        let model = defaultState().model
+        model.id = id
+        model.choosen_formula_id = 1
+        model.name = "Nom de la compétition"
+        model.date = "19/07/2020"
+        model.place = faker.address.city()
+        model.owner = faker.name.findName()
+
+        return new Promise((resolve, reject) => {
+            // TOTO API GET DATA
+            setTimeout(() => {
+                commit('STATUS_STOP')
+                commit('INJECT_MODEL_DATA', model)
+                resolve()
+            }, 3000)
+        })
+    }
 }
 
 export default {

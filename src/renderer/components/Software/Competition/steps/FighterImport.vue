@@ -7,7 +7,7 @@ export default {
     components: { FighterList },
     computed: {
         ...mapFields('competition', {
-            fighter_list: 'model_related.fighter_list',
+            fighter_list: 'model.fighter_list',
             competition_type: 'model.type'
         }),
         step_is_valid() {
