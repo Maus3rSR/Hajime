@@ -37,6 +37,9 @@ export default {
     created() {
         if (this.id !== this.competition_id)
             this.loadCompetition(this.id)
+    },
+    mounted() {
+        
     }
 }
 </script>
@@ -61,7 +64,7 @@ export default {
         <div>
             <b-tabs>
                 <b-tab title="Liste d'appel" active>
-                    <fighter-list v-model="fighter_list" :competition_type="competition_type" />
+                    <fighter-list ref="fighterList" v-model="fighter_list" :competition_type="competition_type" />
                 </b-tab>
             </b-tabs>
         </div>

@@ -26,6 +26,16 @@ export default {
                 rectRootElement = this.$el.getBoundingClientRect(),
                 rectLimitElement = document.getElementById(this.limitContainer).getBoundingClientRect()
 
+            // console.log("rectLimitElement TOP", rectLimitElement.top)
+            // console.log("rectRootElement TOP", rectRootElement.top)
+            // console.log("computedRootElement PADDING TOP", parseFloat(computedRootElement.paddingTop))
+            // console.log("computedRootElement PADDING BOTTOM", parseFloat(computedRootElement.paddingBottom))
+            // console.log("computedRootElement MARGIN BOTTOM", parseFloat(computedRootElement.marginBottom))
+            // console.log("computedRootElement MARGIN TOP", parseFloat(computedRootElement.marginTop))
+            // console.log("computedRootElement BORDER WIDTH BOTTOM", parseFloat(computedRootElement.borderBottomWidth))
+            // console.log("computedRootElement BORDER WIDTH TOP", parseFloat(computedRootElement.borderTopWidth))
+            // console.log("elementListOffsetValue", this.getElementListOffsetValue())
+
             this.height = (
                 rectLimitElement.top -
                 rectRootElement.top -
@@ -71,7 +81,7 @@ export default {
                     // Padding
                     parseFloat(computedRootElement.paddingTop) +
                     parseFloat(computedRootElement.paddingBottom) +
-                    // Margin
+                    // Margin - Not to use ... cause issues
                     // parseFloat(computedRootElement.marginBottom) +
                     // parseFloat(computedRootElement.marginTop) +
                     // Border
@@ -87,9 +97,15 @@ export default {
             height: null
         }
     },
+    created() {
+        // this.$softwareContainer.addContainer(this)
+    },
     mounted() {
-        window.onresize = this.resize
         this.resize()
+        this.$nextTick(function() { this.resize() })
+    },
+    destroyed() {
+        // this.$softwareContainer.removeContainer(this)
     }
 }
 </script>
