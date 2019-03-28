@@ -36,7 +36,7 @@ const state = defaultState()
 
 const getters = {
     getField,
-    isEmpty: state => null == state.model.id,
+    is_empty: state => null == state.model.id,
     loading: state => state.status == STATUS_LIST.LOADING,
     saving: state => state.status == STATUS_LIST.SAVING,
     count: state => state.list.length,

@@ -350,6 +350,11 @@ export default {
             position: static;
         }
     }
+
+    .toolbar {
+        margin-bottom: 0;
+        box-shadow: none;
+    }
 </style>
 
 <style lang="scss">

@@ -1,14 +1,16 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import FighterList from '@partials/list/FighterList/Component'
 
 export default {
     components: { FighterList },
     computed: {
+        ...mapState('competition', {
+            competition_type: state => state.model.type,
+        }),
         ...mapFields('competition', {
-            fighter_list: 'model.fighter_list',
-            competition_type: 'model.type'
+            fighter_list: 'model.fighter_list'
         }),
         step_is_valid() {
             return this.fighter_list.length > 0

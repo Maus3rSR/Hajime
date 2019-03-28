@@ -66,7 +66,7 @@ export default {
 </script>
 
 <template>
-    <div id="competition__create">
+    <section id="competition__create">
 
         <header class="content__title">
             <h1>Nouvelle compétition</h1>
@@ -101,8 +101,7 @@ export default {
             </div>
         </div>
 
-
-    </div>
+    </section>
 </template>
 
 <style lang="scss">

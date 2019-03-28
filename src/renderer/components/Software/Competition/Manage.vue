@@ -1,20 +1,29 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
+import FighterList from '@partials/list/FighterList/Component'
+
 export default {
     props: {
         id: {
             required: true
         }
     },
-    components: {},
+    components: { FighterList },
     computed: {
         ...mapState('competition', {
             competition_id: state => state.model.id,
             competition_name: state => state.model.name,
             competition_date: state => state.model.date,
+            competition_type: state => state.model.type,
         }),
         ...mapGetters({
-            isEmptyCompetition: "competition/isEmpty"
+            is_empty_competition: "competition/is_empty",
+            competition_loading: "competition/loading",
+            competition_saving: "competition/saving",
+        }),
+        ...mapFields('competition', {
+            fighter_list: 'model.fighter_list',
         })
     },
     methods: {
@@ -33,12 +42,12 @@ export default {
 </script>
 
 <template>
-    <div id="competition__manage">
+    <section id="competition__manage">
         <header class="content__title">
-            <empty-placeholder :loaded="!isEmptyCompetition" :tag="'h1'">
+            <empty-placeholder :loaded="!is_empty_competition" :tag="'h1'">
                 {{ competition_name }}
             </empty-placeholder>
-            <empty-placeholder :loaded="!isEmptyCompetition" :tag="'small'" :width="'5%'" :height="'10px'">
+            <empty-placeholder :loaded="!is_empty_competition" :tag="'small'" :width="'5%'" :height="'10px'">
                 Du {{ competition_date }}
             </empty-placeholder>
 
@@ -48,5 +57,29 @@ export default {
                 </router-link>
             </div>
         </header>
-    </div>
+
+        <div>
+            <b-tabs>
+                <b-tab title="Liste d'appel" active>
+                    <fighter-list v-model="fighter_list" :competition_type="competition_type" />
+                </b-tab>
+            </b-tabs>
+        </div>
+    </section>
 </template>
+
+<style lang="scss" scoped>
+h1 {
+    display: inline-block;
+    + small {
+        display: inline-block;
+        margin: 0;
+    }
+}
+</style>
+
+<style lang="scss">
+#competition__manage .tab-content {
+    padding-bottom: 0;
+}
+</style>
