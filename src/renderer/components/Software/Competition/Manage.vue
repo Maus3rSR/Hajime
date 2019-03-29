@@ -21,6 +21,7 @@ export default {
             is_empty_competition: "competition/is_empty",
             competition_loading: "competition/loading",
             competition_saving: "competition/saving",
+            fighter_count: "competition/fighter_count",
         }),
         ...mapFields('competition', {
             fighter_list: 'model.fighter_list',
@@ -61,13 +62,14 @@ export default {
             </div>
         </header>
 
-        <div>
-            <b-tabs>
-                <b-tab title="Liste d'appel" active>
-                    <fighter-list ref="fighterList" v-model="fighter_list" :competition_type="competition_type" />
-                </b-tab>
-            </b-tabs>
-        </div>
+        <b-tabs>
+            <b-tab active title="1. Liste d'appel">
+                <transition name="fade" mode="out-in" appear>
+                    <clip-loader v-if="is_empty_competition" :color="'#fff'"></clip-loader>
+                    <fighter-list v-if="!is_empty_competition" ref="fighterList" v-model="fighter_list" :competition_type="competition_type" />
+                </transition>
+            </b-tab>
+        </b-tabs>
     </section>
 </template>
 

@@ -15,7 +15,7 @@ export default {
         },
         height: {
             type: String,
-            default: '20px'
+            default: '15px'
         }
     },
     computed: {
@@ -40,12 +40,12 @@ export default {
 
 <template> 
     <component :is="tag" :style="style" :class="{ empty: !loaded }">
-        <slot></slot>
+        <slot v-if="loaded"></slot>
     </component>
 </template>
 
 <style lang="scss" scoped>
-    $color-base: #fff;
+    $color-base: rgba(255, 255, 255, 0.4);
     $color-highlight: darken($color-base, 5%);
 
     .empty {
