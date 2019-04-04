@@ -82,7 +82,9 @@ export default {
     data() {
         return {
             mode: MODE_TYPE.ADD,
-            fighter: {}
+            fighter: {
+                is_present: false
+            }
         }
     }
 }

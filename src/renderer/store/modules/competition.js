@@ -41,6 +41,12 @@ const getters = {
     saving: state => state.status == STATUS_LIST.SAVING,
     count: state => state.list.length,
     fighter_count: state => state.model.fighter_list.length,
+    fighter_present_list: state => state.model.fighter_list.filter(fighter => fighter.is_present),
+    fighter_missing_list: state => state.model.fighter_list.filter(fighter => !fighter.is_present),
+    fighter_present_count: (state, getters) => getters.fighter_present_list.length,
+    fighter_missing_count: (state, getters) => getters.fighter_missing_list.length,
+    is_all_fighter_present: (state, getters) => getters.fighter_count == getters.fighter_present_count,
+    is_all_fighter_missing: (state, getters) => getters.fighter_count == getters.fighter_missing_count,
     constant_type_list: () => TYPE_LIST,
     type_list: () => [
         {

@@ -11,12 +11,20 @@ export default {
         competition_type: {
             type: String,
             required: true,
+        },
+        make_the_call: {
+            type: Boolean,
+            value: false
         }
     },
     components: { Dropdown, ModalFighter, ModalPreviewCsv },
     computed: {
         ...mapGetters({
-            constant_type_list: "competition/constant_type_list"
+            constant_type_list: "competition/constant_type_list",
+            present_count: "competition/fighter_present_count",
+            missing_count: "competition/fighter_missing_count",
+            is_all_present: "competition/is_all_fighter_present",
+            is_all_missing: "competition/is_all_fighter_missing",
         }),
         list() {
             if (this.competition_type != this.constant_type_list.TEAM)
@@ -50,7 +58,10 @@ export default {
             ]
 
             if (this.competition_type == this.constant_type_list.TEAM)
-                column_list.splice(2, 0, { label: 'Equipe', field: 'team' }) 
+                column_list.splice(2, 0, { label: 'Equipe', field: 'team', sortable: false }) 
+
+            if (this.make_the_call)
+                column_list.splice(0, 0, { label: 'Présence', field: 'is_present', sortable: false })
 
             return column_list
         },
@@ -70,6 +81,35 @@ export default {
         },
         deleteFighter(fighter) {
             this.$refs.modalDeleteFighter.show(fighter)
+        },
+        markAllPresence(is_present) {
+            let list = JSON.parse(JSON.stringify(this.value))
+            this.$emit("input", list.map(fighter => {
+                fighter.is_present = is_present
+                return fighter
+            }))
+
+            this.$notify.success("Tous les combatants ont été définis comme " + (is_present ? "présents" : "absents"))
+        },
+        markPresence(fighter, is_present)
+        {
+            const index = fighter.originalIndex
+            let list = JSON.parse(JSON.stringify(this.value))
+            
+            if (undefined == list[index]) {
+                this.$notify.error("Le combattant n'a pas été trouvé dans la liste")
+                return
+            }
+
+            // from data-list component, remove artefacts
+            delete fighter.originalIndex
+            delete fighter.vgt_id
+
+            fighter.is_present = is_present
+            list[index] = fighter
+
+            this.$emit("input", list)
+            this.$notify.success("Le combattant a bien été défini comme " + (is_present ? "présent" : "absent"))
         },
         previewImport(e) {
             if (undefined == e.target.files[0]) {
@@ -128,6 +168,10 @@ export default {
             this.$notify.success("Le combattant a bien été supprimé")
         },
         onFighterListImport(fighter_list) {
+            fighter_list = fighter_list.map(fighter => {
+                fighter.is_present = false
+                return fighter
+            })
             this.$emit("input", fighter_list)
             this.$notify.success("La liste des combattants a bien été ajoutée")
         }
@@ -146,6 +190,7 @@ export default {
             :list="list"
             :total="total"
             :groupedHeader="grouped_header"
+            :hasFooter="make_the_call"
             :isDynamic="false"
         >
             <template slot="action-bar">
@@ -170,8 +215,12 @@ export default {
 
             </template>
 
+            <template slot="is_present" slot-scope="props">
+                <a href="javascript:void(0)" @click.prevent="markPresence(props.row, false)" v-if="props.row.is_present" class="text-success zmdi zmdi-hc-2x zmdi-mood" title="Rendre absent"></a>
+                <a href="javascript:void(0)" @click.prevent="markPresence(props.row, true)" v-else class="text-danger zmdi zmdi-hc-2x zmdi-mood-bad" title="Rendre présent"></a>
+            </template>
+
             <template slot="action-cell" slot-scope="props">
-                
                 <button title="Modifier ce combattant" class="btn btn-sm btn-outline-primary" @click.prevent="editFighter(props.row)">
                     <i class="zmdi zmdi-edit"></i>
                 </button>
@@ -179,7 +228,37 @@ export default {
                 <button title="Supprimer ce combattant de la liste" class="btn btn-sm btn-outline-danger" @click.prevent="deleteFighter(props.row)">
                     <i class="zmdi zmdi-close"></i>
                 </button>
+            </template>
 
+            <template slot="footer">
+                <span class="toolbar__label d-none d-sm-inline">
+                    <template>
+                        Présent&nbsp;
+                        <span class="badge badge-pill" :class="{ 'badge-success': is_all_present, 'badge-primary': !is_all_present }">
+                            <counter :value="present_count" /> / <counter :value="total" />
+                        </span>
+                    </template>
+                    
+                    <transition name="fade" mode="out-in">
+                        <span v-if="!is_all_present">
+                            / Absent&nbsp;
+                            <span class="badge badge-pill badge-danger">
+                                <counter :value="missing_count" /> / <counter :value="total" />
+                            </span>
+                        </span>
+                    </transition>
+                </span>
+
+                <span>
+                    <a href="javascript:void(0)" class="btn btn-link" @click.prevent="markAllPresence(true)">
+                        <i class="text-success zmdi zmdi-mood"></i>
+                        Tous présent
+                    </a>
+                    <a href="javascript:void(0)" class="btn btn-link" @click.prevent="markAllPresence(false)">
+                        <i class="text-danger zmdi zmdi-mood-bad"></i>
+                        Tous absent
+                    </a>
+                </span>
             </template>
         </data-list>
 
@@ -212,17 +291,3 @@ export default {
         />
     </div>
 </template>
-
-<style lang="scss">
-.datalist {
-    .toolbar {
-        .actions {
-            button {
-                margin: 0;
-                padding: 0;
-                border: none;
-            }
-        }
-    }
-}
-</style>

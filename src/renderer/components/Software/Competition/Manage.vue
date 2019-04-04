@@ -66,7 +66,7 @@ export default {
             <b-tab active title="1. Liste d'appel">
                 <transition name="fade" mode="out-in" appear>
                     <clip-loader v-if="is_empty_competition" :color="'#fff'"></clip-loader>
-                    <fighter-list v-if="!is_empty_competition" ref="fighterList" v-model="fighter_list" :competition_type="competition_type" />
+                    <fighter-list v-else ref="fighterList" v-model="fighter_list" :competition_type="competition_type" :make_the_call="true" />
                 </transition>
             </b-tab>
         </b-tabs>

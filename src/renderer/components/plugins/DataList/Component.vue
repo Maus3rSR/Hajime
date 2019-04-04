@@ -40,6 +40,10 @@ export default {
             type: Number,
             default: 0
         },
+        infiniteScrollDistance: {
+            type: Number,
+            default: 0
+        },
         loading: {
             type: Boolean,
             default: false
@@ -48,15 +52,15 @@ export default {
             type: Boolean,
             default: false
         },
-        infiniteScrollDistance: {
-            type: Number,
-            default: 0
-        },
         isDynamic: {
             type: Boolean,
             default: true
         },
         groupedHeader: {
+            type: Boolean,
+            default: false
+        },
+        hasFooter: {
             type: Boolean,
             default: false
         }
@@ -222,7 +226,9 @@ export default {
 <template>
     <div :id="id_datalist" class="datalist">
 
-        <div class="toolbar">
+        <software-container class="card" limit-container="software__footer" :element-scroll="id_table">
+
+        <div class="toolbar toolbar--inner">
             <div class="toolbar__label h1">
                 {{ title }}
                 <span class="badge badge-pill badge-primary">
@@ -256,7 +262,6 @@ export default {
             </div>
         </div>
 
-        <software-container class="card" limit-container="software__footer" :element-scroll="id_table">
             <div class="card-body">
 
                 <vue-good-table
@@ -316,6 +321,11 @@ export default {
                 </vue-good-table>
 
             </div>
+
+            <div v-if="hasFooter" class="toolbar toolbar--inner mb-0">
+                <slot name="footer"></slot>
+            </div>
+
         </software-container>
 
         <modal-filter
@@ -332,6 +342,10 @@ export default {
 <style lang="scss" scoped>
     .datalist {
         position: relative;
+
+        .toolbar {
+            height: 3.5rem;
+        }
     }
 
     .datalist__emptystate {
@@ -345,11 +359,6 @@ export default {
         .actions {
             position: static;
         }
-    }
-
-    .toolbar {
-        margin-bottom: 0;
-        box-shadow: none;
     }
 </style>
 
