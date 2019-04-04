@@ -101,6 +101,7 @@ export default {
         // this.$softwareContainer.addContainer(this)
     },
     mounted() {
+        window.onresize = this.resize
         this.resize()
         this.$nextTick(function() { this.resize() })
     },
