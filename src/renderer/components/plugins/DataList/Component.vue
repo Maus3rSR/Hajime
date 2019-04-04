@@ -308,13 +308,9 @@ export default {
                     </template>
 
                     <template slot="table-row" slot-scope="props">
-                        <span v-if="props.column.field == 'action-cell'">
-                            <slot name="action-cell" :row="props.row"></slot>
-                        </span>
-
-                        <span v-else>
+                        <slot :name="props.column.field" :row="props.row">
                             {{props.formattedRow[props.column.field]}}
-                        </span>
+                        </slot>
                     </template>
 
                 </vue-good-table>
