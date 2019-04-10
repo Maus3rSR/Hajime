@@ -14,7 +14,8 @@ export default { // TODO shared parent component
     watch: {
         config: {
             handler: function() { this.update() },
-            deep: true
+            deep: true,
+            immediate: true
         },
         value: function () { if (undefined == this.value) this.update() }
     },
