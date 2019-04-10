@@ -38,10 +38,14 @@ export default {
                         mode: "span",
                         label: row.team,
                         html: false,
+                        is_favorite: false,
                         children: []
                     }) - 1
 
                 list[index].children.push(row)
+
+                if (row.is_favorite && !list[index].is_favorite)
+                    list[index].is_favorite = true
 
                 // TODO : Si on demande à ce que la liste soit ordonnée par nom d'équipe, il faudra gérer un problème d'index lors de la suppression d'un combattant ...
                 // return list.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0))
@@ -57,7 +61,7 @@ export default {
                 { label: '', field: 'action-cell' }
             ]
 
-            if (this.competition_type == this.constant_type_list.TEAM)
+            if (this.is_team)
                 column_list.splice(2, 0, { label: 'Equipe', field: 'team', sortable: false }) 
 
             if (this.make_the_call)
@@ -65,7 +69,7 @@ export default {
 
             return column_list
         },
-        grouped_header() {
+        is_team() {
             return this.competition_type == this.constant_type_list.TEAM
         },
         total() {
@@ -73,6 +77,26 @@ export default {
         }
     },
     methods: {
+        updateField(object, field, value)
+        {
+            const index = object.originalIndex
+            let list = JSON.parse(JSON.stringify(this.value))
+            
+            if (undefined == list[index]) {
+                this.$notify.error("Le combattant n'a pas été trouvé dans la liste")
+                return false
+            }
+
+            // from data-list component, remove artefacts
+            delete object.originalIndex
+            delete object.vgt_id
+
+            object[field] = value
+            list[index] = object
+
+            this.$emit("input", list)
+            return true
+        },
         addFighter() {
             this.$refs.modalFighter.show()
         },
@@ -93,23 +117,34 @@ export default {
         },
         markPresence(fighter, is_present)
         {
-            const index = fighter.originalIndex
-            let list = JSON.parse(JSON.stringify(this.value))
+            if (this.updateField(fighter, "is_present", is_present))
+                this.$notify.success("Le combattant a bien été défini comme " + (is_present ? "présent" : "absent"))
+        },
+        markFavorite(fighter, is_favorite, notify)
+        {
+            notify = undefined == notify ? true : notify
+            const updateFieldSuccess = this.updateField(fighter, "is_favorite", is_favorite)
+
+            if (updateFieldSuccess && notify)
+                this.$notify.success("Le combattant a bien été défini comme " + (is_favorite ? "favori" : "non favori"))
             
-            if (undefined == list[index]) {
-                this.$notify.error("Le combattant n'a pas été trouvé dans la liste")
+            return updateFieldSuccess
+        },
+        markTeamFavorite(header_row, is_favorite)
+        {
+            if (undefined == header_row.children) {
+                this.$notify.error("Une erreur est survenue, il n'y a pas de combattants dans cette équipe")
                 return
             }
 
-            // from data-list component, remove artefacts
-            delete fighter.originalIndex
-            delete fighter.vgt_id
+            let success = false
+            header_row.children.forEach(row => {
+                if (this.markFavorite(row, is_favorite, false) && !success) // @TODO : à corriger pour être sûr que tous les combattants sont en favoris, conflit de boucle avec this.$emit('input') de updateField
+                    success = true
+            })
 
-            fighter.is_present = is_present
-            list[index] = fighter
-
-            this.$emit("input", list)
-            this.$notify.success("Le combattant a bien été défini comme " + (is_present ? "présent" : "absent"))
+            if (success)
+                this.$notify.success("L'équipe a bien été défini comme " + (is_favorite ? "favorie" : "non favorie"))
         },
         previewImport(e) {
             if (undefined == e.target.files[0]) {
@@ -170,6 +205,7 @@ export default {
         onFighterListImport(fighter_list) {
             fighter_list = fighter_list.map(fighter => {
                 fighter.is_present = false
+                fighter.is_favorite = false
                 return fighter
             })
             this.$emit("input", fighter_list)
@@ -189,7 +225,7 @@ export default {
             :columns="column_list"
             :list="list"
             :total="total"
-            :groupedHeader="grouped_header"
+            :groupedHeader="is_team"
             :hasFooter="make_the_call"
             :isDynamic="false"
         >
@@ -215,9 +251,44 @@ export default {
 
             </template>
 
+            <template slot="table-header-row" slot-scope="props">
+                <a
+                    href="javascript:void(0)"
+                    class="zmdi btn btn-sm btn-link"
+                    
+                    :title="'Rendre ' + (props.row.is_favorite ? 'non favorie' : 'favorie')"
+                    :class="{ 'zmdi-star text-yellow': props.row.is_favorite, 'zmdi-star-outline text-muted': !props.row.is_favorite }"
+
+                    @click.prevent="markTeamFavorite(props.row, !props.row.is_favorite)"
+                ></a>
+                {{ props.row.label }}
+            </template>
+
+            <template slot="name" slot-scope="props">
+                <a
+                    href="javascript:void(0)"
+                    class="zmdi btn btn-sm btn-link"
+                    
+                    v-if="!is_team"
+
+                    :title="'Rendre ' + (props.row.is_favorite ? 'non favori' : 'favori')"
+                    :class="{ 'zmdi-star text-yellow': props.row.is_favorite, 'zmdi-star-outline text-muted': !props.row.is_favorite }"
+
+                    @click.prevent="markFavorite(props.row, !props.row.is_favorite)"
+                ></a>
+                {{ props.row.name }}
+            </template>
+
             <template slot="is_present" slot-scope="props">
-                <a href="javascript:void(0)" @click.prevent="markPresence(props.row, false)" v-if="props.row.is_present" class="text-success zmdi zmdi-hc-2x zmdi-mood" title="Rendre absent"></a>
-                <a href="javascript:void(0)" @click.prevent="markPresence(props.row, true)" v-else class="text-danger zmdi zmdi-hc-2x zmdi-mood-bad" title="Rendre présent"></a>
+                <a
+                    href="javascript:void(0)"
+                    class="zmdi zmdi-hc-2x"
+                    
+                    :title="'Rendre ' + (props.row.is_present ? 'absent' : 'présent')"
+                    :class="{ 'zmdi-mood text-success': props.row.is_present, 'zmdi-mood-bad text-danger': !props.row.is_present }"
+
+                    @click.prevent="markPresence(props.row, !props.row.is_present)"
+                ></a>
             </template>
 
             <template slot="action-cell" slot-scope="props">

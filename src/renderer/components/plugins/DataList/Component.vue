@@ -266,6 +266,7 @@ export default {
 
                 <vue-good-table
                     :id="id_table"
+                    :styleClass=style_class
                     :columns="columns"
                     :rows="list"
                     :totalRows="total"
@@ -280,7 +281,6 @@ export default {
                     @on-sort-change="onSortChange"
 
                     infinite-wrapper
-                    :styleClass=style_class
                 >
 
                     <span class="datalist__emptystate" slot="emptystate">
@@ -315,6 +315,12 @@ export default {
                     <template slot="table-row" slot-scope="props">
                         <slot :name="props.column.field" :row="props.row">
                             {{props.formattedRow[props.column.field]}}
+                        </slot>
+                    </template>
+
+                    <template slot="table-header-row" slot-scope="props">
+                        <slot name="table-header-row" :row="props.row">
+                            {{ props.row.label }}
                         </slot>
                     </template>
 
