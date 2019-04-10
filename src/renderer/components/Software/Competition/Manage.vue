@@ -1,7 +1,8 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import FighterList from '@partials/list/FighterList/Component'
+import * as FormulaTabsManagementList from '@partials/competitionFormula/tabsManagement'
+import FighterCall from './manage/steps/FighterCall'
 
 export default {
     props: {
@@ -9,38 +10,73 @@ export default {
             required: true
         }
     },
-    components: { FighterList },
+    components: { FighterCall, ...FormulaTabsManagementList },
     computed: {
         ...mapState('competition', {
-            competition_id: state => state.model.id,
-            competition_name: state => state.model.name,
-            competition_date: state => state.model.date,
-            competition_type: state => state.model.type,
+            competition: state => state.model,
         }),
         ...mapGetters({
             is_empty_competition: "competition/is_empty",
             competition_loading: "competition/loading",
             competition_saving: "competition/saving",
-            fighter_count: "competition/fighter_count",
+            fighter_present_count: "competition/fighter_present_count",
+            getFormulaComponentList: "formula/getFormulaComponentList"
         }),
         ...mapFields('competition', {
             fighter_list: 'model.fighter_list',
-        })
+        }),
+        step_component() {
+            return this.step_list[this.current_step-1].component_name
+        },
+        step_list() {
+            let l = [{
+                name: "Liste d'appel",
+                component_name: "FighterCall",
+                count: this.fighter_present_count
+            }]
+            
+            const formula_component_list = this.getFormulaComponentList(this.competition.choosen_formula_id)
+            formula_component_list.forEach((component_name, index) => {
+                if (undefined == this.competition.formula_config_list[index])
+                    return
+
+                l.push({
+                    name: this.competition.formula_config_list[index].name,
+                    component_name: component_name
+                })
+            })
+
+            return l
+        },
+        is_last_step() {
+            return this.current_step == this.step_list.length
+        }
     },
     methods: {
         ...mapActions({
             loadCompetition: "competition/LOAD"
-        })
+        }),
+        nextStep() {
+            this.current_step = this.current_step + 1
+        },
+        previousStep() {
+            this.current_step = this.current_step - 1
+        },
+        goToStep(step) {
+            if (this.current_step <= step)
+                return
+
+            this.current_step = step
+        }
     },
     data() {
-        return {}
+        return {
+            current_step: 1,
+        }
     },
     created() {
-        if (this.id !== this.competition_id)
+        if (this.id !== this.competition.id)
             this.loadCompetition(this.id)
-    },
-    mounted() {
-        
     }
 }
 </script>
@@ -49,10 +85,10 @@ export default {
     <section id="competition__manage">
         <header class="content__title">
             <empty-placeholder :loaded="!is_empty_competition" :tag="'h1'">
-                {{ competition_name }}
+                {{ competition.name }}
             </empty-placeholder>
             <empty-placeholder :loaded="!is_empty_competition" :tag="'small'" :width="'5%'" :height="'10px'">
-                Du {{ competition_date }}
+                Du {{ competition.date }}
             </empty-placeholder>
 
             <div class="actions">
@@ -62,14 +98,26 @@ export default {
             </div>
         </header>
 
-        <b-tabs>
-            <b-tab active title="1. Liste d'appel">
+        <div class="card">
+            <div class="card-body">
                 <transition name="fade" mode="out-in" appear>
                     <clip-loader v-if="is_empty_competition" :color="'#fff'"></clip-loader>
-                    <fighter-list v-else ref="fighterList" v-model="fighter_list" :competition_type="competition_type" :make_the_call="true" />
+                    <span v-else>
+                        <nav aria-label="step-wizard" role="navigation">
+                            <ol class="breadcrumb mb-4 software__container--offset-element">
+                                <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">
+                                    {{ index+1 }}. {{ step.name }} <span v-if="null !== step.count" class="badge badge-pill badge-primary">{{ step.count }}</span>
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <transition name="fade" mode="out-in">
+                            <component :is="step_component" @onValidate="is_last_step ? true : nextStep()" @onBack="previousStep()"></component>
+                        </transition>
+                    </span>
                 </transition>
-            </b-tab>
-        </b-tabs>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -84,7 +132,12 @@ h1 {
 </style>
 
 <style lang="scss">
-#competition__manage .tab-content {
-    padding-bottom: 0;
+#competition__manage {
+    .tab-content {
+        padding-bottom: 0;
+    }
+    .breadcrumb-item.active {
+        cursor: pointer;
+    }
 }
 </style>

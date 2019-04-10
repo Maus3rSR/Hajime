@@ -1,8 +1,8 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import Step1 from './steps/Form'
-import Step2 from './steps/FighterImport'
-import Step3 from './steps/CompetitionFormula'
+import Step1 from './create/steps/Form'
+import Step2 from './create/steps/FighterImport'
+import Step3 from './create/steps/CompetitionFormula'
 
 export default {
     components: { Step1, Step2, Step3 },
@@ -14,19 +14,22 @@ export default {
             fighter_count: "competition/fighter_count"
         }),
         step_component() {
-            return "step"+this.current_step
+            return this.step_list[this.current_step-1].component_name
         },
         step_list() {
             return [
                 {
-                    name: "Informations générales"
+                    name: "Informations générales",
+                    component_name: "Step1"
                 },
                 {
                     name: "Import des combattants",
+                    component_name: "Step2",
                     count: this.fighter_count
                 },
                 {
-                    name: "Formule de compétition"
+                    name: "Formule de compétition",
+                    component_name: "Step3"
                 }
             ]
         },
@@ -59,7 +62,7 @@ export default {
             current_step: 1,
         }
     },
-    mounted() {
+    created() {
         this.clearCompetition()
     }
 }

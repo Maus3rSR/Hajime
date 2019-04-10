@@ -25,7 +25,11 @@ const state = {
 
 const getters = {
     list: state => state.list,
-    getFormula: state => id => state.list.find(el => el.id == id)
+    getFormula: state => id => state.list.find(el => el.id == id),
+    getFormulaComponentList: (state, getters) => id => {
+        const formula = getters.getFormula(id)
+        return undefined == formula ? [] : formula.component_list
+    }
 }
 
 const mutations = {}
