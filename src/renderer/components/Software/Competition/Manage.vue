@@ -26,7 +26,10 @@ export default {
             fighter_list: 'model.fighter_list',
         }),
         step_component() {
-            return this.step_list[this.current_step-1].component_name
+            return this.step_list[this.current_step-1]
+        },
+        step_component_name() {
+            return this.step_component.component_name
         },
         step_list() {
             let l = [{
@@ -42,7 +45,8 @@ export default {
 
                 l.push({
                     name: this.competition.formula_config_list[index].name,
-                    component_name: component_name
+                    component_name: component_name,
+                    config: this.competition.formula_config_list[index]
                 })
             })
 
@@ -110,7 +114,7 @@ export default {
                     <clip-loader v-if="is_empty_competition" :color="'#fff'"></clip-loader>
                     <span v-else>
                         <nav aria-label="step-wizard" role="navigation">
-                            <ol class="breadcrumb mb-4 software__container--offset-element">
+                            <ol class="breadcrumb mb-3 software__container--offset-element">
                                 <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">
                                     {{ index+1 }}. {{ step.name }} <span v-if="null !== step.count" class="badge badge-pill badge-primary">{{ step.count }}</span>
                                 </li>
@@ -118,7 +122,12 @@ export default {
                         </nav>
 
                         <transition name="fade" mode="out-in">
-                            <component :is="step_component" @onValidate="is_last_step ? true : nextStep()" @onBack="previousStep()"></component>
+                            <component
+                                :is="step_component_name"
+                                :config="step_component.config"
+                                
+                                @onValidate="is_last_step ? true : nextStep()" @onBack="previousStep()"
+                            ></component>
                         </transition>
                     </span>
                 </transition>

@@ -250,26 +250,31 @@ export default {
             :hasFooter="make_the_call"
             :isDynamic="false"
         >
-            <template v-if="!readonly" slot="action-bar">
+            <template slot="action-bar">
 
-                <a
-                    href="javascript:void(0)"
-                    class="actions__item zmdi zmdi-plus"
-                    title="Ajouter un combattant"
+                <template v-if="!readonly">
+                    <a
+                        href="javascript:void(0)"
+                        class="actions__item zmdi zmdi-plus"
+                        title="Ajouter un combattant"
 
-                    @click.prevent="addFighter"
-                >
-                </a>
+                        @click.prevent="addFighter"
+                    >
+                    </a>
 
-                <a
-                    href="javascript:void(0)"
-                    class="actions__item zmdi zmdi-download"
-                    title="Importer une liste existante (fichier .CSV)"
+                    <a
+                        href="javascript:void(0)"
+                        class="actions__item zmdi zmdi-download"
+                        title="Importer une liste existante (fichier .CSV)"
 
-                    @click.prevent="$refs.fighterFileInput.click()" 
-                >
-                </a>
+                        @click.prevent="$refs.fighterFileInput.click()" 
+                    >
+                    </a>
+                </template>
 
+                <span v-else class="badge badge-pill badge-primary">
+                    Lecture seule
+                </span>
             </template>
 
             <template slot="table-header-row" slot-scope="props">
