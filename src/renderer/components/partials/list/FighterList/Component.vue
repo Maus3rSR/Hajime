@@ -15,6 +15,10 @@ export default {
         make_the_call: {
             type: Boolean,
             value: false
+        },
+        readonly: {
+            type: Boolean,
+            value: false
         }
     },
     components: { Dropdown, ModalFighter, ModalPreviewCsv },
@@ -79,6 +83,8 @@ export default {
     methods: {
         updateField(object, field, value)
         {
+            if (this.readonly) return false
+
             const index = object.originalIndex
             let list = JSON.parse(JSON.stringify(this.value))
             
@@ -95,6 +101,7 @@ export default {
             list[index] = object
 
             this.$emit("input", list)
+
             return true
         },
         addFighter() {
@@ -107,6 +114,8 @@ export default {
             this.$refs.modalDeleteFighter.show(fighter)
         },
         markAllPresence(is_present) {
+            if (this.readonly) return
+
             let list = JSON.parse(JSON.stringify(this.value))
             this.$emit("input", list.map(fighter => {
                 fighter.is_present = is_present
@@ -122,6 +131,8 @@ export default {
         },
         markFavorite(fighter, is_favorite, notify)
         {
+            if (this.readonly) return false
+
             notify = undefined == notify ? true : notify
             const updateFieldSuccess = this.updateField(fighter, "is_favorite", is_favorite)
 
@@ -132,6 +143,8 @@ export default {
         },
         markTeamFavorite(header_row, is_favorite)
         {
+            if (this.readonly) return
+
             if (undefined == header_row.children) {
                 this.$notify.error("Une erreur est survenue, il n'y a pas de combattants dans cette équipe")
                 return
@@ -165,6 +178,8 @@ export default {
             })
         },
         onFighterAdd(fighter) {
+            if (this.readonly) return
+
             let list = JSON.parse(JSON.stringify(this.value))
             list.push(fighter)
             this.$emit("input", list)
@@ -172,6 +187,8 @@ export default {
             this.$notify.success("Le combattant a bien été ajouté")
         },
         onFighterEdit(fighter) {
+            if (this.readonly) return
+
             const index = fighter.originalIndex
             let list = JSON.parse(JSON.stringify(this.value))
             
@@ -190,6 +207,8 @@ export default {
             this.$notify.success("Le combattant a bien été modifié")
         },
         onFighterDelete(fighter) {
+            if (this.readonly) return
+
             let list = JSON.parse(JSON.stringify(this.value))
 
             if (undefined == list[fighter.originalIndex]) {
@@ -203,6 +222,8 @@ export default {
             this.$notify.success("Le combattant a bien été supprimé")
         },
         onFighterListImport(fighter_list) {
+            if (this.readonly) return
+
             fighter_list = fighter_list.map(fighter => {
                 fighter.is_present = false
                 fighter.is_favorite = false
@@ -229,7 +250,7 @@ export default {
             :hasFooter="make_the_call"
             :isDynamic="false"
         >
-            <template slot="action-bar">
+            <template v-if="!readonly" slot="action-bar">
 
                 <a
                     href="javascript:void(0)"
@@ -252,30 +273,30 @@ export default {
             </template>
 
             <template slot="table-header-row" slot-scope="props">
-                <a
-                    href="javascript:void(0)"
+                <button
                     class="zmdi btn btn-sm btn-link"
-                    
+
+                    :disabled="readonly"
                     :title="'Rendre ' + (props.row.is_favorite ? 'non favorie' : 'favorie')"
                     :class="{ 'zmdi-star text-yellow': props.row.is_favorite, 'zmdi-star-outline text-muted': !props.row.is_favorite }"
 
                     @click.prevent="markTeamFavorite(props.row, !props.row.is_favorite)"
-                ></a>
+                ></button>
                 {{ props.row.label }}
             </template>
 
             <template slot="name" slot-scope="props">
-                <a
-                    href="javascript:void(0)"
+                <button
                     class="zmdi btn btn-sm btn-link"
                     
                     v-if="!is_team"
 
+                    :disabled="readonly"
                     :title="'Rendre ' + (props.row.is_favorite ? 'non favori' : 'favori')"
                     :class="{ 'zmdi-star text-yellow': props.row.is_favorite, 'zmdi-star-outline text-muted': !props.row.is_favorite }"
 
                     @click.prevent="markFavorite(props.row, !props.row.is_favorite)"
-                ></a>
+                ></button>
                 {{ props.row.name }}
             </template>
 
@@ -284,14 +305,25 @@ export default {
                     href="javascript:void(0)"
                     class="zmdi zmdi-hc-2x"
                     
+                    v-if="!readonly"
+
                     :title="'Rendre ' + (props.row.is_present ? 'absent' : 'présent')"
                     :class="{ 'zmdi-mood text-success': props.row.is_present, 'zmdi-mood-bad text-danger': !props.row.is_present }"
 
                     @click.prevent="markPresence(props.row, !props.row.is_present)"
                 ></a>
+
+                <i
+                    class="zmdi zmdi-hc-2x"
+                    
+                    v-else
+
+                    :class="{ 'zmdi-mood text-success': props.row.is_present, 'zmdi-mood-bad text-danger': !props.row.is_present }"
+                    :title="'Est ' + (props.row.is_present ? 'présent' : 'absent')"
+                ></i>
             </template>
 
-            <template slot="action-cell" slot-scope="props">
+            <template v-if="!readonly" slot="action-cell" slot-scope="props">
                 <button title="Modifier ce combattant" class="btn btn-sm btn-outline-primary" @click.prevent="editFighter(props.row)">
                     <i class="zmdi zmdi-edit"></i>
                 </button>
@@ -320,7 +352,7 @@ export default {
                     </transition>
                 </span>
 
-                <span>
+                <span v-if="!readonly">
                     <a href="javascript:void(0)" class="btn btn-link" @click.prevent="markAllPresence(true)">
                         <i class="text-success zmdi zmdi-mood"></i>
                         Tous présent

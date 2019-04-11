@@ -27,6 +27,7 @@ const defaultState = () => ({
         owner: null,
         type: TYPE_LIST.INDI,
         locked: false,
+        locked_fighter_list: false,
         fighter_list: [],
         formula_config_list: [],
     }

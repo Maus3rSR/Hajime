@@ -92,6 +92,12 @@ export default {
             </empty-placeholder>
 
             <div class="actions">
+                <transition name="fade" mode="out-in">
+                    <button v-if="current_step > 1" class="btn btn-dark" title="Tour précédent" @click.prevent="previousStep()">
+                        <i class="zmdi zmdi-arrow-left"></i>
+                    </button>
+                </transition>
+
                 <router-link to="/" title="Revenir à l'écran principal" class="btn btn-dark">
                     <i class="zmdi zmdi-home"></i>
                 </router-link>
