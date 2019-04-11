@@ -1,6 +1,11 @@
 <script>
 export default {
-    props: {},
+    props: {
+        config: {
+            type: Object,
+            required: true
+        }
+    },
     methods: {},
     watch: {},
     mounted() {}
@@ -8,7 +13,9 @@ export default {
 </script>
 
 <template>
-    <div>Implémentation management pool...</div>
+    <div>
+
+    </div>
 </template>
 
 <style lang="scss" scoped>

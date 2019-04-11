@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import * as FormulaTabsManagementList from '@partials/competitionFormula/tabsManagement'
+import * as FormulaTabsManagementList from './manage/steps/competition_formula'
 import FighterCall from './manage/steps/FighterCall'
 
 export default {

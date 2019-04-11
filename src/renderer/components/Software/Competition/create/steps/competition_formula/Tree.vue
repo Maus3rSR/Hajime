@@ -25,6 +25,7 @@ export default { // TODO shared parent component
             config: {
                 dismiss_favorite: false,
                 third_place_match: false,
+                lock: false
             }
         }
     },
@@ -43,7 +44,7 @@ export default { // TODO shared parent component
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.dismiss_favorite">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Ecarter les têtes de séries</span>
+                        <span class="custom-control-description">Ecarter les têtes de séries (favoris)</span>
                     </label>
                 </div>
                 <div class="col-md-6">

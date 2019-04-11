@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import * as FormulaSettingsFormList from '@partials/competitionFormula/settingsForm'
+import * as FormulaSettingsFormList from './competition_formula'
 
 export default {
     components: { ...FormulaSettingsFormList },

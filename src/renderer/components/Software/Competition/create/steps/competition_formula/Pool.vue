@@ -23,10 +23,11 @@ export default { // TODO shared parent component
         return {
             name: "Matchs de poule",
             config: {
-                number_of_fighter: 1,
+                number_of_qualified_fighter: 1,
                 number_of_pool: 1,
                 number_of_player_per_pool: 1,
                 dismiss_favorite: false,
+                lock: false
             }
         }
     },
@@ -43,8 +44,8 @@ export default { // TODO shared parent component
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="pool_configuration__number_of_fighter" class="card-body__title">Nombre de combattants qualifiés par poule</label>
-                        <input id="pool_configuration__number_of_fighter" type="number" min="1" class="form-control" v-model="config.number_of_fighter">
+                        <label for="pool_configuration__number_of_qualified_fighter" class="card-body__title">Nombre de combattants qualifiés par poule</label>
+                        <input id="pool_configuration__number_of_qualified_fighter" type="number" min="1" class="form-control" v-model="config.number_of_qualified_fighter">
                         <i class="form-group__bar"></i>
                     </div>
                 </div>
@@ -53,7 +54,7 @@ export default { // TODO shared parent component
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.dismiss_favorite">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Ecarter les têtes de séries</span>
+                        <span class="custom-control-description">Ecarter les têtes de séries (favoris)</span>
                     </label>
                 </div>
             </div>
