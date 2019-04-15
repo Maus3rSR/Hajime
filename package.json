@@ -8,6 +8,12 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
+  "build": {
+    "appId": "com.askc.app",
+    "mac": {
+      "category": "public.app-category.sports"
+    }
+  },
   "dependencies": {
     "@tweenjs/tween.js": "^17.2.0",
     "animate.css": "^3.7.0",
@@ -34,10 +40,11 @@
   },
   "devDependencies": {
     "electron": "2.0.7",
-    "electron-builder": "^20.38.2",
+    "electron-builder": "^20.39.0",
     "electron-webpack": "^2.6.1",
     "electron-webpack-vue": "^2.2.2",
     "faker": "^4.1.0",
+    "jquery": "^3.4.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "webpack": "^4.26.1"
