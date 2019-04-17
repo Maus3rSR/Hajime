@@ -272,7 +272,8 @@ export default {
                     </a>
                 </template>
 
-                <span v-else class="badge badge-pill badge-primary">
+                <span v-else>
+                    <i class="zmdi zmdi-lock"></i>
                     Lecture seule
                 </span>
             </template>
