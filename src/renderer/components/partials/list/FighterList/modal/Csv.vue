@@ -13,6 +13,10 @@ export default {
         competition_type: {
             type: String,
             required: true,
+        },
+        number_of_preview: {
+            type: Number,
+            default: 0
         }
     },
     computed: {
@@ -50,10 +54,13 @@ export default {
             return field_list
         },
         preview_list() {
-            return this.list.filter((row, index) => index+1 <= this.number_of_preview)
+            if (!this.number_of_preview)
+                return this.list
+
+            return this.list.filter((row, index) => index <= this.number_of_preview)
         },
         modal_title() {
-            return "Prévisualisation de l'import des combattants ("+this.number_of_preview+" premières lignes)"
+            return "Prévisualisation de l'import des combattants " + (this.number_of_preview ? (this.number_of_preview+" premières lignes") : "")
         },
         final_list() {
             if (Object.keys(this.match_field_list).length == 0)
@@ -149,7 +156,6 @@ export default {
             list: [],
             match_field_list: {},
             import_first_line: true,
-            number_of_preview: 5
         }
     }
 }
