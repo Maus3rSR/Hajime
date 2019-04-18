@@ -45,7 +45,7 @@ export default {
 
 <template>
     <div>
-        <div class=" form-group row">
+        <div class="form-group row">
             <label class="col-sm-3 col-form-label card-body__title" for="competition_formula">Choisir une formule de compétition</label>
             <div class="col-sm-9">
                 <select class="form-control" id="competition_formula" v-model="choosen_formula_id">
