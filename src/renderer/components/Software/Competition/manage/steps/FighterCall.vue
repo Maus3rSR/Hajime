@@ -10,6 +10,9 @@ export default {
             competition_type: state => state.model.type,
             is_fighter_list_lock: state => state.model.locked_fighter_list
         }),
+        ...mapState('configuration', {
+            competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT",
+        }),
         ...mapGetters({
             fighter_present_count: "competition/fighter_present_count",
             competition_saving: "competition/saving",
@@ -19,7 +22,7 @@ export default {
             locked_fighter_list: 'model.locked_fighter_list'
         }),
         step_is_valid() {
-            return this.fighter_present_count > 0
+            return this.fighter_present_count >= this.competition_minimum_entrant
         },
     },
     methods: {
@@ -63,6 +66,14 @@ export default {
         </div>
 
         <div class="row software__container--offset-element">
+            <div class="col">
+                <transition name="fade" type="out-in">
+                    <span class="text-warning" v-if="!step_is_valid">
+                        <i class="zmdi zmdi-alert-triangle"></i>
+                        Nombre de combattant insuffisant pour procéder à la compétition
+                    </span>
+                </transition>
+            </div>
             <div class="col">
                 <button :disabled="!step_is_valid" :class="{'btn-outline-success tada': step_is_valid}" class="btn float-right animated" @click="process">
                     Tour suivant
