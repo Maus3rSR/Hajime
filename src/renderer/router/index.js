@@ -17,12 +17,12 @@ export default new Router({
                 {
                     name: 'dashboard',
                     path: '/', // root of software
-                    component: require('@/components/software/Dashboard').default
+                    component: require('@/components/Software/Dashboard').default
                 },
                 {
                     name: 'create-competition',
                     path: '/competition/new',
-                    component: require('@/components/software/competition/Create').default,
+                    component: require('@/components/Software/Competition/Create').default,
                     meta: {
                         breadcrumb: 'Nouvelle compétition',
                     }
@@ -31,14 +31,14 @@ export default new Router({
                     name: 'manage-competition',
                     path: '/competition/:id',
                     props: true,
-                    component: require('@/components/software/competition/Manage').default,
+                    component: require('@/components/Software/Competition/Manage').default,
                     meta: {
                         breadcrumb: 'Gestion d\'une compétition' // @todo Dynamique
                     }
                 }
             ]
         },
-        { path: '/404', component: require('@/components/layouts/NotFound').default },  
+        { path: '/404', component: require('@/components/layouts/NotFound').default },
         { path: '*', redirect: '/404' },
     ]
 })
