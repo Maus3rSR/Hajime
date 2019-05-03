@@ -14,8 +14,8 @@ Vue.config.productionTip = process.env.NODE_ENV == 'production'
 Object.keys(plugins).forEach(key => {
     Vue.use(plugins[key])
 })
-Vue.use(VeeValidate);
-Vue.use(VueMask);
+Vue.use(VeeValidate); // @TODO Problem when loaded as a plugin
+Vue.use(VueMask); // @TODO Problem when loaded as a plugin
 
 /* eslint-disable no-new */
 new Vue({

@@ -19,7 +19,7 @@
 
 @each $color, $value in $theme-colors {
   .alert-#{$color} {
-    @include alert-variant($value, $value, $value);
+    @include alert-variant($value, $value, $white);
   }
 }
 
