@@ -76,7 +76,7 @@ export default {
                             required
 
                             v-mask="'##/##/####'"
-                            v-validate="{ date_format:'DD/MM/YYYY' }"
+                            v-validate="{ date_format:'dd/MM/yyyy' }"
                             v-model="date"
 
                             :class="{ 'is-invalid': errors.has('date') }"

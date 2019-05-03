@@ -132,7 +132,7 @@ export default {
                             required
 
                             v-mask="'##/##/####'"
-                            v-validate="{ date_format:'DD/MM/YYYY' }"
+                            v-validate="{ date_format:'dd/MM/yyyy' }"
                             v-model="fighter.birthdate"
 
                             :class="{ 'is-invalid': errors.has('birthdate') }"
