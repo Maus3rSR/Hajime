@@ -45,7 +45,10 @@ export default {
                 const number_of_entrant_left = this.getNumberOfEntrantLeft(nb_pool_tested)
 
                 if (!(number_of_entrant_left > 0 && number_of_entrant_left < this.min_per_pool || number_of_entrant_left > number_of_entrant_per_pool))
-                    list.push(nb_pool_tested)
+                    list.push({
+                        number_of_pool: nb_pool_tested,
+                        number_of_entrant_per_pool: number_of_entrant_per_pool
+                    })
 
                 nb_pool_tested++
                 number_of_entrant_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
@@ -69,7 +72,7 @@ export default {
                     return
 
                 if (null == this.number_of_pool)
-                    this.number_of_pool = list[0]
+                    this.number_of_pool = list[0].number_of_pool
             },
             deep: true,
             immediate: true
@@ -89,7 +92,8 @@ export default {
             <label for="number_of_pool" class="col-sm-3 col-xl-2 col-form-label card-body__title">Nombre de poules</label>
             <div class="col-sm-9 col-xl-10">
                 <select id="number_of_pool" class="form-control" v-model="number_of_pool">
-                    <option v-for="number in number_of_pool_value_list" :key="number">{{ number }}</option>
+                    <!-- TODO Label combattants / équipes -->
+                    <option v-for="pool in number_of_pool_value_list" :key="pool.number_of_pool" :value="pool.number_of_pool">{{ pool.number_of_pool }} poules de {{ pool.number_of_entrant_per_pool }} combattants</option>
                 </select>
             </div>
         </div>
