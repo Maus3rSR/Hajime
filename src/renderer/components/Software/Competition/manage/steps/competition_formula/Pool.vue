@@ -16,9 +16,14 @@ export default {
             competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT",
             min_per_pool: "POOL_MIN_SIZE",
             max_per_pool: "POOL_MAX_SIZE",
+            last_pool_offset: "LAST_POOL_OFFSET",
+        }),
+        ...mapState('competition', {
+            competition_type: state => state.model.type,
         }),
         ...mapGetters({
-            fighter_list: "competition/fighter_present_list"
+            constant_type_list: "competition/constant_type_list",
+            fighter_list: "competition/fighter_present_list",
         }),
         list() { // TODO gérer retour liste d'équipes
             return this.fighter_list
@@ -44,11 +49,20 @@ export default {
             while (number_of_entrant_per_pool >= this.min_per_pool && number_of_entrant_per_pool <= this.max_per_pool) {
                 const number_of_entrant_left = this.getNumberOfEntrantLeft(nb_pool_tested)
 
-                if (!(number_of_entrant_left > 0 && number_of_entrant_left < this.min_per_pool || number_of_entrant_left > number_of_entrant_per_pool))
+                if (
+                    !(
+                        number_of_entrant_left > 0 && number_of_entrant_left < this.min_per_pool ||
+                        (number_of_entrant_left > 0 && Math.abs(number_of_entrant_left - number_of_entrant_per_pool) > this.last_pool_offset) ||
+                        number_of_entrant_left == number_of_entrant_per_pool
+                    )
+                ) {
                     list.push({
                         number_of_pool: nb_pool_tested,
-                        number_of_entrant_per_pool: number_of_entrant_per_pool
+                        number_of_entrant_per_pool: number_of_entrant_per_pool,
+                        number_of_entrant_left: number_of_entrant_left,
+                        number_of_total_pool: number_of_entrant_left > 0 ? nb_pool_tested + 1 : nb_pool_tested
                     })
+                }
 
                 nb_pool_tested++
                 number_of_entrant_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
@@ -56,6 +70,9 @@ export default {
 
             return list
         },
+        entrant_label() {
+            return this.competition_type == this.constant_type_list.TEAM ? "équipes" : "combattants"
+        }
     },
     methods: {
         getNumberOfEntrantPerPool(number_of_pool) {
@@ -71,8 +88,8 @@ export default {
                 if (!list.length)
                     return
 
-                if (null == this.number_of_pool)
-                    this.number_of_pool = list[0].number_of_pool
+                if (null == this.pool_configuration)
+                    this.pool_configuration = list[0]
             },
             deep: true,
             immediate: true
@@ -80,7 +97,7 @@ export default {
     },
     data() {
         return {
-            number_of_pool: null,
+            pool_configuration: null,
         }
     }
 }
@@ -89,11 +106,16 @@ export default {
 <template>
     <div v-if="has_enough_entrant">
         <div class="form-group row">
-            <label for="number_of_pool" class="col-sm-3 col-xl-2 col-form-label card-body__title">Nombre de poules</label>
+            <label for="pool_configuration" class="col-sm-3 col-xl-2 col-form-label card-body__title">Nombre de poules</label>
             <div class="col-sm-9 col-xl-10">
-                <select id="number_of_pool" class="form-control" v-model="number_of_pool">
+                <select id="pool_configuration" class="form-control" v-model="pool_configuration">
                     <!-- TODO Label combattants / équipes -->
-                    <option v-for="pool in number_of_pool_value_list" :key="pool.number_of_pool" :value="pool.number_of_pool">{{ pool.number_of_pool }} poules de {{ pool.number_of_entrant_per_pool }} combattants</option>
+                    <option v-for="pool_config in number_of_pool_value_list" :key="pool_config.number_of_pool" :value="pool_config">
+                        {{ pool_config.number_of_pool }} poules de {{ pool_config.number_of_entrant_per_pool }} {{ entrant_label }}
+                        <template v-if="pool_config.number_of_entrant_left">
+                            et 1 poule de {{ pool_config.number_of_entrant_left }} {{ entrant_label }}
+                        </template>
+                    </option>
                 </select>
             </div>
         </div>
