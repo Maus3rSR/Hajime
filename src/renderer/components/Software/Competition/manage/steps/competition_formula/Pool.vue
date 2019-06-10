@@ -31,7 +31,7 @@ export default {
         },
         minimum_nb_pool_tested()
         {
-            return this.count / this.max_per_pool
+            return parseInt(this.count / this.max_per_pool, 10)
         },
         number_of_pool_value_list() {
             if (!this.has_enough_entrant)
@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         getNumberOfEntrantPerPool(number_of_pool) {
-            return this.count / parseInt(number_of_pool, 10)
+            return parseInt(this.count / number_of_pool, 10)
         },
         getNumberOfEntrantLeft(number_of_pool) {
             return this.count % number_of_pool
