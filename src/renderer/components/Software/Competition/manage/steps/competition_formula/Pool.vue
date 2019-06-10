@@ -1,8 +1,10 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import Pool from '@partials/pool/Component'
 
 export default {
+    components: { Pool },
     props: {
         config: {
             type: Object,
@@ -91,6 +93,12 @@ export default {
                 </select>
             </div>
         </div>
+
+        <!-- <div class="row">
+            <div class="col" v-for="pool_number in number_of_pool" :key="pool_number">
+                <pool />
+            </div>
+        </div> -->
     </div>
 
     <div class="h5 text-warning" v-else>
