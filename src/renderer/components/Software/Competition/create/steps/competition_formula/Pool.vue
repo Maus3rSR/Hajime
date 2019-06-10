@@ -58,11 +58,6 @@ export default { // TODO shared parent component
                     </label>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12 text-warning h5">
-                    <i class="zmdi zmdi-alert-circle-o"></i> Le nombre de poule et le nombre de combattant par poule seront configurables après l'appel des combattants pour le tirage au sort
-                </div>
-            </div>
         </div>
     </div>
 </template>

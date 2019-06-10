@@ -33,12 +33,17 @@ export default {
             let field_list = {
                 "name": {
                     label: "Nom",
-                    required: true,
+                    required: true
                 },
                 "birthdate": {
                     label: "Date de naissance (format DD/MM/YYYY)",
                     required: true,
                     validate: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+                },
+                "license": {
+                    label: "Licence",
+                    required: true,
+                    validate: /^(?!\s*$).+/
                 },
                 "grade": {
                     label: "Grade"

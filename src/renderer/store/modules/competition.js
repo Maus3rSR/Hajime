@@ -123,7 +123,7 @@ const actions = {
 
         // TODO DEV : Supprimer à terme
         let model = defaultState().model
-        model.id = id
+        model.license = id
         model.choosen_formula_id = 1
         model.name = "Nom de la compétition"
         model.date = "19/07/2020"

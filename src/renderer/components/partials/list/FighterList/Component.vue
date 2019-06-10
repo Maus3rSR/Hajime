@@ -59,6 +59,7 @@ export default {
         column_list() {
             let column_list = [
                 { label: 'Combattant', field: 'name' },
+                { label: 'N° de licence', field: 'license' },
                 { label: 'Date de naissance', field: 'birthdate' },
                 { label: 'Grade', field: 'grade' },
                 { label: 'Club', field: 'club' },

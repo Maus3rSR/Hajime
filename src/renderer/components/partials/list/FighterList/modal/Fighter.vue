@@ -143,6 +143,27 @@ export default {
                 </div>
             </div>
 
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div>
+                        <label for="fighter__license">N° licence *</label>
+                        <input
+                            id="fighter__license"
+                            class="form-control"
+                            type="text"
+                            name="license"
+
+                            v-validate
+                            v-model="fighter.license"
+
+                            :class="{ 'is-invalid': errors.has('license') }"
+                        >
+                        <i class="form-group__bar"></i>
+                    </div>
+                    <span class="text-danger" v-if="errors.has('license')">{{ errors.first('license') }}</span>
+                </div>
+            </div>
+
             <div class="col-sm-12" v-if="competition_type == constant_type_list.TEAM">
                 <div class="form-group">
                     <div>
