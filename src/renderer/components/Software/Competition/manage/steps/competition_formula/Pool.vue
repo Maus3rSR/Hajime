@@ -27,25 +27,26 @@ export default {
         has_enough_entrant() {
             return this.count >= this.competition_minimum_entrant
         },
+        minimum_nb_pool_tested()
+        {
+            return this.count / this.max_per_pool
+        },
         number_of_pool_value_list() {
             if (!this.has_enough_entrant)
                 return []
 
             let list = []
-            let nb_pool_tested = 2
+            let nb_pool_tested = this.minimum_nb_pool_tested
             let number_of_entrant_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
 
             while (number_of_entrant_per_pool >= this.min_per_pool && number_of_entrant_per_pool <= this.max_per_pool) {
-                const nb_pool = nb_pool_tested
-                const number_of_entrant_left = this.getNumberOfEntrantLeft(nb_pool)
+                const number_of_entrant_left = this.getNumberOfEntrantLeft(nb_pool_tested)
+
+                if (!(number_of_entrant_left > 0 && number_of_entrant_left < this.min_per_pool || number_of_entrant_left > number_of_entrant_per_pool))
+                    list.push(nb_pool_tested)
 
                 nb_pool_tested++
                 number_of_entrant_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
-
-                if (number_of_entrant_left > 0 && number_of_entrant_left < this.min_per_pool)
-                    continue
-                
-                list.push(nb_pool)
             }
 
             return list
