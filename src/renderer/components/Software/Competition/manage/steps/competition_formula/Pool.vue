@@ -1,10 +1,10 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import Pool from '@partials/pool/Component'
+import PoolList from '@partials/pool/List'
 
 export default {
-    components: { Pool },
+    components: { PoolList },
     props: {
         config: {
             type: Object,
@@ -120,11 +120,10 @@ export default {
             </div>
         </div>
 
-        <!-- <div class="row">
-            <div class="col" v-for="pool_number in number_of_pool" :key="pool_number">
-                <pool />
-            </div>
-        </div> -->
+        <pool-list
+            :config="pool_configuration"
+            :entry_list="fighter_list"
+        />
     </div>
 
     <div class="h5 text-warning" v-else>

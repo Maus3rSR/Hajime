@@ -24,12 +24,12 @@
  * SLIDE DOWN LIST
  */
 .list-item {
-    transition: all 1s;
+    transition: all 0.5s;
 }
 .list-enter, .list-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
+    opacity: 0;
+    transform: translateY(30px);
 }
 .list-leave-active {
-  position: absolute;
+    position: absolute;
 }

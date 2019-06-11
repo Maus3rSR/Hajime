@@ -12,7 +12,6 @@ const defaultState = () => ({
     model: {
         id: null,
         competition_id: null,
-        fighter_list: []
     }
 })
 
@@ -24,7 +23,6 @@ const getters = {
     loading: state => state.status == STATUS_LIST.LOADING,
     saving: state => state.status == STATUS_LIST.SAVING,
     count: state => state.list.length,
-    fighter_count: state => state.model.fighter_list.length,
 }
 
 const mutations = {
