@@ -1,0 +1,25 @@
+ASKC database usage :
+
+Prerequisite : sqlite3 (the askc_db.sql script is not compliant with sqlite)
+
+askc_db is the sqlite3 database
+askc_db.sql is the sql file enabling the tables creations
+mode_db_askc.mwb is a MySQL Workbench file with the description of the DB structure (tables, keys, types...)
+schemaDB.pdf is an export of mode_db_askc.mwb in pdf format
+
+In order to create the ASKC database :
+~$ cd ~/PathToMyAskcRepo/base
+~/PathToMyAskcRepo/base$ sqlite3 askc_db
+SQLite version 3.22.0 2018-01-22 18:45:57
+Enter ".help" for usage hints.
+sqlite> .read askc_db.sql
+sqlite> .table
+Competition         CompetitionFormula  CompetitionTree   
+CompetitionFighter  CompetitionPool     Formula           
+
+
+.read command execute the askc_db.sql script in order to populate the askc_db database with tables.
+.table command checks if the job as been done correctly.
+
+MESSAGE TO THE DEV TEAM : 
+Sqlite3 does not have any boolean type so in order to implement a False|True object you'll have to use integers 0|1 
