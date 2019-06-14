@@ -120,10 +120,13 @@ export default {
             </div>
         </div>
 
-        <pool-list
-            :config="pool_configuration"
-            :entry_list="fighter_list"
-        />
+        <software-container limit-container="software__footer" element-scroll="poolList">
+            <pool-list
+                id="poolList"
+                :config="pool_configuration"
+                :entry_list="fighter_list"
+            />
+        </software-container>
     </div>
 
     <div class="h5 text-warning" v-else>
