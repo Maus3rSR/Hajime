@@ -68,6 +68,9 @@ export default {
             }
 
             return entry_list;
+        },
+        validate() {
+            this.$emit('on-validate', this.pool_list)
         }
     },
     watch: {
@@ -118,7 +121,7 @@ export default {
                 <transition name="fade">
                     <div v-if="!is_initial_state" class="text-right">
                         <button class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
-                        <button class="btn animated" :class="{'btn-outline-success tada': !drawing_lot}" :disabled="drawing_lot">Je valide ce tirage !</button>
+                        <button class="btn animated" :class="{'btn-outline-success tada': !drawing_lot}" :disabled="drawing_lot" @click.prevent="validate()">Je valide ce tirage !</button>
                     </div>
                 </transition>
             </div>

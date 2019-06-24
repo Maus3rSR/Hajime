@@ -80,6 +80,12 @@ export default {
         },
         getNumberOfEntrantLeft(number_of_pool) {
             return this.count % number_of_pool
+        },
+        validatePoolList(pool_list) {
+            // TODO SAUVEGARDE DE LA LISTE DES POULES
+            // SAUVEGARDE DU CHOIX DU NOMBRE DE POULES + NOMBRE COMBATTANT PAR POULE
+            // Gerer le retour readonly sur le composant d'affichage des poules
+            // pouvoir passer une liste de poules au chargement en plus de la liste des combattants/équipes
         }
     },
     watch: {
@@ -91,8 +97,7 @@ export default {
                 if (null == this.pool_configuration)
                     this.pool_configuration = list[0]
             },
-            deep: true,
-            immediate: true
+            deep: true
         }
     },
     data() {
@@ -109,7 +114,7 @@ export default {
             <label for="pool_configuration" class="col-sm-3 col-xl-2 col-form-label card-body__title">Nombre de poules</label>
             <div class="col-sm-9 col-xl-10">
                 <select id="pool_configuration" class="form-control" v-model="pool_configuration">
-                    <!-- TODO Label combattants / équipes -->
+                    <option value="null" selected>Choisir une configuration</option>
                     <option v-for="pool_config in number_of_pool_value_list" :key="pool_config.number_of_pool" :value="pool_config">
                         {{ pool_config.number_of_pool }} poules de {{ pool_config.number_of_entrant_per_pool }} {{ entrant_label }}
                         <template v-if="pool_config.number_of_entrant_left">
@@ -120,13 +125,19 @@ export default {
             </div>
         </div>
 
-        <software-container limit-container="software__footer" element-scroll="poolList">
-            <pool-list
-                id="poolList"
-                :config="pool_configuration"
-                :entry_list="fighter_list"
-            />
-        </software-container>
+        <transition name="fade" mode="out-in">
+            <software-container v-if="null != pool_configuration" limit-container="software__footer" element-scroll="poolList">
+                <pool-list
+                    id="poolList"
+
+                    :config="pool_configuration"
+                    :entry_list="fighter_list"
+                    :readonly="false"
+
+                    @on-validate="validatePoolList"
+                />
+            </software-container>
+        </transition>
     </div>
 
     <div class="h5 text-warning" v-else>

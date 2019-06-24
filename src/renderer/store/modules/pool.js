@@ -8,10 +8,15 @@ const STATUS_LIST = {
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
-    list: [],
     model: {
         id: null,
         competition_id: null,
+        number_of_qualified_fighter: 1,
+        number_of_pool: 1,
+        number_of_player_per_pool: 1,
+        dismiss_favorite: false,
+        lock: false,
+        pool_list: []
     }
 })
 
@@ -22,7 +27,7 @@ const getters = {
     is_empty: state => null == state.model.id,
     loading: state => state.status == STATUS_LIST.LOADING,
     saving: state => state.status == STATUS_LIST.SAVING,
-    count: state => state.list.length,
+    pool_count: state => state.model.pool_list.length,
 }
 
 const mutations = {
@@ -48,19 +53,18 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    SAVE({ dispatch, commit }) {
+    SAVE_ALL({ dispatch, commit }) { // Save model and pool_list
         commit('STATUS_START', STATUS_LIST.SAVING)
         return new Promise((resolve, reject) => {
             // TODO API SAVE DATA
             setTimeout(() => {
                 commit('STATUS_STOP')
-                dispatch('NOTIFY_SUCCESS', 'La poule a bien été sauvegardée', { root: true })
-                commit('UPDATE_MODEL_ID', 1) // TODO DEV : Remplacer par le retour API
+                dispatch('NOTIFY_SUCCESS', 'Les poules ont bien été sauvegardées', { root: true })
                 resolve()
             }, 1500)
         })
     },
-    LOAD({ dispatch, commit }, id) {
+    LOAD({ dispatch, commit }, competition_id) {
         dispatch('CLEAR')
         commit('STATUS_START', STATUS_LIST.LOADING)
 
