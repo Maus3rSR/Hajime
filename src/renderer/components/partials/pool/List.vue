@@ -26,12 +26,12 @@ export default {
     methods: {
         updatePoolList(base_entry_list) {
             this.pool_list = []
-            let current_entry_index = 0;
+            let current_entry_index = 0
 
             for (let i = 0; i < this.config.number_of_total_pool; i++) {
                 const next_entry_index = i == this.config.number_of_total_pool - 1 ?
                     base_entry_list.length :
-                    current_entry_index + this.config.number_of_entrant_per_pool
+                    current_entry_index + this.config.number_of_entry_per_pool
                 
                 let entry_list = []
                 
@@ -67,7 +67,7 @@ export default {
                 [entry_list[i], entry_list[j]] = [entry_list[j], entry_list[i]];
             }
 
-            return entry_list;
+            return entry_list
         },
         validate() {
             this.$emit('on-validate', this.pool_list)
@@ -97,35 +97,37 @@ export default {
 <template>
     <div class="pool-list">
         
-        <div v-if="!readonly" class="pool-front-actions card">
-            <div class="card-body">
-                <transition name="fade">
-                    <div class="card-title" v-if="!is_initial_state">
-                        <template v-if="drawing_lot">
-                            Tirage au sort en cours...
-                        </template>
-                        <template v-else>
-                            Tirage au sort terminé !
-                        </template>
+        <transition name="fade" mode="out-in">
+            <div v-if="!readonly" class="pool-front-actions card">
+                <div class="card-body">
+                    <transition name="fade">
+                        <div class="card-title" v-if="!is_initial_state">
+                            <template v-if="drawing_lot">
+                                Tirage au sort en cours...
+                            </template>
+                            <template v-else>
+                                Tirage au sort terminé !
+                            </template>
+                        </div>
+                    </transition>
+
+                    <button v-if="is_initial_state" class="btn btn__draw btn-outline-success animated infinite pulse" @click.prevent="shuffle()">
+                        Effectuer le tirage au sort
+                    </button>
+
+                    <div class="progress mb-4" v-else>
+                        <div class="progress-bar bg-primary" role="progressbar" :style="{ width: this.draw_lot_progress+'%' }"></div>
                     </div>
-                </transition>
 
-                <button v-if="is_initial_state" class="btn btn__draw btn-outline-success animated infinite pulse" @click.prevent="shuffle()">
-                    Effectuer le tirage au sort
-                </button>
-
-                <div class="progress mb-4" v-else>
-                    <div class="progress-bar bg-primary" role="progressbar" :style="{ width: this.draw_lot_progress+'%' }"></div>
+                    <transition name="fade">
+                        <div v-if="!is_initial_state" class="text-right">
+                            <button class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
+                            <button class="btn animated" :class="{'btn-outline-success tada': !drawing_lot}" :disabled="drawing_lot" @click.prevent="validate()">Je valide ce tirage !</button>
+                        </div>
+                    </transition>
                 </div>
-
-                <transition name="fade">
-                    <div v-if="!is_initial_state" class="text-right">
-                        <button class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
-                        <button class="btn animated" :class="{'btn-outline-success tada': !drawing_lot}" :disabled="drawing_lot" @click.prevent="validate()">Je valide ce tirage !</button>
-                    </div>
-                </transition>
             </div>
-        </div>
+        </transition>
         
         <transition-group name="list" tag="div" class="row">
             <div class="col-xl-3 col-lg-4 list-item" v-for="(entry_list, index) in pool_list" :key="index+'_'+entry_list.name">

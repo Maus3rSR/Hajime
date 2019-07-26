@@ -3,7 +3,7 @@ export default {
     beforeRouteUpdate (to, from, next) {
         const toDepth = to.path.split('/').length
         const fromDepth = from.path.split('/').length
-        this.transitionName = 'fade';
+        this.transitionName = 'fade'
         if (toDepth !== fromDepth) {
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
         }

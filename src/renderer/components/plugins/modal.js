@@ -8,4 +8,4 @@ const ModalPlugin = {
     }
 }
 
-export default ModalPlugin;
+export default ModalPlugin

@@ -6,4 +6,4 @@ const CounterPlugin = {
     }
 }
 
-export default CounterPlugin;
+export default CounterPlugin

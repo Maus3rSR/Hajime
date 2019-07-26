@@ -24,4 +24,4 @@ const SoftwareContainerPlugin = {
     }
 }
 
-export default SoftwareContainerPlugin;
+export default SoftwareContainerPlugin

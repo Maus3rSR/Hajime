@@ -1,4 +1,4 @@
-import Toasted from 'vue-toasted';
+import Toasted from 'vue-toasted'
 
 const getIconClass = icon => 'mr-2 zmdi zmdi-'+icon
 
@@ -32,4 +32,4 @@ const NotifyPlugin = {
     }
 }
 
-export default NotifyPlugin;
+export default NotifyPlugin

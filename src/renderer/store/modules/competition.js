@@ -109,6 +109,7 @@ const actions = {
         commit('STATUS_START', STATUS_LIST.SAVING)
         return new Promise((resolve, reject) => {
             // TODO API SAVE DATA
+            // TODO Lors de la sauvegarde API, il faut déjà créer la poule / arbre éliminatoire en fonction de la formule choisie
             setTimeout(() => {
                 commit('STATUS_STOP')
                 dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })

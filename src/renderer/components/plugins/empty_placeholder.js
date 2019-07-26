@@ -6,4 +6,4 @@ const EmptyPlaceholderPlugin = {
     }
 }
 
-export default EmptyPlaceholderPlugin;
+export default EmptyPlaceholderPlugin

@@ -13,7 +13,7 @@ const defaultState = () => ({
         competition_id: null,
         number_of_qualified_fighter: 1,
         number_of_pool: 1,
-        number_of_player_per_pool: 1,
+        number_of_entry_per_pool: 1,
         dismiss_favorite: false,
         lock: false,
         pool_list: []

@@ -22,12 +22,9 @@ export default { // TODO shared parent component
     data() {
         return {
             name: "Matchs de poule",
-            config: { // TODO récupérer ces champs via vuex pool.js ?
+            config: {
                 number_of_qualified_fighter: 1,
-                number_of_pool: 1,
-                number_of_player_per_pool: 1,
                 dismiss_favorite: false,
-                lock: false
             }
         }
     },

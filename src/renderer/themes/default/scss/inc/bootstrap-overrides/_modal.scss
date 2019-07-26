@@ -25,6 +25,11 @@
   }
 }
 
+.modal-backdrop {
+    opacity: $modal-backdrop-opacity;
+}
+  
+
 @include media-breakpoint-up(sm) {
   .modal {
     text-align: center;

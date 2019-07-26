@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `CompetitionPool` (
 	`competition_id`	INTEGER,
 	`number_of_qualified_fighter`	INTEGER,
 	`number_of_pool`	INTEGER,
-	`number_of_player_per_pool`	INTEGER,
+	`number_of_entry_per_pool`	INTEGER,
 	`dismiss_favorite`	INTEGER,
 	`locked`	INTEGER,
 	FOREIGN KEY(`competition_id`) REFERENCES `Competition`(`idcompetition`)

@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import bModal from 'bootstrap-vue/es/components/modal/modal'
-import { isArray } from 'util';
+import { isArray } from 'util'
 
 export default {
     components: { bModal },
@@ -27,7 +27,7 @@ export default {
             return "modal-filter__"+this.id
         },
         can_do_import() {
-            return this.total_final_list > 0;
+            return this.total_final_list > 0
         },
         field_list() {
             let field_list = {

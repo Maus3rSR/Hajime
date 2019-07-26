@@ -20,7 +20,7 @@
     "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.11",
+    "bootstrap-vue": "^2.0.0-rc.27",
     "electron": "2.0.7",
     "electron-builder": "^20.39.0",
     "electron-webpack": "^2.6.1",

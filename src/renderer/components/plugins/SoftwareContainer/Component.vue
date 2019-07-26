@@ -54,7 +54,7 @@ export default {
 
             if (!this.elementScroll) {
                 this.$el.classList.add("software__container--scroll")
-                return;
+                return
             }
 
             let element = document.getElementById(this.elementScroll)

@@ -1,5 +1,5 @@
-import { VueGoodTable } from 'vue-good-table';
-import vBModal from 'bootstrap-vue/es/directives/modal/modal';
+import { VueGoodTable } from 'vue-good-table'
+import vBModal from 'bootstrap-vue/es/directives/modal/modal'
 import Component from './DataList/Component'
 
 const DataListPlugin = {
@@ -12,4 +12,4 @@ const DataListPlugin = {
     }
 }
 
-export default DataListPlugin;
+export default DataListPlugin
