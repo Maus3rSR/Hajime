@@ -167,7 +167,7 @@ export default {
 </script>
 
 <template>
-    <b-modal class="modal__filter" :title="modal_title" size="lg" hide-header-close ref="previewCsvModal">
+    <b-modal scrollable class="modal__filter" :title="modal_title" size="lg" hide-header-close ref="previewCsvModal">
         <div class="row">
             <div class="col-sm-12">
                 <transition name="fade">
