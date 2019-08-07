@@ -64,6 +64,11 @@ export default {
                     <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
                     Matchs
                 </template>
+
+                <span class="badge badge-warning text-white">
+                    <i class="zmdi zmdi-alert-triangle"></i>
+                    DEVELOPPEMENT EN COURS
+                </span>
             </b-tab>
         </b-tabs>
     </div>

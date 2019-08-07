@@ -149,7 +149,7 @@ h1 {
 <style lang="scss">
 #competition__manage {
     .tab-content {
-        padding-bottom: 0;
+        padding: 0;
     }
     .breadcrumb-item.active {
         cursor: pointer;

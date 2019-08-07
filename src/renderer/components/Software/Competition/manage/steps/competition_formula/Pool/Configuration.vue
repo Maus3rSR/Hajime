@@ -55,20 +55,20 @@ export default {
             let number_of_entry_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
 
             while (number_of_entry_per_pool >= this.min_per_pool && number_of_entry_per_pool <= this.max_per_pool) {
-                const number_of_entrant_left = this.getNumberOfEntrantLeft(nb_pool_tested)
+                const number_of_entry_left = this.getNumberOfEntrantLeft(nb_pool_tested)
 
                 if (
                     !(
-                        number_of_entrant_left > 0 && number_of_entrant_left < this.min_per_pool ||
-                        (number_of_entrant_left > 0 && Math.abs(number_of_entrant_left - number_of_entry_per_pool) > this.last_pool_offset) ||
-                        number_of_entrant_left == number_of_entry_per_pool
+                        number_of_entry_left > 0 && number_of_entry_left < this.min_per_pool ||
+                        (number_of_entry_left > 0 && Math.abs(number_of_entry_left - number_of_entry_per_pool) > this.last_pool_offset) ||
+                        number_of_entry_left == number_of_entry_per_pool
                     )
                 ) {
                     list.push({
                         number_of_pool: nb_pool_tested,
                         number_of_entry_per_pool: number_of_entry_per_pool,
-                        number_of_entrant_left: number_of_entrant_left,
-                        number_of_total_pool: number_of_entrant_left > 0 ? nb_pool_tested + 1 : nb_pool_tested
+                        number_of_entry_left: number_of_entry_left,
+                        number_of_total_pool: number_of_entry_left > 0 ? nb_pool_tested + 1 : nb_pool_tested
                     })
                 }
 
@@ -143,8 +143,8 @@ export default {
                     <option value="null" selected>Choisir une configuration</option>
                     <option v-for="pool_config in number_of_pool_value_list" :key="pool_config.number_of_pool" :value="pool_config">
                         {{ pool_config.number_of_pool }} poules de {{ pool_config.number_of_entry_per_pool }} {{ entrant_label }}
-                        <template v-if="pool_config.number_of_entrant_left">
-                            et 1 poule de {{ pool_config.number_of_entrant_left }} {{ entrant_label }}
+                        <template v-if="pool_config.number_of_entry_left">
+                            et 1 poule de {{ pool_config.number_of_entry_left }} {{ entrant_label }}
                         </template>
                     </option>
                 </select>

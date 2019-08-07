@@ -14,7 +14,8 @@
     }
   
     .actions {
-      margin: 0.05rem -0.8rem 0 auto;
+        position: static; // Override when actions is inside a .card-body
+        margin: 0.05rem -0.8rem 0 auto;
     }
   }
   
