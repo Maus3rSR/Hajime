@@ -5,6 +5,7 @@ const getIconClass = icon => 'mr-2 zmdi zmdi-'+icon
 const NotifyPlugin = {
     install(Vue) {
         Vue.use(Toasted, {
+            position: 'bottom-right',
             duration: 3000,
             iconPack: "custom-class",
         })
