@@ -3,9 +3,10 @@ import { mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import { TabsPlugin } from 'bootstrap-vue'
 import PoolConfiguration from './Pool/Configuration'
+import PoolViewer from './Pool/Viewer'
 
 export default {
-    components: { PoolConfiguration, TabsPlugin },
+    components: { PoolConfiguration, PoolViewer, TabsPlugin },
     props: {
         config: {
             type: Object,
@@ -22,7 +23,6 @@ export default {
         }),
         ...mapFields('pool', {
             pool_locked: 'model.lock',
-            pool_list: 'model.pool_list',
         }),
         list() { // TODO gérer retour liste d'équipes
             return this.fighter_list
@@ -33,9 +33,11 @@ export default {
         has_enough_entrant() {
             return this.count >= this.competition_minimum_entrant
         },
-        pool_configuration_title() {
-            return this.pool_locked && !pool_saving ?
-                "Poules" : "Tirage au sort"
+        pool_list_validated() {
+            return this.pool_locked && !this.pool_saving
+        },
+        pool_tab_title() {
+            return this.pool_list_validated ? "Liste des poules" : "Tirage au sort"
         }
     },
     methods: {},
@@ -51,10 +53,11 @@ export default {
             <b-tab active>
                 <template slot="title">
                     <clip-loader v-if="pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
-                    Tirage au sort
+                    {{ pool_tab_title }}
                 </template>
 
-                <pool-configuration :config="config" />
+                <pool-configuration v-if="!pool_list_validated" :config="config" />
+                <pool-viewer v-else />
             </b-tab>
             <b-tab :disabled="!pool_locked || pool_saving">
                 <template slot="title">
