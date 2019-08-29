@@ -1,6 +1,10 @@
 <script>
-import { mapState, mapGetters } from 'vuex'
+import * as JsPDF from 'jspdf'
+import 'jspdf-autotable';
+import { mapState, mapGetters, mapActions } from 'vuex'
 import PoolList from '@partials/pool/List'
+
+const { BrowserWindow } = require('electron').remote
 
 export default {
     components: { PoolList },
@@ -29,7 +33,59 @@ export default {
             return this.competition_type == this.constant_type_list.TEAM ? "équipes" : "combattants"
         }
     },
-    methods: {},
+    methods: {
+        // ...mapActions({
+        //     GeneratePdf: "pool/GENERATE_PDF"
+        // })
+        GeneratePdf() {
+            let doc = new JsPDF()
+
+            const marginX = 10
+            const marginY = 10
+            const poolMargin = 107
+            let startY = 20
+
+            doc.text('Liste des poules', marginX, marginY)
+
+            this.list.forEach((pool, index) => { // Each pool
+                let body = []
+                let is_pair = (index+1) % 2 === 0
+
+                if (!is_pair && index > 0)
+                    startY = doc.autoTable.previous.finalY + 10
+
+                console.log(startY)
+
+                let config = {
+                    showHead: 'firstPage',
+                    startY: startY,
+                    margin: {
+                        right: (is_pair ? marginX : poolMargin),
+                        left: (is_pair ? poolMargin : marginX)
+                    },
+                    head: [["Poule n°"+(index+1), "Nom"]],
+                    body: body,
+                    didDrawPage: data => {
+                        //console.log(data)
+                    }
+                }
+
+                pool.forEach((entry, entry_index) => body.push([(index+1)+"."+(entry_index+1), entry.name])) // Each entry of pool
+
+                doc.autoTable(config)
+            })
+
+            const pdfWindow = new BrowserWindow({
+                width: 1024,
+                height: 800,
+                webPreferences: {
+                    plugins: true,
+                    webSecurity: false
+                }
+            })
+            pdfWindow.loadURL(doc.output('datauristring'))
+        }
+    },
     data() {
         return {}
     }
@@ -47,7 +103,7 @@ export default {
             </div>
 
             <div class="actions">
-                <a href="javascript:void(0);" title="Télécharger le PDF de la liste des poules" class="actions__item zmdi zmdi-collection-pdf"></a>
+                <a href="javascript:void(0);" @click.prevent="GeneratePdf" title="Télécharger le PDF de la liste des poules" class="actions__item zmdi zmdi-collection-pdf"></a>
             </div>
         </div>
 

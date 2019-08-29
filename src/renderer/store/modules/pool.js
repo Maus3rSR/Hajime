@@ -79,6 +79,9 @@ const actions = {
                 resolve()
             }, 3000)
         })
+    },
+    GENERATE_PDF() {
+        console.log("GENERATE PDF PLEASE !")
     }
 }
 

@@ -14,7 +14,6 @@
       "category": "public.app-category.sports"
     }
   },
-  "dependencies": {},
   "devDependencies": {
     "@tweenjs/tween.js": "^17.2.0",
     "animate.css": "^3.7.0",
@@ -27,6 +26,8 @@
     "electron-webpack-vue": "^2.2.2",
     "faker": "^4.1.0",
     "file-loader": "^3.0.1",
+    "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.2.4",
     "luxon": "^1.8.2",
     "material-design-iconic-font": "^2.2.0",
     "node-sass": "^4.12.0",
