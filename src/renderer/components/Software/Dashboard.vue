@@ -1,12 +1,11 @@
 <script>
-export default {
+import Vue from 'vue'
 
-}
+export default {}
 </script>
 
 <template>
     <div id="dashboard">
-
         <div class="row">
             <div class="col-sm">
                 <!-- Competition -->

@@ -18,10 +18,8 @@ Vue.use(VeeValidate) // @TODO Problem when loaded as a plugin
 Vue.use(VueMask) // @TODO Problem when loaded as a plugin
 
 /* eslint-disable no-new */
-let vm = new Vue({
+new Vue({
   render: h => h(App),
   router,
   store,
 }).$mount('#app')
-
-console.log(vm)
