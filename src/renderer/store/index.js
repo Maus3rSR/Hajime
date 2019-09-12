@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 import notifyPlugin from '../components/plugins/notify'
+import pdfPlugin from '../components/plugins/pdf'
 
 Vue.use(Vuex)
 Vue.use(notifyPlugin)
@@ -18,5 +19,6 @@ export default new Vuex.Store({
             notifier.$notify.error(msg)
         }
     },
+    plugins: [pdfPlugin.storePlugin],
     strict: process.env.NODE_ENV !== 'production'
 })
