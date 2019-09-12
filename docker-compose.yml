@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mariadb:
+    restart: always
+    image: 'bitnami/mariadb:latest'
+    ports:
+      - 3310:3306
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+      MARIADB_DATABASE: askc
+      MARIADB_USER: askc
+      MARIADB_PASSWORD: askc
+    volumes:
+      - mysqldata:/bitnami
+volumes:
+  mysqldata:
+    driver: local
