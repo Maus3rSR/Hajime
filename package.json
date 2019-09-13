@@ -34,6 +34,7 @@
     "papaparse": "^4.6.2",
     "sass-loader": "^7.1.0",
     "source-map-support": "^0.5.9",
+    "typeorm": "^0.2.18",
     "upath": "^1.0.5",
     "uuid": "^3.3.2",
     "v-mask": "^1.3.3",
