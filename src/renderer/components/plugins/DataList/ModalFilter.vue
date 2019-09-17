@@ -1,10 +1,9 @@
 <script>
 import { mapGetters } from 'vuex'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
 import DatePicker from 'vue2-datepicker'
 
 export default {
-    components: { bModal, DatePicker },
+    components: { DatePicker },
     props: {
         id: {
             type: String,
@@ -21,6 +20,9 @@ export default {
         }),
         id_modal_filter() {
             return "modal-filter__"+this.id
+        },
+        filterableColumns() {
+            return this.columns.filter(column => this.isFilterable(column))
         }
     },
     methods: {
@@ -76,7 +78,7 @@ export default {
 <template>
     <b-modal class="modal__filter" title="Filtrer" size="lg" hide-header-close ref="modalFilter">
         <div class="row">
-            <div v-if="isFilterable(column)" class="col-sm-6" v-for="(column, index) in columns" :key="index">
+            <div class="col-sm-6" v-for="(column, index) in filterableColumns" :key="index">
 
                 <!-- options are a list of primitives -->
                 <select

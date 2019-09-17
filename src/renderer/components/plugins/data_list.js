@@ -1,12 +1,13 @@
 import { VueGoodTable } from 'vue-good-table'
-import vBModal from 'bootstrap-vue/es/directives/modal/modal'
+import { ModalPlugin, PopoverPlugin } from 'bootstrap-vue'
 import Component from './DataList/Component'
 
 const DataListPlugin = {
     install(Vue) {
         // Dependancy
+        Vue.use(ModalPlugin)
+        Vue.use(PopoverPlugin)
         Vue.component('VueGoodTable', VueGoodTable)
-        Vue.directive('b-modal', vBModal)
         // Custom component
         Vue.component("DataList", Component)
     }

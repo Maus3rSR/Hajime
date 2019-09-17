@@ -1,12 +1,11 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import { TabsPlugin } from 'bootstrap-vue'
 import PoolConfiguration from './Pool/Configuration'
 import PoolViewer from './Pool/Viewer'
 
 export default {
-    components: { PoolConfiguration, PoolViewer, TabsPlugin },
+    components: { PoolConfiguration, PoolViewer },
     props: {
         config: {
             type: Object,

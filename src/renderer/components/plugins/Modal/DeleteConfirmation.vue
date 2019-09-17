@@ -1,8 +1,6 @@
 <script>
-import bModal from 'bootstrap-vue/es/components/modal/modal'
-
 export default {
-    components: { bModal },
+    components: {},
     props: {
         labelField: {
             type: String,

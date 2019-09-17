@@ -1,6 +1,4 @@
 <script>
-import bModal from 'bootstrap-vue/es/components/modal/modal'
-
 export default {
     props: {
         title: {
@@ -8,14 +6,14 @@ export default {
             default: "Confirmation d'une action"
         }
     },
-    components: { bModal },
+    components: {},
     computed: {},
     methods: {
         show() {
-            this.$refs.confirmationModal.show()
+            this.showModal = true
         },
         closeModal() {
-            this.$refs.confirmationModal.hide()
+            this.showModal = false
         },
         confirm() {
             this.$emit('on-confirm')
@@ -24,12 +22,17 @@ export default {
         cancel() {
             this.closeModal()
         }
+    },
+    data() {
+        return {
+            showModal: false
+        }
     }
 }
 </script>
 
 <template>
-    <b-modal class="modal__filter" :title="title" size="lg" hide-header-close ref="confirmationModal">
+    <b-modal class="modal__filter" :title="title" v-model="showModal" size="lg" hide-header-close>
         <div class="h3">
             <slot name="label">
                 Confirmez-vous cette action ?

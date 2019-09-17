@@ -1,6 +1,5 @@
 <script>
 import { mapGetters } from 'vuex'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
 
 const MODE_TYPE = {
     ADD: 'ADD',
@@ -8,7 +7,7 @@ const MODE_TYPE = {
 }
 
 export default {
-    components: { bModal },
+    components: {},
     props: {
         id: {
             type: String,

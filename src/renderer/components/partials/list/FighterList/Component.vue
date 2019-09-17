@@ -1,6 +1,5 @@
 <script>
 import { mapGetters } from 'vuex'
-import { Dropdown } from 'bootstrap-vue/es/components'
 import ModalFighter from './modal/Fighter'
 import ModalPreviewCsv from './modal/Csv'
 import Papa from 'papaparse'
@@ -21,7 +20,7 @@ export default {
             value: false
         }
     },
-    components: { Dropdown, ModalFighter, ModalPreviewCsv },
+    components: { ModalFighter, ModalPreviewCsv },
     computed: {
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",

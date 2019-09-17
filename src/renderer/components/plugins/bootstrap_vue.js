@@ -1,9 +1,14 @@
-import { Dropdown, Tabs } from 'bootstrap-vue/es/components'
+import {
+    DropdownPlugin,
+    TabsPlugin,
+    ModalPlugin
+} from 'bootstrap-vue'
 
 const BootstrapVuePlugin = {
     install(Vue) {
-        Vue.use(Dropdown)
-        Vue.use(Tabs)
+        Vue.use(DropdownPlugin)
+        Vue.use(TabsPlugin)
+        Vue.use(ModalPlugin)
     }
 }
 

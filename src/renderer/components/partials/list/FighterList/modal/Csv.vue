@@ -1,10 +1,9 @@
 <script>
 import { mapGetters } from 'vuex'
-import bModal from 'bootstrap-vue/es/components/modal/modal'
 import { isArray } from 'util'
 
 export default {
-    components: { bModal },
+    components: {},
     props: {
         id: {
             type: String,
