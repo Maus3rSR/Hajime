@@ -5,7 +5,11 @@
 * `structure.mwb` is a MySQL Workbench file with the description of the DB structure (tables, keys, types...)
 * `scheme.pdf` is an export of the Workbench file
 
-## Export valid SQL file from Workbench > Mariadb
+## Gestion par driver
+
+### Mariadb / Mysql
+
+#### Exporter un fichier SQL valide depuis Workbench
 
 * Open the export window with `CTRL + MAJ + G`
 * Options to check :
@@ -15,7 +19,7 @@
   * Generate USE statements
 * Edit the exported file and remove all `VISIBLE` and `UNVISIBLE` keywords
 
-## SQLite (UNDER DEVELOPEMENT...)
+### SQLite (UNDER DEVELOPEMENT...)
 
 In folder `sqlite`
 
@@ -40,3 +44,11 @@ CompetitionFighter  CompetitionPool     Formula
 .read command execute the askc_db.sql script in order to populate the askc_db database with tables.
 .table command checks if the job as been done correctly.
 ```
+
+## Mise à jour des modèles de l'ORM
+
+Installer et utiliser https://github.com/sequelize/sequelize-auto
+
+## Migrations
+
+Gestion des migrations lors des mises à jour avec https://sequelize.org/master/manual/migrations.html
