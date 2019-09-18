@@ -38,6 +38,8 @@ export default new Router({
                 }
             ]
         },
+        { path: '/dberror', component: require('@/components/layouts/DatabaseConnection').default },
+        { path: '/dbnotfound', component: require('@/components/layouts/DatabaseConnection').default, props: { empty_config: true } },
         { path: '/404', component: require('@/components/layouts/NotFound').default },
         { path: '*', redirect: '/404' },
     ]
