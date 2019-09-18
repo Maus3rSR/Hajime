@@ -9,9 +9,13 @@ export default {
         ...mapState('competition', {
             formula_config_list: state => state.model.formula_config_list
         }),
+        ...mapState('formula', {
+            formula_list_loading: state => state.loading
+        }),
         ...mapGetters({
             competition_saving: "competition/saving",
             formula_list: "formula/list",
+            formula_count: "formula/count",
             getFormula: "formula/getFormula"
         }),
         ...mapFields('competition', ['model.choosen_formula_id']),
@@ -21,6 +25,7 @@ export default {
             resetFormulaConfig: "competition/RESET_FORMULA_CONFIG_LIST"
         }),
         ...mapActions({
+            loadFormulaList: "formula/LOAD_ALL",
             saveFormulaConfig: "competition/SAVE_FORMULA_CONFIG",
             saveCompetition: "competition/SAVE"
         }),
@@ -34,11 +39,18 @@ export default {
             handler: function () {
                 this.resetFormulaConfig()
             }
+        },
+        formula_list: {
+            handler: function (new_list) {
+                if (null == this.choosen_formula_id && new_list.length)
+                    this.choosen_formula_id = this.formula_list[0].id
+            },
+            immediate: true
         }
     },
-    mounted() {
-        if (null == this.choosen_formula_id)
-            this.choosen_formula_id = this.formula_list[0].id
+    created() {
+        if (this.formula_list.length === 0)
+            this.loadFormulaList()
     }
 }
 </script>
@@ -48,11 +60,17 @@ export default {
         <div class="form-group row">
             <label class="col-sm-3 col-form-label card-body__title" for="competition_formula">Choisir une formule de compétition</label>
             <div class="col-sm-9">
-                <select class="form-control" id="competition_formula" v-model="choosen_formula_id">
-                    <option v-for="formula in formula_list" :value="formula.id" :key="formula.id">
-                        {{ formula.name }}
-                    </option>
-                </select>
+                <div v-if="formula_count == 0 && !formula_list_loading" class="h4 alert alert-warning">
+                    <i class="zmdi zmdi-alert-triangle"></i>
+                    La liste des formules de compétition est vide :(
+                </div>
+                <empty-placeholder v-else :loaded="!formula_list_loading" :tag="'div'" :width="'100%'" :height="'30px'">
+                    <select class="form-control" id="competition_formula" v-model="choosen_formula_id">
+                        <option v-for="formula in formula_list" :value="formula.id" :key="formula.id">
+                            {{ formula.name }}
+                        </option>
+                    </select>
+                </empty-placeholder>
             </div>
         </div>
 

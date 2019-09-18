@@ -5,11 +5,11 @@
 * `structure.mwb` is a MySQL Workbench file with the description of the DB structure (tables, keys, types...)
 * `scheme.pdf` is an export of the Workbench file
 
-## Gestion par driver
+## Per driver
 
 ### Mariadb / Mysql
 
-#### Exporter un fichier SQL valide depuis Workbench
+#### Export a valid SQL file from Workbench
 
 * Open the export window with `CTRL + MAJ + G`
 * Options to check :
@@ -19,7 +19,7 @@
   * Generate USE statements
 * Edit the exported file and remove all `VISIBLE` and `UNVISIBLE` keywords
 
-### SQLite (UNDER DEVELOPEMENT...)
+### SQLite (UNDER DEVELOPMENT...)
 
 In folder `sqlite`
 
@@ -45,10 +45,12 @@ CompetitionFighter  CompetitionPool     Formula
 .table command checks if the job as been done correctly.
 ```
 
-## Mise à jour des modèles de l'ORM
+## Update models file (in `src/renderer/database/models`) of the Sequelize ORM
 
-Installer et utiliser https://github.com/sequelize/sequelize-auto
+Install & use the package https://github.com/sequelize/sequelize-auto
 
-## Migrations
+**IMPORTANT** Use `--skip-tables` options to skip `Formula` definition which won't change and contain manual updates. If you must update, do it manually according to the Sequelize documentation about model definition.
 
-Gestion des migrations lors des mises à jour avec https://sequelize.org/master/manual/migrations.html
+## Migrations (UNDER DEVELOPMENT...)
+
+Migrations when the software install updates with https://sequelize.org/master/manual/migrations.html

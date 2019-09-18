@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import database from '../database/index'
+import { sequelize } from '@root/database'
+import notifyPlugin from '@components/plugins/notify'
+import pdfPlugin from '@components/plugins/pdf'
 import modules from './modules'
-import notifyPlugin from '../components/plugins/notify'
-import pdfPlugin from '../components/plugins/pdf'
 
 Vue.use(Vuex)
 Vue.use(notifyPlugin)
@@ -45,7 +45,7 @@ const store = new Vuex.Store({
         },
         CONNECT_DATABASE({ commit }) {
             commit("START_DB_CONNECTION")
-            database.sequelize.authenticate()
+            sequelize.authenticate()
                 .then(() => commit("DB_CONNECTION_SUCCESS"))
                 .catch(() => {
                     commit("DB_CONNECTION_ERROR")

@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import * as models from './models'
+import models from './models'
 
 const sequelize = new Sequelize('mariadb://askc:askc@127.0.0.1:3310/askc', { 
     dialectOptions: {
@@ -18,13 +18,22 @@ const sequelize = new Sequelize('mariadb://askc:askc@127.0.0.1:3310/askc', {
     }
 })
 
-const database = {
-    Sequelize,
-    sequelize
-}
-
-Object.keys(models.default).forEach(modelName => {
-    database[modelName] = models.default[modelName](sequelize, Sequelize)
+const repositories = {}
+Object.keys(models).forEach(modelName => {
+    repositories[modelName] = models[modelName](sequelize, Sequelize)
 })
 
-export default database
+const mapModel = name => {
+    if (undefined === repositories[name])
+        throw new Error("Model " + name + " not found")
+    
+    return repositories[name]
+}
+
+const mapModels = name_list => {
+    const model_list_found = {}
+    name_list.forEach(name => model_list_found[name] = mapModel(name))
+    return model_list_found
+}
+
+export { Sequelize, sequelize, mapModel, mapModels }
