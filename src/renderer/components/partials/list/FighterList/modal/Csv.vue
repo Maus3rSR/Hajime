@@ -1,6 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
-import { isArray } from 'util'
+import { DateTime } from 'luxon'
 
 export default {
     components: {},
@@ -37,7 +37,8 @@ export default {
                 "birthdate": {
                     label: "Date de naissance (format DD/MM/YYYY)",
                     required: true,
-                    validate: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
+                    is_date: true
+                    // validate: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
                 },
                 "license": {
                     label: "Licence",
@@ -89,16 +90,25 @@ export default {
                 return final_row
             })
 
-            return list.filter(row => { // Vérification
+            return list.filter(row => { // Validation
             
                 for (let field_name in this.field_list) {
                     let field = this.field_list[field_name]
                     
-                    if (field.required && row[field_name] == undefined)
+                    if (field.required && row[field_name] === undefined)
                         return false
 
-                    if (field.validate != undefined && row[field_name] != undefined && !field.validate.test(row[field_name]))
+                    if (field.validate !== undefined && row[field_name] !== undefined && !field.validate.test(row[field_name]))
                         return false
+
+                    if (field.is_date !== undefined && field.is_date && row[field_name] !== undefined) {
+                        const date = DateTime.fromFormat(row[field_name], 'dd/mm/yyyy', { locale: 'fr' })
+
+                        if (!date.isValid)
+                            return false
+                        
+                        row[field_name] = date.toJSDate()
+                    }
                 }
 
                 return true

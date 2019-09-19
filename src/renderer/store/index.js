@@ -36,7 +36,7 @@ const store = new Vuex.Store({
             state.db_is_connecting = false
         }
     },
-    actions: {
+    actions: { // TODO rempalcer NOTIFY_SUCCESS/NOTIFY_ERROR par un plugin store
         NOTIFY_SUCCESS(context, msg) {
             notifier.$notify.success(msg)
         },

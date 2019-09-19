@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `CompetitionFighter` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`license`	INTEGER NOT NULL UNIQUE INDEX,
 	`competition_id`	INTEGER INDEX,
-	`birthday`	TEXT,
+	`birthdate`	TEXT,
 	`grade`	TEXT,
 	`club`	TEXT,
 	`team`	TEXT,

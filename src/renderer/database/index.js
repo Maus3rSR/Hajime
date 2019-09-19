@@ -1,9 +1,11 @@
 import Sequelize from 'sequelize'
 import models from './models'
 
+const TZ = "Etc/GMT-2"
 const sequelize = new Sequelize('mariadb://askc:askc@127.0.0.1:3310/askc', { 
+    timezone: TZ,
     dialectOptions: {
-        timezone: "Etc/GMT+2" 
+        timezone: TZ 
     },
     define: {
         paranoid: true,

@@ -19,7 +19,7 @@ export default function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    birthday: {
+    birthdate: {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
@@ -39,18 +39,6 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(3).UNSIGNED,
       allowNull: true,
       defaultValue: '0'
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    deleted_at: {
-      type: DataTypes.DATE,
-      allowNull: false
     }
   }, {
     tableName: 'CompetitionFighter'

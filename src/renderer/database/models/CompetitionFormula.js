@@ -21,18 +21,6 @@ export default function(sequelize, DataTypes) {
     element_type: {
       type: DataTypes.STRING(100),
       allowNull: false
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    deleted_at: {
-      type: DataTypes.DATE,
-      allowNull: false
     }
   }, {
     tableName: 'CompetitionFormula'

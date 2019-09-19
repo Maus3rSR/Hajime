@@ -1,7 +1,11 @@
+import { Sequelize, sequelize, mapModels } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 import faker from 'faker'
 
 faker.locale = 'fr'
+
+const { Competition, CompetitionFighter } = mapModels(['Competition', 'CompetitionFighter'])
+const Fighters = Competition.hasMany(CompetitionFighter, { foreignKey: 'competition_id', as: 'fighter_list' })
 
 const TYPE_LIST = {
     INDI: "INDI",
@@ -14,7 +18,6 @@ const STATUS_LIST = {
     LOADING: "LOADING"
 }
 
-// TODO : Séparer en sous-module ? List / Model
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
     list: [],
@@ -105,18 +108,35 @@ const actions = {
         else
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
-    SAVE({ dispatch, commit }) {
+    SAVE({ dispatch, commit, state }) {
         commit('STATUS_START', STATUS_LIST.SAVING)
-        return new Promise((resolve, reject) => {
-            // TODO API SAVE DATA
-            // TODO Lors de la sauvegarde API, il faut déjà créer la poule / arbre éliminatoire en fonction de la formule choisie
-            setTimeout(() => {
-                commit('STATUS_STOP')
-                dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
-                commit('UPDATE_MODEL_ID', 1) // TODO DEV : Remplacer par le retour API
-                resolve()
-            }, 1500)
+
+        const promise = sequelize.transaction(t => {
+            return Competition.create(state.model, {
+                transaction: t,
+                include: [{
+                    association: Fighters,
+                    as: 'fighter_list'
+                }]
+            })
         })
+
+        promise
+            .then(competition => {
+                dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
+                commit('UPDATE_MODEL_ID', competition.id)
+            })
+            .catch(Sequelize.UniqueConstraintError, () => 
+                dispatch('NOTIFY_ERROR', 'Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !', { root: true })
+            )
+            .catch(() =>
+                dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde de la compétition', { root: true })
+            )
+            .finally(() => {
+                commit('STATUS_STOP')
+            })
+
+        return promise
     },
     LOAD({ dispatch, commit }, id) {
         dispatch('CLEAR')

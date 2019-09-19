@@ -1,6 +1,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import { DateTime } from 'luxon'
 
 export default {
     computed: {
@@ -12,8 +13,19 @@ export default {
         step_is_valid() {
             return !Object.keys(this.fields).some(key => this.fields[key].invalid)
         },
+        competition_date: {
+            get() {
+                if (null === this.date || typeof this.date === "string")
+                    return this.date
+                    
+                return DateTime.fromJSDate(this.date).toFormat('dd/MM/yyyy')
+            },
+            set(value) {
+                const date = DateTime.fromFormat(value, 'dd/MM/yyyy', { locale: 'fr' })
+                this.date = date.isValid ? date.toJSDate() : value
+            }
+        }
     },
-    methods: {},
     mounted() {
         this.$nextTick().then(() => this.$validator.validateAll().then(() => this.errors.clear()))
     }
@@ -77,7 +89,7 @@ export default {
 
                             v-mask="'##/##/####'"
                             v-validate="{ date_format:'dd/MM/yyyy' }"
-                            v-model="date"
+                            v-model="competition_date"
 
                             :class="{ 'is-invalid': errors.has('date') }"
                         >

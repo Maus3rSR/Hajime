@@ -49,7 +49,9 @@ CompetitionFighter  CompetitionPool     Formula
 
 Install & use the package https://github.com/sequelize/sequelize-auto
 
-**IMPORTANT** Use `--skip-tables` options to skip `Formula` definition which won't change and contain manual updates. If you must update, do it manually according to the Sequelize documentation about model definition.
+**IMPORTANT**
+- Use `--skip-tables` options to skip `Formula` definition which won't change and contain manual updates. If you must update, do it manually according to the Sequelize documentation about model definition
+- You should remove all `created_at`, `updated_at`, `deleted_at` fields from the definition, because it's manually handled by Sequelize, and it'll provide an notNull violation when you create an instance of the model
 
 ## Migrations (UNDER DEVELOPMENT...)
 

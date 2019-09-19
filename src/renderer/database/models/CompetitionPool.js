@@ -38,18 +38,6 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.INTEGER(3).UNSIGNED,
       allowNull: true,
       defaultValue: '0'
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    deleted_at: {
-      type: DataTypes.DATE,
-      allowNull: false
     }
   }, {
     tableName: 'CompetitionPool'

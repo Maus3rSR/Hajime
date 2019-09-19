@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import { DateTime } from 'luxon'
 import ModalFighter from './modal/Fighter'
 import ModalPreviewCsv from './modal/Csv'
 import Papa from 'papaparse'
@@ -81,6 +82,9 @@ export default {
         }
     },
     methods: {
+        displayDate(date_object) {
+            return DateTime.fromJSDate(date_object).toFormat("dd/MM/yyyy")
+        },
         updateField(object, field, value)
         {
             if (this.readonly) return false
@@ -304,6 +308,10 @@ export default {
                     @click.prevent="markFavorite(props.row, !props.row.is_favorite)"
                 ></button>
                 {{ props.row.name }}
+            </template>
+
+            <template slot="birthdate" slot-scope="props">
+                {{ displayDate(props.row.birthdate) }}
             </template>
 
             <template slot="is_present" slot-scope="props">

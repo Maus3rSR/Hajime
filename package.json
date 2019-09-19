@@ -28,7 +28,7 @@
     "file-loader": "^3.0.1",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.4",
-    "luxon": "^1.8.2",
+    "luxon": "^1.17.3",
     "mariadb": "^2.1.1",
     "material-design-iconic-font": "^2.2.0",
     "mysql": "^2.17.1",
