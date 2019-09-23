@@ -2,6 +2,7 @@
 # Project
 # ############
 .vscode
+*.bak
 *.hot*
 .env*.local
 # ############
