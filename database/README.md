@@ -45,13 +45,9 @@ CompetitionFighter  CompetitionPool     Formula
 .table command checks if the job as been done correctly.
 ```
 
-## Update models file (in `src/renderer/database/models`) of the Sequelize ORM
+## Update models file of the Sequelize ORM
 
-Install & use the package https://github.com/sequelize/sequelize-auto
-
-**IMPORTANT**
-- Use `--skip-tables` options to skip `Formula` definition which won't change and contain manual updates. If you must update, do it manually according to the Sequelize documentation about model definition
-- You should remove all `created_at`, `updated_at`, `deleted_at` fields from the definition, because it's manually handled by Sequelize, and it'll provide an notNull violation when you create an instance of the model
+In `src/renderer/database/models`, according to the the documentation https://sequelize.org/master/manual/models-definition.html
 
 ## Migrations (UNDER DEVELOPMENT...)
 
