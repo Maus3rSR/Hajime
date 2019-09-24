@@ -13,14 +13,6 @@ export default function (sequelize, Sequelize) {
                 model: 'Competition',
                 key: 'id'
             }
-        },
-        element_id: {
-            type: Sequelize.INTEGER(10).UNSIGNED,
-            allowNull: false
-        },
-        element_type: {
-            type: Sequelize.STRING(100),
-            allowNull: false
         }
     }, {
         tableName: 'CompetitionFormula'
