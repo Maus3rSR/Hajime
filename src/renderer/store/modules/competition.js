@@ -4,19 +4,21 @@ import faker from 'faker'
 
 faker.locale = 'fr'
 
-const { Competition, CompetitionFighter } = mapModels(['Competition', 'CompetitionFighter'])
+// IMPORT MODELS
+const { Competition, CompetitionFighter, CompetitionFormula, Meta } = 
+    mapModels(['Competition', 'CompetitionFighter', 'CompetitionFormula', 'Meta'])
+// DEFINES RELATIONSHIP
 const Fighters = Competition.hasMany(CompetitionFighter, { foreignKey: 'competition_id', as: 'fighter_list' })
+const Formulas = Competition.hasMany(CompetitionFormula, { foreignKey: 'competition_id', as: 'formula_config_list' })
+Formulas.Metas = CompetitionFormula.hasMany(Meta, {
+    foreignKey: 'metaable_id',
+    constraints: false,
+    scope: { metaable: 'CompetitionFormula' },
+    as: 'meta_list'
+})
 
-const TYPE_LIST = {
-    INDI: "INDI",
-    TEAM: "TEAM"
-}
-
-const STATUS_LIST = {
-    NOTHING: "NOTHING",
-    SAVING: "SAVING",
-    LOADING: "LOADING"
-}
+const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" }
+const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING" }
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
@@ -71,10 +73,27 @@ const getters = {
 const mutations = {
     updateField,
     ADD_FORMULA_CONFIG(state, formula_config) {
-        state.model.formula_config_list.push(formula_config)
+        let competition_formula = { name: formula_config.name, meta_list: [] }
+        Object.keys(formula_config.config).forEach(config_name => {
+            competition_formula.meta_list.push({
+                key: config_name,
+                value: formula_config.config[config_name]
+            })
+        })
+
+        state.model.formula_config_list.push(competition_formula)
     },
     UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
-        state.model.formula_config_list.splice(index, 1, formula_config)
+
+        let competition_formula = { name: formula_config.name, meta_list: [] }
+        Object.keys(formula_config.config).forEach(config_name => {
+            competition_formula.meta_list.push({
+                key: config_name,
+                value: formula_config.config[config_name]
+            })
+        })
+
+        state.model.formula_config_list.splice(index, 1, competition_formula)
     },
     RESET_FORMULA_CONFIG_LIST(state) {
         state.model.formula_config_list = []
@@ -117,6 +136,13 @@ const actions = {
                 include: [{
                     association: Fighters,
                     as: 'fighter_list'
+                }, {
+                    association: Formulas,
+                    as: 'formula_config_list',
+                    include: [{
+                        association: Formulas.Metas,
+                        as: 'meta_list'
+                    }]
                 }]
             })
         })

@@ -7,7 +7,7 @@ export default { // TODO shared parent component
         update() {
             this.$emit("input", {
                 name: this.name,
-                ...this.config
+                config: this.config
             })
         }
     },
@@ -30,7 +30,12 @@ export default { // TODO shared parent component
         }
     },
     mounted() {
-        this.config = Object.assign(this.config, this.value)
+        if (undefined !== this.value && undefined !== this.value.meta_list)
+        {
+            let config = {}
+            this.value.meta_list.forEach(meta => config[meta.key] = meta.value)
+            this.config = Object.assign(this.config, config)
+        }
     }
 }
 </script>
