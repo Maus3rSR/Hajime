@@ -23,6 +23,7 @@ const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING" }
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
     list: [],
+    list_total: 0,
     model: {
         id: null,
         choosen_formula_id: null,
@@ -37,6 +38,19 @@ const defaultState = () => ({
         formula_config_list: [],
     }
 })
+
+const formatFormulaConfiguration = formula_config => {
+    let competition_formula = { name: formula_config.name, meta_list: [] }
+    
+    Object.keys(formula_config.config).forEach(config_name => {
+        competition_formula.meta_list.push({
+            key: config_name,
+            value: formula_config.config[config_name]
+        })
+    })
+
+    return competition_formula
+}
 
 const state = defaultState()
 
@@ -73,30 +87,10 @@ const getters = {
 const mutations = {
     updateField,
     ADD_FORMULA_CONFIG(state, formula_config) {
-        let competition_formula = { name: formula_config.name, meta_list: [] }
-        Object.keys(formula_config.config).forEach(config_name => {
-            competition_formula.meta_list.push({
-                key: config_name,
-                value: formula_config.config[config_name]
-            })
-        })
-
-        state.model.formula_config_list.push(competition_formula)
+        state.model.formula_config_list.push(formatFormulaConfiguration(formula_config))
     },
     UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
-
-        let competition_formula = { name: formula_config.name, meta_list: [] }
-        Object.keys(formula_config.config).forEach(config_name => {
-            competition_formula.meta_list.push({
-                key: config_name,
-                value: formula_config.config[config_name]
-            })
-        })
-
-        state.model.formula_config_list.splice(index, 1, competition_formula)
-    },
-    RESET_FORMULA_CONFIG_LIST(state) {
-        state.model.formula_config_list = []
+        state.model.formula_config_list.splice(index, 1, formatFormulaConfiguration(formula_config))
     },
     RESET_STATE(state) {
         Object.assign(state, defaultState())
@@ -158,9 +152,7 @@ const actions = {
             .catch(() =>
                 dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde de la compétition', { root: true })
             )
-            .finally(() => {
-                commit('STATUS_STOP')
-            })
+            .finally(() => commit('STATUS_STOP'))
 
         return promise
     },
@@ -185,6 +177,27 @@ const actions = {
                 resolve()
             }, 3000)
         })
+    },
+    LOAD_LIST({ dispatch, commit }, payload) {
+        commit('STATUS_START', STATUS_LIST.LOADING)
+
+        const current_limit = payload.limit * payload.page
+        const offset = current_limit - payload.limit
+
+        let promise = Competition.findAndCountAll({
+            limit: current_limit,
+            offset: offset,
+            raw: true
+        })
+        
+        promise.then(result => {
+            commit("updateField", { path: 'list_total', value: result.count })
+            commit("updateField", { path: 'list', value: result.rows })
+        }).catch(() => 
+            dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des compétitions', { root: true })
+        ).finally(() => commit("STATUS_STOP"))
+
+        return promise
     }
 }
 

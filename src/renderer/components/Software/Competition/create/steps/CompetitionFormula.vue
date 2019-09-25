@@ -6,9 +6,6 @@ import * as FormulaSettingsFormList from './competition_formula'
 export default {
     components: { ...FormulaSettingsFormList },
     computed: {
-        ...mapState('competition', {
-            formula_config_list: state => state.model.formula_config_list
-        }),
         ...mapState('formula', {
             formula_list_loading: state => state.loading
         }),
@@ -18,12 +15,9 @@ export default {
             formula_count: "formula/count",
             getFormula: "formula/getFormula"
         }),
-        ...mapFields('competition', ['model.choosen_formula_id']),
+        ...mapFields('competition', ['model.choosen_formula_id', 'model.formula_config_list']),
     },
     methods: {
-        ...mapMutations({
-            resetFormulaConfig: "competition/RESET_FORMULA_CONFIG_LIST"
-        }),
         ...mapActions({
             loadFormulaList: "formula/LOAD_ALL",
             saveFormulaConfig: "competition/SAVE_FORMULA_CONFIG",
@@ -37,7 +31,7 @@ export default {
     watch: {
         choosen_formula_id: {
             handler: function () {
-                this.resetFormulaConfig()
+                this.formula_config_list = []
             }
         },
         formula_list: {

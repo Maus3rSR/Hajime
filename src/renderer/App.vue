@@ -1,7 +1,22 @@
 <script>
-    export default {
-        name: 'ASKC'
+import { mapGetters } from 'vuex'
+
+export default {
+    name: 'ASKC',
+    computed: {
+        ...mapGetters({
+            db_error: "db_not_connected_by_error"
+        })
+    },
+    watch: {
+        db_error(db_error) {
+            if (db_error === false)
+                return
+
+            this.$router.push('/dberror')
+        }
     }
+}
 </script>
 
 <template>

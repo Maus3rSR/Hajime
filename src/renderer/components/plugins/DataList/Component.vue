@@ -48,6 +48,10 @@ export default {
             type: Boolean,
             default: false
         },
+        sortColumn: {
+            type: Boolean,
+            default: true
+        },
         fixedHeader: {
             type: Boolean,
             default: false
@@ -271,12 +275,11 @@ export default {
                     :rows="list"
                     :totalRows="total"
                     :isLoading="loading_table"
-                    :fixed-header="fixedHeader"
-                    :pagination-options="{ enabled: isDynamic && this.is_loading_type_page }"
+                    :fixedHeader="fixedHeader"
+                    :paginationOptions="{ enabled: isDynamic && this.is_loading_type_page }"
                     :mode="mode"
-                    :groupOptions="{
-                        enabled: groupedHeader
-                    }"
+                    :sortOptions="{ enabled: sortColumn }"
+                    :groupOptions="{ enabled: groupedHeader }"
 
                     @on-sort-change="onSortChange"
 
