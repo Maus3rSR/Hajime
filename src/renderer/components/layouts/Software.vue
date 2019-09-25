@@ -1,24 +1,29 @@
 <script>
 export default {
-    beforeRouteUpdate (to, from, next) {
+    beforeRouteUpdate(to, from, next) {
         const toDepth = to.path.split('/').length
         const fromDepth = from.path.split('/').length
         this.transitionName = 'fade'
+
         if (toDepth !== fromDepth) {
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
         }
+        
+        this.theme = (undefined === to.meta.theme) ? '' : to.meta.theme
+
         next()
     },
     data() {
         return {
-            transitionName: 'fade'
+            transitionName: 'fade',
+            theme: ''
         }
     }
 }
 </script>
 
 <template>
-    <main id="software" class="main" data-sa-theme="1">
+    <main id="software" class="main" data-sa-theme="1" :data-sa-theme-extended="theme">
 
         <!-- Header -->
         <header class="header">

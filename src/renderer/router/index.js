@@ -25,6 +25,7 @@ export default new Router({
                     component: require('@components/Software/Competition/Create').default,
                     meta: {
                         breadcrumb: 'Nouvelle compétition',
+                        theme: 'competition'
                     }
                 },
                 {
@@ -33,7 +34,8 @@ export default new Router({
                     props: true,
                     component: require('@components/Software/Competition/Manage').default,
                     meta: {
-                        breadcrumb: 'Gestion d\'une compétition' // @todo Dynamique
+                        breadcrumb: 'Gestion d\'une compétition', // @todo Dynamique
+                        theme: 'competition'
                     }
                 }
             ]
