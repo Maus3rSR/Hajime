@@ -9,7 +9,7 @@ export default {
             competition_list_total: 'list_total',
         }),
         ...mapGetters({
-            competition_list_loading: 'competition/loading',
+            competition_list_loading: 'competition/list_loading',
             competition_type_list: "competition/type_list",
         }),
         competition_column_list() {

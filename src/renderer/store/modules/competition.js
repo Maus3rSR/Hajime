@@ -22,6 +22,7 @@ const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING" }
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
+    status_list: STATUS_LIST.NOTHING,
     list: [],
     list_total: 0,
     model: {
@@ -58,6 +59,7 @@ const getters = {
     getField,
     is_empty: state => null == state.model.id,
     loading: state => state.status == STATUS_LIST.LOADING,
+    list_loading: state => state.status_list == STATUS_LIST.LOADING,
     saving: state => state.status == STATUS_LIST.SAVING,
     count: state => state.list.length,
     fighter_count: state => state.model.fighter_list.length,
@@ -100,12 +102,6 @@ const mutations = {
     },
     UPDATE_MODEL_ID(state, id) {
         state.model.id = parseInt(id, 10)
-    },
-    STATUS_START(state, status) {
-        state.status = status
-    },
-    STATUS_STOP(state) {
-        state.status = STATUS_LIST.NOTHING
     }
 }
 
@@ -122,7 +118,7 @@ const actions = {
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
     SAVE({ dispatch, commit, state }) {
-        commit('STATUS_START', STATUS_LIST.SAVING)
+        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         const promise = sequelize.transaction(t => {
             return Competition.create(state.model, {
@@ -152,13 +148,13 @@ const actions = {
             .catch(() =>
                 dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde de la compétition', { root: true })
             )
-            .finally(() => commit('STATUS_STOP'))
+            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
     },
     LOAD({ dispatch, commit }, id) {
         dispatch('CLEAR')
-        commit('STATUS_START', STATUS_LIST.LOADING)
+        commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
         // TODO DEV : Supprimer à terme
         let model = defaultState().model
@@ -172,14 +168,14 @@ const actions = {
         return new Promise((resolve, reject) => {
             // TOTO API GET DATA
             setTimeout(() => {
-                commit('STATUS_STOP')
+                commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING })
                 commit('INJECT_MODEL_DATA', model)
                 resolve()
             }, 3000)
         })
     },
     LOAD_LIST({ dispatch, commit }, payload) {
-        commit('STATUS_START', STATUS_LIST.LOADING)
+        commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
 
         const current_limit = payload.limit * payload.page
         const offset = current_limit - payload.limit
@@ -195,7 +191,7 @@ const actions = {
             commit("updateField", { path: 'list', value: result.rows })
         }).catch(() => 
             dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des compétitions', { root: true })
-        ).finally(() => commit("STATUS_STOP"))
+        ).finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
         return promise
     }
