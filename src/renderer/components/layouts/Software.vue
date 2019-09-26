@@ -9,15 +9,23 @@ export default {
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
         }
         
-        this.theme = (undefined === to.meta.theme) ? '' : to.meta.theme
+        this.setTheme(to)
 
         next()
+    },
+    methods: {
+        setTheme(route) {
+            this.theme = (undefined === route.meta.theme) ? '' : route.meta.theme
+        }
     },
     data() {
         return {
             transitionName: 'fade',
             theme: ''
         }
+    },
+    mounted() {
+        this.setTheme(this.$route)
     }
 }
 </script>
