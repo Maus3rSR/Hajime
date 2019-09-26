@@ -92,7 +92,7 @@ export default {
                 {{ competition.name }}
             </empty-placeholder>
             <empty-placeholder :loaded="!is_empty_competition" :tag="'small'" :width="'5%'" :height="'10px'">
-                Du {{ competition.date }}
+                Du {{ competition.date | luxon:locale('date_short') }}
             </empty-placeholder>
 
             <div class="actions">

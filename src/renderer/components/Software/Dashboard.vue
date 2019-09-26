@@ -1,6 +1,5 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { DateTime } from 'luxon'
 
 export default {
     computed: {
@@ -28,9 +27,6 @@ export default {
         ...mapActions({
             loadCompetitionList: 'competition/LOAD_LIST'
         }),
-        displayDate(date_object) {
-            return DateTime.fromSQL(date_object).toFormat("dd/MM/yyyy")
-        },
         getCompetitionTypeLabel(type) {
             return this.competition_type_list.find(el => el.value === type).name
         }
@@ -72,7 +68,7 @@ export default {
                 >
 
                     <template slot="date" slot-scope="props">
-                        {{ displayDate(props.row.date) }}
+                        {{ props.row.date | luxon:locale('date_short') }}
                     </template>
 
                     <template slot="type" slot-scope="props">

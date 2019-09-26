@@ -4365,6 +4365,10 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+luxon@^1.17.2:
+  version "1.19.3"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.19.3.tgz#86c04a1395529b4386ae235a8fe16d0a82a0695b"
+
 luxon@^1.17.3:
   version "1.17.3"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.17.3.tgz#12ed5157a7e8f705759ce2f4d840410643081409"
@@ -7318,6 +7322,12 @@ vue-loader@^15.7.0:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-luxon@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/vue-luxon/-/vue-luxon-0.7.0.tgz#22b4e7c3b34bdf65453225c7ecfa8925cda7ee5b"
+  dependencies:
+    luxon "^1.17.2"
 
 vue-router@^3.0.2:
   version "3.1.3"

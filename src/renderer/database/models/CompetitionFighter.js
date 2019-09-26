@@ -36,7 +36,7 @@ export default function (sequelize, Sequelize) {
             allowNull: true
         },
         is_present: {
-            type: Sequelize.INTEGER(3).UNSIGNED,
+            type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue: '0'
         }

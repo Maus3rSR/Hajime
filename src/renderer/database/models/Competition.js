@@ -35,12 +35,12 @@ export default function(sequelize, Sequelize) {
             allowNull: false
         },
         locked: {
-            type: Sequelize.INTEGER(3).UNSIGNED,
+            type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue: '0'
         },
             locked_fighter_list: {
-            type: Sequelize.INTEGER(3).UNSIGNED,
+            type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue: '0'
         }

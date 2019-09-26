@@ -46,6 +46,7 @@
     "vue-breadcrumbs": "^1.1.2",
     "vue-good-table": "^2.16.0",
     "vue-infinite-loading": "^2.4.3",
+    "vue-luxon": "^0.7.0",
     "vue-router": "^3.0.2",
     "vue-spinner": "^1.0.3",
     "vue-toasted": "^1.1.25",

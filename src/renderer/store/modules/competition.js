@@ -8,8 +8,9 @@ faker.locale = 'fr'
 const { Competition, CompetitionFighter, CompetitionFormula, Meta } = 
     mapModels(['Competition', 'CompetitionFighter', 'CompetitionFormula', 'Meta'])
 // DEFINES RELATIONSHIP
-const Fighters = Competition.hasMany(CompetitionFighter, { foreignKey: 'competition_id', as: 'fighter_list' })
-const Formulas = Competition.hasMany(CompetitionFormula, { foreignKey: 'competition_id', as: 'formula_config_list' })
+const Fighters = Competition.hasMany(CompetitionFighter, { as: 'fighter_list' })
+const Formulas = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list' })
+
 Formulas.Metas = CompetitionFormula.hasMany(Meta, {
     foreignKey: 'metaable_id',
     constraints: false,
@@ -156,23 +157,28 @@ const actions = {
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        // TODO DEV : Supprimer à terme
-        let model = defaultState().model
-        model.license = id
-        model.choosen_formula_id = 1
-        model.name = "Nom de la compétition"
-        model.date = "19/07/2020"
-        model.place = faker.address.city()
-        model.owner = faker.name.findName()
-
-        return new Promise((resolve, reject) => {
-            // TOTO API GET DATA
-            setTimeout(() => {
-                commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING })
-                commit('INJECT_MODEL_DATA', model)
-                resolve()
-            }, 3000)
+        let promise = Competition.findByPk(id, {
+            include: [{
+                model: CompetitionFighter,
+                as: 'fighter_list'
+            },
+            {
+                model: CompetitionFormula,
+                as: 'formula_config_list',
+                include: [{
+                    model: Meta,
+                    as: 'meta_list'
+                }]
+            }]
         })
+        
+        promise.then(competition => {
+            commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
+        }).catch(() => 
+            dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des compétitions', { root: true })
+        ).finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+
+        return promise
     },
     LOAD_LIST({ dispatch, commit }, payload) {
         commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
@@ -182,13 +188,12 @@ const actions = {
 
         let promise = Competition.findAndCountAll({
             limit: current_limit,
-            offset: offset,
-            raw: true
+            offset: offset
         })
         
         promise.then(result => {
             commit("updateField", { path: 'list_total', value: result.count })
-            commit("updateField", { path: 'list', value: result.rows })
+            commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) })
         }).catch(() => 
             dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des compétitions', { root: true })
         ).finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
