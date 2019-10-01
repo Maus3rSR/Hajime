@@ -1,11 +1,5 @@
 export default function (sequelize, Sequelize) {
     return sequelize.define('CompetitionFormula', {
-        id: {
-            type: Sequelize.INTEGER(10).UNSIGNED,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
         competition_id: {
             type: Sequelize.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -13,6 +7,10 @@ export default function (sequelize, Sequelize) {
                 model: 'Competition',
                 key: 'id'
             }
+        },
+        name: {
+            type: Sequelize.STRING(50),
+            allowNull: false
         }
     }, {
         tableName: 'CompetitionFormula'

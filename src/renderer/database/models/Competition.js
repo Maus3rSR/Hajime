@@ -1,11 +1,5 @@
 export default function(sequelize, Sequelize) {
     return sequelize.define('Competition', {
-        id: {
-            type: Sequelize.INTEGER(10).UNSIGNED,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
         choosen_formula_id: {
             type: Sequelize.INTEGER(10).UNSIGNED,
             allowNull: false,

@@ -1,11 +1,5 @@
 export default function (sequelize, Sequelize) {
     return sequelize.define('Meta', {
-        id: {
-            type: Sequelize.INTEGER(10).UNSIGNED,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
         metaable_id: {
             type: Sequelize.INTEGER(10).UNSIGNED,
             allowNull: false

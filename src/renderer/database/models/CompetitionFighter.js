@@ -1,16 +1,5 @@
 export default function (sequelize, Sequelize) {
     return sequelize.define('CompetitionFighter', {
-        id: {
-            type: Sequelize.INTEGER(10).UNSIGNED,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        license: {
-            type: Sequelize.STRING(16),
-            allowNull: false,
-            unique: true
-        },
         competition_id: {
             type: Sequelize.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -19,8 +8,13 @@ export default function (sequelize, Sequelize) {
                 key: 'id'
             }
         },
-        birthdate: {
-            type: Sequelize.DATEONLY,
+        license: {
+            type: Sequelize.STRING(16),
+            allowNull: false,
+            unique: true
+        },
+        name: {
+            type: Sequelize.STRING(255),
             allowNull: false
         },
         grade: {
@@ -34,6 +28,10 @@ export default function (sequelize, Sequelize) {
         team: {
             type: Sequelize.STRING(60),
             allowNull: true
+        },
+        birthdate: {
+            type: Sequelize.DATEONLY,
+            allowNull: false
         },
         is_present: {
             type: Sequelize.BOOLEAN,
