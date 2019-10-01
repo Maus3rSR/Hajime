@@ -13,11 +13,19 @@ export default {
         },
         make_the_call: {
             type: Boolean,
-            value: false
+            default: false
         },
         readonly: {
             type: Boolean,
-            value: false
+            default: false
+        },
+        can_import: {
+            type: Boolean,
+            default: true
+        },
+        emit_change: {
+            type: Boolean,
+            default: false
         }
     },
     components: { ModalFighter, ModalPreviewCsv },
@@ -113,53 +121,10 @@ export default {
         deleteFighter(fighter) {
             this.$refs.modalDeleteFighter.show(fighter)
         },
-        markAllPresence(is_present) {
-            if (this.readonly) return
-
-            let list = JSON.parse(JSON.stringify(this.value))
-            this.$emit("input", list.map(fighter => {
-                fighter.is_present = is_present
-                return fighter
-            }))
-
-            this.$notify.success("Tous les combatants ont été définis comme " + (is_present ? "présents" : "absents"))
-        },
-        markPresence(fighter, is_present)
-        {
-            if (this.updateField(fighter, "is_present", is_present))
-                this.$notify.success("Le combattant a bien été défini comme " + (is_present ? "présent" : "absent"))
-        },
-        markFavorite(fighter, is_favorite, notify)
-        {
-            if (this.readonly) return false
-
-            notify = undefined == notify ? true : notify
-            const updateFieldSuccess = this.updateField(fighter, "is_favorite", is_favorite)
-
-            if (updateFieldSuccess && notify)
-                this.$notify.success("Le combattant a bien été défini comme " + (is_favorite ? "favori" : "non favori"))
-            
-            return updateFieldSuccess
-        },
-        markTeamFavorite(header_row, is_favorite)
-        {
-            if (this.readonly) return
-
-            if (undefined == header_row.children) {
-                this.$notify.error("Une erreur est survenue, il n'y a pas de combattants dans cette équipe")
-                return
-            }
-
-            let success = false
-            header_row.children.forEach(row => {
-                if (this.markFavorite(row, is_favorite, false) && !success) // @TODO : à corriger pour être sûr que tous les combattants sont en favoris, conflit de boucle avec this.$emit('input') de updateField
-                    success = true
-            })
-
-            if (success)
-                this.$notify.success("L'équipe a bien été défini comme " + (is_favorite ? "favorie" : "non favorie"))
-        },
         previewImport(e) {
+            if (!this.can_import)
+                return
+
             if (undefined == e.target.files[0]) {
                 this.$notify.error("Une erreur est survenue lors de la lecture du fichier à importer")
                 return
@@ -177,8 +142,75 @@ export default {
                 }
             })
         },
+        markAllPresence(is_present) {
+            if (this.readonly) return
+
+            if (this.emit_change) {
+                this.$emit("on-bulk-update", {
+                    id_list: this.value.map(fighter => fighter.id),
+                    field_list: { is_present: is_present }
+                })
+                return
+            }
+
+            let list = JSON.parse(JSON.stringify(this.value))
+            this.$emit("input", list.map(fighter => {
+                fighter.is_present = is_present
+                return fighter
+            }))
+        },
+        markPresence(fighter, is_present)
+        {
+            if (this.emit_change) {
+                this.$emit("on-bulk-update", {
+                    id_list: [fighter.id],
+                    field_list: { is_present: is_present }
+                })
+                return
+            }
+
+            this.updateField(fighter, "is_present", is_present)
+        },
+        markFavorite(fighter, is_favorite)
+        {
+            if (this.readonly) return false
+
+            if (this.emit_change) {
+                this.$emit("on-bulk-update", {
+                    id_list: [fighter.id],
+                    field_list: { is_favorite: is_favorite }
+                })
+                return true // @TODO à supprimer quand markTeamFavorite sera correctement géré
+            }
+
+            const updateFieldSuccess = this.updateField(fighter, "is_favorite", is_favorite)
+            return updateFieldSuccess
+        },
+        markTeamFavorite(header_row, is_favorite) // @TODO, gérer la partie TEAM avec un champ is_favorite dans une table TEAM
+        {
+            if (this.readonly) return
+
+            if (undefined == header_row.children) {
+                this.$notify.error("Une erreur est survenue, il n'y a pas de combattants dans cette équipe")
+                return
+            }
+
+            let success = false
+            header_row.children.forEach(row => {
+                if (this.markFavorite(row, is_favorite, false) && !success) // @TODO : à corriger pour être sûr que tous les combattants sont en favoris, conflit de boucle avec this.$emit('input') de updateField
+                    success = true
+            })
+
+            if (success)
+                this.$notify.success("L'équipe a bien été défini comme " + (is_favorite ? "favorie" : "non favorie"))
+        },
         onFighterAdd(fighter) {
             if (this.readonly) return
+
+            if (this.emit_change) {
+                this.$emit('on-fighter-add', fighter)
+                return
+            }
 
             let list = JSON.parse(JSON.stringify(this.value))
             list.push(fighter)
@@ -188,6 +220,11 @@ export default {
         },
         onFighterEdit(fighter) {
             if (this.readonly) return
+
+            if (this.emit_change) {
+                this.$emit('on-fighter-edit', fighter)
+                return
+            }
 
             const index = fighter.originalIndex
             let list = JSON.parse(JSON.stringify(this.value))
@@ -209,6 +246,11 @@ export default {
         onFighterDelete(fighter) {
             if (this.readonly) return
 
+            if (this.emit_change) {
+                this.$emit('on-fighter-delete', fighter.id)
+                return
+            }
+
             let list = JSON.parse(JSON.stringify(this.value))
 
             if (undefined == list[fighter.originalIndex]) {
@@ -222,7 +264,12 @@ export default {
             this.$notify.success("Le combattant a bien été supprimé")
         },
         onFighterListImport(fighter_list) {
-            if (this.readonly) return
+            if (this.readonly || !this.can_import) return
+
+            if (this.emit_change) {
+                this.$emit('on-fighter-list-import', fighter_list)
+                return
+            }
 
             fighter_list = fighter_list.map(fighter => {
                 fighter.is_present = false
@@ -263,6 +310,8 @@ export default {
                     </a>
 
                     <a
+                        v-if="can_import"
+
                         href="javascript:void(0)"
                         class="actions__item zmdi zmdi-download"
                         title="Importer une liste existante (fichier .CSV)"

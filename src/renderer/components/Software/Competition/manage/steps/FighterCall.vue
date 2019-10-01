@@ -27,13 +27,18 @@ export default {
     },
     methods: {
         ...mapActions({
-            saveCompetition: "competition/SAVE"
+            saveCompetition: "competition/SAVE",
+            bulkUpdateFighter: "competition/BULK_UPDATE_FIGHTER",
+            saveFighter: "competition/SAVE_FIGHTER",
+            deleteFighter: "competition/DELETE_FIGHTER"
         }),
         save() {
             if (this.competition_saving) return
 
             this.locked_fighter_list = true
-            this.saveCompetition().then(() => this.$emit('onValidate'))
+            this.saveCompetition().then(() => {
+                this.$emit('onValidate')
+            }).catch(() => this.locked_fighter_list = false)
         },
         confirm() {
             this.$refs.modalConfirmCall.show()
@@ -58,9 +63,17 @@ export default {
             <div class="col-sm-12">
                 <fighter-list
                     v-model="fighter_list"
+
                     :competition_type="competition_type"
                     :make_the_call="true"
                     :readonly="is_fighter_list_lock"
+                    :emit_change="true"
+                    :can_import="false"
+
+                    @on-fighter-add="saveFighter"
+                    @on-fighter-edit="saveFighter"
+                    @on-fighter-delete="deleteFighter"
+                    @on-bulk-update="bulkUpdateFighter"
                 />
             </div>
         </div>

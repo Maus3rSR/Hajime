@@ -40,10 +40,15 @@ export default {
         convertDate(date) {
             return DateTime.fromFormat(date, 'dd/MM/yyyy', { locale: 'fr' }).toSQLDate()
         },
+        displayDate(date) {
+            return DateTime.fromSQL(date).toFormat('dd/MM/yyyy', { locale: 'fr' })
+        },
         show(fighter) {
             if (undefined !== fighter && null !== fighter) {
                 this.mode = MODE_TYPE.EDIT
                 this.fighter = fighter
+
+                this.fighter.birthdate = this.displayDate(this.fighter.birthdate)
                 this.$nextTick().then(() => this.$validator.validateAll())
             }
 
