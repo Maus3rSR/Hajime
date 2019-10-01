@@ -232,39 +232,39 @@ export default {
 
         <software-container class="card" limit-container="software__footer" :element-scroll="id_table">
 
-        <div class="toolbar toolbar--inner">
-            <div class="toolbar__label h1">
-                {{ title }}
-                <span class="badge badge-pill badge-primary">
-                    <counter :value="total || 0" />
-                </span>
+            <div class="toolbar toolbar--inner">
+                <div class="toolbar__label h1">
+                    {{ title }}
+                    <span class="badge badge-pill badge-primary">
+                        <counter :value="total || 0" />
+                    </span>
+                </div>
+
+                <div class="actions">
+
+                    <record-display
+                        :name="name"
+                        :display-by="per_page_list"
+
+                        v-if="isDynamic"
+
+                        @on-display-change="onPerPageChange"
+                    />
+
+                    <a
+                        href="javascript:void(0)"
+                        class="actions__item zmdi zmdi-settings"
+                        title="Filtrer"
+
+                        v-if="isDynamic && has_filter"
+
+                        @click.prevent="openModal"   
+                    >
+                    </a>
+
+                    <slot name="action-bar"></slot>
+                </div>
             </div>
-
-            <div class="actions">
-
-                <record-display
-                    :name="name"
-                    :display-by="per_page_list"
-
-                    v-if="isDynamic"
-
-                    @on-display-change="onPerPageChange"
-                />
-
-                <a
-                    href="javascript:void(0)"
-                    class="actions__item zmdi zmdi-settings"
-                    title="Filtrer"
-
-                    v-if="isDynamic && has_filter"
-
-                    @click.prevent="openModal"   
-                >
-                </a>
-
-                <slot name="action-bar"></slot>
-            </div>
-        </div>
 
             <div class="card-body">
 
