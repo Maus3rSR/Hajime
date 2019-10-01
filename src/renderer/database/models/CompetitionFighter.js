@@ -37,6 +37,11 @@ export default function (sequelize, Sequelize) {
             type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue: '0'
+        },
+        is_favorite: {
+            type: Sequelize.BOOLEAN,
+            allowNull: true,
+            defaultValue: '0'
         }
     }, {
         tableName: 'CompetitionFighter'

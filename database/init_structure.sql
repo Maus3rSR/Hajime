@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `CompetitionFighter` (
   `team` varchar(60) DEFAULT NULL,
   `birthdate` date NOT NULL,
   `is_present` tinyint(3) unsigned DEFAULT '0',
+  `is_favorite` tinyint(3) unsigned DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `deleted_at` datetime DEFAULT NULL,
