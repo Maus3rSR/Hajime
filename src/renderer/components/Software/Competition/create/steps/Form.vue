@@ -13,16 +13,19 @@ export default {
         step_is_valid() {
             return !Object.keys(this.fields).some(key => this.fields[key].invalid)
         },
-        competition_date: {
+        competition_date: { // TODO : Need a better fix
             get() {
-                if (null === this.date || typeof this.date === "string")
+                if (null === this.date || undefined === this.date || this.date.length < 10)
                     return this.date
-                    
-                return DateTime.fromJSDate(this.date).toFormat('dd/MM/yyyy')
+                
+                const date = DateTime.fromSQL(this.date)
+
+                return date.isValid ? date.toFormat('dd/MM/yyyy') : this.date
             },
             set(value) {
                 const date = DateTime.fromFormat(value, 'dd/MM/yyyy', { locale: 'fr' })
-                this.date = date.isValid ? date.toJSDate() : value
+
+                this.date = date.isValid ? date.toSQLDate() : value
             }
         }
     },
