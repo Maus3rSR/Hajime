@@ -16,6 +16,9 @@ export default {
             getFormula: "formula/getFormula"
         }),
         ...mapFields('competition', ['model.choosen_formula_id', 'model.formula_config_list']),
+        can_create_competition() {
+            return this.formula_count == 0 || this.competition_saving
+        }
     },
     methods: {
         ...mapActions({
@@ -76,7 +79,7 @@ export default {
 
         <div class="row">
             <div class="col">
-                <button class="btn float-right btn-outline-success" type="button" @click="save()" :disabled="competition_saving">
+                <button class="btn float-right btn-outline-success" type="button" @click="save()" :disabled="can_create_competition">
                     <transition name="fade" mode="out-in">
                         <i v-if="!competition_saving" class="zmdi zmdi-check"></i>
                         <clip-loader v-else :size="'14px'"></clip-loader>
