@@ -8,8 +8,8 @@ faker.locale = 'fr'
 const { Competition, CompetitionFighter, CompetitionFormula, Meta } = 
     mapModels(['Competition', 'CompetitionFighter', 'CompetitionFormula', 'Meta'])
 // DEFINES RELATIONSHIP
-const Fighters = Competition.hasMany(CompetitionFighter, { as: 'fighter_list' })
-const Formulas = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list' })
+const Fighters = Competition.hasMany(CompetitionFighter, { as: 'fighter_list', foreignKey: 'competition_id' })
+const Formulas = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list', foreignKey: 'competition_id' })
 
 Formulas.Metas = CompetitionFormula.hasMany(Meta, {
     foreignKey: 'metaable_id',
