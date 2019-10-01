@@ -210,7 +210,6 @@ export default {
             if (this.readonly) return
 
             let list = JSON.parse(JSON.stringify(this.value))
-            list.map(fighter => fighter.birthdate = new Date(fighter.birthdate)) // FIX unconvenient conversion of JS Date object to string by JSON.parse(JSON.stringify())
 
             if (undefined == list[fighter.originalIndex]) {
                 this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")

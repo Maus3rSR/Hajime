@@ -107,7 +107,7 @@ export default {
                         if (!date.isValid)
                             return false
                         
-                        row[field_name] = date.toJSDate()
+                        row[field_name] = date.toSQLDate()
                     }
                 }
 

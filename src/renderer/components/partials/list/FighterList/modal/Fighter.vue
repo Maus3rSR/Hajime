@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import { DateTime } from 'luxon'
 
 const MODE_TYPE = {
     ADD: 'ADD',
@@ -36,6 +37,9 @@ export default {
         }
     },
     methods: {
+        convertDate(date) {
+            return DateTime.fromFormat(date, 'dd/MM/yyyy', { locale: 'fr' }).toSQLDate()
+        },
         show(fighter) {
             if (undefined !== fighter && null !== fighter) {
                 this.mode = MODE_TYPE.EDIT
@@ -55,12 +59,16 @@ export default {
             if (!this.form_is_valid)
                 return
 
+            this.fighter.birthdate = this.convertDate(this.fighter.birthdate)
+
             this.$emit('on-fighter-add', this.fighter)
             this.reset()
         },
         applyEditAndClose() {
             if (!this.form_is_valid)
                 return
+
+            this.fighter.birthdate = this.convertDate(this.fighter.birthdate)
 
             this.$emit('on-fighter-edit', this.fighter)
             this.closeModal()
@@ -151,6 +159,8 @@ export default {
                             class="form-control"
                             type="text"
                             name="license"
+
+                            required
 
                             v-validate
                             v-model="fighter.license"
