@@ -11,7 +11,13 @@ export default function (sequelize, Sequelize) {
         license: {
             type: Sequelize.STRING(16),
             allowNull: false,
-            unique: true
+            unique: true,
+            validate: {
+                len: {
+                    args: [1,16],
+                    msg: "Le numéro de licence doit être de 16 caractères maximum"
+                }
+            }
         },
         name: {
             type: Sequelize.STRING(255),

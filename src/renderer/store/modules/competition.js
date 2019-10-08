@@ -160,12 +160,9 @@ const actions = {
                 dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
-            .catch(Sequelize.UniqueConstraintError, () => 
-                dispatch('NOTIFY_ERROR', 'Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !', { root: true })
-            )
-            .catch(() =>
-                dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde de la compétition', { root: true })
-            )
+            .catch(Sequelize.UniqueConstraintError, () => dispatch('NOTIFY_ERROR', 'Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !', { root: true }))
+            .catch(Sequelize.ValidationError, msg => dispatch('NOTIFY_ERROR', msg, { root: true }))
+            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde de la compétition', { root: true }))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise

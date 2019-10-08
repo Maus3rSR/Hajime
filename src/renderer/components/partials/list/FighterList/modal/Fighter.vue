@@ -167,7 +167,7 @@ export default {
 
                             required
 
-                            v-validate
+                            v-validate="{ max: 16 }"
                             v-model="fighter.license"
 
                             :class="{ 'is-invalid': errors.has('license') }"
