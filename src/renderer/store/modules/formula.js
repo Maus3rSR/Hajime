@@ -8,7 +8,6 @@ const state = {
 }
 
 const getters = {
-    list: state => state.list,
     count: state => state.list.length,
     getFormula: state => id => state.list.find(el => el.id == id),
     getFormulaComponentList: (state, getters) => id => {

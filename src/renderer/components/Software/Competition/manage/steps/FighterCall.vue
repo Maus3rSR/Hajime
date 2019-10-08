@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            saveCompetition: "competition/CREATE",
+            saveCompetition: "competition/SAVE",
             bulkUpdateFighter: "competition/BULK_UPDATE_FIGHTER",
             saveFighter: "competition/SAVE_FIGHTER",
             deleteFighter: "competition/DELETE_FIGHTER"
@@ -36,9 +36,9 @@ export default {
             if (this.competition_saving) return
 
             this.locked_fighter_list = true
-            this.saveCompetition().then(() => {
-                this.$emit('onValidate')
-            }).catch(() => this.locked_fighter_list = false)
+            this.saveCompetition()
+                .then(() => this.$emit('onValidate'))
+                .catch(() => this.locked_fighter_list = false)
         },
         confirm() {
             this.$refs.modalConfirmCall.show()

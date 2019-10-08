@@ -24,11 +24,11 @@ export default {
         ...mapActions({
             loadFormulaList: "formula/LOAD_ALL",
             saveFormulaConfig: "competition/SAVE_FORMULA_CONFIG",
-            saveCompetition: "competition/CREATE"
+            createCompetition: "competition/CREATE"
         }),
         save() {
             if (this.competition_saving) return
-            this.saveCompetition().then(() => this.$emit('onValidate'))
+            this.createCompetition().then(() => this.$emit('onValidate'))
         }
     },
     watch: {

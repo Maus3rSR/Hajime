@@ -20,7 +20,8 @@ export default {
             competition_loading: "competition/loading",
             competition_saving: "competition/saving",
             fighter_present_count: "competition/fighter_present_count",
-            getFormulaComponentList: "formula/getFormulaComponentList"
+            formula_list_count: "formula/count",
+            getFormulaComponentList: "formula/getFormulaComponentList",
         }),
         ...mapFields('competition', {
             fighter_list: 'model.fighter_list',
@@ -58,7 +59,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            loadCompetition: "competition/LOAD"
+            loadCompetition: "competition/LOAD",
+            loadFormulaList: "formula/LOAD_ALL",
         }),
         nextStep() {
             this.current_step = this.current_step + 1
@@ -81,6 +83,9 @@ export default {
     created() {
         if (this.id !== this.competition.id)
             this.loadCompetition(this.id)
+
+        if (this.formula_list_count === 0)
+            this.loadFormulaList()
     }
 }
 </script>

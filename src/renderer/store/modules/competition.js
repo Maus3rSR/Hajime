@@ -167,17 +167,42 @@ const actions = {
 
         return promise
     },
+    SAVE({ dispatch, commit, state }) {
+        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+
+        if (state.model.locked)
+        {
+            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de mettre à jour la compétition", { root: true })
+            return Promise.reject()
+        }
+
+        const { id, fighter_list, formula_config_list, ...fields } = state.model
+        const promise = Competition.update(fields, { where: { id: state.model.id }})
+
+        promise
+            .then(() => dispatch('NOTIFY_SUCCESS', 'La compétition a bien été mise à jour', { root: true }))
+            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la mise à jour de la compétition', { root: true }))
+            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))        
+
+        return promise
+    },
     SAVE_FIGHTER({ dispatch, commit, getters, state }, fighter) {
         if (getters.is_empty) {
             dispatch('NOTIFY_ERROR', "Impossible de procéder à la sauvegarde de ce combattant. Aucune compétition n'est chargée.", { root: true })
-            return
+            return Promise.reject()
+        }
+
+        if (state.model.locked_fighter_list)
+        {
+            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de mettre à jour les combattants", { root: true })
+            return Promise.reject()
         }
 
         const update = undefined !== fighter.id && null !== fighter.id
 
         if (update && !getters.existFighter(fighter.id)) {
             dispatch('NOTIFY_ERROR', "Impossible de procéder à l'édition d'un combattant inexistant", { root: true })
-            return
+            return Promise.reject()
         }
 
         if (!update)
@@ -187,7 +212,10 @@ const actions = {
 
         let promise
         if (update)
-            promise = CompetitionFighter.update(fighter, { where: { id: fighter.id, competition_id: state.model.id }})
+        {
+            const { id, ...fields } = fighter
+            promise = CompetitionFighter.update(fields, { where: { id: fighter.id, competition_id: state.model.id }})
+        }
         else
             promise = CompetitionFighter.create(fighter)
 
@@ -206,12 +234,18 @@ const actions = {
     DELETE_FIGHTER({ dispatch, commit, getters }, fighter_id) {
         if (getters.is_empty) {
             dispatch('NOTIFY_ERROR', "Impossible de procéder à la suppression de ce combattant. Aucune compétition n'est chargée.", { root: true })
-            return
+            return Promise.reject()
         }
         
+        if (state.model.locked_fighter_list)
+        {
+            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de supprimer les combattants", { root: true })
+            return Promise.reject()
+        }
+
         if (!getters.existFighter(fighter_id)) {
             dispatch('NOTIFY_ERROR', "Impossible de procéder à la suppression d'un combattant inexistant", { root: true })
-            return
+            return Promise.reject()
         }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
@@ -230,13 +264,19 @@ const actions = {
     BULK_UPDATE_FIGHTER({ dispatch, commit, getters, state }, { id_list, field_list }) {
         if (getters.is_empty) {
             dispatch('NOTIFY_ERROR', "Impossible de faire la mise à jour en masse de ces combattants. Aucune compétition n'est chargée.", { root: true })
-            return
+            return Promise.reject()
+        }
+
+        if (state.model.locked_fighter_list)
+        {
+            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de mettre à jour les combattants", { root: true })
+            return Promise.reject()
         }
 
         if (!Array.isArray(id_list))
         {
             dispatch('NOTIFY_ERROR', 'Les données ne sont pas valides pour cette mise à jour en masse des combattants', { root: true })
-            return
+            return Promise.reject()
         }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
