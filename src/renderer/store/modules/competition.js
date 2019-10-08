@@ -103,9 +103,6 @@ const mutations = {
     INJECT_MODEL_DATA(state, model) {
         Object.assign(state.model, model)
     },
-    UPDATE_MODEL_ID(state, id) {
-        state.model.id = parseInt(id, 10)
-    },
     UPDATE_FIGHTER(state, fighter) {
         const index = state.model.fighter_list.findIndex(el => el.id === fighter.id)
 
@@ -138,7 +135,7 @@ const actions = {
         else
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
-    SAVE({ dispatch, commit, state }) {
+    CREATE({ dispatch, commit, state }) {
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         const promise = sequelize.transaction(t => {
@@ -161,7 +158,7 @@ const actions = {
         promise
             .then(competition => {
                 dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
-                commit('UPDATE_MODEL_ID', competition.id)
+                commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
             .catch(Sequelize.UniqueConstraintError, () => 
                 dispatch('NOTIFY_ERROR', 'Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !', { root: true })
@@ -190,8 +187,6 @@ const actions = {
             fighter.competition_id = state.model.id
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
-
-        console.log(fighter)
 
         let promise
         if (update)

@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            saveCompetition: "competition/SAVE",
+            saveCompetition: "competition/CREATE",
             bulkUpdateFighter: "competition/BULK_UPDATE_FIGHTER",
             saveFighter: "competition/SAVE_FIGHTER",
             deleteFighter: "competition/DELETE_FIGHTER"

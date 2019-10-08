@@ -24,7 +24,7 @@ export default {
         ...mapActions({
             loadFormulaList: "formula/LOAD_ALL",
             saveFormulaConfig: "competition/SAVE_FORMULA_CONFIG",
-            saveCompetition: "competition/SAVE"
+            saveCompetition: "competition/CREATE"
         }),
         save() {
             if (this.competition_saving) return

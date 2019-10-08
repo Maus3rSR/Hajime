@@ -12,7 +12,7 @@ const NotifyPlugin = {
 
         Vue.toasted.register('error', payload => payload, {
             type : 'error',
-            duration : null,
+            duration : 8000,
             closeOnSwipe: true,
             icon : getIconClass('alert-circle-o'),
             action : {

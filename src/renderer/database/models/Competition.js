@@ -33,7 +33,7 @@ export default function(sequelize, Sequelize) {
             allowNull: true,
             defaultValue: '0'
         },
-            locked_fighter_list: {
+        locked_fighter_list: {
             type: Sequelize.BOOLEAN,
             allowNull: true,
             defaultValue: '0'
