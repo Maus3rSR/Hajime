@@ -24,7 +24,10 @@ export default { // TODO shared parent component
             name: "Matchs de poule",
             config: {
                 number_of_qualified_fighter: 1,
+                number_of_pool: 1,
+                number_of_entry_per_pool: 1,
                 dismiss_favorite: false,
+                lock: false
             }
         }
     },
