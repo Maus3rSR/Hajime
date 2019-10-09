@@ -7,11 +7,11 @@ export default {
     components: { ...FormulaSettingsFormList },
     computed: {
         ...mapState('formula', {
-            formula_list_loading: state => state.loading
+            formula_list_loading: state => state.loading,
+            formula_list: state => state.list
         }),
         ...mapGetters({
             competition_saving: "competition/saving",
-            formula_list: "formula/list",
             formula_count: "formula/count",
             getFormula: "formula/getFormula"
         }),

@@ -43,6 +43,7 @@ export default {
                 "license": {
                     label: "Licence",
                     required: true,
+                    replace: {regex: /\s/g, value: '' },
                     validate: /^(?!\s*$).+/
                 },
                 "grade": {
@@ -90,7 +91,7 @@ export default {
                 return final_row
             })
 
-            return list.filter(row => { // Validation
+            return list.filter(row => { // Validation && manipulation
             
                 for (let field_name in this.field_list) {
                     let field = this.field_list[field_name]
@@ -109,6 +110,19 @@ export default {
                         
                         row[field_name] = date.toSQLDate()
                     }
+
+                    if (field_name === "license")
+                    {
+                        console.log(row[field_name])
+                        console.log(field)
+                    }
+
+                    if (field.replace !== undefined)
+                        row[field_name] = row[field_name].replace(field.replace.regex, field.replace.value)
+
+
+                    if (field_name === "license")
+                        console.log(row[field_name])
                 }
 
                 return true
