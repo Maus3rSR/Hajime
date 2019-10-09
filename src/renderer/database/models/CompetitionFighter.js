@@ -8,6 +8,14 @@ export default function (sequelize, Sequelize) {
                 key: 'id'
             }
         },
+        team_id: {
+            type: Sequelize.INTEGER(10).UNSIGNED,
+            allowNull: true,
+            references: {
+                model: 'CompetitionTeam',
+                key: 'id'
+            }
+        },
         license: {
             type: Sequelize.STRING(16),
             allowNull: false,
@@ -29,10 +37,6 @@ export default function (sequelize, Sequelize) {
         },
         club: {
             type: Sequelize.STRING(255),
-            allowNull: true
-        },
-        team: {
-            type: Sequelize.STRING(60),
             allowNull: true
         },
         birthdate: {
