@@ -39,11 +39,11 @@ DROP TABLE IF EXISTS `CompetitionFighter`;
 CREATE TABLE IF NOT EXISTS `CompetitionFighter` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `competition_id` int(10) unsigned NOT NULL,
+  `team_id` int(10) unsigned DEFAULT NULL,
   `license` varchar(16) NOT NULL,
   `name` varchar(255) NOT NULL,
   `grade` varchar(15) DEFAULT NULL,
   `club` varchar(255) DEFAULT NULL,
-  `team` varchar(60) DEFAULT NULL,
   `birthdate` date NOT NULL,
   `is_present` tinyint(3) unsigned DEFAULT '0',
   `is_favorite` tinyint(3) unsigned DEFAULT '0',
@@ -54,7 +54,9 @@ CREATE TABLE IF NOT EXISTS `CompetitionFighter` (
   UNIQUE KEY `license_UNIQUE` (`competition_id`,`license`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `Competition_id_idx` (`competition_id`),
-  CONSTRAINT `competition_fighter_id_competition` FOREIGN KEY (`competition_id`) REFERENCES `Competition` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_CompetitionFighter_CompetitionTeam1_idx` (`team_id`),
+  CONSTRAINT `competition_fighter_id_competition` FOREIGN KEY (`competition_id`) REFERENCES `Competition` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CompetitionFighter_CompetitionTeam1` FOREIGN KEY (`team_id`) REFERENCES `CompetitionTeam` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -72,6 +74,24 @@ CREATE TABLE IF NOT EXISTS `CompetitionFormula` (
   UNIQUE KEY `idCompetitionFormula_UNIQUE` (`id`),
   KEY `idCompetition_idx` (`competition_id`),
   CONSTRAINT `competition_formula_id_competition` FOREIGN KEY (`competition_id`) REFERENCES `Competition` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Les données exportées n'étaient pas sélectionnées.
+
+-- Listage de la structure de la table askc. CompetitionTeam
+DROP TABLE IF EXISTS `CompetitionTeam`;
+CREATE TABLE IF NOT EXISTS `CompetitionTeam` (
+  `id` int(10) unsigned NOT NULL,
+  `competition_id` int(10) unsigned NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `competition_id_UNIQUE` (`competition_id`),
+  KEY `fk_CompetitionTeam_Competition1_idx` (`competition_id`),
+  CONSTRAINT `fk_CompetitionTeam_Competition1` FOREIGN KEY (`competition_id`) REFERENCES `Competition` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -103,6 +123,43 @@ CREATE TABLE IF NOT EXISTS `Meta` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `meta_UNIQUE` (`metaable_id`,`metaable`,`key`,`value`),
   KEY `idMetaable_idx` (`metaable_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Les données exportées n'étaient pas sélectionnées.
+
+-- Listage de la structure de la table askc. Pool
+DROP TABLE IF EXISTS `Pool`;
+CREATE TABLE IF NOT EXISTS `Pool` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `competition_formula` int(10) unsigned NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `competition_formula_UNIQUE` (`competition_formula`),
+  KEY `fk_Pool_CompetitionFormula1_idx` (`competition_formula`),
+  CONSTRAINT `fk_Pool_CompetitionFormula1` FOREIGN KEY (`competition_formula`) REFERENCES `CompetitionFormula` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Les données exportées n'étaient pas sélectionnées.
+
+-- Listage de la structure de la table askc. PoolEntry
+DROP TABLE IF EXISTS `PoolEntry`;
+CREATE TABLE IF NOT EXISTS `PoolEntry` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pool_id` int(10) unsigned NOT NULL,
+  `entriable_id` int(10) unsigned NOT NULL,
+  `entriable` varchar(45) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `pool_id_UNIQUE` (`pool_id`),
+  UNIQUE KEY `pool_entry_unique` (`pool_id`,`entriable_id`,`entriable`),
+  KEY `fk_PoolEntry_Pool1_idx` (`pool_id`),
+  CONSTRAINT `fk_PoolEntry_Pool1` FOREIGN KEY (`pool_id`) REFERENCES `Pool` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
