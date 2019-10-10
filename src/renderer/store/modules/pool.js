@@ -1,4 +1,3 @@
-
 import { getField, updateField } from 'vuex-map-fields'
 
 const STATUS_LIST = {

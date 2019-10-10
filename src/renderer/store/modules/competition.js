@@ -5,18 +5,14 @@ import faker from 'faker'
 faker.locale = 'fr'
 
 // IMPORT MODELS
-const { Competition, CompetitionFighter, CompetitionFormula, Meta } = 
-    mapModels(['Competition', 'CompetitionFighter', 'CompetitionFormula', 'Meta'])
+const { Competition, CompetitionFighter, CompetitionFormula, Pool, Tree } = 
+    mapModels(['Competition', 'CompetitionFighter', 'CompetitionFormula', 'Pool', 'Tree'])
 // DEFINES RELATIONSHIP
 const Fighters = Competition.hasMany(CompetitionFighter, { as: 'fighter_list', foreignKey: 'competition_id' })
 const Formulas = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list', foreignKey: 'competition_id' })
 
-Formulas.Metas = CompetitionFormula.hasMany(Meta, {
-    foreignKey: 'metaable_id',
-    constraints: false,
-    scope: { metaable: 'CompetitionFormula' },
-    as: 'meta_list'
-})
+Formulas.Pool = CompetitionFormula.hasOne(Pool, { as: 'pool', foreignKey: 'competition_formula_id' })
+Formulas.Tree = CompetitionFormula.hasOne(Tree, { as: 'tree', foreignKey: 'competition_formula_id' })
 
 const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" }
 const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING" }
@@ -40,19 +36,6 @@ const defaultState = () => ({
         formula_config_list: [],
     }
 })
-
-const formatFormulaConfiguration = formula_config => {
-    let competition_formula = { name: formula_config.name, meta_list: [] }
-    
-    Object.keys(formula_config.config).forEach(config_name => {
-        competition_formula.meta_list.push({
-            key: config_name,
-            value: formula_config.config[config_name]
-        })
-    })
-
-    return competition_formula
-}
 
 const state = defaultState()
 
@@ -92,10 +75,10 @@ const getters = {
 const mutations = {
     updateField,
     ADD_FORMULA_CONFIG(state, formula_config) {
-        state.model.formula_config_list.push(formatFormulaConfiguration(formula_config))
+        state.model.formula_config_list.push(JSON.parse(JSON.stringify(formula_config)))
     },
     UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
-        state.model.formula_config_list.splice(index, 1, formatFormulaConfiguration(formula_config))
+        state.model.formula_config_list.splice(index, 1, JSON.parse(JSON.stringify(formula_config)))
     },
     RESET_STATE(state) {
         Object.assign(state, defaultState())
@@ -148,8 +131,11 @@ const actions = {
                     association: Formulas,
                     as: 'formula_config_list',
                     include: [{
-                        association: Formulas.Metas,
-                        as: 'meta_list'
+                        association: Formulas.Pool,
+                        as: 'pool'
+                    }, {
+                        association: Formulas.Tree,
+                        as: 'tree'
                     }]
                 }]
             })
@@ -309,8 +295,11 @@ const actions = {
                 model: CompetitionFormula,
                 as: 'formula_config_list',
                 include: [{
-                    model: Meta,
-                    as: 'meta_list'
+                    model: Pool,
+                    as: 'pool'
+                }, {
+                    model: Tree,
+                    as: 'tree'
                 }]
             }]
         })

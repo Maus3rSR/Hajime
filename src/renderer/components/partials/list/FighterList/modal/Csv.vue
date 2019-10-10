@@ -111,18 +111,8 @@ export default {
                         row[field_name] = date.toSQLDate()
                     }
 
-                    if (field_name === "license")
-                    {
-                        console.log(row[field_name])
-                        console.log(field)
-                    }
-
                     if (field.replace !== undefined)
                         row[field_name] = row[field_name].replace(field.replace.regex, field.replace.value)
-
-
-                    if (field_name === "license")
-                        console.log(row[field_name])
                 }
 
                 return true

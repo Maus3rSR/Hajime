@@ -7,7 +7,7 @@ export default { // TODO shared parent component
         update() {
             this.$emit("input", {
                 name: this.name,
-                config: this.config
+                pool: this.config
             })
         }
     },
@@ -17,27 +17,21 @@ export default { // TODO shared parent component
             deep: true,
             immediate: true
         },
-        value: function () { if (undefined == this.value) this.update() }
+        value: function () { if (undefined === this.value) this.update() }
     },
     data() {
         return {
             name: "Matchs de poule",
             config: {
                 number_of_qualified_fighter: 1,
-                number_of_pool: 1,
-                number_of_entry_per_pool: 1,
                 dismiss_favorite: false,
                 lock: false
             }
         }
     },
     mounted() {
-        if (undefined !== this.value && undefined !== this.value.meta_list)
-        {
-            let config = {}
-            this.value.meta_list.forEach(meta => config[meta.key] = meta.value)
-            this.config = Object.assign(this.config, config)
-        }
+        if (undefined !== this.value)
+            this.config = this.value.pool
     }
 }
 </script>

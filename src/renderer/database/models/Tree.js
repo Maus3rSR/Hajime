@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-    return sequelize.define('Pool', {
+    return sequelize.define('Tree', {
         id: {
             type: DataTypes.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -20,27 +20,17 @@ export default function (sequelize, DataTypes) {
             allowNull: true,
             defaultValue: '0'
         },
-        lock: {
+        third_place: {
             type: DataTypes.INTEGER(3).UNSIGNED,
             allowNull: true,
             defaultValue: '0'
         },
-        number_of_qualified_fighter: {
-            type: DataTypes.INTEGER(10).UNSIGNED,
+        lock: {
+            type: DataTypes.INTEGER(3).UNSIGNED,
             allowNull: true,
-            defaultValue: '1'
-        },
-        number_of_pool: {
-            type: DataTypes.INTEGER(10).UNSIGNED,
-            allowNull: true,
-            defaultValue: '1'
-        },
-        number_of_entry_per_pool: {
-            type: DataTypes.INTEGER(10).UNSIGNED,
-            allowNull: true,
-            defaultValue: '1'
+            defaultValue: '0'
         }
     }, {
-        tableName: 'Pool'
+        tableName: 'Tree'
     })
 }

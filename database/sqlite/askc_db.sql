@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `CompetitionTree` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`competition_id`	INTEGER,
 	`dismiss_favorite`	TEXT,
-	`third_place_match`	INTEGER,
+	`third_place`	INTEGER,
 	`locked`	INTEGER,
 	FOREIGN KEY(`competition_id`) REFERENCES `Competition`(`id`)
 );

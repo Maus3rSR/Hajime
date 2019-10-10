@@ -7,7 +7,7 @@ export default { // TODO shared parent component
         update() {
             this.$emit("input", {
                 name: this.name,
-                config: this.config
+                tree: this.config
             })
         }
     },
@@ -24,18 +24,14 @@ export default { // TODO shared parent component
             name: "Arbre éliminatoire",
             config: {
                 dismiss_favorite: false,
-                third_place_match: false,
+                third_place: false,
                 lock: false
             }
         }
     },
     mounted() {
-        if (undefined !== this.value && undefined !== this.value.meta_list)
-        {
-            let config = {}
-            this.value.meta_list.forEach(meta => config[meta.key] = meta.value)
-            this.config = Object.assign(this.config, config)
-        }
+        if (undefined !== this.value)
+            this.config = this.value.tree
     }
 }
 </script>
@@ -54,7 +50,7 @@ export default { // TODO shared parent component
                 </div>
                 <div class="col-md-6">
                     <label class="ml-2 custom-control custom-checkbox">
-                        <input class="custom-control-input" type="checkbox" v-model="config.third_place_match">
+                        <input class="custom-control-input" type="checkbox" v-model="config.third_place">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">Match pour la 3ème place</span>
                     </label>
