@@ -8,7 +8,7 @@ export default {
 </script>
 
 <template>
-    <div>Implémentation management tree...</div>
+    <div>Développement en cours...</div>
 </template>
 
 <style lang="scss" scoped>

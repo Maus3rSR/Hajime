@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-    return sequelize.define('Pool', {
+    return sequelize.define('PoolConfiguration', {
         id: {
             type: DataTypes.INTEGER(10).UNSIGNED,
             allowNull: false,

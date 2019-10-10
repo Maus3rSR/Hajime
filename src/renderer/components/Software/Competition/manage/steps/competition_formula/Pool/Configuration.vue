@@ -5,12 +5,7 @@ import PoolListDraw from '@partials/pool/ListDraw'
 
 export default {
     components: { PoolListDraw },
-    props: {
-        config: {
-            type: Object,
-            required: true
-        }
-    },
+    props: {},
     computed: {
         ...mapState('configuration', {
             competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT",
@@ -31,7 +26,7 @@ export default {
             number_of_pool: 'model.number_of_pool',
             number_of_entry_per_pool: 'model.number_of_entry_per_pool',
             pool_locked: 'model.lock',
-            pool_list: 'model.pool_list',
+            pool_entry_list: 'model.pool_entry_list',
         }),
         list() { // TODO gérer retour liste d'équipes
             return this.fighter_list
@@ -92,12 +87,12 @@ export default {
         getNumberOfEntrantLeft(number_of_pool) {
             return this.count % number_of_pool
         },
-        validatePoolList(pool_list) {
+        validatePoolList(pool_entry_list) {
             if (this.pool_saving)
                 return
 
             this.pool_locked = true
-            this.pool_list = pool_list
+            this.pool_entry_list = pool_entry_list
 
             this.savePool().catch(() => {
                 this.pool_locked = false

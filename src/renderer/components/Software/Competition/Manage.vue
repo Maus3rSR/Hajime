@@ -16,9 +16,9 @@ export default {
             competition: state => state.model,
         }),
         ...mapGetters({
-            is_empty_competition: "competition/is_empty",
-            competition_loading: "competition/loading",
-            competition_saving: "competition/saving",
+            is_competition_empty: "competition/is_empty",
+            is_competition_loading: "competition/loading",
+            is_competition_saving: "competition/saving",
             fighter_present_count: "competition/fighter_present_count",
             formula_list_count: "formula/count",
             getFormulaComponentList: "formula/getFormulaComponentList",
@@ -47,7 +47,7 @@ export default {
                 l.push({
                     name: this.competition.formula_config_list[index].name,
                     component_name: component_name,
-                    config: this.competition.formula_config_list[index]
+                    competition_formula_id: this.competition.formula_config_list[index].id
                 })
             })
 
@@ -93,12 +93,14 @@ export default {
 <template>
     <section id="competition__manage">
         <header class="content__title">
-            <empty-placeholder :loaded="!is_empty_competition" :tag="'h1'">
-                {{ competition.name }}
-            </empty-placeholder>
-            <empty-placeholder :loaded="!is_empty_competition" :tag="'small'" :width="'5%'" :height="'10px'">
-                Du {{ competition.date | luxon:locale('date_short') }}
-            </empty-placeholder>
+            <template v-if="is_competition_loading || !is_competition_empty">
+                <empty-placeholder :loaded="!is_competition_empty" :tag="'h1'">
+                    {{ competition.name }}
+                </empty-placeholder>
+                <empty-placeholder :loaded="!is_competition_empty" :tag="'small'" :width="'5%'" :height="'10px'">
+                    Du {{ competition.date | luxon:locale('date_short') }}
+                </empty-placeholder>
+            </template>
 
             <div class="actions">
                 <transition name="fade" mode="out-in">
@@ -116,7 +118,12 @@ export default {
         <div class="card">
             <div class="card-body">
                 <transition name="fade" mode="out-in" appear>
-                    <clip-loader v-if="is_empty_competition" :color="'#fff'"></clip-loader>
+                    <div v-if="is_competition_empty" class="text-center">
+                        <h1>Aucune données de compétition... :'(</h1>
+                    </div>
+
+                    <clip-loader v-else-if="is_competition_loading" :color="'#fff'"></clip-loader>
+
                     <span v-else>
                         <nav aria-label="step-wizard" role="navigation">
                             <ol class="breadcrumb mb-3 software__container--offset-element">
@@ -129,7 +136,7 @@ export default {
                         <transition name="fade" mode="out-in">
                             <component
                                 :is="step_component_name"
-                                :config="step_component.config"
+                                :competition_formula_id="step_component.competition_formula_id"
                                 
                                 @onValidate="is_last_step ? true : nextStep()" @onBack="previousStep()"
                             ></component>

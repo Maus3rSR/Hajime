@@ -1,4 +1,10 @@
+import { Sequelize, sequelize, mapModels } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
+
+// IMPORT MODELS
+const { PoolConfiguration, Pool, PoolEntry, CompetitionFighter, CompetitionTeam } = 
+    mapModels(["PoolConfiguration", "Pool", "PoolEntry", "CompetitionFighter", "CompetitionTeam"])
+// DEFINES RELATIONSHIP
 
 const STATUS_LIST = {
     NOTHING: "NOTHING",
@@ -10,13 +16,17 @@ const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
     model: {
         id: null,
-        competition_id: null,
+        number: null,
+        pool_entry_list: []
+    },
+    configuration: {
+        id: null,
+        competition_formula_id: null,
         number_of_qualified_fighter: 1,
         number_of_pool: 1,
         number_of_entry_per_pool: 1,
         dismiss_favorite: false,
         lock: false,
-        pool_list: []
     }
 })
 
@@ -27,7 +37,7 @@ const getters = {
     is_empty: state => null == state.model.id,
     loading: state => state.status == STATUS_LIST.LOADING,
     saving: state => state.status == STATUS_LIST.SAVING,
-    pool_count: state => state.model.pool_list.length,
+    pool_count: state => state.model.pool_entry_list.length,
 }
 
 const mutations = {
@@ -37,15 +47,6 @@ const mutations = {
     },
     INJECT_MODEL_DATA(state, model) {
         Object.assign(state.model, model)
-    },
-    UPDATE_MODEL_ID(state, id) {
-        state.model.id = parseInt(id, 10)
-    },
-    STATUS_START(state, status) {
-        state.status = status
-    },
-    STATUS_STOP(state) {
-        state.status = STATUS_LIST.NOTHING
     }
 }
 
@@ -53,7 +54,7 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    SAVE_ALL({ dispatch, commit }) { // Save model and pool_list
+    SAVE_ALL({ dispatch, commit }) { // Save model and pool_entry_list
         commit('STATUS_START', STATUS_LIST.SAVING)
         return new Promise((resolve, reject) => {
             // TODO API SAVE DATA
@@ -64,21 +65,22 @@ const actions = {
             }, 1500)
         })
     },
-    LOAD({ dispatch, commit }, competition_id) {
-        dispatch('CLEAR')
-        commit('STATUS_START', STATUS_LIST.LOADING)
+    LOAD_BY_COMPETITION_FORMULA({ dispatch, commit }, competition_formula_id) {
+        // dispatch('CLEAR')
+        // commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        // TODO DEV : Supprimer à terme
-        let model = defaultState().model
+        // const promise = Pool.findOne({
+        //     where: { competition_formula_id: parseInt(competition_formula_id, 10) }
+        // })
+        
+        // promise
+        //     .then(pool => {
+        //         commit('INJECT_MODEL_DATA', pool.get({ plain: true }))
+        //     })
+        //     .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération de la poule', { root: true }))
+        //     .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
-        return new Promise((resolve, reject) => {
-            // TOTO API GET DATA
-            setTimeout(() => {
-                commit('STATUS_STOP')
-                commit('INJECT_MODEL_DATA', model)
-                resolve()
-            }, 3000)
-        })
+        // return promise
     },
     GENERATE_PDF({ state, getters }) {
         let doc = this.$pdf.getNewDocument()
@@ -104,7 +106,7 @@ const actions = {
             body: []
         }
 
-        state.model.pool_list.forEach((pool, index) => { // Each pool
+        state.model.pool_entry_list.forEach((pool, index) => { // Each pool
             let body = []
             let is_pair = (index+1) % 2 === 0
 
