@@ -5,6 +5,7 @@ import { getField, updateField } from 'vuex-map-fields'
 const { PoolConfiguration, Pool, PoolEntry, Fighter, Team } = 
     mapModels(["PoolConfiguration", "Pool", "PoolEntry", "Fighter", "Team"])
 // DEFINES RELATIONSHIP
+const PoolEntryList = Pool.hasMany(PoolEntry, { as: 'entry_list', foreignKey: 'pool_id' })
 
 const STATUS_LIST = {
     NOTHING: "NOTHING",
@@ -14,12 +15,8 @@ const STATUS_LIST = {
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
+    status_list: STATUS_LIST.NOTHING,
     list: [],
-    model: {
-        id: null,
-        number: null,
-        pool_entry_list: []
-    },
     configuration: {
         id: null,
         competition_formula_id: null,
@@ -35,10 +32,11 @@ const state = defaultState()
 
 const getters = {
     getField,
-    is_empty: state => null == state.model.id,
-    loading: state => state.status == STATUS_LIST.LOADING,
-    saving: state => state.status == STATUS_LIST.SAVING,
-    pool_count: state => state.model.pool_entry_list.length,
+    is_configuration_empty: state => null === state.configuration.id,
+    loading: state => state.status === STATUS_LIST.LOADING,
+    list_loading: state => state.status_list === STATUS_LIST.LOADING,
+    saving: state => state.status === STATUS_LIST.SAVING,
+    pool_count: state => 0//state.model.pool_entry_list.length,
 }
 
 const mutations = {
@@ -46,8 +44,8 @@ const mutations = {
     RESET_STATE(state) {
         Object.assign(state, defaultState())
     },
-    INJECT_MODEL_DATA(state, model) {
-        Object.assign(state.model, model)
+    INJECT_CONFIGURATION_DATA(state, config) {
+        Object.assign(state.configuration, config)
     }
 }
 
@@ -55,33 +53,63 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    SAVE_ALL({ dispatch, commit }) { // Save model and pool_entry_list
-        commit('STATUS_START', STATUS_LIST.SAVING)
-        return new Promise((resolve, reject) => {
-            // TODO API SAVE DATA
-            setTimeout(() => {
-                commit('STATUS_STOP')
-                dispatch('NOTIFY_SUCCESS', 'Les poules ont bien été sauvegardées', { root: true })
-                resolve()
-            }, 1500)
+    CREATE({ dispatch, commit, getters, state }) {
+        if (getters.saving)
+            return
+
+        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+
+        const promise = sequelize.transaction(t => {
+            return Pool.bulkCreate(state.list, {
+                transaction: t,
+                include: [{
+                    association: PoolEntryList,
+                    as: 'entry_list'
+                }]
+            })
         })
+
+        promise
+            .then(() => {
+                dispatch('NOTIFY_SUCCESS', 'Les poules ont bien été sauvegardées', { root: true })
+                //commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
+            })
+            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde des poules', { root: true }))
+            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+
+        return promise
     },
-    LOAD_BY_COMPETITION_FORMULA({ dispatch, commit }, competition_formula_id) {
-        // dispatch('CLEAR')
-        // commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
+    SAVE_CONFIGURATION({ dispatch, commit, getters, state }) {
+        if (getters.saving)
+            return
 
-        // const promise = Pool.findOne({
-        //     where: { competition_formula_id: parseInt(competition_formula_id, 10) }
-        // })
+        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+
+        const { id, competition_formula_id, ...fields } = state.configuration
+        const promise = PoolConfiguration.update(fields, { where: { id: parseInt(id, 10) }})
+
+        promise
+            .then(() => dispatch('NOTIFY_SUCCESS', 'La configuration des poules a bien été mise à jour', { root: true }))
+            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la mise à jour de la configuration des poules', { root: true }))
+            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))        
+
+        return promise
+    },
+    LOAD_CONFIGURATION({ dispatch, commit, getters }, competition_formula_id) {
+        if (getters.loading)
+            return
+
+        dispatch('CLEAR')
+        commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
+
+        const promise = PoolConfiguration.findOne({ where: { competition_formula_id: parseInt(competition_formula_id, 10) } })
         
-        // promise
-        //     .then(pool => {
-        //         commit('INJECT_MODEL_DATA', pool.get({ plain: true }))
-        //     })
-        //     .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération de la poule', { root: true }))
-        //     .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+        promise
+            .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
+            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération de informations de configuration des poules', { root: true }))
+            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
-        // return promise
+        return promise
     },
     GENERATE_PDF({ state, getters }) {
         let doc = this.$pdf.getNewDocument()

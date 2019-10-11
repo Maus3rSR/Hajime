@@ -23,8 +23,8 @@ export default {
 
 <template>
     <transition-group name="list" tag="div" class="row">
-        <div class="col-lg-6 col-xl-4 list-item" v-for="(entry_list, index) in list" :key="index+'_'+entry_list.name">
-            <pool :id="index+1" :list="entry_list" :blured="blured" />
+        <div class="col-lg-6 col-xl-4 list-item" v-for="(pool, index) in list" :key="pool.number">
+            <pool :pool="pool" :blured="blured" />
         </div>
     </transition-group>
 </template>

@@ -12,7 +12,7 @@ FormulaOfCompetition.PoolConfiguration = CompetitionFormula.hasOne(PoolConfigura
 FormulaOfCompetition.TreeConfiguration = CompetitionFormula.hasOne(TreeConfiguration, { as: 'tree_configuration', foreignKey: 'competition_formula_id' })
 
 const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" }
-const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING" }
+const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING", DELETING: "DELETING" }
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
@@ -42,6 +42,7 @@ const getters = {
     loading: state => state.status === STATUS_LIST.LOADING,
     list_loading: state => state.status_list === STATUS_LIST.LOADING,
     saving: state => state.status === STATUS_LIST.SAVING,
+    deleting: state => state.status === STATUS_LIST.DELETING,
     count: state => state.list.length,
     fighter_count: state => state.model.fighter_list.length,
     fighter_present_list: state => state.model.fighter_list.filter(fighter => fighter.is_present),
@@ -115,7 +116,10 @@ const actions = {
         else
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
-    CREATE({ dispatch, commit, state }) {
+    CREATE({ dispatch, commit, getters, state }) {
+        if (getters.saving)
+            return
+
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         const promise = sequelize.transaction(t => {
@@ -150,7 +154,10 @@ const actions = {
 
         return promise
     },
-    SAVE({ dispatch, commit, state }) {
+    SAVE({ dispatch, commit, getters, state }) {
+        if (getters.saving)
+            return
+
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         if (state.model.locked)
@@ -160,7 +167,7 @@ const actions = {
         }
 
         const { id, fighter_list, formula_config_list, ...fields } = state.model
-        const promise = Competition.update(fields, { where: { id: state.model.id }})
+        const promise = Competition.update(fields, { where: { id: parseInt(id, 10) }})
 
         promise
             .then(() => dispatch('NOTIFY_SUCCESS', 'La compétition a bien été mise à jour', { root: true }))
@@ -170,6 +177,9 @@ const actions = {
         return promise
     },
     SAVE_FIGHTER({ dispatch, commit, getters, state }, fighter) {
+        if (getters.saving)
+            return
+
         if (getters.is_empty) {
             dispatch('NOTIFY_ERROR', "Impossible de procéder à la sauvegarde de ce combattant. Aucune compétition n'est chargée.", { root: true })
             return Promise.reject()
@@ -215,6 +225,9 @@ const actions = {
         return promise
     },
     DELETE_FIGHTER({ dispatch, commit, getters }, fighter_id) {
+        if (getters.deleting)
+            return
+
         if (getters.is_empty) {
             dispatch('NOTIFY_ERROR', "Impossible de procéder à la suppression de ce combattant. Aucune compétition n'est chargée.", { root: true })
             return Promise.reject()
@@ -231,7 +244,7 @@ const actions = {
             return Promise.reject()
         }
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: STATUS_LIST.DELETING })
         const promise = Fighter.destroy({ where: { id: fighter_id } })
 
         promise
@@ -245,6 +258,9 @@ const actions = {
         return promise
     },
     BULK_UPDATE_FIGHTER({ dispatch, commit, getters, state }, { id_list, field_list }) {
+        if (getters.saving)
+            return
+
         if (getters.is_empty) {
             dispatch('NOTIFY_ERROR', "Impossible de faire la mise à jour en masse de ces combattants. Aucune compétition n'est chargée.", { root: true })
             return Promise.reject()
@@ -279,7 +295,10 @@ const actions = {
 
         return promise
     },
-    LOAD({ dispatch, commit }, id) {
+    LOAD({ dispatch, commit, getters }, id) {
+        if (getters.loading)
+            return
+
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
@@ -303,7 +322,10 @@ const actions = {
 
         return promise
     },
-    LOAD_LIST({ dispatch, commit }, payload) {
+    LOAD_LIST({ dispatch, commit, getters }, payload) {
+        if (getters.list_loading)
+            return
+
         commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
 
         const current_limit = payload.limit * payload.page

@@ -17,16 +17,20 @@ export default {
             competition_id: state => state.model.id,
             competition_type: state => state.model.type,
         }),
+        ...mapState('pool', {
+            competition_formula_id: state => state.configuration.competition_formula_id,
+        }),
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",
             fighter_list: "competition/fighter_present_list",
             pool_saving: "pool/saving",
         }),
         ...mapFields('pool', {
-            number_of_pool: 'model.number_of_pool',
-            number_of_entry_per_pool: 'model.number_of_entry_per_pool',
-            pool_locked: 'model.lock',
-            pool_entry_list: 'model.pool_entry_list',
+            number_of_pool: 'configuration.number_of_pool',
+            number_of_entry_per_pool: 'configuration.number_of_entry_per_pool',
+            pool_locked: 'configuration.lock',
+            pool_list: 'list',
+            pool_status: 'status'
         }),
         list() { // TODO gérer retour liste d'équipes
             return this.fighter_list
@@ -79,7 +83,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            savePool: "pool/SAVE_ALL"
+            createPool: "pool/CREATE",
+            savePoolConfiguration: "pool/SAVE_CONFIGURATION"
         }),
         getNumberOfEntrantPerPool(number_of_pool) {
             return parseInt(this.count / number_of_pool, 10)
@@ -87,16 +92,27 @@ export default {
         getNumberOfEntrantLeft(number_of_pool) {
             return this.count % number_of_pool
         },
-        validatePoolList(pool_entry_list) {
+        validatePoolList(pool_list) {
             if (this.pool_saving)
                 return
 
             this.pool_locked = true
-            this.pool_entry_list = pool_entry_list
+            this.savePoolConfiguration()
+                .then(() => {
+                    this.pool_status = "NOTHING" // TODO, trouver une solution pour régler ce problème ...
 
-            this.savePool().catch(() => {
-                this.pool_locked = false
-            })
+                    this.pool_list = pool_list.map(pool => {
+                        pool.competition_formula_id = parseInt(this.competition_formula_id, 10)
+                        return pool
+                    })
+
+                    return this.createPool()
+                        .catch(() => {
+                            this.pool_locked = false
+                            this.savePoolConfiguration()
+                        })
+                })
+                .catch(() => this.pool_locked = false)
         }
     },
     watch: {

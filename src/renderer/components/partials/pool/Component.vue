@@ -1,12 +1,8 @@
 <script>
 export default {
     props: {
-        id: {
-            type: Number,
-            required: true
-        },
-        list: {
-            type: Array,
+        pool: {
+            type: Object,
             required: true
         },
         blured: {
@@ -20,15 +16,15 @@ export default {
 <template>
     <div class="card pool">
         <div class="card-body">
-            <h4 class="card-title">Poule N° {{ id }}</h4>
+            <h4 class="card-title">Poule N° {{ pool.number }}</h4>
 
             <transition-group name="list" tag="ul">
-                <li class="list-item" v-for="(entry, index) in list" :key="index+'_'+entry.name">
+                <li class="list-item" v-for="pool_entry in pool.entry_list" :key="pool_entry.number+'_'+pool_entry.entry.name">
                     <span class="pool-id">
-                        {{ id }}.{{ index+1 }}
+                        {{ pool.number }}.{{ pool_entry.number }}
                     </span>
                     <span class="pool-entry_name" :class="{ 'pool-entry_name__blured': blured }">
-                        {{ entry.name }}
+                        {{ pool_entry.entry.name }}
                     </span>
                 </li>
             </transition-group>

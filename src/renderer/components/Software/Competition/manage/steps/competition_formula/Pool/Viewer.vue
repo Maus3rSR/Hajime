@@ -7,7 +7,7 @@ export default {
     computed: {
         ...mapState('pool', {
             list: state => state.model.pool_list,
-            number_of_entry_per_pool: state => state.model.number_of_entry_per_pool
+            number_of_entry_per_pool: state => state.configuration.number_of_entry_per_pool
         }),
         ...mapState('competition', {
             competition_type: state => state.model.type,

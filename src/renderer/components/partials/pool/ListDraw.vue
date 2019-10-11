@@ -1,6 +1,6 @@
 <script>
-import PoolList from './List'
 import { setTimeout } from 'timers';
+import PoolList from './List'
 
 export default {
     props: {
@@ -36,7 +36,18 @@ export default {
 
                 current_entry_index = next_entry_index
 
-                this.pool_list.push(entry_list)
+                this.pool_list.push({
+                    number: this.pool_list.length + 1,
+                    entry_list: entry_list
+                        .map((entry, index) => {
+                            return {
+                                number: index + 1,
+                                entriable_id: entry.id,
+                                entriable: "Fighter",
+                                entry: entry
+                            }
+                        })
+                })
             }
         },
         shuffle() {

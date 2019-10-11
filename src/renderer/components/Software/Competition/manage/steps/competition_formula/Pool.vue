@@ -17,14 +17,14 @@ export default {
             competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT"
         }),
         ...mapState('pool', {
-            pool_competition_formula_id: "competition_formula_id",
-            pool_locked: 'model.lock',
+            pool_competition_formula_id: state => state.configuration.competition_formula_id,
+            pool_locked: state => state.configuration.lock
         }),
         ...mapGetters({
             fighter_list: "competition/fighter_present_list",
             is_pool_loading: "pool/loading",
             is_pool_saving: "pool/saving",
-            is_pool_empty: "pool/is_empty"
+            is_pool_configuration_empty: "pool/is_configuration_empty"
         }),
         entry_list() { // TODO gérer retour liste d'équipes
             return this.fighter_list
@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            loadPoolByCompetitionFormula: "pool/LOAD_BY_COMPETITION_FORMULA"
+            loadPoolConfiguration: "pool/LOAD_CONFIGURATION"
         })
     },
     data() {
@@ -52,7 +52,7 @@ export default {
     },
     created() {
         if (this.competition_formula_id !== this.pool_competition_formula_id)
-            this.loadPoolByCompetitionFormula(this.competition_formula_id)
+            this.loadPoolConfiguration(this.competition_formula_id)
     }
 }
 </script>
@@ -60,7 +60,7 @@ export default {
 <template>
     <div class="competition__manage__pool">
         <transition name="fade" mode="out-in" appear>
-            <div v-if="is_pool_empty" class="text-center">
+            <div v-if="is_pool_configuration_empty" class="text-center">
                 <h1>Aucune données de poule... :'(</h1>
             </div>
 
@@ -75,8 +75,9 @@ export default {
                                 {{ pool_tab_title }}
                             </template>
 
-                            <pool-configuration v-if="!pool_list_validated" />
-                            <pool-viewer v-else />
+                            <pool-configuration/>
+                            <!-- <pool-configuration v-if="!pool_list_validated" /> -->
+                            <!-- <pool-viewer v-else /> -->
                         </b-tab>
                         <b-tab :disabled="!pool_locked || is_pool_saving">
                             <template slot="title">
