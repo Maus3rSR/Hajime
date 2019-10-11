@@ -1,5 +1,5 @@
 export default function (sequelize, Sequelize) {
-    return sequelize.define('CompetitionFighter', {
+    return sequelize.define('Fighter', {
         competition_id: {
             type: Sequelize.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -54,6 +54,6 @@ export default function (sequelize, Sequelize) {
             defaultValue: '0'
         }
     }, {
-        tableName: 'CompetitionFighter'
+        tableName: 'Fighter'
     })
 }

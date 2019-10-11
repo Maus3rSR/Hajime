@@ -31,6 +31,6 @@ export default function (sequelize, DataTypes) {
             defaultValue: '0'
         }
     }, {
-        tableName: 'Tree'
+        tableName: 'TreeConfiguration'
     })
 }

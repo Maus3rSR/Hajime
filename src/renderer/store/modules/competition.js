@@ -2,14 +2,14 @@ import { Sequelize, sequelize, mapModels } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 
 // IMPORT MODELS
-const { Competition, CompetitionFighter, CompetitionFormula, Pool, Tree } = 
-    mapModels(['Competition', 'CompetitionFighter', 'CompetitionFormula', 'Pool', 'Tree'])
+const { Competition, Fighter, CompetitionFormula, PoolConfiguration, TreeConfiguration } = 
+    mapModels(['Competition', 'Fighter', 'CompetitionFormula', 'PoolConfiguration', 'TreeConfiguration'])
 // DEFINES RELATIONSHIP
-const Fighters = Competition.hasMany(CompetitionFighter, { as: 'fighter_list', foreignKey: 'competition_id' })
-const Formulas = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list', foreignKey: 'competition_id' })
+const CompetitionFighter = Competition.hasMany(Fighter, { as: 'fighter_list', foreignKey: 'competition_id' })
+const FormulaOfCompetition = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list', foreignKey: 'competition_id' })
 
-Formulas.Pool = CompetitionFormula.hasOne(Pool, { as: 'pool', foreignKey: 'competition_formula_id' })
-Formulas.Tree = CompetitionFormula.hasOne(Tree, { as: 'tree', foreignKey: 'competition_formula_id' })
+FormulaOfCompetition.PoolConfiguration = CompetitionFormula.hasOne(PoolConfiguration, { as: 'pool_configuration', foreignKey: 'competition_formula_id' })
+FormulaOfCompetition.TreeConfiguration = CompetitionFormula.hasOne(TreeConfiguration, { as: 'tree_configuration', foreignKey: 'competition_formula_id' })
 
 const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" }
 const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING" }
@@ -122,17 +122,17 @@ const actions = {
             return Competition.create(state.model, {
                 transaction: t,
                 include: [{
-                    association: Fighters,
+                    association: CompetitionFighter,
                     as: 'fighter_list'
                 }, {
-                    association: Formulas,
+                    association: FormulaOfCompetition,
                     as: 'formula_config_list',
                     include: [{
-                        association: Formulas.Pool,
-                        as: 'pool'
+                        association: FormulaOfCompetition.PoolConfiguration,
+                        as: 'pool_configuration'
                     }, {
-                        association: Formulas.Tree,
-                        as: 'tree'
+                        association: FormulaOfCompetition.TreeConfiguration,
+                        as: 'tree_configuration'
                     }]
                 }]
             })
@@ -197,10 +197,10 @@ const actions = {
         if (update)
         {
             const { id, ...fields } = fighter
-            promise = CompetitionFighter.update(fields, { where: { id: fighter.id, competition_id: state.model.id }})
+            promise = Fighter.update(fields, { where: { id: fighter.id, competition_id: state.model.id }})
         }
         else
-            promise = CompetitionFighter.create(fighter)
+            promise = Fighter.create(fighter)
 
         promise
             .then(f => {
@@ -232,7 +232,7 @@ const actions = {
         }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
-        const promise = CompetitionFighter.destroy({ where: { id: fighter_id } })
+        const promise = Fighter.destroy({ where: { id: fighter_id } })
 
         promise
             .then(() => {
@@ -263,7 +263,7 @@ const actions = {
         }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
-        const promise = CompetitionFighter.update(field_list, { where: { id: id_list, competition_id: state.model.id }})
+        const promise = Fighter.update(field_list, { where: { id: id_list, competition_id: state.model.id }})
 
         promise
             .then(() => {
@@ -285,7 +285,7 @@ const actions = {
 
         const promise = Competition.findByPk(parseInt(id, 10), {
             include: [{
-                model: CompetitionFighter,
+                model: Fighter,
                 as: 'fighter_list'
             },
             {

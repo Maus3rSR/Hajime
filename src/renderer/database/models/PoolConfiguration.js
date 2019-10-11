@@ -41,6 +41,6 @@ export default function (sequelize, DataTypes) {
             defaultValue: '1'
         }
     }, {
-        tableName: 'Pool'
+        tableName: 'PoolConfiguration'
     })
 }

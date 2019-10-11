@@ -7,7 +7,7 @@ export default { // TODO shared parent component
         update() {
             this.$emit("input", {
                 name: this.name,
-                tree: this.config
+                tree_configuration: this.config
             })
         }
     },
@@ -31,7 +31,7 @@ export default { // TODO shared parent component
     },
     mounted() {
         if (undefined !== this.value)
-            this.config = this.value.tree
+            this.config = this.value.tree_configuration
     }
 }
 </script>

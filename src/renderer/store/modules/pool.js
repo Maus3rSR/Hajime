@@ -2,8 +2,8 @@ import { Sequelize, sequelize, mapModels } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 
 // IMPORT MODELS
-const { PoolConfiguration, Pool, PoolEntry, CompetitionFighter, CompetitionTeam } = 
-    mapModels(["PoolConfiguration", "Pool", "PoolEntry", "CompetitionFighter", "CompetitionTeam"])
+const { PoolConfiguration, Pool, PoolEntry, Fighter, Team } = 
+    mapModels(["PoolConfiguration", "Pool", "PoolEntry", "Fighter", "Team"])
 // DEFINES RELATIONSHIP
 
 const STATUS_LIST = {
@@ -14,6 +14,7 @@ const STATUS_LIST = {
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
+    list: [],
     model: {
         id: null,
         number: null,

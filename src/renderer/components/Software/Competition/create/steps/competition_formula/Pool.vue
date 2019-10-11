@@ -7,7 +7,7 @@ export default { // TODO shared parent component
         update() {
             this.$emit("input", {
                 name: this.name,
-                pool: this.config
+                pool_configuration: this.config
             })
         }
     },
@@ -31,7 +31,7 @@ export default { // TODO shared parent component
     },
     mounted() {
         if (undefined !== this.value)
-            this.config = this.value.pool
+            this.config = this.value.pool_configuration
     }
 }
 </script>

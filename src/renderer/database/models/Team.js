@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-    return sequelize.define('CompetitionTeam', {
+    return sequelize.define('Team', {
         id: {
             type: DataTypes.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -19,6 +19,6 @@ export default function (sequelize, DataTypes) {
             allowNull: false
         }
     }, {
-        tableName: 'CompetitionTeam'
+        tableName: 'Team'
     })
 }
