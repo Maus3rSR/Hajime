@@ -116,7 +116,7 @@ const actions = {
         else
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
-    CREATE({ dispatch, commit, getters, state }) {
+    CREATE({ commit, getters, state }) {
         if (getters.saving)
             return
 
@@ -144,17 +144,17 @@ const actions = {
 
         promise
             .then(competition => {
-                dispatch('NOTIFY_SUCCESS', 'La compétition a bien été sauvegardée', { root: true })
+                this.$notify.success("La compétition a bien été sauvegardée")
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
-            .catch(Sequelize.UniqueConstraintError, () => dispatch('NOTIFY_ERROR', 'Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !', { root: true }))
-            .catch(Sequelize.ValidationError, msg => dispatch('NOTIFY_ERROR', msg, { root: true }))
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde de la compétition', { root: true }))
+            .catch(Sequelize.UniqueConstraintError, () => this.$notify.error('Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !'))
+            .catch(Sequelize.ValidationError, msg => this.$notify.error(msg))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde de la compétition'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
     },
-    SAVE({ dispatch, commit, getters, state }) {
+    SAVE({ commit, getters, state }) {
         if (getters.saving)
             return
 
@@ -162,7 +162,7 @@ const actions = {
 
         if (state.model.locked)
         {
-            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de mettre à jour la compétition", { root: true })
+            this.$notify.error("Vous n'avez pas le droit de mettre à jour la compétition")
             return Promise.reject()
         }
 
@@ -170,31 +170,31 @@ const actions = {
         const promise = Competition.update(fields, { where: { id: parseInt(id, 10) }})
 
         promise
-            .then(() => dispatch('NOTIFY_SUCCESS', 'La compétition a bien été mise à jour', { root: true }))
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la mise à jour de la compétition', { root: true }))
+            .then(() => this.$notify.success('La compétition a bien été mise à jour'))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour de la compétition'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))        
 
         return promise
     },
-    SAVE_FIGHTER({ dispatch, commit, getters, state }, fighter) {
+    SAVE_FIGHTER({ commit, getters, state }, fighter) {
         if (getters.saving)
             return
 
         if (getters.is_empty) {
-            dispatch('NOTIFY_ERROR', "Impossible de procéder à la sauvegarde de ce combattant. Aucune compétition n'est chargée.", { root: true })
+            this.$notify.error("Impossible de procéder à la sauvegarde de ce combattant. Aucune compétition n'est chargée.")
             return Promise.reject()
         }
 
         if (state.model.locked_fighter_list)
         {
-            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de mettre à jour les combattants", { root: true })
+            this.$notify.error("Vous n'avez pas le droit de mettre à jour les combattants")
             return Promise.reject()
         }
 
         const update = undefined !== fighter.id && null !== fighter.id
 
         if (update && !getters.existFighter(fighter.id)) {
-            dispatch('NOTIFY_ERROR', "Impossible de procéder à l'édition d'un combattant inexistant", { root: true })
+            this.$notify.error("Impossible de procéder à l'édition d'un combattant inexistant")
             return Promise.reject()
         }
 
@@ -217,30 +217,30 @@ const actions = {
                 const value = update ? fighter : f.get({ plain: true })
 
                 commit("UPDATE_FIGHTER", value)
-                dispatch('NOTIFY_SUCCESS', 'Le combattant a bien été sauvegardé', { root: true })
+                this.$notify.success('Le combattant a bien été sauvegardé')
             })
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde du combattant', { root: true }))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde du combattant'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
     },
-    DELETE_FIGHTER({ dispatch, commit, getters }, fighter_id) {
+    DELETE_FIGHTER({ commit, getters }, fighter_id) {
         if (getters.deleting)
             return
 
         if (getters.is_empty) {
-            dispatch('NOTIFY_ERROR', "Impossible de procéder à la suppression de ce combattant. Aucune compétition n'est chargée.", { root: true })
+            this.$notify.error("Impossible de procéder à la suppression de ce combattant. Aucune compétition n'est chargée.")
             return Promise.reject()
         }
         
         if (state.model.locked_fighter_list)
         {
-            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de supprimer les combattants", { root: true })
+            this.$notify.error("Vous n'avez pas le droit de supprimer les combattants")
             return Promise.reject()
         }
 
         if (!getters.existFighter(fighter_id)) {
-            dispatch('NOTIFY_ERROR', "Impossible de procéder à la suppression d'un combattant inexistant", { root: true })
+            this.$notify.error("Impossible de procéder à la suppression d'un combattant inexistant")
             return Promise.reject()
         }
 
@@ -250,31 +250,31 @@ const actions = {
         promise
             .then(() => {
                 commit("REMOVE_FIGHTER", fighter_id)
-                dispatch('NOTIFY_SUCCESS', 'Le combattant a bien été supprimé', { root: true })
+                this.$notify.success('Le combattant a bien été supprimé')
             })
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de suppression du combattant', { root: true }))
+            .catch(() => this.$notify.error('Un problème est survenu lors de suppression du combattant'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
     },
-    BULK_UPDATE_FIGHTER({ dispatch, commit, getters, state }, { id_list, field_list }) {
+    BULK_UPDATE_FIGHTER({ commit, getters, state }, { id_list, field_list }) {
         if (getters.saving)
             return
 
         if (getters.is_empty) {
-            dispatch('NOTIFY_ERROR', "Impossible de faire la mise à jour en masse de ces combattants. Aucune compétition n'est chargée.", { root: true })
+            this.$notify.error("Impossible de faire la mise à jour en masse de ces combattants. Aucune compétition n'est chargée.")
             return Promise.reject()
         }
 
         if (state.model.locked_fighter_list)
         {
-            dispatch('NOTIFY_ERROR', "Vous n'avez pas le droit de mettre à jour les combattants", { root: true })
+            this.$notify.error("Vous n'avez pas le droit de mettre à jour les combattants")
             return Promise.reject()
         }
 
         if (!Array.isArray(id_list))
         {
-            dispatch('NOTIFY_ERROR', 'Les données ne sont pas valides pour cette mise à jour en masse des combattants', { root: true })
+            this.$notify.error('Les données ne sont pas valides pour cette mise à jour en masse des combattants')
             return Promise.reject()
         }
 
@@ -288,9 +288,9 @@ const actions = {
                     Object.keys(field_list).forEach(field => commit("updateField", { path: "model.fighter_list[" + index + "]." + field, value: field_list[field]}))
                 })
 
-                dispatch('NOTIFY_SUCCESS', 'La mise à jour a bien été effectuée', { root: true })
+                this.$notify.success('La mise à jour a bien été effectuée')
             })
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la mise à jour en masse des combattants', { root: true }))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour en masse des combattants'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
@@ -317,12 +317,12 @@ const actions = {
             .then(competition => {
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des compétitions', { root: true }))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
     },
-    LOAD_LIST({ dispatch, commit, getters }, payload) {
+    LOAD_LIST({ commit, getters }, payload) {
         if (getters.list_loading)
             return
 
@@ -341,7 +341,7 @@ const actions = {
                 commit("updateField", { path: 'list_total', value: result.count })
                 commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) })
             })
-        .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des compétitions', { root: true }))
+        .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
         .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
         return promise

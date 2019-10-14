@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { sequelize } from '@root/database'
-import notifyPlugin from '@components/plugins/notify'
-import pdfPlugin from '@components/plugins/pdf'
+import notifyPlugin from '@root/plugins/notify'
+import pdfPlugin from '@root/plugins/pdf'
+import configurationPlugin from '@root/plugins/configuration'
 import modules from './modules'
 
 Vue.use(Vuex)
 Vue.use(notifyPlugin)
-
-let notifier = new Vue()
+Vue.use(pdfPlugin)
+Vue.use(configurationPlugin)
 
 const store = new Vuex.Store({
     modules,
@@ -36,28 +37,25 @@ const store = new Vuex.Store({
             state.db_is_connecting = false
         }
     },
-    actions: { // TODO rempalcer NOTIFY_SUCCESS/NOTIFY_ERROR par un plugin store
-        NOTIFY_SUCCESS(context, msg) {
-            notifier.$notify.success(msg)
-        },
-        NOTIFY_ERROR(context, msg) {
-            notifier.$notify.error(msg)
-        },
+    actions: {
         CONNECT_DATABASE({ commit }) {
             commit("START_DB_CONNECTION")
             sequelize.authenticate()
                 .then(() => commit("DB_CONNECTION_SUCCESS"))
                 .catch(() => {
                     commit("DB_CONNECTION_ERROR")
-                    notifier.$notify.error("Un problème est survenue lors de la connexion à la base de donnée")
+                    this.$notify.error("Un problème est survenue lors de la connexion à la base de donnée")
                 })
                 .finally(() => commit("STOP_DB_CONNECTION"))
         }
     },
-    plugins: [pdfPlugin.storePlugin],
     strict: process.env.NODE_ENV !== 'production'
 })
 
-store.dispatch("CONNECT_DATABASE") // Auto connect
+store.$notify = Vue.notify
+store.$pdf = Vue.pdf
+store.$configuration = Vue.configuration
+
+// store.dispatch("CONNECT_DATABASE") // Auto connect
 
 export default store

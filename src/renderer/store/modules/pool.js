@@ -82,8 +82,8 @@ const actions = {
         })
 
         promise
-            .then(() => dispatch('NOTIFY_SUCCESS', 'Les poules ont bien été sauvegardées', { root: true })) // TODO there is no update from data, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde des poules', { root: true }))
+            .then(() => this.$notify.success('Les poules ont bien été sauvegardées')) // TODO there is no update from data, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
+            .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
@@ -98,8 +98,8 @@ const actions = {
         const promise = PoolConfiguration.update(fields, { where: { id: parseInt(id, 10) } })
 
         promise
-            .then(() => dispatch('NOTIFY_SUCCESS', 'La configuration des poules a bien été mise à jour', { root: true }))
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la mise à jour de la configuration des poules', { root: true }))
+            .then(() => this.$notify.success('La configuration des poules a bien été mise à jour'))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour de la configuration des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
@@ -110,7 +110,7 @@ const actions = {
 
         if (getters.is_configuration_empty) {
             const msg = "Impossible de récupérer la liste des poules car la configuration liée à ces poules n'est pas chargée"
-            dispatch('NOTIFY_ERROR', msg, { root: true })
+            this.$notify.error(msg)
             return Promise.reject(msg)
         }
 
@@ -141,7 +141,7 @@ const actions = {
 
         promise
             .then(result => commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) }))
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des poules', { root: true }))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
             .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
         return promise
@@ -157,7 +157,7 @@ const actions = {
 
         promise
             .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
-            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération de informations de configuration des poules', { root: true }))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération de informations de configuration des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
