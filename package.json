@@ -22,6 +22,7 @@
     "bootstrap-vue": "^2.0.1",
     "electron": "2.0.7",
     "electron-builder": "^20.39.0",
+    "electron-store": "^5.0.0",
     "electron-webpack": "^2.6.1",
     "electron-webpack-vue": "^2.2.2",
     "faker": "^4.1.0",
