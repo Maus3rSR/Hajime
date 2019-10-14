@@ -6,7 +6,7 @@ import VueMask from 'v-mask'
 import App from './App'
 import router from './router'
 import store from './store'
-import plugins from './components/plugins'
+import plugins from './plugins'
 
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = process.env.NODE_ENV == 'production'

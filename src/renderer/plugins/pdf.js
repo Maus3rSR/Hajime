@@ -22,7 +22,6 @@ const api = {
 }
 
 const PdfPlugin = {
-    storePlugin(store) { store.$pdf = api },
     install(Vue) { Vue.pdf = Vue.prototype.$pdf = api }
 }
 
