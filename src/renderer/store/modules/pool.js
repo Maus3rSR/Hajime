@@ -82,10 +82,7 @@ const actions = {
         })
 
         promise
-            .then(() => {
-                dispatch('NOTIFY_SUCCESS', 'Les poules ont bien été sauvegardées', { root: true })
-                //commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
-            })
+            .then(() => dispatch('NOTIFY_SUCCESS', 'Les poules ont bien été sauvegardées', { root: true })) // TODO there is no update from data, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
             .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la sauvegarde des poules', { root: true }))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
@@ -107,13 +104,20 @@ const actions = {
 
         return promise
     },
-    LOAD_LIST({ dispatch, commit, getters }) {
+    LOAD_LIST({ dispatch, commit, getters, state }) {
         if (getters.list_loading)
             return
+
+        if (getters.is_configuration_empty) {
+            const msg = "Impossible de récupérer la liste des poules car la configuration liée à ces poules n'est pas chargée"
+            dispatch('NOTIFY_ERROR', msg, { root: true })
+            return Promise.reject(msg)
+        }
 
         commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
 
         const promise = Pool.findAndCountAll({
+            where: { competition_formula_id: parseInt(state.configuration.competition_formula_id, 10) },
             order: [
                 ['number', 'ASC'],
                 [PoolEntryList, 'number', 'ASC']

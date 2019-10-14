@@ -84,7 +84,8 @@ export default {
     methods: {
         ...mapActions({
             createPool: "pool/CREATE",
-            savePoolConfiguration: "pool/SAVE_CONFIGURATION"
+            savePoolConfiguration: "pool/SAVE_CONFIGURATION",
+            loadPoolList: "pool/LOAD_LIST"
         }),
         getNumberOfEntrantPerPool(number_of_pool) {
             return parseInt(this.count / number_of_pool, 10)
@@ -107,6 +108,7 @@ export default {
                     })
 
                     return this.createPool()
+                        .then(this.loadPoolList)
                         .catch(() => {
                             this.pool_locked = false
                             this.savePoolConfiguration()
