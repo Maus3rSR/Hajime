@@ -29,6 +29,9 @@ export default function (sequelize, DataTypes) {
             allowNull: false
         }
     }, {
-        tableName: 'PoolEntry'
+        tableName: 'PoolEntry',
+        getItem(options) {
+            return this['get' + this.get('entriable')](options)
+        }
     })
 }

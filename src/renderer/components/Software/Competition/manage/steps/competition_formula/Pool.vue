@@ -23,6 +23,7 @@ export default {
         ...mapGetters({
             fighter_list: "competition/fighter_present_list",
             is_pool_loading: "pool/loading",
+            is_pool_list_loading: "pool/list_loading",
             is_pool_saving: "pool/saving",
             is_pool_configuration_empty: "pool/is_configuration_empty"
         }),
@@ -44,7 +45,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            loadPoolConfiguration: "pool/LOAD_CONFIGURATION"
+            loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
+            loadPoolList: "pool/LOAD_LIST"
         })
     },
     data() {
@@ -52,7 +54,8 @@ export default {
     },
     created() {
         if (this.competition_formula_id !== this.pool_competition_formula_id)
-            this.loadPoolConfiguration(this.competition_formula_id)
+            this.loadPoolConfiguration(this.competition_formula_id).then(() => 
+                this.loadPoolList(this.competition_formula_id))
     }
 }
 </script>
@@ -64,7 +67,7 @@ export default {
                 <h1>Aucune données de poule... :'(</h1>
             </div>
 
-            <clip-loader v-else-if="is_pool_loading" :color="'#fff'"></clip-loader>
+            <clip-loader v-else-if="is_pool_loading || is_pool_list_loading" :color="'#fff'"></clip-loader>
 
             <span v-else>
                 <div v-if="has_enough_entry" class="competition__manage__pool">
@@ -75,9 +78,8 @@ export default {
                                 {{ pool_tab_title }}
                             </template>
 
-                            <pool-configuration/>
-                            <!-- <pool-configuration v-if="!pool_list_validated" /> -->
-                            <!-- <pool-viewer v-else /> -->
+                            <pool-configuration v-if="!pool_list_validated" />
+                            <pool-viewer v-else />
                         </b-tab>
                         <b-tab :disabled="!pool_locked || is_pool_saving">
                             <template slot="title">

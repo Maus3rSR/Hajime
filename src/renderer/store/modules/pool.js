@@ -2,10 +2,21 @@ import { Sequelize, sequelize, mapModels } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 
 // IMPORT MODELS
-const { PoolConfiguration, Pool, PoolEntry, Fighter, Team } = 
+const { PoolConfiguration, Pool, PoolEntry, Fighter, Team } =
     mapModels(["PoolConfiguration", "Pool", "PoolEntry", "Fighter", "Team"])
 // DEFINES RELATIONSHIP
 const PoolEntryList = Pool.hasMany(PoolEntry, { as: 'entry_list', foreignKey: 'pool_id' })
+PoolEntryList.Fighter = PoolEntry.belongsTo(Fighter, {
+    foreignKey: 'entriable_id',
+    constraints: false,
+    as: 'fighter'
+})
+PoolEntryList.Team = PoolEntry.belongsTo(Team, {
+    foreignKey: 'entriable_id',
+    constraints: false,
+    as: 'team'
+})
+PoolEntryList.Team.FighterList = Team.hasMany(Fighter, { as: 'fighter_list', foreignKey: 'team_id' })
 
 const STATUS_LIST = {
     NOTHING: "NOTHING",
@@ -36,7 +47,8 @@ const getters = {
     loading: state => state.status === STATUS_LIST.LOADING,
     list_loading: state => state.status_list === STATUS_LIST.LOADING,
     saving: state => state.status === STATUS_LIST.SAVING,
-    pool_count: state => 0//state.model.pool_entry_list.length,
+    count: state => state.list.length,
+    entry_field: state => state.list.length === 0 ? "entry" : (null === state.list[0].fighter ? "team" : "fighter")
 }
 
 const mutations = {
@@ -86,12 +98,47 @@ const actions = {
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         const { id, competition_formula_id, ...fields } = state.configuration
-        const promise = PoolConfiguration.update(fields, { where: { id: parseInt(id, 10) }})
+        const promise = PoolConfiguration.update(fields, { where: { id: parseInt(id, 10) } })
 
         promise
             .then(() => dispatch('NOTIFY_SUCCESS', 'La configuration des poules a bien été mise à jour', { root: true }))
             .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la mise à jour de la configuration des poules', { root: true }))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))        
+            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+
+        return promise
+    },
+    LOAD_LIST({ dispatch, commit, getters }) {
+        if (getters.list_loading)
+            return
+
+        commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
+
+        const promise = Pool.findAndCountAll({
+            order: [
+                ['number', 'ASC'],
+                [PoolEntryList, 'number', 'ASC']
+            ],
+            include: [{
+                association: PoolEntryList,
+                as: 'entry_list',
+                include: [{
+                    association: PoolEntryList.Fighter,
+                    as: 'fighter'
+                }, {
+                    association: PoolEntryList.Team,
+                    as: 'team',
+                    include: [{
+                        association: PoolEntryList.Team.FighterList,
+                        as: 'fighter_list'
+                    }]
+                }]
+            }]
+        })
+
+        promise
+            .then(result => commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) }))
+            .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération des poules', { root: true }))
+            .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
         return promise
     },
@@ -103,7 +150,7 @@ const actions = {
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
         const promise = PoolConfiguration.findOne({ where: { competition_formula_id: parseInt(competition_formula_id, 10) } })
-        
+
         promise
             .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
             .catch(() => dispatch('NOTIFY_ERROR', 'Un problème est survenu lors de la récupération de informations de configuration des poules', { root: true }))
@@ -130,21 +177,21 @@ const actions = {
             showHead: 'firstPage',
             tableWidth: tableWidth,
             startY: startY,
-            margin: { right: margingLeftX, left: margingLeftX, top: margingY + autoTableYCompensation, bottom: margingY + autoTableYCompensation},
+            margin: { right: margingLeftX, left: margingLeftX, top: margingY + autoTableYCompensation, bottom: margingY + autoTableYCompensation },
             head: [[null, "Nom"]],
             body: []
         }
 
-        state.model.pool_entry_list.forEach((pool, index) => { // Each pool
+        state.list.forEach((pool, index) => { // Each pool
             let body = []
-            let is_pair = (index+1) % 2 === 0
+            let is_pair = (index + 1) % 2 === 0
 
             if (!is_pair && index > 0)
                 startY = doc.autoTable.previous.finalY + margingBetweenEachPoolLine
 
-            pool.forEach((entry, entry_index) => body.push([(index+1)+"."+(entry_index+1), entry.name])) // Each entry of pool
+            pool.entry_list.forEach(entry => body.push([pool.number + "." + entry.number, entry[getters.entry_field].name])) // Each entry of pool
 
-            config.head[0][0] = "Poule n°"+(index+1)
+            config.head[0][0] = "Poule n°" + (index + 1)
             config.body = body
             config.startY = startY
             config.margin.right = (is_pair ? margingLeftX : margingLeftSecondTable)
@@ -153,19 +200,17 @@ const actions = {
             doc.autoTable(config)
 
             const total_page = doc.internal.getNumberOfPages()
-            if (current_page < total_page)
-            {
+            if (current_page < total_page) {
                 current_page = total_page
                 startY = doc.autoTable.previous.pageStartY
             }
         })
 
         const pageCount = doc.internal.getNumberOfPages()
-        for (let i = 0; i < pageCount; i++)
-        {
+        for (let i = 0; i < pageCount; i++) {
             doc.setPage(i)
             const page_info = doc.internal.getCurrentPageInfo()
-            doc.text('Liste des poules ('+getters.pool_count+')', margingLeftX, margingY)
+            doc.text('Liste des poules (' + getters.count + ')', margingLeftX, margingY)
             doc.setFontSize(10)
             doc.text(margingRightX, margingY, page_info.pageNumber + "/" + pageCount)
             doc.setFontSize(14)

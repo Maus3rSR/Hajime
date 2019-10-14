@@ -6,27 +6,28 @@ export default {
     components: { PoolList },
     computed: {
         ...mapState('pool', {
-            list: state => state.model.pool_list,
+            list: state => state.list,
             number_of_entry_per_pool: state => state.configuration.number_of_entry_per_pool
         }),
-        ...mapState('competition', {
+        ...mapState('competition', { // @TODO il faut être sûr que la compétition soit chargée, à revoir ...
             competition_type: state => state.model.type,
         }),
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",
-            pool_count: 'pool/pool_count'
+            pool_count: 'pool/count',
+            entry_field: 'pool/entry_field'
         }),
         number_of_entry_left() {
-            return this.list[this.pool_count-1].length
+            return this.list[this.pool_count-1].entry_list.length
         },
         is_last_pool_different_size() {
-            return this.number_of_entry_per_pool !== this.last_pool_entry_count
+            return this.number_of_entry_per_pool !== this.number_of_entry_left
         },
         number_of_pool() {
             return this.is_last_pool_different_size ? this.pool_count - 1 : this.pool_count
         },
-        entrant_label() {
-            return this.competition_type == this.constant_type_list.TEAM ? "équipes" : "combattants"
+        entry_label() {
+            return this.competition_type === this.constant_type_list.TEAM ? "équipes" : "combattants"
         }
     },
     methods: {
@@ -44,9 +45,9 @@ export default {
     <div>
         <div class="toolbar">
             <div class="toolbar__label">
-                {{ number_of_pool }} poules de {{ number_of_entry_per_pool }} {{ entrant_label }}
+                {{ number_of_pool }} poules de {{ number_of_entry_per_pool }} {{ entry_label }}
                 <template v-if="is_last_pool_different_size">
-                    et 1 poule de {{ number_of_entry_left }} {{ entrant_label }}
+                    et 1 poule de {{ number_of_entry_left }} {{ entry_label }}
                 </template>
             </div>
 
@@ -59,6 +60,7 @@ export default {
             <pool-list
                 id="poolListViewer"
                 :list="list"
+                :entry_field="entry_field"
             />
         </software-container>
     </div>

@@ -5,6 +5,10 @@ export default {
             type: Object,
             required: true
         },
+        entry_field: {
+            type: String,
+            required: true
+        },
         blured: {
             type: Boolean,
             default: false
@@ -19,12 +23,12 @@ export default {
             <h4 class="card-title">Poule N° {{ pool.number }}</h4>
 
             <transition-group name="list" tag="ul">
-                <li class="list-item" v-for="pool_entry in pool.entry_list" :key="pool_entry.number+'_'+pool_entry.entry.name">
+                <li class="list-item" v-for="pool_entry in pool.entry_list" :key="pool_entry.number+'_'+pool_entry[entry_field].name">
                     <span class="pool-id">
                         {{ pool.number }}.{{ pool_entry.number }}
                     </span>
                     <span class="pool-entry_name" :class="{ 'pool-entry_name__blured': blured }">
-                        {{ pool_entry.entry.name }}
+                        {{ pool_entry[entry_field].name }}
                     </span>
                 </li>
             </transition-group>
