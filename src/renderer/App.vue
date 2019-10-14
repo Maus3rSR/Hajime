@@ -15,6 +15,9 @@ export default {
 
             this.$router.push('/dberror')
         }
+    },
+    created() {
+        
     }
 }
 </script>

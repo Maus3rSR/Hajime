@@ -9,20 +9,20 @@ export default new Router({
             // Software contain the default layout
             // We will be able to set a route (not children) like '/login' with a completely different layout in the future
             path: '/',
-            component: require('@components/layouts/Software').default,
+            component: require('@components/layouts/software').default,
             meta: {
                 breadcrumb: 'Accueil',
             },
             children: [
                 {
                     name: 'dashboard',
-                    path: '/', // root of software
-                    component: require('@components/Software/Dashboard').default
+                    path: '', // root of software
+                    component: require('@components/software/Dashboard').default
                 },
                 {
                     name: 'create-competition',
-                    path: '/competition/new',
-                    component: require('@components/Software/Competition/Create').default,
+                    path: 'competition/new',
+                    component: require('@components/software/competition/Create').default,
                     meta: {
                         breadcrumb: 'Nouvelle compétition',
                         theme: 'competition'
@@ -30,9 +30,9 @@ export default new Router({
                 },
                 {
                     name: 'manage-competition',
-                    path: '/competition/:id',
+                    path: 'competition/:id',
                     props: true,
-                    component: require('@components/Software/Competition/Manage').default,
+                    component: require('@components/software/competition/Manage').default,
                     meta: {
                         breadcrumb: 'Gestion d\'une compétition', // @todo Dynamique
                         theme: 'competition'
@@ -40,9 +40,14 @@ export default new Router({
                 }
             ]
         },
-        { path: '/dberror', component: require('@components/layouts/DatabaseConnection').default },
-        { path: '/dbnotfound', component: require('@components/layouts/DatabaseConnection').default, props: { empty_config: true } },
-        { path: '/404', component: require('@components/layouts/NotFound').default },
-        { path: '*', redirect: '/404' },
+        {
+            path: '/error',
+            component: require('@components/layouts/error').default,
+            children: [
+                { path: '404', component: require('@components/error/NotFound').default },
+                { path: 'db', component: require('@components/error/DatabaseConnection').default },
+            ]
+        },
+        { path: '*', redirect: '/error/404' },
     ]
 })
