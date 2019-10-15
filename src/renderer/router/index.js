@@ -41,6 +41,10 @@ export default new Router({
             ]
         },
         {
+            path: '/welcome',
+            component: require('@components/Welcome').default
+        },
+        {
             path: '/error',
             component: require('@components/layouts/error').default,
             children: [

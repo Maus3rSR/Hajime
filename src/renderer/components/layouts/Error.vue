@@ -13,13 +13,4 @@ export default {
     </main>
 </template>
 
-<style lang="scss">
-#software {
-    .content {
-        &>div {
-            // Pour la transition slide left/right
-            transition: all .5s cubic-bezier(.55,0,.1,1);
-        }
-    }
-}
-</style>
+<style lang="scss"></style>

@@ -24,6 +24,9 @@ export default {
         }
     },
     created() {
+        if (undefined === this.$configuration.get('database') && !this.$route.path.includes('welcome'))
+            this.$router.push('/welcome')
+
         ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
     }
 }
