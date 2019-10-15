@@ -1,11 +1,18 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
+const { ipcRenderer } = require('electron')
 
 export default {
     name: 'ASKC',
     computed: {
         ...mapGetters({
-            db_error: "db_not_connected_by_error"
+            db_error: "database/not_connected_by_error"
+        })
+    },
+    methods: {
+        ...mapActions({
+            disconnectDb: "database/DISCONNECT"
         })
     },
     watch: {
@@ -17,7 +24,7 @@ export default {
         }
     },
     created() {
-        
+        ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
     }
 }
 </script>
