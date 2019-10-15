@@ -1,15 +1,5 @@
-import { Sequelize, sequelize, mapModels } from '@root/database'
+import { Sequelize } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
-
-// IMPORT MODELS
-const { Competition, Fighter, CompetitionFormula, PoolConfiguration, TreeConfiguration } = 
-    mapModels(['Competition', 'Fighter', 'CompetitionFormula', 'PoolConfiguration', 'TreeConfiguration'])
-// DEFINES RELATIONSHIP
-const CompetitionFighter = Competition.hasMany(Fighter, { as: 'fighter_list', foreignKey: 'competition_id' })
-const FormulaOfCompetition = Competition.hasMany(CompetitionFormula, { as: 'formula_config_list', foreignKey: 'competition_id' })
-
-FormulaOfCompetition.PoolConfiguration = CompetitionFormula.hasOne(PoolConfiguration, { as: 'pool_configuration', foreignKey: 'competition_formula_id' })
-FormulaOfCompetition.TreeConfiguration = CompetitionFormula.hasOne(TreeConfiguration, { as: 'tree_configuration', foreignKey: 'competition_formula_id' })
 
 const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" }
 const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING", DELETING: "DELETING" }
@@ -116,28 +106,18 @@ const actions = {
         else
             commit("UPDATE_FORMULA_CONFIG", { index, formula_config })
     },
-    CREATE({ commit, getters, state }) {
+    CREATE({ commit, getters, rootGetters, state }) {
         if (getters.saving)
             return
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
-        const promise = sequelize.transaction(t => {
-            return Competition.create(state.model, {
+        const promise = rootGetters["database/instance"].transaction(t => {
+            return rootGetters["database/getModel"]("Competition").create(state.model, {
                 transaction: t,
-                include: [{
-                    association: CompetitionFighter,
-                    as: 'fighter_list'
-                }, {
-                    association: FormulaOfCompetition,
-                    as: 'formula_config_list',
-                    include: [{
-                        association: FormulaOfCompetition.PoolConfiguration,
-                        as: 'pool_configuration'
-                    }, {
-                        association: FormulaOfCompetition.TreeConfiguration,
-                        as: 'tree_configuration'
-                    }]
+                include: ['fighter_list', {
+                    association: 'formula_config_list',
+                    include: ['pool_configuration', 'tree_configuration']
                 }]
             })
         })
@@ -154,7 +134,7 @@ const actions = {
 
         return promise
     },
-    SAVE({ commit, getters, state }) {
+    SAVE({ commit, getters, rootGetters, state }) {
         if (getters.saving)
             return
 
@@ -167,7 +147,7 @@ const actions = {
         }
 
         const { id, fighter_list, formula_config_list, ...fields } = state.model
-        const promise = Competition.update(fields, { where: { id: parseInt(id, 10) }})
+        const promise = rootGetters["database/getModel"]("Competition").update(fields, { where: { id: parseInt(id, 10) }})
 
         promise
             .then(() => this.$notify.success('La compétition a bien été mise à jour'))
@@ -176,7 +156,7 @@ const actions = {
 
         return promise
     },
-    SAVE_FIGHTER({ commit, getters, state }, fighter) {
+    SAVE_FIGHTER({ commit, getters, rootGetters, state }, fighter) {
         if (getters.saving)
             return
 
@@ -207,10 +187,10 @@ const actions = {
         if (update)
         {
             const { id, ...fields } = fighter
-            promise = Fighter.update(fields, { where: { id: fighter.id, competition_id: state.model.id }})
+            promise = rootGetters["database/getModel"]("Fighter").update(fields, { where: { id: fighter.id, competition_id: state.model.id }})
         }
         else
-            promise = Fighter.create(fighter)
+            promise = rootGetters["database/getModel"]("Fighter").create(fighter)
 
         promise
             .then(f => {
@@ -224,7 +204,7 @@ const actions = {
 
         return promise
     },
-    DELETE_FIGHTER({ commit, getters }, fighter_id) {
+    DELETE_FIGHTER({ commit, getters, rootGetters }, fighter_id) {
         if (getters.deleting)
             return
 
@@ -245,7 +225,7 @@ const actions = {
         }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.DELETING })
-        const promise = Fighter.destroy({ where: { id: fighter_id } })
+        const promise = rootGetters["database/getModel"]("Fighter").destroy({ where: { id: fighter_id } })
 
         promise
             .then(() => {
@@ -257,7 +237,7 @@ const actions = {
 
         return promise
     },
-    BULK_UPDATE_FIGHTER({ commit, getters, state }, { id_list, field_list }) {
+    BULK_UPDATE_FIGHTER({ commit, getters, rootGetters, state }, { id_list, field_list }) {
         if (getters.saving)
             return
 
@@ -279,7 +259,7 @@ const actions = {
         }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
-        const promise = Fighter.update(field_list, { where: { id: id_list, competition_id: state.model.id }})
+        const promise = rootGetters["database/getModel"]("Fighter").update(field_list, { where: { id: id_list, competition_id: state.model.id }})
 
         promise
             .then(() => {
@@ -295,23 +275,14 @@ const actions = {
 
         return promise
     },
-    LOAD({ dispatch, commit, getters }, id) {
+    LOAD({ dispatch, commit, getters, rootGetters }, id) {
         if (getters.loading)
             return
 
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        const promise = Competition.findByPk(parseInt(id, 10), {
-            include: [{
-                model: Fighter,
-                as: 'fighter_list'
-            },
-            {
-                model: CompetitionFormula,
-                as: 'formula_config_list'
-            }]
-        })
+        const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: ['fighter_list', 'formula_config_list'] })
         
         promise
             .then(competition => {
@@ -322,7 +293,7 @@ const actions = {
 
         return promise
     },
-    LOAD_LIST({ commit, getters }, payload) {
+    LOAD_LIST({ commit, getters, rootGetters }, payload) {
         if (getters.list_loading)
             return
 
@@ -331,7 +302,7 @@ const actions = {
         const current_limit = payload.limit * payload.page
         const offset = current_limit - payload.limit
 
-        const promise = Competition.findAndCountAll({
+        const promise = rootGetters["database/getModel"]("Competition").findAndCountAll({
             limit: current_limit,
             offset: offset
         })

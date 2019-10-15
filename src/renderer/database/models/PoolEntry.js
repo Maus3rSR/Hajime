@@ -1,6 +1,6 @@
 
 export default function (sequelize, DataTypes) {
-    return sequelize.define('PoolEntry', {
+    const Model = sequelize.define('PoolEntry', {
         id: {
             type: DataTypes.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -34,4 +34,19 @@ export default function (sequelize, DataTypes) {
             return this['get' + this.get('entriable')](options)
         }
     })
+
+    Model.associate = models => {
+        Model.belongsTo(models.Fighter, {
+            foreignKey: 'entriable_id',
+            constraints: false,
+            as: 'fighter'
+        })
+        Model.belongsTo(models.Team, {
+            foreignKey: 'entriable_id',
+            constraints: false,
+            as: 'team'
+        })
+    }
+
+    return Model
 }

@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-    return sequelize.define('Pool', {
+    const Model = sequelize.define('Pool', {
         id: {
             type: DataTypes.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -21,4 +21,10 @@ export default function (sequelize, DataTypes) {
     }, {
         tableName: 'Pool'
     })
+
+    Model.associate = models => {
+        Model.hasMany(models.PoolEntry, { as: 'entry_list', foreignKey: 'pool_id' })
+    }
+
+    return Model
 }

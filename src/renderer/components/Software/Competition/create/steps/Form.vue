@@ -67,7 +67,7 @@ export default {
                     <span class="card-body__title">Type *</span>
                     <div class="clearfix mt-3">
                         <label class="custom-control custom-radio" v-for="(competition_type, index) in type_list" :key="competition_type.value" :title="index > 0 ? 'Développement en cours' : ''">
-                            <input type="radio" name="radio-inline" :disabled="index > 0" :value="competition_type.value" v-model="type" class="custom-control-input">
+                            <input type="radio" name="competition__type" :disabled="index > 0" :value="competition_type.value" v-model="type" class="custom-control-input">
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">{{ competition_type.name }}</span>
                         </label>

@@ -1,22 +1,4 @@
-import { Sequelize, sequelize, mapModels } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
-
-// IMPORT MODELS
-const { PoolConfiguration, Pool, PoolEntry, Fighter, Team } =
-    mapModels(["PoolConfiguration", "Pool", "PoolEntry", "Fighter", "Team"])
-// DEFINES RELATIONSHIP
-const PoolEntryList = Pool.hasMany(PoolEntry, { as: 'entry_list', foreignKey: 'pool_id' })
-PoolEntryList.Fighter = PoolEntry.belongsTo(Fighter, {
-    foreignKey: 'entriable_id',
-    constraints: false,
-    as: 'fighter'
-})
-PoolEntryList.Team = PoolEntry.belongsTo(Team, {
-    foreignKey: 'entriable_id',
-    constraints: false,
-    as: 'team'
-})
-PoolEntryList.Team.FighterList = Team.hasMany(Fighter, { as: 'fighter_list', foreignKey: 'team_id' })
 
 const STATUS_LIST = {
     NOTHING: "NOTHING",
@@ -65,19 +47,16 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    CREATE({ dispatch, commit, getters, state }) {
+    CREATE({ commit, getters, rootGetters, state }) {
         if (getters.saving)
             return
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
-        const promise = sequelize.transaction(t => {
-            return Pool.bulkCreate(state.list, {
+        const promise = rootGetters["database/instance"].transaction(t => {
+            return rootGetters["database/getModel"]("Pool").bulkCreate(state.list, {
                 transaction: t,
-                include: [{
-                    association: PoolEntryList,
-                    as: 'entry_list'
-                }]
+                include: ["entry_list"]
             })
         })
 
@@ -88,14 +67,14 @@ const actions = {
 
         return promise
     },
-    SAVE_CONFIGURATION({ dispatch, commit, getters, state }) {
+    SAVE_CONFIGURATION({ commit, getters, rootGetters, state }) {
         if (getters.saving)
             return
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         const { id, competition_formula_id, ...fields } = state.configuration
-        const promise = PoolConfiguration.update(fields, { where: { id: parseInt(id, 10) } })
+        const promise = rootGetters["database/getModel"]("PoolConfiguration").update(fields, { where: { id: parseInt(id, 10) } })
 
         promise
             .then(() => this.$notify.success('La configuration des poules a bien été mise à jour'))
@@ -104,7 +83,7 @@ const actions = {
 
         return promise
     },
-    LOAD_LIST({ dispatch, commit, getters, state }) {
+    LOAD_LIST({ commit, getters, rootGetters, state }) {
         if (getters.list_loading)
             return
 
@@ -116,25 +95,19 @@ const actions = {
 
         commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
 
+        const Pool = rootGetters["database/getModel"]("Pool")
+
         const promise = Pool.findAndCountAll({
             where: { competition_formula_id: parseInt(state.configuration.competition_formula_id, 10) },
             order: [
                 ['number', 'ASC'],
-                [PoolEntryList, 'number', 'ASC']
+                [Pool.associations.entry_list, 'number', 'ASC']
             ],
             include: [{
-                association: PoolEntryList,
-                as: 'entry_list',
-                include: [{
-                    association: PoolEntryList.Fighter,
-                    as: 'fighter'
-                }, {
-                    association: PoolEntryList.Team,
-                    as: 'team',
-                    include: [{
-                        association: PoolEntryList.Team.FighterList,
-                        as: 'fighter_list'
-                    }]
+                association: 'entry_list',
+                include: ['fighter', {
+                    association: 'team',
+                    include: ['fighter_list']
                 }]
             }]
         })
@@ -146,14 +119,14 @@ const actions = {
 
         return promise
     },
-    LOAD_CONFIGURATION({ dispatch, commit, getters }, competition_formula_id) {
+    LOAD_CONFIGURATION({ dispatch, commit, getters, rootGetters }, competition_formula_id) {
         if (getters.loading)
             return
 
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        const promise = PoolConfiguration.findOne({ where: { competition_formula_id: parseInt(competition_formula_id, 10) } })
+        const promise = rootGetters["database/getModel"]("PoolConfiguration").findOne({ where: { competition_formula_id: parseInt(competition_formula_id, 10) } })
 
         promise
             .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))

@@ -1,15 +1,44 @@
 <script>
+import { mapState, mapActions } from 'vuex'
+
 export default {
+    computed: {
+        ...mapState("database", {
+            is_db_connected: "connected",
+            is_db_connecting: "is_connecting",
+            db_error: "error"
+        }),
+        is_db_external() {
+            return this.database.type === 'external'
+        }
+    },
+    methods: {
+        ...mapActions({
+            connect: "database/CONNECT"
+        }),
+        testConnexion() {
+            if (!this.is_db_external)
+                return
+
+            this.connect(this.database)
+        },
+        save() {
+            this.$configuration.set("database", this.database)
+            this.$router.push('/')
+        }
+    },
     data() {
         return {
             database: {
                 type: "local",
-                dialect: "mariadb",
-                host: "127.0.0.1",
-                port: "3306",
-                username: "",
-                password: "",
-                name: ""
+                connection: {
+                    dialect: "mariadb",
+                    host: "127.0.0.1",
+                    port: "3306",
+                    username: "",
+                    password: "",
+                    database: ""
+                }
             }
         }
     }
@@ -30,18 +59,18 @@ export default {
                             <div class="clearfix mt-3">
                                 <label class="custom-control custom-radio">
 
-                                    <input type="radio" name="radio-inline" value="local" v-model="database.type" class="custom-control-input">
+                                    <input type="radio" name="database__type" value="local" v-model="database.type" class="custom-control-input">
                                     
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Locale</span>
+                                    <span class="custom-control-description">Locale (recommandé)</span>
                                 </label>
 
                                 <label class="custom-control custom-radio">
 
-                                    <input type="radio" name="radio-inline" value="external" v-model="database.type" class="custom-control-input">
+                                    <input type="radio" name="database__type" value="external" v-model="database.type" class="custom-control-input">
                                     
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Externe (Mysql, Mariadb)</span>
+                                    <span class="custom-control-description">Externe (pour utilisateurs avancés)</span>
                                 </label>
                                 <i class="form-group__bar"></i>
                             </div>
@@ -51,6 +80,30 @@ export default {
 
                 <transition name="fade" mode="out-in">
                     <div class="row" v-if="database.type === 'external'">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="card-body__title">Langage</span>
+                                <div class="clearfix mt-3">
+                                    <label class="custom-control custom-radio">
+
+                                        <input type="radio" name="database__dialect" value="mariadb" v-model="database.connection.dialect" class="custom-control-input">
+                                        
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Mariadb</span>
+                                    </label>
+
+                                    <label class="custom-control custom-radio">
+
+                                        <input type="radio" name="database__dialect" value="mysql" v-model="database.connection.dialect" class="custom-control-input">
+                                        
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Mysql</span>
+                                    </label>
+                                    <i class="form-group__bar"></i>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <div>
@@ -61,7 +114,7 @@ export default {
                                         type="text"
                                         name="host"
 
-                                        v-model="database.host"
+                                        v-model="database.connection.host"
                                     >
                                     <i class="form-group__bar"></i>
                                 </div>
@@ -78,7 +131,7 @@ export default {
                                         type="text"
                                         name="port"
 
-                                        v-model="database.port"
+                                        v-model="database.connection.port"
                                     >
                                     <i class="form-group__bar"></i>
                                 </div>
@@ -95,7 +148,7 @@ export default {
                                         type="text"
                                         name="username"
 
-                                        v-model="database.username"
+                                        v-model="database.connection.username"
                                     >
                                     <i class="form-group__bar"></i>
                                 </div>
@@ -109,10 +162,10 @@ export default {
                                     <input
                                         id="database__password"
                                         class="form-control"
-                                        type="text"
+                                        type="password"
                                         name="password"
 
-                                        v-model="database.password"
+                                        v-model="database.connection.password"
                                     >
                                     <i class="form-group__bar"></i>
                                 </div>
@@ -122,14 +175,14 @@ export default {
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div>
-                                    <label for="database__name" class="card-body__title">Nom de la base de données</label>
+                                    <label for="database__database" class="card-body__title">Nom de la base de données</label>
                                     <input
-                                        id="database__name"
+                                        id="database__database"
                                         class="form-control"
                                         type="text"
                                         name="name"
 
-                                        v-model="database.name"
+                                        v-model="database.connection.database"
                                     >
                                     <i class="form-group__bar"></i>
                                 </div>
@@ -138,12 +191,29 @@ export default {
                     </div>
                 </transition>
 
-                <div class="row text-center">
+                <div class="row">
                     <div class="col">
-                        <button class="btn btn-btn-lg btn-outline-warning text-uppercase">
-                            <i class="zmdi zmdi-hc-2x zmdi-flash-off"></i><br/>
-                            Tester la connexion
-                        </button>
+                        <transition name="fade" mode="out-in">
+                            <button class="btn btn-outline-warning text-uppercase float-right" v-if="is_db_external && !is_db_connected" @click="testConnexion">
+                                <transition name="fade" mode="out-in">
+                                    <i v-if="!is_db_connecting" class="zmdi zmdi-flash-off"></i>
+                                    <clip-loader v-else :size="'14px'" color="#ffc107"></clip-loader>
+                                </transition>
+                                Tester la connexion
+                            </button>
+
+                            <button v-else-if="!is_db_external || is_db_connected" class="btn btn-outline-success float-right" @click="save">
+                                <i class="zmdi zmdi-check"></i>
+                                Sauvegarder les paramètres et commencer
+                            </button>
+                        </transition>
+
+                        <transition name="fade" mode="out-in">
+                            <span v-if="is_db_external && is_db_connected" class="text-success">
+                                <i class="zmdi zmdi-check" />
+                                La connexion à la base de données a pu être établie
+                            </span>
+                        </transition>
                     </div>
                 </div>
             </div>

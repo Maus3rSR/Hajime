@@ -1,27 +1,46 @@
-import { sequelize } from '@root/database'
+import { CreateSequelizeInstance } from '@root/database'
+
+let sequelize_instance = null // We must not set it in the state because the object make internal updates when used and we can't handle these changes
 
 const defaultState = () => ({
     connected: false,
-    connection_error: false,
-    is_connecting: false
+    error: false,
+    is_connecting: false,
+    model_list: {}
 })
 
 const state = defaultState()
 
 const getters = {
-    not_connected_by_error: state => !state.connected && state.connection_error
+    instance: () => sequelize_instance,
+    is_empty_instance: () => null === sequelize_instance,
+    getModel: state => model_name => {
+        if (undefined === state.model_list[model_name])
+            throw new Error("[STORE/DATABASE] Model " + model_name + " not found")
+        return state.model_list[model_name]
+    }
 }
 
 const mutations = {
+    RESET_INSTANCE() {
+        sequelize_instance = null
+    },
+    SEQUELIZE_INSTANCE(state, conf) {
+        let { sequelize, model_list } = CreateSequelizeInstance(conf)
+        sequelize_instance = sequelize
+        state.model_list = model_list
+    },
     CONNECTION_SUCCESS(state) {
         state.connected = true
-        state.connection_error = false
+        state.error = false
     },
     CONNECTION_ERROR(state) {
+        sequelize_instance = null
+        state.model_list = {}
         state.connected = false
-        state.connection_error = true
+        state.error = true
     },
-    DISCONNECT_SUCCESS(state) {
+    DISCONNECT_SUCCESS() {
         state = defaultState()
     },
     START_CONNECTION(state) {
@@ -33,9 +52,21 @@ const mutations = {
 }
 
 const actions = {
-    CONNECT({ commit }) {
+    CONNECT({ commit }, conf) {
+        if (null === sequelize_instance) {
+            conf = conf || this.$configuration.get('database')
+            
+            if (undefined === conf)
+            {
+                this.$notify.error("Impossible de se connecter à la base de données. Aucune configuration trouvée.")
+                commit("CONNECTION_ERROR")
+                return Promise.reject()
+            }
+            commit("SEQUELIZE_INSTANCE", conf)
+        }
+
         commit("START_CONNECTION")
-        return sequelize.authenticate()
+        return sequelize_instance.authenticate()
             .then(() => commit("CONNECTION_SUCCESS"))
             .catch(() => {
                 commit("CONNECTION_ERROR")
@@ -44,7 +75,7 @@ const actions = {
             .finally(() => commit("STOP_CONNECTION"))
     },
     DISCONNECT({ commit }) {
-        return sequelize.close()
+        return sequelize_instance.close()
             .then(() => commit("DISCONNECT_SUCCESS"))
             .catch(() => this.$notify.error("Un problème est survenue lors de la déconnexion à la base de donnée"))
     }

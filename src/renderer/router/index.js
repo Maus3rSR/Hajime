@@ -7,7 +7,6 @@ export default new Router({
   routes: [
         {
             // Software contain the default layout
-            // We will be able to set a route (not children) like '/login' with a completely different layout in the future
             path: '/',
             component: require('@components/layouts/software').default,
             meta: {

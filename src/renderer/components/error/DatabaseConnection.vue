@@ -3,14 +3,14 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
     computed: {
-        ...mapState({
-            is_db_connected: state => state.db_connected,
-            is_db_connecting: state => state.db_is_connecting
+        ...mapState('database', {
+            is_db_connected: state => state.connected,
+            is_db_connecting: state => state.is_connecting
         })
     },
     methods: {
         ...mapActions({
-            connect: "CONNECT_DATABASE"
+            connect: "database/CONNECT"
         })
     },
     watch: {

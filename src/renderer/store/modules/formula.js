@@ -1,7 +1,3 @@
-import { mapModel } from '@root/database'
-
-const FormulaModel = mapModel('Formula')
-
 const state = {
     loading: false,
     list: []
@@ -31,8 +27,8 @@ const mutations = {
 }
 
 const actions = {
-    LOAD_ALL({ commit }) {
-        let promise = FormulaModel.findAll({ raw: true })
+    LOAD_ALL({ commit, rootGetters }) {
+        let promise = rootGetters["database/getModel"]("Formula").findAll({ raw: true })
 
         promise
             .then(formula_list => commit("SET_LIST", formula_list))

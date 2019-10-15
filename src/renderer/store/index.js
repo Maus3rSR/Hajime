@@ -23,6 +23,4 @@ store.$notify = Vue.notify
 store.$pdf = Vue.pdf
 store.$configuration = Vue.configuration
 
-// store.dispatch("CONNECT_DATABASE") // Auto connect
-
 export default store

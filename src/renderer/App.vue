@@ -1,31 +1,27 @@
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 const { ipcRenderer } = require('electron')
 
 export default {
     name: 'ASKC',
     computed: {
-        ...mapGetters({
-            db_error: "database/not_connected_by_error"
+        ...mapState('database', {
+            is_db_connected: "connected"
         })
     },
     methods: {
         ...mapActions({
+            connectDb: "database/CONNECT",
             disconnectDb: "database/DISCONNECT"
         })
-    },
-    watch: {
-        db_error(db_error) {
-            if (db_error === false)
-                return
-
-            this.$router.push('/dberror')
-        }
     },
     created() {
         if (undefined === this.$configuration.get('database') && !this.$route.path.includes('welcome'))
             this.$router.push('/welcome')
+
+        if (!this.is_db_connected)
+            this.connectDb().catch(() => this.$router.push('/error/db'))
 
         ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
     }

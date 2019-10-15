@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-    return sequelize.define('Team', {
+    const Model = sequelize.define('Team', {
         id: {
             type: DataTypes.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -21,4 +21,10 @@ export default function (sequelize, DataTypes) {
     }, {
         tableName: 'Team'
     })
+
+    Model.associate = models => {
+        Model.hasMany(models.Fighter, { as: 'fighter_list', foreignKey: 'team_id' })
+    }
+
+    return Model
 }

@@ -1,5 +1,5 @@
 export default function (sequelize, Sequelize) {
-    return sequelize.define('CompetitionFormula', {
+    const Model = sequelize.define('CompetitionFormula', {
         competition_id: {
             type: Sequelize.INTEGER(10).UNSIGNED,
             allowNull: false,
@@ -15,4 +15,11 @@ export default function (sequelize, Sequelize) {
     }, {
         tableName: 'CompetitionFormula'
     })
+
+    Model.associate = models => {
+        Model.hasOne(models.PoolConfiguration, { as: 'pool_configuration', foreignKey: 'competition_formula_id' })
+        Model.hasOne(models.TreeConfiguration, { as: 'tree_configuration', foreignKey: 'competition_formula_id' })
+    }
+
+    return Model
 }
