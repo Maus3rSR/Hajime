@@ -8,7 +8,16 @@ export default {
     computed: {
         ...mapState('database', {
             is_db_connected: "connected"
-        })
+        }),
+        on_welcome_page() {
+            return this.$route.path.includes('welcome')
+        },
+        redirect_to_error_db() {
+            return !this.is_db_connected && !this.on_welcome_page
+        },
+        is_database_configuration_empty() {
+            return undefined === this.$configuration.get('database')
+        }
     },
     methods: {
         ...mapActions({
@@ -19,13 +28,9 @@ export default {
     created() {
         ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
 
-        if (undefined === this.$configuration.get('database') && !this.$route.path.includes('welcome'))
-        {
+        if (this.is_database_configuration_empty && !this.on_welcome_page)
             this.$router.push('/welcome')
-            return
-        }
-
-        if (!this.is_db_connected)
+        else if (redirect_to_error_db)
             this.connectDb().catch(() => this.$router.push('/error/db'))
     }
 }

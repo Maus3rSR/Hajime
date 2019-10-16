@@ -197,7 +197,7 @@ export default {
                             <button class="btn btn-outline-warning text-uppercase float-right" v-if="is_db_external && !is_db_connected" @click="testConnexion">
                                 <transition name="fade" mode="out-in">
                                     <i v-if="!is_db_connecting" class="zmdi zmdi-flash-off"></i>
-                                    <clip-loader v-else :size="'14px'" color="#ffc107"></clip-loader>
+                                    <clip-loader v-else :size="'14px'" color="#000000"></clip-loader>
                                 </transition>
                                 Tester la connexion
                             </button>
