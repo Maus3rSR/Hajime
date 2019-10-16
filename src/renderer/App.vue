@@ -30,7 +30,7 @@ export default {
 
         if (this.is_database_configuration_empty && !this.on_welcome_page)
             this.$router.push('/welcome')
-        else if (redirect_to_error_db)
+        else if (this.redirect_to_error_db)
             this.connectDb().catch(() => this.$router.push('/error/db'))
     }
 }
