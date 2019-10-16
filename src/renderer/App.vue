@@ -17,13 +17,16 @@ export default {
         })
     },
     created() {
+        ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
+
         if (undefined === this.$configuration.get('database') && !this.$route.path.includes('welcome'))
+        {
             this.$router.push('/welcome')
+            return
+        }
 
         if (!this.is_db_connected)
             this.connectDb().catch(() => this.$router.push('/error/db'))
-
-        ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
     }
 }
 </script>

@@ -75,6 +75,9 @@ const actions = {
             .finally(() => commit("STOP_CONNECTION"))
     },
     DISCONNECT({ commit }) {
+        if (null === sequelize_instance)
+            return Promise.resolve()
+
         return sequelize_instance.close()
             .then(() => commit("DISCONNECT_SUCCESS"))
             .catch(() => this.$notify.error("Un problème est survenue lors de la déconnexion à la base de donnée"))
