@@ -28,7 +28,7 @@ export default {
             <h4 class="card-title">Poule N° {{ pool.number }}</h4>
 
             <transition-group name="list" tag="ul">
-                <li class="list-item" v-for="pool_entry in pool_entry_list" :key="pool_entry.id+'_'+pool_entry.number">
+                <li class="list-item" v-for="pool_entry in pool_entry_list" :key="pool_entry.entriable_id+'_'+pool_entry.number">
                     <span class="pool-id">
                         {{ pool.number }}.{{ pool_entry.number }}
                     </span>
