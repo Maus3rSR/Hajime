@@ -6,7 +6,8 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
+    "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
+    "postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "appId": "com.askc.app",
@@ -30,15 +31,11 @@
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.4",
     "luxon": "^1.17.3",
-    "mariadb": "^2.1.1",
     "material-design-iconic-font": "^2.2.0",
-    "mysql": "^2.17.1",
     "node-sass": "^4.12.0",
     "papaparse": "^4.6.2",
     "sass-loader": "^7.1.0",
-    "sequelize": "^5.18.4",
     "source-map-support": "^0.5.9",
-    "sqlite3": "^4.1.0",
     "upath": "^1.0.5",
     "url-loader": "^2.2.0",
     "uuid": "^3.3.2",
@@ -60,5 +57,11 @@
   },
   "resolutions": {
     "upath": "^1.0.5"
+  },
+  "dependencies": {
+    "mariadb": "^2.1.1",
+    "mysql": "^2.17.1",
+    "sequelize": "^5.19.6",
+    "sqlite3": "^4.1.0"
   }
 }

@@ -1,6 +1,4 @@
 const path = require('path')
-// const webpack = require('webpack')
-// const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
     resolve: {
@@ -23,15 +21,5 @@ module.exports = {
             }
         ]
     },
-    // plugins: [
-    //     new webpack.ContextReplacementPlugin(/Sequelize(\\|\/)/, path.resolve(__dirname, '../src'))
-    // ],
-    // externals: [nodeExternals({
-    //     modulesFromFile: {
-    //         exclude: [/* sections to exclude, i.e 'devDependencies' */],
-    //         include: ['devDependencies']
-    //     }
-    // })]
-    // externals: ["pg", "tedious", "pg-hstore", "mssql"]
-    externals: ["sequelize"]
+    externals: ["pg", "tedious", "pg-hstore", "mssql"]
 }

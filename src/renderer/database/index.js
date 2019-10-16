@@ -1,18 +1,31 @@
+import { join } from 'path'
 import Sequelize from 'sequelize'
 import model_definition_list from './models'
 
+const app = require('electron').remote.app
 const TZ = "Etc/GMT-2"
 
 const CreateSequelizeInstance = conf => {
     if (undefined === conf)
         throw new Error("[CreateSequelizeInstance] configuration is undefined")
 
+    let options = {
+        dialectOptions: { timezone: TZ }, // TODO : voir s'il faut pas laisser par défault la bdd faire comme il le fait par défaut... pour rendre l'application utilisable à différents endroits du globe
+        timezone: TZ // TODO : Dynamique par rapport à la localisation du client ?
+    }
+
+    if (conf.type === 'local')
+    {
+        conf.connection = {
+            dialect: 'sqlite',
+            storage: join(app.getPath("userData"), "db.sqlite")
+        }
+        options = {}
+    }
+
     const sequelize = new Sequelize({
         ...conf.connection,
-        timezone: TZ, // TODO : Dynamique par rapport à la localisation du client ?
-        dialectOptions: {
-            timezone: TZ // TODO : voir s'il faut pas laisser par défault la bdd faire comme il le fait par défaut... pour rendre l'application utilisable à différents endroits du globe
-        },
+        ...options,
         define: {
             paranoid: true,
             underscored: true,
