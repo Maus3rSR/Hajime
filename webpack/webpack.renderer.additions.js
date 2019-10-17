@@ -5,6 +5,7 @@ module.exports = {
         alias: {
             '@src': path.join(__dirname, '../src'),
             '@root': path.join(__dirname, '../src/renderer'),
+            '@database': path.join(__dirname, '../src/renderer/database'),
             '@components': path.join(__dirname, '../src/renderer/components'),
             '@partials': path.join(__dirname, '../src/renderer/components/partials'),
             '@themes': path.join(__dirname, '../src/renderer/themes'),

@@ -31,6 +31,7 @@ export default {
         return {
             database: {
                 type: "local",
+                already_initialized: false,
                 connection: {
                     dialect: "mariadb",
                     host: "127.0.0.1",
@@ -50,19 +51,19 @@ export default {
         <section class="welcome">
             <div class="welcome__inner">
                 <h2>Bienvenue sur le logiciel ASKC, Kenshi</h2>
-                <p>C'est la première fois que tu utilises cette application, il faut que tu nous indiques comment nous gérerons les données</p>
+                <p>C'est la première fois que tu utilises cette application, il faut que tu nous indiques comment fonctionnera le logiciel</p>
+                <hr/>
 
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <span class="card-body__title">Type de base de données</span>
                             <div class="clearfix mt-3">
                                 <label class="custom-control custom-radio">
 
                                     <input type="radio" name="database__type" value="local" v-model="database.type" class="custom-control-input">
                                     
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Locale (recommandé)</span>
+                                    <span class="custom-control-description">Mono-instance</span>
                                 </label>
 
                                 <label class="custom-control custom-radio">
@@ -70,7 +71,7 @@ export default {
                                     <input type="radio" name="database__type" value="external" v-model="database.type" class="custom-control-input">
                                     
                                     <span class="custom-control-indicator"></span>
-                                    <span class="custom-control-description">Externe (pour utilisateurs avancés)</span>
+                                    <span class="custom-control-description">Multi-instance (pour utilisateurs avancés)</span>
                                 </label>
                                 <i class="form-group__bar"></i>
                             </div>
@@ -80,6 +81,35 @@ export default {
 
                 <transition name="fade" mode="out-in">
                     <div class="row" v-if="database.type === 'external'">
+                        <div class="col-sm-12">
+                            <p>Dans le cas d'une utilisation multi-instance, tu dois nous indiquer où aller chercher les données</p>
+                            <hr/>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="card-body__title">
+                                    <span class="badge badge-danger">IMPORTANT</span>
+                                    La base de données a déjà été initialisée par une autre instance du logiciel
+                                </span>
+                                <div class="clearfix mt-3">
+                                    <label class="custom-control custom-radio">
+                                        <input type="radio" name="database__already_initialized" value="false" v-model="database.already_initialized" class="custom-control-input">
+                                        
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Non</span>
+                                    </label>
+
+                                    <label class="custom-control custom-radio">
+                                        <input type="radio" name="database__already_initialized" value="true" v-model="database.already_initialized" class="custom-control-input">
+                                        
+                                        <span class="custom-control-indicator"></span>
+                                        <span class="custom-control-description">Oui</span>
+                                    </label>
+                                    <i class="form-group__bar"></i>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <span class="card-body__title">Langage</span>
