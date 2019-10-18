@@ -14,48 +14,52 @@ export default {
             return this.$route.path.includes('welcome')
         },
         on_app_update_page() {
-            return this.$route.path.includes('app_update')
-        },
-        can_try_connection() {
-            return !this.is_db_connected && !this.on_welcome_page
-        },
-        is_database_configuration_empty() {
-            return undefined === this.$configuration.get('database')
-        },
-        is_first_entry_on_app() {
-            return this.is_database_configuration_empty && !this.on_welcome_page
-        },
-        has_app_version() {
-            return undefined !== this.$configuration.get('app_version')
-        },
-        is_app_version_same() {
-            return this.$configuration.get('app_version') === appVersion
-        },
-        is_app_update_needed() {
-            return !this.is_app_version_same && !this.on_app_update_page
+            return this.$route.path.includes('app/update')
         }
     },
     methods: {
         ...mapActions({
             connectDb: "database/CONNECT",
             disconnectDb: "database/DISCONNECT"
-        })
+        }),
+        canTryConnection() {
+            return !this.isAppFirstEntry() && !this.is_db_connected && !this.on_welcome_page
+        },
+        isDatabaseConfigurationEmpty() {
+            return undefined === this.$configuration.get('database')
+        },
+        isAppFirstEntry() {
+            return this.isDatabaseConfigurationEmpty()
+        },
+        isAppUpdateNeeded() {
+            return !this.isAppFirstEntry() && !this.isAppVersionUpdated()
+        },
+        isAppVersionUpdated() {
+            return this.$configuration.get('app_version') === appVersion
+        },
+        hasAppVersion() {
+            return undefined !== this.$configuration.get('app_version')
+        },
+        check() {
+            if (!this.on_app_update_page && this.isAppUpdateNeeded())
+                this.$router.push('/app/update')
+            else if (this.canTryConnection())
+                this.connectDb().catch(() => this.$router.push('/error/db'))
+        }
     },
     created() {
         ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
 
-        if (this.is_first_entry_on_app)
+        if (this.isAppFirstEntry())
             this.$router.push('/welcome')
-        else if (this.can_try_connection)
-            this.connectDb().catch(() => this.$router.push('/error/db'))
-    }
+    },
+    mounted() { this.check() },
+    updated() { this.check() }
 }
 </script>
 
 <template>
-    <transition :name="fade" mode="out-in" appear>
-        <router-view></router-view>
-    </transition>
+    <router-view></router-view>
 </template>
 
 <style lang="scss">
