@@ -14,13 +14,13 @@ export default {
     },
     methods: {
         ...mapActions({
-            connect: "database/CONNECT"
+            test_connection: "database/TEST_CONNECTION"
         }),
         testConnexion() {
             if (!this.is_db_external)
                 return
 
-            this.connect(this.database)
+            this.test_connection(this.database)
         },
         save() {
             this.$configuration.set("database", this.database)

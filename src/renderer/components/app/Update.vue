@@ -1,5 +1,7 @@
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
+
+const appVersion = require('electron').remote.app.getVersion() 
 
 export default {
     computed: {
@@ -7,13 +9,63 @@ export default {
             is_db_connected: "connected",
             is_db_connecting: "is_connecting"
         }),
-        is_db_already_initialized() {
-            return this.$configuration.get('database.already_initialized')
+        ...mapState("database/migration", {
+            migration_initialized: "initialized",
+            migrating: "migrating",
+            migration_error: "error",
+        }),
+        ...mapGetters({
+            migrationOn: "database/migration/on",
+            getPending: "database/migration/pending",
+            getExecuted: "database/migration/executed"
+        }),
+        applied_migration_percent() {
+            return this.applied_migration / this.migration_pending * 100
         }
     },
-    methods: {},
+    methods: {
+        ...mapActions({
+            ignore_migration: "database/migration/IGNORE_MIGRATION",
+            migrate: "database/migration/MIGRATE"
+        }),
+        isDbAlreadyInitialized() {
+            return this.$configuration.get('database.already_initialized')
+        },
+        validate() {
+            this.$configuration.set("app_version", app_version)
+            this.$router.push('/')
+        }
+    },
+    watch: {
+        migration_initialized: {
+            handler: function(init) {
+                if (!init || this.migrating)
+                    return
+
+                this.migration_pending = this.getPending()
+                this.migration_executed = this.getExecuted()
+                this.migrationOn("migrating", () => this.applied_migration++)
+
+                if (this.migration_pending === 0) {
+                    this.validate()
+                    return
+                }
+
+                if (this.migration_executed === 0 && this.isDbAlreadyInitialized())
+                    this.ignore_migration().then(this.validate)
+                else
+                    this.migrate().then(this.validate)
+            },
+            deep: true,
+            immediate: true
+        }
+    },
     data() {
-        return {}
+        return {
+            applied_migration: 0,
+            migration_pending: 0,
+            migration_executed: 0,
+        }
     }
 }
 </script>
@@ -22,14 +74,26 @@ export default {
     <main id="app_update" class="main" data-sa-theme="1">
         <section class="app_update">
             <div class="app_update__inner">
-                <h1>
-                    <span v-if="is_db_connecting">
-                        Connexion...
+                <transition name="fade" mode="out-in" appear>
+                    <span v-if="!migration_error">
+                        <h1 v-if="is_db_connecting">Connexion...</h1>
+                        <h1 v-else>
+                            Application des mises à jour...
+                            <span v-if="migration_pending">
+                                {{ applied_migration }} / {{ migration_pending }}
+                            </span>
+                        </h1>
+                        <clip-loader color="#ffffff"></clip-loader>
+
+                        <div class="progress mb-4" v-if="migration_pending">
+                            <div class="progress-bar bg-primary" role="progressbar" :style="{ width: applied_migration_percent+'%' }"></div>
+                        </div>
                     </span>
                     <span v-else>
-                        Application des mises à jour...
+                        <h1>Oops... :(</h1>
+                        <h2>Une erreur est survenue lors de la mise à jour du logiciel.</h2>
                     </span>
-                </h1>
+                </transition>
             </div>
         </section>
     </main>

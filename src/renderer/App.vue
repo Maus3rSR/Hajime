@@ -23,7 +23,7 @@ export default {
             disconnectDb: "database/DISCONNECT"
         }),
         canTryConnection() {
-            return !this.isAppFirstEntry() && !this.is_db_connected && !this.on_welcome_page
+            return !this.isAppFirstEntry() && !this.is_db_connected
         },
         isDatabaseConfigurationEmpty() {
             return undefined === this.$configuration.get('database')
@@ -43,14 +43,14 @@ export default {
         check() {
             if (!this.on_app_update_page && this.isAppUpdateNeeded())
                 this.$router.push('/app/update')
-            else if (this.canTryConnection())
+            else if (!this.on_welcome_page && this.canTryConnection())
                 this.connectDb().catch(() => this.$router.push('/error/db'))
         }
     },
     created() {
         ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
 
-        if (this.isAppFirstEntry())
+        if (this.isAppFirstEntry() && !this.on_welcome_page)
             this.$router.push('/welcome')
     },
     mounted() { this.check() },
