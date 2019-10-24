@@ -4,9 +4,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
     computed: {
         ...mapState("database", {
-            is_db_connected: "connected",
             is_db_connecting: "is_connecting",
-            db_error: "error"
         }),
         is_db_external() {
             return this.database.type === 'external'
@@ -20,7 +18,7 @@ export default {
             if (!this.is_db_external)
                 return
 
-            this.test_connection(this.database)
+            this.test_connection(this.database).then(() => this.is_db_connected = true)
         },
         save() {
             this.$configuration.set("database", this.database)
@@ -29,9 +27,9 @@ export default {
     },
     data() {
         return {
+            is_db_connected: false,
             database: {
                 type: "local",
-                already_initialized: false,
                 connection: {
                     dialect: "mariadb",
                     host: "127.0.0.1",
@@ -85,31 +83,6 @@ export default {
                             <p>Dans le cas d'une utilisation multi-instance, tu dois nous indiquer où aller chercher les données</p>
                             <hr/>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <span class="card-body__title">
-                                    <span class="badge badge-danger">IMPORTANT</span>
-                                    La base de données a déjà été initialisée par une autre instance du logiciel
-                                </span>
-                                <div class="clearfix mt-3">
-                                    <label class="custom-control custom-radio">
-                                        <input type="radio" name="database__already_initialized" value="false" v-model="database.already_initialized" class="custom-control-input">
-                                        
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Non</span>
-                                    </label>
-
-                                    <label class="custom-control custom-radio">
-                                        <input type="radio" name="database__already_initialized" value="true" v-model="database.already_initialized" class="custom-control-input">
-                                        
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Oui</span>
-                                    </label>
-                                    <i class="form-group__bar"></i>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <span class="card-body__title">Langage</span>

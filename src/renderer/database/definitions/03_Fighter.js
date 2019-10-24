@@ -3,6 +3,9 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Fighter",
+    options: {
+        indexes: [{ fields: ['competition_id', 'license'], unique: true }]
+    },
     getDefinition: with_timestamp => {
         return {
             id: {
@@ -14,7 +17,6 @@ export default {
             competition_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                unique: 'license_unique',
                 references: {
                     model: 'Competition',
                     key: 'id'
@@ -24,14 +26,13 @@ export default {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: true,
                 references: {
-                    model: 'CompetitionTeam',
+                    model: 'Team',
                     key: 'id'
                 }
             },
             license: {
                 type: Sequelize.STRING(16),
                 allowNull: false,
-                unique: 'license_unique',
                 validate: {
                     len: {
                         args: [1,16],

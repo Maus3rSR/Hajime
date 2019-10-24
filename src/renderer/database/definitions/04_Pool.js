@@ -2,7 +2,10 @@ import Sequelize from 'sequelize'
 import timestamp_definition from './timestamp'
 
 export default {
-    name: "Meta",
+    name: "Pool",
+    options: {
+        indexes: [{ fields: ['competition_formula_id', 'number'], unique: true }]
+    },
     getDefinition: with_timestamp => {
         return {
             id: {
@@ -11,28 +14,22 @@ export default {
                 primaryKey: true,
                 autoIncrement: true
             },
-            metaable_id: {
+            competition_formula_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                unique: 'meta_unique'
+                references: {
+                    model: 'CompetitionFormula',
+                    key: 'id'
+                }
             },
-            metaable: {
-                type: Sequelize.STRING(45),
+            number: {
+                type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                unique: 'meta_unique'
-            },
-            key: {
-                type: Sequelize.STRING(255),
-                allowNull: false,
-                unique: 'meta_unique'
-            },
-            value: {
-                type: Sequelize.STRING(255),
-                allowNull: false,
-                unique: 'meta_unique'
             },
             ...with_timestamp && timestamp_definition
         }
     },
-    // getAssociation: Model => model_list => {}
+    getAssociation: Model => model_list => {
+        Model.hasMany(model_list.PoolEntry, { as: 'entry_list', foreignKey: 'pool_id' })
+    }
 }

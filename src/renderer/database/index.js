@@ -43,6 +43,7 @@ const CreateSequelizeInstance = conf => {
     const model_list = {}
     Object.keys(model_definition_list).forEach(modelName => { // Define all models
         const model_def = model_definition_list[modelName]
+
         const Model = sequelize.define(model_def.name, model_def.getDefinition(), { 
             tableName: model_def.name,
             ...model_def.options
@@ -51,7 +52,7 @@ const CreateSequelizeInstance = conf => {
         if (undefined !== model_def.getAssociation)
             Model.associate = model_def.getAssociation(Model)
 
-            model_list[modelName] = Model
+        model_list[model_def.name] = Model
     })
 
     Object.keys(model_list).forEach(modelName => { // Associate all models

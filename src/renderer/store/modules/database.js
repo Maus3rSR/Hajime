@@ -63,11 +63,7 @@ const actions = {
         const promise = sequelize_instance.authenticate()
         
         promise
-            .then(() => commit("CONNECTION_SUCCESS"))
-            .catch(() => {
-                commit("CONNECTION_ERROR")
-                this.$notify.error("Un problème est survenue lors de la connexion à la base de donnée")
-            })
+            .catch(() => this.$notify.error("Un problème est survenue lors de la connexion à la base de donnée"))
             .finally(() => commit("STOP_CONNECTION"))
         
         return promise
@@ -75,13 +71,16 @@ const actions = {
     TEST_CONNECTION({ dispatch, commit }, conf) {
         if (undefined === conf)
         {
-            this.$notify.error("Impossible de se connecter à la base de données. Aucune configuration trouvée.")
-            commit("CONNECTION_ERROR")
+            this.$notify.error("Impossible de tester la connexion à la base de données. La configuration est vide.")
             return Promise.reject()
         }
         commit("INIT", conf)
 
-        return dispatch("AUTHENTICATE")
+        const promise = dispatch("AUTHENTICATE")
+
+        promise.catch(() => this.$notify.error("Le test de connexion à la base de données a échoué."))
+
+        return promise
     },
     CONNECT({ dispatch, commit }) {
         if (null === sequelize_instance) {
@@ -96,8 +95,16 @@ const actions = {
             commit("INIT", conf)
         }
 
-        return dispatch("AUTHENTICATE").then(() => dispatch("migration/INIT", sequelize_instance))
+        const promise = dispatch("AUTHENTICATE")
 
+        promise
+            .then(() => {
+                commit("CONNECTION_SUCCESS")
+                return dispatch("migration/INIT", sequelize_instance)
+            })
+            .catch(() => commit("CONNECTION_ERROR"))
+
+        return promise
     },
     DISCONNECT({ commit }) {
         if (null === sequelize_instance)

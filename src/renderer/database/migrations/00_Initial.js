@@ -1,31 +1,27 @@
 import definition_list from '@database/definitions'
 
+const getPromise = (queryInterface, definition) => queryInterface.createTable(definition.name, definition.getDefinition(true))
+
 export default {
-    up: query => {
-        return new Promise((resolve, reject) => {
-            let table_create_promise_list = []
-            Object.keys(definition_list).forEach(def_name => {
-                const def = definition_list[def_name]
-                table_create_promise_list.push(query.createTable('def.name', def.getDefinition(true)))
-            })
+    up: queryInterface => {
+        const insert_data = [{
+            name: "Matchs de poule",
+            component_list: JSON.stringify(["Pool"])
+        }, {
+            name: "Arbre éliminatoire",
+            component_list: JSON.stringify(["Tree"])
+        }, {
+            name: "Matchs de poule & Arbre éliminatoire",
+            component_list: JSON.stringify(["Pool", "Tree"])
+        }]
 
-            table_create_promise_list.push(
-                query.bulkInsert('Formula', [{
-                    name: "Matchs de poule",
-                    component_list: JSON.stringify(["Pool"])
-                }, {
-                    name: "Arbre éliminatoire",
-                    component_list: JSON.stringify(["Tree"])
-                }, {
-                    name: "Matchs de poule & Arbre éliminatoire",
-                    component_list: JSON.stringify(["Pool", "Tree"])
-                }])
-            )
+        const definition_name_list = Object.keys(definition_list)
 
-            Promise.all(table_create_promise_list)
-                .then(resolve)
-                .reject(reject)
-        })
+        let promise = getPromise(queryInterface, definition_list[definition_name_list[0]])
+        for (let i = 1; i < definition_name_list.length; i++)
+            promise = promise.then(() => getPromise(queryInterface, definition_list[definition_name_list[i]]))
+
+        return promise.then(() => queryInterface.bulkInsert('Formula', insert_data))
     },
-    down: query => query.dropAllTables()
+    down: queryInterface => queryInterface.dropAllTables()
 }

@@ -4,7 +4,10 @@ import timestamp_definition from './timestamp'
 export default {
     name: "PoolEntry",
     options: {
-        indexes: [{ fields: ['pool_id', 'entriable_id', 'entriable'], unique: true }]
+        indexes: [
+            { fields: ['pool_id', 'entriable_id', 'entriable'], unique: true },
+            { fields: ['pool_id', 'number'], unique: true }
+        ]
     },
     getDefinition: with_timestamp => {
         return {
@@ -17,7 +20,6 @@ export default {
             pool_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                unique: 'pool_entry_number_unique',
                 references: {
                     model: 'Pool',
                     key: 'id'
@@ -26,7 +28,6 @@ export default {
             number: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                unique: 'pool_entry_number_unique'
             },
             entriable_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,

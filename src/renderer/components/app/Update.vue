@@ -28,11 +28,8 @@ export default {
             ignore_migration: "database/migration/IGNORE_MIGRATION",
             migrate: "database/migration/MIGRATE"
         }),
-        isDbAlreadyInitialized() {
-            return this.$configuration.get('database.already_initialized')
-        },
         validate() {
-            this.$configuration.set("app_version", app_version)
+            this.$configuration.set("app_version", appVersion)
             this.$router.push('/')
         }
     },
@@ -51,10 +48,7 @@ export default {
                     return
                 }
 
-                if (this.migration_executed === 0 && this.isDbAlreadyInitialized())
-                    this.ignore_migration().then(this.validate)
-                else
-                    this.migrate().then(this.validate)
+                this.migrate().then(this.validate)
             },
             deep: true,
             immediate: true

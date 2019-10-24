@@ -1,4 +1,4 @@
-import { join } from 'path'
+import * as path from 'path'
 import Umzug from 'umzug'
 import Sequelize from 'sequelize'
 
@@ -14,17 +14,14 @@ const CreateUmzugInstance = sequelize => {
                 Sequelize, // DataTypes
                 () => { throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.') }
             ],
-            path: join(__dirname, "migrations"),
-            pattern: /\.js$/
+            path: path.join(__dirname, "migrations"),
+            pattern: /\.js$/,
+            customResolver: migrationFile => require(`./migrations/${path.basename(migrationFile, '.js')}`)
         },
         logging: (process.env.NODE_ENV !== 'production' ? console.log : false),
     })
 
-    const status = () => new Promise((resolve, reject) =>
-        Promise.all([umzug.executed(), umzug.pending()])
-            .then(res => resolve({ executed: res[0], pending: res[1] }))
-            .catch(error => reject(error))
-    )
+    const status = () => Promise.all([umzug.executed(), umzug.pending()]).then(res => ({ executed: res[0], pending: res[1] }))
     const logUmzugEvent = eventName => (name, migration) => console.log(`${ name } ${ eventName }`)
 
     umzug.on('migrating', logUmzugEvent('migrating'))
