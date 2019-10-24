@@ -5,6 +5,12 @@ export default {
     name: "Competition",
     getDefinition: with_timestamp => {
         return {
+            id: {
+                type: Sequelize.INTEGER(10).UNSIGNED,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true
+            },
             choosen_formula_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,

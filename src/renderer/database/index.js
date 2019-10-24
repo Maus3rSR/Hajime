@@ -45,7 +45,7 @@ const CreateSequelizeInstance = conf => {
         const model_def = model_definition_list[modelName]
         const Model = sequelize.define(model_def.name, model_def.getDefinition(), { 
             tableName: model_def.name,
-            ...model_def.timestamps && { timestamps: model_def.timestamps }
+            ...model_def.options
         })
     
         if (undefined !== model_def.getAssociation)

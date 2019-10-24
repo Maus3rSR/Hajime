@@ -14,6 +14,7 @@ export default {
             competition_formula_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
+                unique: 'pool_number_unique',
                 references: {
                     model: 'CompetitionFormula',
                     key: 'id'
@@ -21,7 +22,8 @@ export default {
             },
             number: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: false
+                allowNull: false,
+                unique: 'pool_number_unique'
             },
             ...with_timestamp && timestamp_definition
         }

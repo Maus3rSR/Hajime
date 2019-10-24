@@ -3,9 +3,17 @@ import Sequelize from 'sequelize'
 
 export default {
     name: "Formula",
-    timestamps: false,
+    options: {
+        timestamps: false
+    },
     getDefinition: (/* with_timestamp */) => {
         return {
+            id: {
+                type: Sequelize.INTEGER(10).UNSIGNED,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true
+            },
             name: {
                 type: Sequelize.STRING(45),
                 allowNull: false

@@ -5,9 +5,16 @@ export default {
     name: "Fighter",
     getDefinition: with_timestamp => {
         return {
+            id: {
+                type: Sequelize.INTEGER(10).UNSIGNED,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true
+            },
             competition_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
+                unique: 'license_unique',
                 references: {
                     model: 'Competition',
                     key: 'id'
@@ -24,7 +31,7 @@ export default {
             license: {
                 type: Sequelize.STRING(16),
                 allowNull: false,
-                unique: true,
+                unique: 'license_unique',
                 validate: {
                     len: {
                         args: [1,16],
