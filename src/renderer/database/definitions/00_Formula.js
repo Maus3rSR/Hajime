@@ -4,7 +4,19 @@ import Sequelize from 'sequelize'
 export default {
     name: "Formula",
     options: {
-        timestamps: false
+        timestamps: false,
+        hooks: {
+            afterFind: formula_list => (formula_list
+                .map(formula => {
+                    if (Array.isArray(formula.component_list))
+                        return formula
+
+                    formula.component_list = JSON.parse(formula.component_list)
+
+                    return formula
+                })
+            )
+        }
     },
     getDefinition: (/* with_timestamp */) => {
         return {

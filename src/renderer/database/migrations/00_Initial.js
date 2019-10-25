@@ -27,7 +27,7 @@ export default {
         for (let i = 1; i < name_list.length; i++)
             promise = promise.then(() => getCreateTablePromise(queryInterface, definition_list[name_list[i]]))
             
-        name_list.forEach(name => { // Add constraints
+        name_list.forEach(name => { // Chaining promise to create tables constraints in order
             const def = definition_list[name]
             
             if (undefined === def.constraint_list)
