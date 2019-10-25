@@ -2,6 +2,7 @@
 import { mapState, mapActions } from 'vuex'
 
 const { ipcRenderer } = require('electron')
+const appVersion = require('electron').remote.app.getVersion() 
 
 export default {
     name: 'ASKC',
@@ -12,26 +13,51 @@ export default {
         on_welcome_page() {
             return this.$route.path.includes('welcome')
         },
-        redirect_to_error_db() {
-            return !this.is_db_connected && !this.on_welcome_page
-        },
-        is_database_configuration_empty() {
-            return undefined === this.$configuration.get('database')
+        on_app_update_page() {
+            return this.$route.path.includes('app/update')
         }
     },
     methods: {
         ...mapActions({
             connectDb: "database/CONNECT",
             disconnectDb: "database/DISCONNECT"
-        })
+        }),
+        canTryConnection() {
+            return !this.isAppFirstEntry() && !this.is_db_connected
+        },
+        isDatabaseConfigurationEmpty() {
+            return undefined === this.$configuration.get('database')
+        },
+        isAppFirstEntry() {
+            return this.isDatabaseConfigurationEmpty()
+        },
+        isAppUpdateNeeded() {
+            return !this.isAppFirstEntry() && !this.isAppVersionUpdated()
+        },
+        isAppVersionUpdated() {
+            return this.$configuration.get('app_version') === appVersion
+        },
+        hasAppVersion() {
+            return undefined !== this.$configuration.get('app_version')
+        },
+        checkDbConnection() {
+            if (!this.on_welcome_page && this.canTryConnection())
+                this.connectDb().catch(() => this.$router.push('/error/db'))
+        }
     },
     created() {
         ipcRenderer.on('app-close', () => this.disconnectDb().then(() => ipcRenderer.send('closed')))
 
-        if (this.is_database_configuration_empty && !this.on_welcome_page)
+        if (this.isAppFirstEntry() && !this.on_welcome_page)
             this.$router.push('/welcome')
-        else if (this.redirect_to_error_db)
-            this.connectDb().catch(() => this.$router.push('/error/db'))
+    
+        if (!this.on_app_update_page && this.isAppUpdateNeeded())
+            this.$router.push('/app/update')
+        
+        this.checkDbConnection()
+    },
+    updated() {
+        this.checkDbConnection()
     }
 }
 </script>

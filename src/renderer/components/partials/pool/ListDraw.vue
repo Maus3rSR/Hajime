@@ -121,7 +121,7 @@ export default {
                 </button>
 
                 <div class="progress mb-4" v-else>
-                    <div class="progress-bar bg-primary" role="progressbar" :style="{ width: this.draw_lot_progress+'%' }"></div>
+                    <div class="progress-bar bg-primary" role="progressbar" :style="{ width: draw_lot_progress+'%' }"></div>
                 </div>
 
                 <transition name="fade">
