@@ -3,9 +3,7 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Pool",
-    options: {
-        indexes: [{ fields: ['competition_formula_id', 'number'], unique: true }]
-    },
+    constraint_list: [{ field_list: ['competition_formula_id', 'number'], key: { type: 'unique' } }],
     getDefinition: with_timestamp => {
         return {
             id: {

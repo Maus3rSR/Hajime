@@ -1,10 +1,18 @@
 import definition_list from '@database/definitions'
 
-const getPromise = (queryInterface, definition) => queryInterface.createTable(definition.name, definition.getDefinition(true))
+const getCreateTablePromise = (queryInterface, definition) => {
+    return queryInterface.createTable(definition.name, definition.getDefinition(true))
+}
+
+const getConstraintPromise = (queryInterface, table_name, constraint_option) => {
+    return queryInterface.addConstraint(table_name, constraint_option.field_list, constraint_option.key)
+}
 
 export default {
     up: queryInterface => {
-        const insert_data = [{
+
+        const name_list = Object.keys(definition_list)
+        const INSERT_DATA = [{
             name: "Matchs de poule",
             component_list: JSON.stringify(["Pool"])
         }, {
@@ -15,13 +23,20 @@ export default {
             component_list: JSON.stringify(["Pool", "Tree"])
         }]
 
-        const definition_name_list = Object.keys(definition_list)
+        let promise = getCreateTablePromise(queryInterface, definition_list[name_list[0]]) // Chaining promise to create tables in order
+        for (let i = 1; i < name_list.length; i++)
+            promise = promise.then(() => getCreateTablePromise(queryInterface, definition_list[name_list[i]]))
+            
+        name_list.forEach(name => { // Add constraints
+            const def = definition_list[name]
+            
+            if (undefined === def.constraint_list)
+                return
+            
+            def.constraint_list.forEach(constraint_option => promise = promise.then(() => getConstraintPromise(queryInterface, def.name, constraint_option)))
+        })
 
-        let promise = getPromise(queryInterface, definition_list[definition_name_list[0]])
-        for (let i = 1; i < definition_name_list.length; i++)
-            promise = promise.then(() => getPromise(queryInterface, definition_list[definition_name_list[i]]))
-
-        return promise.then(() => queryInterface.bulkInsert('Formula', insert_data))
+        return promise.then(() => queryInterface.bulkInsert('Formula', INSERT_DATA))
     },
     down: queryInterface => queryInterface.dropAllTables()
 }

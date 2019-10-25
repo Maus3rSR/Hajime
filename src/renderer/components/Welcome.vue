@@ -22,7 +22,7 @@ export default {
         },
         save() {
             this.$configuration.set("database", this.database)
-            this.$router.push('/')
+            this.$router.push('/app/update')
         }
     },
     data() {

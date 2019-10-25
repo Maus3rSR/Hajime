@@ -3,9 +3,7 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Fighter",
-    options: {
-        indexes: [{ fields: ['competition_id', 'license'], unique: true }]
-    },
+    constraint_list: [{ field_list: ['competition_id', 'license'], key: { type: 'unique' } }],
     getDefinition: with_timestamp => {
         return {
             id: {

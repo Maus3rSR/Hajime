@@ -3,9 +3,7 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Meta",
-    options: {
-        indexes: [{ fields: ['metaable_id', 'metaable', 'key', 'value'], unique: true }]
-    },
+    constraint_list: [{ field_list: ['metaable_id', 'metaable', 'key', 'value'], key: { type: 'unique' } }],
     getDefinition: with_timestamp => {
         return {
             id: {

@@ -3,12 +3,11 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "PoolEntry",
-    options: {
-        indexes: [
-            { fields: ['pool_id', 'entriable_id', 'entriable'], unique: true },
-            { fields: ['pool_id', 'number'], unique: true }
-        ]
-    },
+    constraint_list: [{
+        field_list: ['pool_id', 'entriable_id', 'entriable'], key: { type: 'unique' } 
+    }, {
+        field_list: ['pool_id', 'number'], key: { type: 'unique' } 
+    }],
     getDefinition: with_timestamp => {
         return {
             id: {

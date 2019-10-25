@@ -40,10 +40,7 @@ export default {
         hasAppVersion() {
             return undefined !== this.$configuration.get('app_version')
         },
-        check() {
-            if (!this.on_app_update_page && this.isAppUpdateNeeded())
-                this.$router.push('/app/update')
-            
+        checkDbConnection() {
             if (!this.on_welcome_page && this.canTryConnection())
                 this.connectDb().catch(() => this.$router.push('/error/db'))
         }
@@ -53,10 +50,15 @@ export default {
 
         if (this.isAppFirstEntry() && !this.on_welcome_page)
             this.$router.push('/welcome')
+    
+        if (!this.on_app_update_page && this.isAppUpdateNeeded())
+            this.$router.push('/app/update')
         
-        this.check()
+        this.checkDbConnection()
     },
-    updated() { this.check() }
+    updated() {
+        this.checkDbConnection()
+    }
 }
 </script>
 
