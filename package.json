@@ -1,7 +1,17 @@
 {
   "name": "askc",
   "version": "0.0.0",
-  "license": "MIT",
+  "description": "Kendo's championship and grade management",
+  "author": {
+      "name": "Kevin UNFRICHT",
+      "email": "unfricht.kevin@hotmail.fr"
+  },
+  "license": "COPYRIGHT",
+  "homepage": "https://framagit.org/kendo/askc.git",
+  "repository": {
+    "type" : "git",
+    "url" : "https://framagit.org/kendo/askc.git"
+  },
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
@@ -10,7 +20,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "appId": "com.askc.app",
+    "appId": "com.${name}.app",
     "mac": {
       "category": "public.app-category.sports"
     }
