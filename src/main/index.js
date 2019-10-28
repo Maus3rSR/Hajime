@@ -1,10 +1,11 @@
 'use strict'
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow
@@ -19,7 +20,10 @@ function createMainWindow() {
         // useContentSize: true
     })
 
-    if (isDevelopment) {
+	globalShortcut.register('f5', reloadWindow)
+	globalShortcut.register('CommandOrControl+R', reloadWindow)
+
+    if (isDevelopment || isDebugBuild) {
         window.webContents.openDevTools()
     }
 
@@ -54,6 +58,15 @@ function createMainWindow() {
     })
 
     return window
+}
+
+function reloadWindow(window) {
+    window = window || mainWindow
+
+    if (null === window)
+        return
+
+    window.reload()
 }
 
 // When closed is called by renderer process

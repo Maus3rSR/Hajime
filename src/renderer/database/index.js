@@ -5,6 +5,9 @@ import model_definition_list from './definitions'
 const app = require('electron').remote.app
 const TZ = "Etc/GMT-2" // TODO : Dynamique par rapport à la localisation du client ?
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
+
 const CreateSequelizeInstance = conf => {
     if (undefined === conf)
         throw new Error("[CreateSequelizeInstance] configuration is undefined")
@@ -37,7 +40,7 @@ const CreateSequelizeInstance = conf => {
             },
             timestamps: true
         },
-        logging: (process.env.NODE_ENV !== 'production' ? console.log : false)
+        logging: (isDevelopment || isDebugBuild ? console.log : false)
     })
 
     const model_list = {}

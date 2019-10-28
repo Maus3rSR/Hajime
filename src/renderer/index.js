@@ -9,7 +9,9 @@ import store from './store'
 import plugins from './plugins'
 
 Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = process.env.NODE_ENV == 'production'
+Vue.config.productionTip = process.env.NODE_ENV === 'production'
+if (process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD)
+    Vue.config.devtools = true
 
 Object.keys(plugins).forEach(key => {
     Vue.use(plugins[key])

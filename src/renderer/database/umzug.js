@@ -2,11 +2,13 @@ import * as path from 'path'
 import Umzug from 'umzug'
 import Sequelize from 'sequelize'
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
 const CreateUmzugInstance = sequelize => {
     const umzug = new Umzug({
         storage: 'sequelize',
-        storageOptions: {
-            sequelize: sequelize
+        storageOptions: { sequelize: sequelize },
+        logging: (isDevelopment || isDebugBuild ? console.log : false),
         },
         migrations: {
             params: [
@@ -18,7 +20,6 @@ const CreateUmzugInstance = sequelize => {
             pattern: /\.js$/,
             customResolver: migrationFile => require(`./migrations/${path.basename(migrationFile, '.js')}`)
         },
-        logging: (process.env.NODE_ENV !== 'production' ? console.log : false),
     })
 
     const status = () => Promise.all([umzug.executed(), umzug.pending()]).then(res => ({ executed: res[0], pending: res[1] }))
