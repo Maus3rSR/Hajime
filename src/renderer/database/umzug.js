@@ -1,25 +1,25 @@
-import * as path from 'path'
 import Umzug from 'umzug'
-import Sequelize from 'sequelize'
+import migration_list from './migrations'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
+
+const CreateMigration = (queryInterface, key, { up, down }) => {
+    return {
+        path: null,
+        file: key,
+        up: () => up(queryInterface),
+        down: () => down(queryInterface),
+        testFileName: needle => key.startsWith(needle)
+    }
+}
+
 const CreateUmzugInstance = sequelize => {
     const umzug = new Umzug({
         storage: 'sequelize',
         storageOptions: { sequelize: sequelize },
         logging: (isDevelopment || isDebugBuild ? console.log : false),
-        },
-        migrations: {
-            params: [
-                sequelize.getQueryInterface(), // queryInterface
-                Sequelize, // DataTypes
-                () => { throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.') }
-            ],
-            path: path.join(__dirname, "migrations"),
-            pattern: /\.js$/,
-            customResolver: migrationFile => require(`./migrations/${path.basename(migrationFile, '.js')}`)
-        },
+        migrations: Object.keys(migration_list).map(migration_name => CreateMigration(sequelize.getQueryInterface(), migration_name, migration_list[migration_name]))
     })
 
     const status = () => Promise.all([umzug.executed(), umzug.pending()]).then(res => ({ executed: res[0], pending: res[1] }))
