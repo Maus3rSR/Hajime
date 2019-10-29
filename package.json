@@ -32,6 +32,7 @@
         "build:dir": "yarn build --dir -c.compression=store -c.mac.identity=null",
         "build:win": "yarn build -w --x64 --ia32",
         "build:linux": "yarn build -l",
+        "build:all": "yarn build -wl",
         "postinstall": "electron-builder install-app-deps"
     },
     "devDependencies": {
