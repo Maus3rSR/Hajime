@@ -1,0 +1,10 @@
+stages:
+  - build
+
+build:
+  stage: build
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/dist/*.*
+    script:
+      - yarn install && yarn build
