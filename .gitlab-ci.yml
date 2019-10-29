@@ -1,9 +1,10 @@
 stages:
   - build
 
-build:
-  image: slauta93/electron-builder-win
+windows job:
   stage: build
+  tags:
+    - windows
   #only:
   #  - tags
   artifacts:
