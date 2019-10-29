@@ -2,6 +2,7 @@ stages:
   - build
 
 build:
+  image: slauta93/electron-builder-win
   stage: build
   only:
     - tags
@@ -9,4 +10,5 @@ build:
     paths:
       - $CI_PROJECT_DIR/dist/*.*
   script:
+    - sed  -i '/version/s/[^.]*$/'"${CI_COMMIT_TAG}\"/" package.json
     - yarn install && yarn build
