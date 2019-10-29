@@ -4,8 +4,8 @@ stages:
 build:
   image: slauta93/electron-builder-win
   stage: build
-  only:
-    - tags
+  #only:
+  #  - tags
   artifacts:
     paths:
       - $CI_PROJECT_DIR/dist/*.*
