@@ -16,12 +16,12 @@ export default new Router({
                 {
                     name: 'dashboard',
                     path: '', // root of software
-                    component: require('@components/software/Dashboard').default
+                    component: require('@components/software/zashboard').default
                 },
                 {
                     name: 'create-competition',
                     path: 'competition/new',
-                    component: require('@components/software/competition/Create').default,
+                    component: require('@components/software/competition/zreate').default,
                     meta: {
                         breadcrumb: 'Nouvelle compétition',
                         theme: 'competition'
@@ -31,7 +31,7 @@ export default new Router({
                     name: 'manage-competition',
                     path: 'competition/:id',
                     props: true,
-                    component: require('@components/software/competition/Manage').default,
+                    component: require('@components/software/competition/zanage').default,
                     meta: {
                         breadcrumb: 'Gestion d\'une compétition', // @todo Dynamique
                         theme: 'competition'
