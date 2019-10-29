@@ -17,9 +17,12 @@
         "mac": {
             "category": "public.app-category.sports"
         },
+        "win": {
+            "verifyUpdateCodeSignature": false
+        },
         "publish": {
             "provider": "generic",
-            "url": "https://framagit.org/kendo/askc.git"
+            "url": "https://framagit.org/"
         }
     },
     "scripts": {

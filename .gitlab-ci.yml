@@ -1,10 +1,9 @@
 stages:
   - build
 
-windows job:
+build job:
   stage: build
-  tags:
-    - windows
+  image: electronuserland/builder:wine
   #only:
   #  - tags
   artifacts:
