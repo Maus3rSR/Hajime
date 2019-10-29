@@ -3,8 +3,10 @@ stages:
 
 build:
   stage: build
+  only:
+    - tags
   artifacts:
     paths:
       - $CI_PROJECT_DIR/dist/*.*
-    script:
-      - yarn install && yarn build
+  script:
+    - yarn install && yarn build
