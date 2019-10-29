@@ -8,7 +8,7 @@ export default new Router({
         {
             // Software contain the default layout
             path: '/',
-            component: require('@components/layouts/software').default,
+            component: require('@components/layouts/Software').default,
             meta: {
                 breadcrumb: 'Accueil',
             },
@@ -49,7 +49,7 @@ export default new Router({
         },
         {
             path: '/error',
-            component: require('@components/layouts/error').default,
+            component: require('@components/layouts/Error').default,
             children: [
                 { path: '404', component: require('@components/error/NotFound').default },
                 { path: 'db', component: require('@components/error/DatabaseConnection').default },
