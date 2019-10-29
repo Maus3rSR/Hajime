@@ -11,4 +11,5 @@ build:
       - $CI_PROJECT_DIR/dist/*.*
   script:
     - sed  -i '/version/s/[^.]*$/'"${CI_COMMIT_TAG}\"/" package.json
+    - yarn -v
     - yarn install && yarn build
