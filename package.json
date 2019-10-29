@@ -16,6 +16,10 @@
         "appId": "com.askc.app",
         "mac": {
             "category": "public.app-category.sports"
+        },
+        "publish": {
+            "provider": "generic",
+            "url": "https://framagit.org/kendo/askc.git"
         }
     },
     "scripts": {
