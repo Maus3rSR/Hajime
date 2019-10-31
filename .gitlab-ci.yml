@@ -4,8 +4,8 @@ stages:
 build:
   stage: build
   image: electronuserland/builder:wine
-  #only:
-  #  - tags
+  only:
+    - master
   artifacts:
     paths:
       - $CI_PROJECT_DIR/dist/*.*
