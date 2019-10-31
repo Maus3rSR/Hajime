@@ -19,13 +19,22 @@
         },
         "win": {
             "verifyUpdateCodeSignature": false,
-            "target": [{
-                "target": "nsis",
-                "arch": ["x64", "ia32"]
-            }]
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                }
+            ]
         },
         "linux": {
-            "target": [{ "target": "AppImage" }],
+            "target": [
+                {
+                    "target": "AppImage"
+                }
+            ],
             "category": "Sports"
         }
     },
@@ -83,6 +92,7 @@
         "upath": "^1.0.5"
     },
     "dependencies": {
+        "electron-updater": "^4.2.0",
         "mariadb": "^2.1.1",
         "mysql": "^2.17.1",
         "sequelize": "^5.19.6",
