@@ -1,11 +1,14 @@
 'use strict'
 
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
+const appUpdateUrl = process.env.ELECTRON_WEBPACK_APP_UPDATE_URL
+const appUpdateToken = process.env.ELECTRON_WEBPACK_APP_UPDATE_TOKEN
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow
@@ -23,20 +26,17 @@ function createMainWindow() {
 	globalShortcut.register('f5', reloadWindow)
 	globalShortcut.register('CommandOrControl+R', reloadWindow)
 
-    if (isDevelopment || isDebugBuild) {
+    if (isDevelopment || isDebugBuild)
         window.webContents.openDevTools()
-    }
 
-    if (isDevelopment) {
+    if (isDevelopment)
         window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
-    }
-    else {
+    else
         window.loadURL(formatUrl({
             pathname: path.join(__dirname, 'index.html'),
             protocol: 'file',
             slashes: true
         }))
-    }
 
     window.on('close', e => {
         if (appCloseCalled)
@@ -56,6 +56,11 @@ function createMainWindow() {
             window.focus()
         })
     })
+
+    if (!(undefined === appUpdateUrl && undefined === appUpdateToken))
+        autoUpdater.checkForUpdatesAndNotify()
+    else
+        console.log("App update URL or TOKEN missing...")
 
     return window
 }
@@ -96,4 +101,43 @@ app.on('activate', () => {
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
     mainWindow = createMainWindow()
+})
+
+/**
+ * AUTO UPDATE SECTION
+ */
+autoUpdater.autoDownload = true
+
+if (isDebugBuild)
+    autoUpdater.setFeedURL({ provider: "generic", url: appUpdateUrl })
+else
+    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": appUpdateToken }
+
+autoUpdater.on('checking-for-update', function () {
+    console.log("Checking for update ...")
+})
+
+autoUpdater.on('update-available', info => {
+})
+
+autoUpdater.on('update-not-available', info => {
+    console.log("Update not available")
+})
+
+autoUpdater.on('error', err => console.log(err)) // @TODO LOG
+
+autoUpdater.on('download-progress', progressObj => {
+    // progressObj.bytesPerSecond
+    // parseInt(progressObj.percent, 10)
+    // progressObj.transferred
+    // progressObj.total
+})
+
+autoUpdater.on('update-downloaded', info => {
+})
+
+autoUpdater.on('update-downloaded', info => {
+    setTimeout(function () {
+        autoUpdater.quitAndInstall()
+    }, 1000)
 })
