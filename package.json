@@ -16,7 +16,7 @@
         "appId": "com.askc.app",
         "publish": {
             "provider": "generic",
-            "url": "AUTO_GENERATED"
+            "url": "BUILD_URL_AUTO_GENERATED"
         },
         "mac": {
             "category": "public.app-category.sports"
@@ -46,7 +46,7 @@
         "dev": "electron-webpack dev",
         "compile": "electron-webpack",
         "build": "yarn compile && electron-builder",
-        "build:dir": "yarn build --dir -c.compression=store -c.mac.identity=null",
+        "build:fast": "yarn build --dir -c.compression=store -c.mac.identity=null",
         "build:win": "yarn build -w",
         "build:linux": "yarn build -l",
         "build:all": "yarn build -wl",
@@ -58,8 +58,9 @@
         "axios": "^0.18.0",
         "bootstrap": "^4.3.1",
         "bootstrap-vue": "^2.0.1",
-        "electron": "2.0.7",
+        "electron": "5.0.6",
         "electron-builder": "^20.39.0",
+        "electron-log": "^3.0.8",
         "electron-store": "^5.0.0",
         "electron-webpack": "^2.6.1",
         "electron-webpack-vue": "^2.2.2",
