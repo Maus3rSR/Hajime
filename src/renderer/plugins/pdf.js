@@ -1,5 +1,6 @@
 import * as JsPDF from 'jspdf'
-import 'jspdf-autotable';
+import 'jspdf-autotable'
+import PDFWindow from 'electron-pdf-window'
 
 const { BrowserWindow } = require('electron').remote
 
@@ -14,10 +15,13 @@ const api = {
             height: 800,
             webPreferences: {
                 plugins: true,
-                webSecurity: false
+                webSecurity: false,
+                nodeIntegration: true,
+                webviewTag: true
             }
         })
-        pdfWindow.loadURL(doc.output('datauristring'))
+        
+        doc.save()
     }
 }
 
