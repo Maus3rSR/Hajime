@@ -31,3 +31,11 @@ header .breadcrumb {
         padding: 0;
     }
 }
+
+.card-body {
+    nav {
+        & > .breadcrumb {
+            padding: 0 0 0.75rem;
+        }
+    }
+}

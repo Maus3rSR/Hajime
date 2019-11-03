@@ -8,7 +8,7 @@
 }
 
 .content {
-    height: 90%;
+    height: (100% - $footer-height);
     overflow-y: auto;
 
   &:not(.content--boxed):not(.content--full) {
@@ -28,7 +28,7 @@
 
 .content--full {
   @include media-breakpoint-up(sm) {
-    padding: ($header-height + $grid-gutter-width) $grid-gutter-width 0;
+    padding: ($header-height + $grid-gutter-width - 20) $grid-gutter-width 0;
   }
 
   @include media-breakpoint-down(sm) {
@@ -49,7 +49,7 @@
 }
 
 .content__title {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding: 0.75rem 2rem 0.75rem;
   position: relative;
 
