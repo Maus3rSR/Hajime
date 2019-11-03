@@ -1,8 +1,6 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
-const appVersion = require('electron').remote.app.getVersion() 
-
 export default {
     computed: {
         ...mapState("database", {
@@ -29,7 +27,7 @@ export default {
             migrate: "database/migration/MIGRATE"
         }),
         validate() {
-            this.$configuration.set("app_version", appVersion)
+            this.$configuration.set("app_version", this.$app.version)
             this.$router.push('/')
         }
     },

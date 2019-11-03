@@ -74,7 +74,9 @@ function reloadWindow(window) {
     window.reload()
 }
 
-// When closed is called by renderer process
+/**
+ * IPC EVENTS
+ */
 ipcMain.on('closed', () => {
     appCloseCalled = true
     mainWindow = null
@@ -82,7 +84,11 @@ ipcMain.on('closed', () => {
         app.quit()
     }
 })
+ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
+/**
+ * APP EVENTS
+ */
 // quit application when all windows are closed
 app.on('window-all-closed', () => {
     // on macOS it is common for applications to stay open until the user explicitly quits
@@ -124,9 +130,10 @@ autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update-downloaded')
 })
 
-autoUpdater.on('download-progress', progressObj => {
+// TODO show progress in notification
+// autoUpdater.on('download-progress', progressObj => {
     // progressObj.bytesPerSecond
     // parseInt(progressObj.percent, 10)
     // progressObj.transferred
     // progressObj.total
-})
+// })
