@@ -42,7 +42,7 @@ export default {
             <div class="logo hidden-sm-down">
                 <h1>
                     <router-link to="/">
-                        ASKC
+                        {{ $app.name || uppercase }}
                     </router-link>
                 </h1>
             </div>
@@ -59,15 +59,20 @@ export default {
         </aside>
 
         <!-- Content -->
-        <section class="content content--full">
+        <div class="content content--full">
             <transition :name="transitionName" mode="out-in" appear>
                 <router-view></router-view>
             </transition>
-        </section>
+        </div>
 
         <!-- Footer -->
         <footer id="software__footer" class="footer">
-            Copyright © ASKC
+            <div>
+                Version {{ $app.version }}
+            </div>
+            <div>
+                © Copyright All rights reserved - Kevin UNFRICHT
+            </div>
         </footer>
 
     </main>

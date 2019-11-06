@@ -12,6 +12,13 @@ services:
       MARIADB_PASSWORD: askc
     volumes:
       - mysqldata:/bitnami
+  web:
+    restart: always
+    image: php:7.2-apache
+    ports:
+      - 8083:80
+    volumes:
+      - ./dist:/var/www/html
 volumes:
   mysqldata:
     driver: local

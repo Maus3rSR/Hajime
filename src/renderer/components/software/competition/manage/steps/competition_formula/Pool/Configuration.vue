@@ -45,7 +45,7 @@ export default {
         {
             return parseInt(this.count / this.max_per_pool, 10)
         },
-        number_of_pool_value_list() {
+        number_of_pool_value_list() { // @TODO : Need some comments
             if (!this.has_enough_entrant)
                 return []
 
@@ -56,20 +56,17 @@ export default {
             while (number_of_entry_per_pool >= this.min_per_pool && number_of_entry_per_pool <= this.max_per_pool) {
                 const number_of_entry_left = this.getNumberOfEntrantLeft(nb_pool_tested)
 
-                if (
-                    !(
-                        number_of_entry_left > 0 && number_of_entry_left < this.min_per_pool ||
-                        (number_of_entry_left > 0 && Math.abs(number_of_entry_left - number_of_entry_per_pool) > this.last_pool_offset) ||
-                        number_of_entry_left == number_of_entry_per_pool
-                    )
-                ) {
+                if (!(
+                    number_of_entry_left > 0 && number_of_entry_left < this.min_per_pool ||
+                    (number_of_entry_left > 0 && Math.abs(number_of_entry_left - number_of_entry_per_pool) > this.last_pool_offset) ||
+                    number_of_entry_left == number_of_entry_per_pool
+                ))
                     list.push({
                         number_of_pool: nb_pool_tested,
                         number_of_entry_per_pool: number_of_entry_per_pool,
                         number_of_entry_left: number_of_entry_left,
                         number_of_total_pool: number_of_entry_left > 0 ? nb_pool_tested + 1 : nb_pool_tested
                     })
-                }
 
                 nb_pool_tested++
                 number_of_entry_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)

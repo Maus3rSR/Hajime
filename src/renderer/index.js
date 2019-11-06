@@ -1,3 +1,4 @@
+import { remote, ipcRenderer } from 'electron'
 import Vue from 'vue'
 import axios from 'axios'
 import VeeValidate from 'vee-validate'
@@ -8,8 +9,18 @@ import router from './router'
 import store from './store'
 import plugins from './plugins'
 
+const { app } = remote
+
+Vue.config.productionTip = process.env.NODE_ENV === 'production'
+if (process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD)
+Vue.config.devtools = true
+
+Vue.ipc = Vue.prototype.$ipc = ipcRenderer
+Vue.app = Vue.prototype.$app = {
+    version: app.getVersion(),
+    name: app.getName()
+}
 Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = process.env.NODE_ENV == 'production'
 
 Object.keys(plugins).forEach(key => {
     Vue.use(plugins[key])
@@ -17,7 +28,6 @@ Object.keys(plugins).forEach(key => {
 Vue.use(VeeValidate) // @TODO Problem when loaded as a plugin
 Vue.use(VueMask) // @TODO Problem when loaded as a plugin
 
-/* eslint-disable no-new */
 new Vue({
   render: h => h(App),
   router,
