@@ -17,5 +17,5 @@ build:
       - $CI_PROJECT_DIR/dist/*.*
   script:
     - sed "s/0.0.0/${CI_COMMIT_TAG}/g" package.json > _package.json && mv _package.json package.json
-    - sed "s/BUILD_PUBLISH_URL_AUTO_GENERATED/${PUBLISH_URL}/g" package.json > _package.json && mv _package.json package.json
+    - sed -e "s|BUILD_PUBLISH_URL_AUTO_GENERATED|${PUBLISH_URL}|g" package.json > _package.json && mv _package.json package.json
     - yarn && yarn build:all
