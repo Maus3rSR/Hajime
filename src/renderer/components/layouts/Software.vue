@@ -59,11 +59,11 @@ export default {
         </aside>
 
         <!-- Content -->
-        <section class="content content--full">
+        <div class="content content--full">
             <transition :name="transitionName" mode="out-in" appear>
                 <router-view></router-view>
             </transition>
-        </section>
+        </div>
 
         <!-- Footer -->
         <footer id="software__footer" class="footer">

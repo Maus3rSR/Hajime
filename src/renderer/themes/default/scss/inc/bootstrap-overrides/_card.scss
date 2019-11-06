@@ -1,3 +1,9 @@
+section {
+    & > .card {
+        margin-bottom: 0;
+    }
+}
+
 .card {
   margin-bottom: $card-columns-margin;
   box-shadow: $card-shadow;
