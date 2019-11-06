@@ -57,7 +57,7 @@ function createMainWindow() {
         })
     })
 
-    if (!(undefined === appUpdateUrl && undefined === appUpdateToken))
+    if (undefined !== appUpdateUrl || undefined !== appUpdateToken)
         autoUpdater.checkForUpdates()
     else
         log.warn("App update URL or TOKEN is missing... impossible to check for updates")
