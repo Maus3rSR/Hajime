@@ -8,9 +8,9 @@ build:
   image: electronuserland/builder:wine
   # only:
   #   - master
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/dist/*.*
+  # artifacts:
+  #   paths:
+  #     - $CI_PROJECT_DIR/dist/*.*
   script:
     - echo $PUBLISH_URL
     # - sed "s/0.0.0/${CI_COMMIT_TAG}/g" package.json package.json > _package.json && mv _package.json package.json
