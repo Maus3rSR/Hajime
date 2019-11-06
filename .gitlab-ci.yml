@@ -2,14 +2,17 @@ stages:
   - build
 
 build:
+  variables:
+    ELECTRON_WEBPACK_APP_UPDATE_TOKEN: $TOKEN_ACCESS
   stage: build
   image: electronuserland/builder:wine
-  only:
-    - master
+  # only:
+  #   - master
   artifacts:
     paths:
       - $CI_PROJECT_DIR/dist/*.*
   script:
-    - sed "s/0.0.0/1.0.0/g" package.json > _package.json && mv _package.json package.json
-    # - sed "s/0.0.0/${CI_COMMIT_TAG}/g" package.json
-    - yarn && yarn build:all
+    - echo $PUBLISH_URL
+    # - sed "s/0.0.0/${CI_COMMIT_TAG}/g" package.json package.json > _package.json && mv _package.json package.json
+    # - sed "s/BUILD_PUBLISH_URL_AUTO_GENERATED/$PUBLISH_URL"
+    # - yarn && yarn build:all

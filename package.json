@@ -16,7 +16,7 @@
         "appId": "com.askc.app",
         "publish": {
             "provider": "generic",
-            "url": "BUILD_URL_AUTO_GENERATED"
+            "url": "BUILD_PUBLISH_URL_AUTO_GENERATED"
         },
         "mac": {
             "category": "public.app-category.sports"
