@@ -1,4 +1,5 @@
 import { join } from 'path'
+import log from 'electron-log'
 import Sequelize from 'sequelize'
 import model_definition_list from './definitions'
 
@@ -7,6 +8,8 @@ const TZ = "Etc/GMT-2" // TODO : Dynamique par rapport à la localisation du cli
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
+
+log.transports.file.level = "info"
 
 const CreateSequelizeInstance = conf => {
     if (undefined === conf)
@@ -40,7 +43,7 @@ const CreateSequelizeInstance = conf => {
             },
             timestamps: true
         },
-        logging: (isDevelopment || isDebugBuild ? console.log : false)
+        logging: (isDevelopment || isDebugBuild ? console.log : log.info)
     })
 
     const model_list = {}
