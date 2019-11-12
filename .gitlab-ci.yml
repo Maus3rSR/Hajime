@@ -1,9 +1,6 @@
 stages:
   - build
 
-variables:
-  ELECTRON_WEBPACK_APP_UPDATE_TOKEN: $TOKEN_ACCESS
-
 build:
   stage: build
   image: electronuserland/builder:wine
