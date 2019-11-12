@@ -129,11 +129,3 @@ autoUpdater.on('update-available', () => {
 autoUpdater.on('update-downloaded', () => {
     mainWindow.webContents.send('update-downloaded')
 })
-
-// TODO show progress in notification
-// autoUpdater.on('download-progress', progressObj => {
-    // progressObj.bytesPerSecond
-    // parseInt(progressObj.percent, 10)
-    // progressObj.transferred
-    // progressObj.total
-// })
