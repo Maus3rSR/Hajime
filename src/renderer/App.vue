@@ -40,23 +40,9 @@ export default {
             if (!this.on_welcome_page && this.canTryConnection())
                 this.connectDb().catch(() => this.$router.push('/error/db'))
         },
-        notifyUpdateDownloaded() {
-            this.$notify.show("Dernière version téléchargée. Voulez-vous redémarrer pour l'installer ?", {
-                ...this.$notify.getOption('info'),
-                action : [{
-                    text: 'PLUS TARD',
-                    onClick : (e, toastObject) => toastObject.goAway(0)
-                }, {
-                    text: 'OUI',
-                    onClick : () => this.$ipc.send('install-update')
-                }]
-            })
-        }
     },
     created() {
         this.$ipc.on('app-close', () => this.disconnectDb().then(() => this.$ipc.send('closed')))
-        this.$ipc.on('update-available', () => this.$notify.info("Une nouvelle version du logiciel est disponible. Téléchargement en cours."))
-        this.$ipc.on('update-downloaded', () => this.notifyUpdateDownloaded)
 
         if (this.isAppFirstEntry() && !this.on_welcome_page)
             this.$router.push('/welcome')
