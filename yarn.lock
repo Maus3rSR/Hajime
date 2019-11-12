@@ -5754,6 +5754,10 @@ promise-polyfill@8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.0.tgz#30059da54d1358ce905ac581f287e184aedf995d"
 
+promise-polyfill@^8.1.0:
+  version "8.1.3"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.3.tgz#8c99b3cf53f3a91c68226ffde7bde81d7f904116"
+
 proxy-addr@~2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/proxy-addr/-/proxy-addr-2.0.5.tgz#34cbd64a2d81f4b1fd21e76f9f06c8a45299ee34"
@@ -7453,6 +7457,12 @@ vue2-datepicker@^2.6.2:
 vue2-filters@^0.8.0-beta.1:
   version "0.8.0-beta.1"
   resolved "https://registry.yarnpkg.com/vue2-filters/-/vue2-filters-0.8.0-beta.1.tgz#871899af4253f6c4f3f4bf68449e369a27d33046"
+
+vue2-slideout-panel@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/vue2-slideout-panel/-/vue2-slideout-panel-2.4.0.tgz#1704b05fe866fae96ef18b5905b34097befbdf62"
+  dependencies:
+    promise-polyfill "^8.1.0"
 
 vue@^2.6.10:
   version "2.6.10"
