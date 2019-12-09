@@ -77,7 +77,7 @@ const actions = {
         const promise = rootGetters["database/getModel"]("PoolConfiguration").update(fields, { where: { id: parseInt(id, 10) } })
 
         promise
-            .then(() => this.$notify.success('La configuration des poules a bien été mise à jour'))
+            .then()
             .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour de la configuration des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 

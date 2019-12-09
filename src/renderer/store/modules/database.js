@@ -78,8 +78,6 @@ const actions = {
 
         const promise = dispatch("AUTHENTICATE")
 
-        promise.catch(() => this.$notify.error("Le test de connexion à la base de données a échoué."))
-
         return promise
     },
     CONNECT({ dispatch, commit }) {
