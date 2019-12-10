@@ -21,7 +21,7 @@ export default { // TODO shared parent component
     },
     data() {
         return {
-            name: "Matchs de poule",
+            name: "Poule",
             config: {
                 number_of_qualified_fighter: 1,
                 dismiss_favorite: false,
@@ -38,7 +38,7 @@ export default { // TODO shared parent component
 
 <template>
     <div class="card">
-        <div class="card-header">Configuration des matchs de poule</div>
+        <div class="card-header">Configuration des poules</div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
