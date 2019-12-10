@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import FighterList from '@partials/list/FighterList/Component'
+import FighterList from '@partials/list/fighter_list/Component'
 
 export default {
     components: { FighterList },
