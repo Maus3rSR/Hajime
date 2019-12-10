@@ -13,13 +13,13 @@ export default {
 
         const name_list = Object.keys(definition_list)
         const INSERT_DATA = [{
-            name: "Matchs de poule",
+            name: "Poule",
             component_list: JSON.stringify(["Pool"])
         }, {
             name: "Arbre éliminatoire",
             component_list: JSON.stringify(["Tree"])
         }, {
-            name: "Matchs de poule & Arbre éliminatoire",
+            name: "Poule & Arbre éliminatoire",
             component_list: JSON.stringify(["Pool", "Tree"])
         }]
 
