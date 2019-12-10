@@ -1,8 +1,8 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import PoolConfiguration from './Pool/Configuration'
-import PoolViewer from './Pool/Viewer'
+import PoolConfiguration from './pool/Configuration'
+import PoolViewer from './pool/Viewer'
 
 export default {
     components: { PoolConfiguration, PoolViewer },
