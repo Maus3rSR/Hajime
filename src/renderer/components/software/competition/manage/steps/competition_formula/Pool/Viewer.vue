@@ -18,7 +18,12 @@ export default {
             entry_field: 'pool/entry_field'
         }),
         number_of_entry_left() {
-            return this.list[this.pool_count-1].entry_list.length
+            const last_pool = this.list[this.pool_count-1]
+
+            if (undefined === last_pool)
+                return 0
+
+            return last_pool.entry_list.length
         },
         is_last_pool_different_size() {
             return this.number_of_entry_per_pool !== this.number_of_entry_left
