@@ -3,9 +3,10 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import PoolConfiguration from './pool/Configuration'
 import PoolViewer from './pool/Viewer'
+import PoolFightList from './pool/FightList'
 
 export default {
-    components: { PoolConfiguration, PoolViewer },
+    components: { PoolConfiguration, PoolViewer, PoolFightList },
     props: {
         competition_formula_id: {
             type: Number,
@@ -88,10 +89,7 @@ export default {
                                     Combats
                                 </template>
 
-                                <span class="badge badge-warning text-white">
-                                    <i class="zmdi zmdi-alert-triangle"></i>
-                                    DEVELOPPEMENT EN COURS
-                                </span>
+                                <pool-fight-list v-if="pool_locked" />
                             </b-tab>
                         </b-tabs>
                     </div>
