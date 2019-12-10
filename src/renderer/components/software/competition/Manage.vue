@@ -125,13 +125,15 @@ export default {
                     <clip-loader v-else-if="is_competition_loading" :color="'#fff'"></clip-loader>
 
                     <span v-else>
-                        <nav aria-label="step-wizard" role="navigation">
-                            <ol class="breadcrumb mb-3 software__container--offset-element">
-                                <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">
-                                    {{ index+1 }}. {{ step.name }} <span v-if="null !== step.count" class="badge badge-pill badge-primary">{{ step.count }}</span>
-                                </li>
-                            </ol>
-                        </nav>
+                        <transition name="fade" type="out-in" appear>
+                            <nav aria-label="step-wizard" role="navigation">
+                                <ol class="breadcrumb mb-3 software__container--offset-element">
+                                    <li v-for="(step, index) in step_list" :key="index" @click="goToStep(index+1)" class="breadcrumb-item" :class="{ active: current_step >= index+1 }">
+                                        {{ index+1 }}. {{ step.name }} <span v-if="null !== step.count" class="badge badge-pill badge-primary">{{ step.count }}</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </transition>
 
                         <transition name="fade" mode="out-in">
                             <component

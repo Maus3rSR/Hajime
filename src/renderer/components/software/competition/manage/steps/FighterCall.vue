@@ -61,26 +61,28 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <fighter-list
-                    v-model="fighter_list"
+                <transition name="fade" type="out-in" appear>
+                    <fighter-list
+                        v-model="fighter_list"
 
-                    :competition_type="competition_type"
-                    :make_the_call="true"
-                    :readonly="is_fighter_list_lock"
-                    :emit_change="true"
-                    :can_import="false"
+                        :competition_type="competition_type"
+                        :make_the_call="true"
+                        :readonly="is_fighter_list_lock"
+                        :emit_change="true"
+                        :can_import="false"
 
-                    @on-fighter-add="saveFighter"
-                    @on-fighter-edit="saveFighter"
-                    @on-fighter-delete="deleteFighter"
-                    @on-bulk-update="bulkUpdateFighter"
-                />
+                        @on-fighter-add="saveFighter"
+                        @on-fighter-edit="saveFighter"
+                        @on-fighter-delete="deleteFighter"
+                        @on-bulk-update="bulkUpdateFighter"
+                    />
+                </transition>
             </div>
         </div>
 
         <div class="row software__container--offset-element">
             <div class="col">
-                <transition name="fade" type="out-in">
+                <transition name="fade" type="out-in" appear>
                     <span class="text-warning" v-if="!step_is_valid">
                         <i class="zmdi zmdi-alert-triangle"></i>
                         Nombre de combattant insuffisant pour procéder à la compétition

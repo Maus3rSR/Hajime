@@ -70,35 +70,37 @@ export default {
             <clip-loader v-else-if="is_pool_loading || is_pool_list_loading" :color="'#fff'"></clip-loader>
 
             <span v-else>
-                <div v-if="has_enough_entry" class="competition__manage__pool">
-                    <b-tabs pills card vertical>
-                        <b-tab active>
-                            <template slot="title">
-                                <clip-loader v-if="is_pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
-                                {{ pool_tab_title }}
-                            </template>
+                <transition name="fade" mode="out-in" appear>
+                    <div v-if="has_enough_entry" class="competition__manage__pool">
+                        <b-tabs pills card vertical>
+                            <b-tab active>
+                                <template slot="title">
+                                    <clip-loader v-if="is_pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
+                                    {{ pool_tab_title }}
+                                </template>
 
-                            <pool-configuration v-if="!pool_list_validated" />
-                            <pool-viewer v-else />
-                        </b-tab>
-                        <b-tab :disabled="!pool_locked || is_pool_saving">
-                            <template slot="title">
-                                <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
-                                Matchs
-                            </template>
+                                <pool-configuration v-if="!pool_list_validated" />
+                                <pool-viewer v-else />
+                            </b-tab>
+                            <b-tab :disabled="!pool_locked || is_pool_saving">
+                                <template slot="title">
+                                    <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
+                                    Combats
+                                </template>
 
-                            <span class="badge badge-warning text-white">
-                                <i class="zmdi zmdi-alert-triangle"></i>
-                                DEVELOPPEMENT EN COURS
-                            </span>
-                        </b-tab>
-                    </b-tabs>
-                </div>
+                                <span class="badge badge-warning text-white">
+                                    <i class="zmdi zmdi-alert-triangle"></i>
+                                    DEVELOPPEMENT EN COURS
+                                </span>
+                            </b-tab>
+                        </b-tabs>
+                    </div>
 
-                <div class="h5 text-warning" v-else>
-                    <i class="zmdi zmdi-alert-triangle"></i>
-                    Nombre de combattant insuffisant pour procéder à la répartition des poules.
-                </div>
+                    <div class="h5 text-warning" v-else>
+                        <i class="zmdi zmdi-alert-triangle"></i>
+                        Nombre de combattant insuffisant pour procéder à la répartition des poules.
+                    </div>
+                </transition>
             </span>
         </transition>
     </div>
