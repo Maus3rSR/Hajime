@@ -93,7 +93,7 @@ const actions = {
             return Promise.reject(msg)
         }
 
-        commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status_list', value: STATUS_LIST.LOADING })
 
         const Pool = rootGetters["database/getModel"]("Pool")
 
