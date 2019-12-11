@@ -159,7 +159,7 @@ Indiquez votre adresse email si souhaité
             </div>
         </footer>
 
-        <slideout-panel></slideout-panel>
+        <!-- <slideout-panel></slideout-panel> -->
     </main>
 </template>
 

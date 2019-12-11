@@ -72,27 +72,49 @@ export default {
 
             <span v-else>
                 <transition name="fade" mode="out-in" appear>
-                    <div v-if="has_enough_entry" class="competition__manage__pool">
-                        <b-tabs pills card vertical>
-                            <b-tab active>
-                                <template slot="title">
-                                    <clip-loader v-if="is_pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
-                                    {{ pool_tab_title }}
-                                </template>
+                    <div v-if="has_enough_entry">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <b-tabs pills card vertical>
+                                    <b-tab active>
+                                        <template slot="title">
+                                            <clip-loader v-if="is_pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
+                                            {{ pool_tab_title }}
+                                        </template>
 
-                                <pool-configuration v-if="!pool_list_validated" />
-                                <pool-viewer v-else />
-                            </b-tab>
-                            <b-tab :disabled="!pool_locked || is_pool_saving">
-                                <template slot="title">
-                                    <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
-                                    Combats
-                                </template>
+                                        <pool-configuration v-if="!pool_list_validated" />
+                                        <pool-viewer v-else />
+                                    </b-tab>
+                                    <b-tab :disabled="!pool_locked || is_pool_saving">
+                                        <template slot="title">
+                                            <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
+                                            Combats
+                                        </template>
 
-                                <pool-fight-list v-if="pool_locked" />
-                            </b-tab>
-                        </b-tabs>
+                                        <pool-fight-list v-if="pool_locked" />
+                                    </b-tab>
+                                </b-tabs>
+                            </div>
+                        </div>
+
+                        <div class="row software__container--offset-element">
+                            <div class="col">
+                                <button :disabled="true" :class="{'btn-outline-success tada': false}" class="btn float-right animated" @click="true">
+                                    Tour suivant
+                                    <transition name="fade" mode="out-in">
+                                        <i v-if="true" class="zmdi zmdi-arrow-right"></i>
+                                        <clip-loader v-else :size="'14px'"></clip-loader>
+                                    </transition>
+                                </button>
+
+                                <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">
+                                    <i class="zmdi zmdi-arrow-left"></i>
+                                    Tour précédent
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                    
 
                     <div class="h5 text-warning" v-else>
                         <i class="zmdi zmdi-alert-triangle"></i>
@@ -108,6 +130,14 @@ export default {
 .competition__manage__pool {
     .tab-pane {
         padding: 0 15px;
+    }
+}
+</style>
+
+<style lang="scss" scoped>
+.software__container--offset-element {
+    & > .col {
+       margin-top: 2.3rem;
     }
 }
 </style>
