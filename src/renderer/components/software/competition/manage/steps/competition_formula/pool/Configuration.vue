@@ -105,13 +105,13 @@ export default {
                     })
 
                     return this.createPool()
-                        .then(this.loadPoolList)
-                        .catch(() => {
-                            this.pool_locked = false
-                            this.savePoolConfiguration()
-                        })
+                        // .then(this.loadPoolList)
+                        // .catch(() => {
+                        //     this.pool_locked = false
+                        //     this.savePoolConfiguration()
+                        // })
                 })
-                .catch(() => this.pool_locked = false)
+                // .catch(() => this.pool_locked = false)
         }
     },
     watch: {

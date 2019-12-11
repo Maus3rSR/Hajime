@@ -1,4 +1,5 @@
 import { getField, updateField } from 'vuex-map-fields'
+import FightLib from '@root/lib/fight'
 
 const STATUS_LIST = {
     NOTHING: "NOTHING",
@@ -47,11 +48,34 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    CREATE({ commit, getters, rootGetters, state }) {
+    CREATE({ commit, getters, state, rootGetters, rootState }) {
         if (getters.saving)
             return
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        //commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+
+        state.list.forEach((pool, index) => { // Fight list generation for each pool
+            let fight_list = []
+
+            try {
+                const fl = new FightLib(pool.entry_list, rootState.configuration.POOL_MIN_NUMBER)
+                fight_list = fl.compile()
+            } catch (error) {
+                commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING })
+                return Promise.reject(error)
+            }
+
+            commit("updateField", { 
+                path: `list[${index}].fight_list`,
+                value: fight_list.map(fight => ({
+                    entriable1_id: parseInt(fight[0].entriable_id),
+                    entriable2_id: parseInt(fight[1].entriable_id),
+                    entriable: fight[0].entriable
+                }))
+            })
+        })
+
+        return
 
         const promise = rootGetters["database/instance"].transaction(t => {
             return rootGetters["database/getModel"]("Pool").bulkCreate(state.list, {
@@ -135,7 +159,7 @@ const actions = {
 
         return promise
     },
-    GENERATE_PDF({ state, getters }) {
+    GENERATE_PDF({ state, getters }) { // @todo Exporter dans une lib javascript
         let doc = this.$pdf.getNewDocument()
 
         const margingLeftX = 15
