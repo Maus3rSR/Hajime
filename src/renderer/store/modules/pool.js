@@ -1,6 +1,22 @@
 import { getField, updateField } from 'vuex-map-fields'
 import FightLib from '@root/lib/fight'
 
+const entriableList = ["Fighter", "Team"]
+const numberOfFighterPerFightList = [1, 2] 
+let entry_list_association_list = []
+let fight_list_association_list = []
+
+entriableList.forEach(entriable => { // TODO @see `src\renderer\database\definitions\05_Fight.js`
+    entry_list_association_list.push(entriable.toLowerCase())
+
+    numberOfFighterPerFightList.forEach(number =>
+        fight_list_association_list.push({
+            association: `${entriable.toLowerCase()}${number}`,
+            include: entriable === "Team" ? ["fighter_list"] : []
+        })
+    )
+})
+
 const STATUS_LIST = {
     NOTHING: "NOTHING",
     SAVING: "SAVING",
@@ -52,7 +68,7 @@ const actions = {
         if (getters.saving)
             return
 
-        //commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
         state.list.forEach((pool, index) => { // Fight list generation for each pool
             let fight_list = []
@@ -70,22 +86,22 @@ const actions = {
                 value: fight_list.map(fight => ({
                     entriable1_id: parseInt(fight[0].entriable_id),
                     entriable2_id: parseInt(fight[1].entriable_id),
-                    entriable: fight[0].entriable
+                    entriable: fight[0].entriable,
+                    entry1: fight[0].entry,
+                    entry2: fight[1].entry
                 }))
             })
         })
 
-        return
-
         const promise = rootGetters["database/instance"].transaction(t => {
             return rootGetters["database/getModel"]("Pool").bulkCreate(state.list, {
                 transaction: t,
-                include: ["entry_list"]
+                include: ["entry_list", "fight_list"]
             })
         })
 
         promise
-            .then(() => this.$notify.success('Les poules ont bien été sauvegardées')) // TODO there is no update from data, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
+            .then(() => this.$notify.success('Les poules ont bien été sauvegardées')) // There is no update from data here, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
             .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
@@ -129,16 +145,17 @@ const actions = {
             ],
             include: [{
                 association: 'entry_list',
-                include: ['fighter', {
-                    association: 'team',
-                    include: ['fighter_list']
-                }]
+                include: entry_list_association_list
+            }, {
+                association: 'fight_list',
+                include: fight_list_association_list
             }]
         })
 
         promise
             .then(result => commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) }))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
+            .catch(err => console.log(err))
             .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
         return promise

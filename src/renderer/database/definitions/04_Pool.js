@@ -29,5 +29,6 @@ export default {
     },
     getAssociation: Model => model_list => {
         Model.hasMany(model_list.PoolEntry, { as: 'entry_list', foreignKey: 'pool_id' })
+        Model.hasMany(model_list.Fight, { as: 'fight_list', foreignKey: 'fightable_id', scope: { fightable: 'Pool' } })
     }
 }

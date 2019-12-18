@@ -15,11 +15,7 @@ export default class FightLib {
     }
 
     getEntry(entry_list, pool_entry_number) {
-        const entry = entry_list.find(entry => entry.number === pool_entry_number)
-        return {
-            entriable_id: entry.entriable_id,
-            entriable: entry.entriable
-        }
+        return entry_list.find(entry => entry.number === pool_entry_number)
     }
 
     compile() {

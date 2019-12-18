@@ -12,7 +12,7 @@ const infoToastOption = {
 const NotifyPlugin = {
     install(Vue) {
         Vue.use(Toasted, {
-            position: 'bottom-right',
+            position: 'bottom-center',
             duration: 3000,
             iconPack: "custom-class",
         })
