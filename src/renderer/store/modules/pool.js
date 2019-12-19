@@ -47,6 +47,7 @@ const getters = {
     list_loading: state => state.status_list === STATUS_LIST.LOADING,
     saving: state => state.status === STATUS_LIST.SAVING,
     count: state => state.list.length,
+    has_fight_list: state => state.list.length && state.list[0].fight_list.length,
     entry_field: state => state.list.length === 0 ? "entry" : (null === state.list[0].fighter ? "team" : "fighter")
 }
 
