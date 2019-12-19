@@ -5,7 +5,7 @@ export default {
             type: Array,
             required: true
         },
-        key: {
+        index: {
             type: Number,
             default: null
         }
@@ -13,7 +13,7 @@ export default {
     computed: {
         name() {
             const name = "fight_list"
-            return this.key === null ? name : `${name}_${this.key}`
+            return this.index === null ? name : `${name}_${this.index}`
         }
     }
 }
@@ -21,7 +21,7 @@ export default {
 
 <template>
     <div>
-        <datalist
+        <data-list
             :name="name"
             title="Matchs"
 
@@ -30,6 +30,6 @@ export default {
             :isDynamic="false"
         >
 
-        </datalist>
+        </data-list>
     </div>
 </template>
