@@ -142,14 +142,15 @@ const actions = {
             where: { competition_formula_id: parseInt(state.configuration.competition_formula_id, 10) },
             order: [
                 ['number', 'ASC'],
-                [Pool.associations.entry_list, 'number', 'ASC']
+                [Pool.associations.entry_list, 'number', 'ASC'],
+                [Pool.associations.fight_list, 'id', 'ASC']
             ],
             include: [{
                 association: 'entry_list',
                 include: entry_list_association_list
             }, {
                 association: 'fight_list',
-                include: fight_list_association_list
+                include: fight_list_association_list,
             }]
         })
 

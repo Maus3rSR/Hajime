@@ -11,6 +11,9 @@ export default {
         }
     },
     computed: {
+        total() {
+            return this.list.length
+        },
         name() {
             const name = "fight_list"
             return this.index === null ? name : `${name}_${this.index}`
@@ -25,9 +28,14 @@ export default {
             :name="name"
             title="Matchs"
 
-            :list="[]"
-            :total="0"
+            :list="list"
+            :total="total"
             :isDynamic="false"
+            :columns="[
+                { label: 'ID', field: 'id' },
+                { label: 'Combattant', field: 'fighter1.name' },
+                { label: 'Combattant', field: 'fighter2.name' }
+            ]"
         >
 
         </data-list>
