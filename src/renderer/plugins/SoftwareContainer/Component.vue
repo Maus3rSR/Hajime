@@ -26,16 +26,6 @@ export default {
                 rectRootElement = this.$el.getBoundingClientRect(),
                 rectLimitElement = document.getElementById(this.limitContainer).getBoundingClientRect()
 
-            // console.log("rectLimitElement TOP", rectLimitElement.top)
-            // console.log("rectRootElement TOP", rectRootElement.top)
-            // console.log("computedRootElement PADDING TOP", parseFloat(computedRootElement.paddingTop))
-            // console.log("computedRootElement PADDING BOTTOM", parseFloat(computedRootElement.paddingBottom))
-            // console.log("computedRootElement MARGIN BOTTOM", parseFloat(computedRootElement.marginBottom))
-            // console.log("computedRootElement MARGIN TOP", parseFloat(computedRootElement.marginTop))
-            // console.log("computedRootElement BORDER WIDTH BOTTOM", parseFloat(computedRootElement.borderBottomWidth))
-            // console.log("computedRootElement BORDER WIDTH TOP", parseFloat(computedRootElement.borderTopWidth))
-            // console.log("elementListOffsetValue", this.getElementListOffsetValue())
-
             this.height = (
                 rectLimitElement.top -
                 rectRootElement.top -
@@ -51,6 +41,41 @@ export default {
                 // All element offset defined manually in the page to consider in the calculation
                 this.getElementListOffsetValue()
             ) + "px"
+
+//             console.log(`
+
+// SoftwareContainer ID ${this._uid}
+// ---------------------------------
+
+// =============================== ${this.limitContainer}:
+// top position                    ${rectLimitElement.top}
+
+// =============================== this.$el :
+// top position                    ${rectRootElement.top}
+// padding top                     ${computedRootElement.paddingTop}
+// padding bottom                  ${computedRootElement.paddingBottom}
+// margin top                      ${computedRootElement.marginTop}
+// margin bottom                   ${computedRootElement.marginBottom}
+// border top                      ${computedRootElement.borderTopWidth}
+// border bottom                   ${computedRootElement.borderBottomWidth}
+
+// =============================== Elements offset :
+// nb element offset               ${this.getElementList().length}
+// total offset                    ${this.getElementListOffsetValue()}
+
+// =============================== Height calculation :
+// ${rectLimitElement.top} -
+// ${rectRootElement.top} -
+// ${parseFloat(computedRootElement.paddingTop)} -
+// ${parseFloat(computedRootElement.paddingBottom)} -
+// ${parseFloat(computedRootElement.marginBottom)} -
+// ${parseFloat(computedRootElement.marginTop)} -
+// ${parseFloat(computedRootElement.borderTopWidth)} -
+// ${parseFloat(computedRootElement.borderBottomWidth)} -
+// ${this.getElementListOffsetValue()}
+
+// = ${this.height}px
+//             `)
 
             if (!this.elementScroll) {
                 this.$el.classList.add("software__container--scroll")
@@ -68,10 +93,11 @@ export default {
                 element = element.parentNode
             }
         },
+        getElementList() {
+            return Array.from(document.getElementsByClassName("software__container--offset-element"))
+        },
         getElementListOffsetValue() {
-            let element_list = document.getElementsByClassName("software__container--offset-element")
-
-            return Array.from(element_list).reduce((total_value, element) => {
+            return this.getElementList().reduce((total_value, element) => {
                 
                 const computedRootElement = window.getComputedStyle(element)
 
@@ -97,10 +123,13 @@ export default {
             height: null
         }
     },
+    created() {
+        this.$softwareContainer.$on('forceResize', () => this.$nextTick(function() { this.resize() }))
+    },
     mounted() {
         window.addEventListener('resize', this.resize)
         this.resize()
-        this.$nextTick(function() { this.resize() })
+        // this.$nextTick(function() { this.resize() })
     }
 }
 </script>
