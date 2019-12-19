@@ -126,14 +126,6 @@ export default {
     </div>
 </template>
 
-<style lang="scss">
-.competition__manage__pool {
-    .tab-pane {
-        padding: 0 15px;
-    }
-}
-</style>
-
 <style lang="scss" scoped>
 .software__container--offset-element {
     & > .col {
