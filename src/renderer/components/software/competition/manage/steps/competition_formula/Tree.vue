@@ -10,7 +10,3 @@ export default {
 <template>
     <div>Développement en cours...</div>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

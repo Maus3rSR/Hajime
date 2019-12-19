@@ -59,8 +59,3 @@ export default { // TODO shared parent component
         </div>
     </div>
 </template>
-
-<style lang="scss" scoped>
-
-</style>
-
