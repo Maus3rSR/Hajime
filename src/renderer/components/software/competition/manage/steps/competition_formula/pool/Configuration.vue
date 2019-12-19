@@ -53,10 +53,10 @@ export default {
             let nb_pool_tested = this.minimum_nb_pool_tested
             let number_of_entry_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
 
-            while (number_of_entry_per_pool >= this.min_per_pool && number_of_entry_per_pool <= this.max_per_pool) {
+            do {
                 const number_of_entry_left = this.getNumberOfEntrantLeft(nb_pool_tested)
 
-                if (!(
+                if (number_of_entry_per_pool <= this.max_per_pool && !(
                     number_of_entry_left > 0 && number_of_entry_left < this.min_per_pool ||
                     (number_of_entry_left > 0 && Math.abs(number_of_entry_left - number_of_entry_per_pool) > this.last_pool_offset) ||
                     number_of_entry_left == number_of_entry_per_pool
@@ -70,7 +70,7 @@ export default {
 
                 nb_pool_tested++
                 number_of_entry_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
-            }
+            } while (number_of_entry_per_pool >= this.min_per_pool && number_of_entry_per_pool <= this.max_per_pool)
 
             return list
         },

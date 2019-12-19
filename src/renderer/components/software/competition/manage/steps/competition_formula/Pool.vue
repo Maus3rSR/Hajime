@@ -49,7 +49,7 @@ export default {
             loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
             loadPoolList: "pool/LOAD_LIST"
         }),
-        onFightTabClicked() {
+        onTabShown() {
             this.$softwareContainer.$emit('forceResize')
         }
     },
@@ -78,7 +78,7 @@ export default {
                     <div v-if="has_enough_entry">
                         <div class="row">
                             <div class="col-sm-12">
-                                <b-tabs pills card vertical>
+                                <b-tabs @input="onTabShown" pills card vertical>
                                     <b-tab active>
                                         <template slot="title">
                                             <clip-loader v-if="is_pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
@@ -88,7 +88,7 @@ export default {
                                         <pool-configuration v-if="!pool_list_validated" />
                                         <pool-viewer v-else />
                                     </b-tab>
-                                    <b-tab @click="onFightTabClicked" :disabled="!pool_locked || is_pool_saving">
+                                    <b-tab :disabled="!pool_locked || is_pool_saving">
                                         <template slot="title">
                                             <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
                                             Combats
