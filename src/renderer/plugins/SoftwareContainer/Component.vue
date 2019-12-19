@@ -97,16 +97,10 @@ export default {
             height: null
         }
     },
-    created() {
-        // this.$softwareContainer.addContainer(this)
-    },
     mounted() {
         window.onresize = this.resize
         this.resize()
         this.$nextTick(function() { this.resize() })
-    },
-    destroyed() {
-        // this.$softwareContainer.removeContainer(this)
     }
 }
 </script>
