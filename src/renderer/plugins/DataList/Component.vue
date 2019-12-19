@@ -288,7 +288,7 @@ export default {
 
                     <span class="datalist__emptystate" slot="emptystate">
                         <transition name="fade" mode="out-in" appear>
-                            <span v-if="!loading">Aucune donnée :(</span>
+                            <span v-if="!loading">Aucune donnée :-(</span>
                         </transition>
                     </span>
                     

@@ -5,7 +5,7 @@ export default {
 
 <template>
     <section id="error__404">
-        <h1>Oops... :(</h1>
+        <h1>Oops... :-(</h1>
         <h2>La page que vous recherchez n'existe pas !</h2>
         <p>
             <button title="Aller sur la page d'accueil" class="btn btn-primary" @click.prevent="$router.push('/')">

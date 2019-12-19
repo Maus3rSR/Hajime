@@ -82,7 +82,7 @@ export default {
                         </div>
                     </span>
                     <span v-else>
-                        <h1>Oops... :(</h1>
+                        <h1>Oops... :-(</h1>
                         <h2>Une erreur est survenue lors de la mise à jour du logiciel.</h2>
                     </span>
                 </transition>

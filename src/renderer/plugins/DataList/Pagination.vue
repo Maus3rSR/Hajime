@@ -78,7 +78,7 @@ export default {
     <infinite-loading @infinite="loadMore" :distance="infiniteScrollDistance"  ref="infiniteLoading">
 
         <template slot="no-more">
-            Toutes les données sont chargées :)
+            Toutes les données sont chargées :-)
         </template>
 
     </infinite-loading>

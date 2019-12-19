@@ -59,7 +59,7 @@ export default {
             <div class="col-sm-9">
                 <div v-if="formula_count == 0 && !formula_list_loading" class="h4 alert alert-warning">
                     <i class="zmdi zmdi-alert-triangle"></i>
-                    La liste des formules de compétition est vide :(
+                    La liste des formules de compétition est vide :-(
                 </div>
                 <empty-placeholder v-else :loaded="!formula_list_loading" :tag="'div'" :width="'100%'" :height="'30px'">
                     <select class="form-control" id="competition_formula" v-model="choosen_formula_id">
