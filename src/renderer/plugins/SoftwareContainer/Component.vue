@@ -98,7 +98,7 @@ export default {
         }
     },
     mounted() {
-        window.onresize = this.resize
+        window.addEventListener('resize', this.resize)
         this.resize()
         this.$nextTick(function() { this.resize() })
     }
