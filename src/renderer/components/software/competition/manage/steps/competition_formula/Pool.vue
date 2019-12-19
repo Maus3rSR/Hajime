@@ -48,7 +48,10 @@ export default {
         ...mapActions({
             loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
             loadPoolList: "pool/LOAD_LIST"
-        })
+        }),
+        onFightTabClicked() {
+            this.$softwareContainer.$emit('forceResize')
+        }
     },
     data() {
         return {}
@@ -85,7 +88,7 @@ export default {
                                         <pool-configuration v-if="!pool_list_validated" />
                                         <pool-viewer v-else />
                                     </b-tab>
-                                    <b-tab :disabled="!pool_locked || is_pool_saving">
+                                    <b-tab @click="onFightTabClicked" :disabled="!pool_locked || is_pool_saving">
                                         <template slot="title">
                                             <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
                                             Combats

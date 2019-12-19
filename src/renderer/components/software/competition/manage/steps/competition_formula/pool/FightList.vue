@@ -13,7 +13,11 @@ export default {
             has_fight_list: "pool/has_fight_list"
         })
     },
-    methods: {},
+    methods: {
+        onTabShown() {
+            this.$softwareContainer.$emit('forceResize')
+        }
+    },
     data() {
         return {}
     },
@@ -28,11 +32,11 @@ export default {
             </div>
 
             <div v-else>
-                <b-tabs pills card vertical>
+                <b-tabs @input="onTabShown" pills card vertical>
                     <b-tab v-for="(pool, index) in list" :key="index" :active="index === 0">
                         <template slot="title">Poule n°{{ pool.number }}</template>
-
-                        <fight-list :list="pool.fight_list" :key="pool.number" />
+                        
+                        <fight-list :list="pool.fight_list" :index="pool.number" />
                     </b-tab>
                 </b-tabs>
             </div>
