@@ -25,7 +25,7 @@ export default { // TODO shared parent component
             config: {
                 dismiss_favorite: false,
                 third_place: false,
-                lock: false
+                locked: false
             }
         }
     },

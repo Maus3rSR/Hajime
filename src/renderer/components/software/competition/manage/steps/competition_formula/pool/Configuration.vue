@@ -28,7 +28,7 @@ export default {
         ...mapFields('pool', {
             number_of_pool: 'configuration.number_of_pool',
             number_of_entry_per_pool: 'configuration.number_of_entry_per_pool',
-            pool_locked: 'configuration.lock',
+            pool_locked: 'configuration.locked',
             pool_list: 'list',
             pool_status: 'status'
         }),

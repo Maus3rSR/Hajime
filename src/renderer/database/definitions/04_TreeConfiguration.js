@@ -30,7 +30,7 @@ export default {
                 allowNull: true,
                 defaultValue: '0'
             },
-            lock: {
+            locked: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
                 allowNull: true,
                 defaultValue: '0'

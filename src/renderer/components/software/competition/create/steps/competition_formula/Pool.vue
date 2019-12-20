@@ -25,7 +25,7 @@ export default { // TODO shared parent component
             config: {
                 number_of_qualified_fighter: 1,
                 dismiss_favorite: false,
-                lock: false
+                locked: false
             }
         }
     },

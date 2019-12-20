@@ -19,7 +19,7 @@ export default {
         }),
         ...mapState('pool', {
             pool_competition_formula_id: state => state.configuration.competition_formula_id,
-            pool_locked: state => state.configuration.lock
+            pool_locked: state => state.configuration.locked
         }),
         ...mapGetters({
             fighter_list: "competition/fighter_present_list",
