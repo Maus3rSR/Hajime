@@ -48,7 +48,9 @@ const getters = {
     saving: state => state.status === STATUS_LIST.SAVING,
     count: state => state.list.length,
     has_fight_list: state => state.list.length > 0 && state.list[0].fight_list !== undefined,
-    entry_field: state => state.list.length === 0 ? "entry" : (null === state.list[0].fighter ? "team" : "fighter")
+    entry_field: state => state.list.length === 0 ? "entry" : (null === state.list[0].fighter ? "team" : "fighter"),
+    findPoolIndex: state => pool_id => state.list.findIndex(el => parseInt(el.id, 10) === parseInt(pool_id, 10)),
+    existPool: (state, getters) => pool_id => getters.findPoolIndex(pool_id) !== -1,
 }
 
 const mutations = {
@@ -105,6 +107,37 @@ const actions = {
             .then(() => this.$notify.success('Les poules ont bien été sauvegardées')) // There is no update from data here, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
             .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+
+        return promise
+    },
+    REVERSE_MARKING_BOARD({ commit, getters, rootGetters, state }, pool_id) {
+        // if (getters.saving)
+        //     return
+
+        // commit("updateField", { path: 'status', value: STATUS_LIST.SAVING }) // TODO We encounter btab component reset when we update status....
+
+        const pool_index = getters.findPoolIndex(parseInt(pool_id, 10))
+
+        if (pool_index === -1) {
+            this.$notify.error("La poule n'existe pas, impossible de procéder à l'inversion")
+            return Promise.reject()
+        }
+
+        const pool = state.list[pool_index]
+        const fields = { marking_board_reversed: !pool.marking_board_reversed }
+        const promise = rootGetters["database/getModel"]("Pool").update(fields, { where: { id: parseInt(pool.id, 10) } })
+
+        promise
+            .then(() => {
+                this.$notify.success("L'inversion du tableau de marque a bien été effectuée")
+
+                commit("updateField", {
+                    path: `list[${pool_index}].marking_board_reversed`,
+                    value: fields.marking_board_reversed
+                })
+            })
+            .catch(() => this.$notify.error("Un problème est survenu lors de l'inversion du tableau de marque"))
+            // .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
     },

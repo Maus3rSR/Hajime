@@ -80,7 +80,7 @@ export default {
             return "datalist__"+this.name
         },
         style_class() {
-            let style_class = "table table-sm table-responsive-sm"
+            let style_class = "table table-hover table-sm table-responsive-sm"
 
             if (!this.groupedHeader)
                 style_class += " table-striped"
@@ -315,9 +315,16 @@ export default {
 
                     </template>
 
+                    <template slot="table-column" slot-scope="props">
+                        <slot :name="`header-${props.column.label}`" :column="props.column">
+                            {{ props.column.label }}
+                        </slot>
+                    </template>
+
+                    <!-- TODO : Add prefix to slot name -->
                     <template slot="table-row" slot-scope="props">
                         <slot :name="props.column.field" :row="props.row">
-                            {{props.formattedRow[props.column.field]}}
+                            {{ props.formattedRow[props.column.field] }}
                         </slot>
                     </template>
 

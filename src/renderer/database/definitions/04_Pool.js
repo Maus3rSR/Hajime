@@ -24,6 +24,11 @@ export default {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
             },
+            marking_board_reversed: {
+                type: Sequelize.BOOLEAN,
+                allowNull: true,
+                defaultValue: 0
+            },
             ...with_timestamp && timestamp_definition
         }
     },

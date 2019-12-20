@@ -14,6 +14,9 @@ export default {
         })
     },
     methods: {
+        ...mapActions({
+            reverse_marking_board: "pool/REVERSE_MARKING_BOARD"
+        }),
         onTabShown() {
             this.$softwareContainer.$emit('forceResize')
         }
@@ -36,7 +39,13 @@ export default {
                     <b-tab v-for="(pool, index) in list" :key="index" :active="index === 0">
                         <template slot="title">Poule n°{{ pool.number }}</template>
                         
-                        <fight-list :list="pool.fight_list" :index="pool.number" />
+                        <fight-list
+                            :list="pool.fight_list"
+                            :index="pool.number"
+                            :marking_board_reversed="pool.marking_board_reversed"
+                            
+                            @makeReverse="reverse_marking_board(pool.id)"
+                        />
                     </b-tab>
                 </b-tabs>
             </div>

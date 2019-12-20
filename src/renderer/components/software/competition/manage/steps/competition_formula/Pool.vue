@@ -81,7 +81,6 @@ export default {
                                 <b-tabs @input="onTabShown" pills card vertical>
                                     <b-tab active>
                                         <template slot="title">
-                                            <clip-loader v-if="is_pool_saving" class="float-left pr-2" :size="'14px'"></clip-loader>
                                             {{ pool_tab_title }}
                                         </template>
 

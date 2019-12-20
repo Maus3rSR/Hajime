@@ -33,3 +33,9 @@
 .tab-pane.card-body {
     padding: 0px 1rem;
 }
+
+.tab-pane {
+    .card-header {
+        padding: 0px;
+    }
+}

@@ -55,8 +55,8 @@ const getters = {
         },
     ],
     default_type: () => defaultState().type,
-    existFighter: (state, getters) => fighter_id => getters.findFighterIndex(fighter_id) !== -1,
     findFighterIndex: state => fighter_id => state.model.fighter_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter_id, 10)),
+    existFighter: (state, getters) => fighter_id => getters.findFighterIndex(fighter_id) !== -1,
     findFormulaConfigIndex: state => formula_config => state.model.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
 

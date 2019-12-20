@@ -1,0 +1,19 @@
+$brand-colors: (
+  "red": ($red, $white),
+  "white": ($white, $white),
+);
+
+.marking_board__color {
+    transition: all 1s;
+}
+
+@each $color_type, $value in $brand-colors {
+    $bgcolor: nth($value, 1);
+    $color: nth($value, 2);
+
+    .marking_board__color--#{$color_type} {
+        background-color: rgba($bgcolor, 0.2);
+        border-bottom: $bgcolor 2px solid;
+        color: $color;
+    }
+}
