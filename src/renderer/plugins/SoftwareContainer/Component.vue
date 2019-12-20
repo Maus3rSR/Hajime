@@ -83,15 +83,15 @@ export default {
             }
 
             let element = document.getElementById(this.elementScroll)
-            if (null === element) {
+            if (null === element)
                 return
-            }
             
             element.classList.add("software__container__child--scroll")
-            while (element !== this.$el) {
+            
+            do {
                 element.classList.add("software__container__child")
                 element = element.parentNode
-            }
+            } while (!element.className.includes("software__container"))
         },
         getElementList() {
             return Array.from(document.getElementsByClassName("software__container--offset-element"))
