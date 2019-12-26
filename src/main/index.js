@@ -2,12 +2,21 @@ import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
-import { format as formatUrl } from 'url'
+import { format as formatUrl, resolve as resolveUrl } from 'url'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
 const appUpdateUrl = process.env.ELECTRON_WEBPACK_APP_UPDATE_URL // ONLY IN DEBUG BUILD
 const appUpdateToken = process.env.ELECTRON_WEBPACK_APP_UPDATE_TOKEN // PRODUCTION TOKEN
+const baseUrl = isDevelopment ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}` : formatUrl({ pathname: path.join(__dirname, 'index.html'), protocol: 'file', slashes: true })
+const windowSharedParam = {
+    webPreferences: {nodeIntegration: true},
+    center: true,
+    minHeight: 800,
+    minWidth: 1200,
+    height: 800,
+    width: 1600,
+}
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow
@@ -15,12 +24,7 @@ let appCloseCalled = false
 
 function createMainWindow() {
     const window = new BrowserWindow({
-        webPreferences: {nodeIntegration: true},
-        minHeight: 800,
-        minWidth: 1200,
-        height: 800,
-        width: 1600,
-        // useContentSize: true
+        ...windowSharedParam
     })
 
 	globalShortcut.register('f5', reloadWindow)
@@ -29,14 +33,7 @@ function createMainWindow() {
     if (isDevelopment || isDebugBuild)
         window.webContents.openDevTools()
 
-    if (isDevelopment)
-        window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
-    else
-        window.loadURL(formatUrl({
-            pathname: path.join(__dirname, 'index.html'),
-            protocol: 'file',
-            slashes: true
-        }))
+    window.loadURL(baseUrl)
 
     window.on('close', e => {
         if (appCloseCalled)
@@ -86,6 +83,18 @@ ipcMain.on('closed', () => {
 })
 ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
+ipcMain.on('open-window', (e, vuePath) => {
+    const window = new BrowserWindow({
+        ...windowSharedParam
+    })
+
+    if (isDevelopment || isDebugBuild)
+        window.webContents.openDevTools()
+
+    console.log(resolveUrl(baseUrl, `#${vuePath}`))
+    window.loadURL(resolveUrl(baseUrl, `#${vuePath}`))
+})
+
 /**
  * APP EVENTS
  */
@@ -99,14 +108,15 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
     // on macOS it is common to re-create a window even after all windows have been closed
-    if (mainWindow === null) {
+    if (mainWindow === null)
         mainWindow = createMainWindow()
-    }
 })
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
-    mainWindow = createMainWindow()
+    mainWindow = createMainWindow({
+        ...windowSharedParam
+    })
 })
 
 /**

@@ -34,7 +34,11 @@ export default {
             return this.color_list[1 - this.marking_board_reversed]
         }
     },
-    methods: {},
+    methods: {
+        openFightWindow(id) {
+            this.$ipc.send('open-window', `fight/${parseInt(id, 10)}`)
+        }
+    },
     data() {
         return {
             marking_board_color_list: []
@@ -56,7 +60,8 @@ export default {
             :sortColumn="false"
             :columns="[
                 { label: 'fighter', field: 'fighter', thClass: 'fighter-column'},
-                { label: 'Statut', field: 'status' }
+                { label: 'Statut', field: 'status' },
+                { label: '', field: 'action-cell' }
             ]"
         >
             <template slot="header-fighter">
@@ -90,6 +95,12 @@ export default {
 
             <template slot="status" slot-scope="props">
                 <span class="badge badge-warning">{{ "à faire" | uppercase }}</span>
+            </template>
+
+            <template slot="action-cell" slot-scope="props">
+                <button title="Gérer le match" class="btn btn-sm btn-outline-primary" @click.prevent="openFightWindow(props.row.id)">
+                    <i class="zmdi zmdi-edit"></i>
+                </button>
             </template>
 
         </data-list>
