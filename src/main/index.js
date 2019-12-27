@@ -1,8 +1,8 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
-import log from 'electron-log'
-import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
 import { format as formatUrl, resolve as resolveUrl } from 'url'
+import log from 'electron-log'
+import { autoUpdater } from 'electron-updater'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
@@ -12,9 +12,9 @@ const baseUrl = isDevelopment ? `http://localhost:${process.env.ELECTRON_WEBPACK
 const windowSharedParam = {
     webPreferences: {nodeIntegration: true},
     center: true,
-    minHeight: 800,
+    minHeight: 900,
     minWidth: 1200,
-    height: 800,
+    height: 900,
     width: 1600,
 }
 
@@ -27,11 +27,13 @@ function createMainWindow() {
         ...windowSharedParam
     })
 
-	globalShortcut.register('f5', reloadWindow)
-	globalShortcut.register('CommandOrControl+R', reloadWindow)
+    globalShortcut.register('f5', reloadWindow)
+    globalShortcut.register('CommandOrControl+R', reloadWindow)
 
     if (isDevelopment || isDebugBuild)
         window.webContents.openDevTools()
+    else
+        window.removeMenu()
 
     window.loadURL(baseUrl)
 
@@ -43,16 +45,8 @@ function createMainWindow() {
         window.webContents.send('app-close')
     })
 
-    window.on('closed', () => {
-        mainWindow = null
-    })
-
-    window.webContents.on('devtools-opened', () => {
-        window.focus()
-        setImmediate(() => {
-            window.focus()
-        })
-    })
+    window.on('closed', () => mainWindow = null)
+    window.webContents.on('devtools-opened', () => setFocus(window))
 
     if (undefined !== appUpdateUrl || undefined !== appUpdateToken)
         autoUpdater.checkForUpdates()
@@ -62,13 +56,16 @@ function createMainWindow() {
     return window
 }
 
-function reloadWindow(window) {
-    window = window || mainWindow
+function reloadWindow() {
+    BrowserWindow.getFocusedWindow().reload()
+}
 
-    if (null === window)
+function setFocus(window) {
+    if (undefined === window)
         return
 
-    window.reload()
+    window.focus()
+    setImmediate(() => { window.focus() })
 }
 
 /**
@@ -81,6 +78,7 @@ ipcMain.on('closed', () => {
         app.quit()
     }
 })
+
 ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
 ipcMain.on('open-window', (e, vuePath) => {
@@ -90,8 +88,9 @@ ipcMain.on('open-window', (e, vuePath) => {
 
     if (isDevelopment || isDebugBuild)
         window.webContents.openDevTools()
+    else
+        window.removeMenu()
 
-    console.log(resolveUrl(baseUrl, `#${vuePath}`))
     window.loadURL(resolveUrl(baseUrl, `#${vuePath}`))
 })
 
