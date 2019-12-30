@@ -11,6 +11,7 @@ export default {
             this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
         }
         
+        this.checkDisplay(to)
         this.setTheme(to)
 
         next()
@@ -70,6 +71,10 @@ Indiquez votre adresse email si souhaité
         }
     },
     methods: {
+        checkDisplay(route) {
+            this.displayHeader = (undefined === route.meta.displayHeader) ? this.displayHeader : route.meta.displayHeader
+            this.displayFooter = (undefined === route.meta.displayFooter) ? this.displayFooter : route.meta.displayFooter
+        },
         setTheme(route) {
             this.theme = (undefined === route.meta.theme) ? '' : route.meta.theme
         },
@@ -85,12 +90,15 @@ Indiquez votre adresse email si souhaité
     },
     data() {
         return {
+            displayHeader: true,
+            displayFooter: true,
             transitionName: 'fade',
             theme: '',
             showUpdateButton: false
         }
     },
     mounted() {
+        this.checkDisplay(this.$route)
         this.setTheme(this.$route)
         this.$ipc.on('update-downloaded', () => this.showUpdateButton = true)
     }
@@ -101,7 +109,7 @@ Indiquez votre adresse email si souhaité
     <main id="software" class="main" data-sa-theme="1" :data-sa-theme-extended="theme">
 
         <!-- Header -->
-        <header class="header">
+        <header class="header" v-if="displayHeader">
             <!-- <div class="navigation-trigger hidden-xl-up" data-sa-action="aside-open" data-sa-target=".sidebar">
                 <i class="zmdi zmdi-menu"></i>
             </div> -->
@@ -133,7 +141,7 @@ Indiquez votre adresse email si souhaité
         </div>
 
         <!-- Footer -->
-        <footer id="software__footer" class="footer">
+        <footer id="software__footer" class="footer" v-if="displayFooter">
             <div class="row">
                 <div class="col-sm-3">
                     <button title="Voir la note de version" class="btn btn-sm btn-dark btn--icon-text">
