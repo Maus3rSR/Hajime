@@ -36,14 +36,13 @@ export default new Router({
                         breadcrumb: 'Gestion d\'une compétition', // @todo Dynamique
                         theme: 'competition'
                     }
-                },
-                {
-                    name: 'fight',
-                    path: 'fight/:id',
-                    props: true,
-                    component: require('@components/software/fight/Manage').default
                 }
             ]
+        },
+        {
+            path: '/fight/:id',
+            props: true,
+            component: require('@components/software/fight/Manage').default
         },
         {
             path: '/welcome',
