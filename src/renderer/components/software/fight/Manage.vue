@@ -1,6 +1,27 @@
 <script>
 export default {
-    
+    data() {
+        return {
+            score_type_list: [{
+                name: "Men",
+                code: "M"
+            },{
+                name: "Kote",
+                code: "K"
+            },{
+                name: "Do",
+                code: "D"
+            },{
+                name: "Tsuki",
+                code: "T"
+            },{
+                name: "Hansokku",
+                code: "△"
+            }],
+            score_left_fighter: [],
+            score_right_fighter: []
+        }
+    }
 }
 </script>
 
@@ -27,11 +48,34 @@ export default {
                 <div class="row fight-versus--content">
                     <div class="col">
                         <div class="card">
-                            <div class="card-body">
+                            <draggable
+                                class="card-body"
+                                
+                                v-model="score_left_fighter"
 
-                            </div>
+                                :group="{ name: 'score_left', pull: false, put: ['score_type'] }"
+                                :sort="false"
+                            >
+                                <span v-for="score in score_left_fighter" :key="score.code" :title="score.name" class="">
+                                    {{ score.code }}
+                                </span>
+                            </draggable>
                         </div>
                     </div>
+
+                    <div class="col-sm-1">
+                        <draggable
+                            class="card d-flex flex-column align-items-center justify-content-center"
+                            
+                            :group="{ name: 'score_type', pull: 'clone', put: false }"
+                            :sort="false"
+                        >
+                            <button v-for="score_type in score_type_list" :key="score_type.code" :title="score_type.name" class="btn btn-light btn--icon mb-2">
+                                {{ score_type.code }}
+                            </button>
+                        </draggable>
+                    </div>
+
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
@@ -42,7 +86,7 @@ export default {
                 </div>
 
                 <div class="row fight-versus-footer mt-3">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <label class="ml-2 custom-control custom-checkbox">
                             <input class="custom-control-input" type="checkbox">
                             <span class="custom-control-indicator"></span>
@@ -50,23 +94,6 @@ export default {
                         </label>
                     </div>
 
-                    <div class="col-sm-5 text-center">
-                        <button class="btn btn-light btn--icon">
-                            M
-                        </button>
-                        <button class="btn btn-light btn--icon">
-                            K
-                        </button>
-                        <button class="btn btn-light btn--icon">
-                            D
-                        </button>
-                        <button class="btn btn-light btn--icon">
-                            T
-                        </button>
-                        <button class="btn btn-light btn--icon">
-                            △
-                        </button>
-                    </div>
                     <div class="col text-right">
                         <transition name="fade" mode="out-in">
                             <button v-if="1" class="btn btn-link">
