@@ -57,7 +57,9 @@ function createMainWindow() {
 }
 
 function reloadWindow() {
-    BrowserWindow.getFocusedWindow().reload()
+    const current_window = BrowserWindow.getFocusedWindow()
+    if (null !== current_window)
+        current_window.reload()
 }
 
 function setFocus(window) {
