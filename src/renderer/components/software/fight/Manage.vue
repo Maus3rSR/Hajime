@@ -47,32 +47,22 @@ export default {
 
                     <div class="col text-right">
                         <transition name="fade" mode="out-in">
-                            <button v-if="1" class="btn btn-link">
-                                Déclarer un forfait
-                                <i class="zmdi zmdi-close"></i>
-                            </button>
-                        </transition>
-
-                        <transition name="fade" mode="out-in">
-                            <button v-if="1" class="btn btn-outline-warning">
-                                Valider par hantei
-                                <i class="zmdi zmdi-check"></i>
-                            </button>
-                        </transition>
-
-                        <transition name="fade" mode="out-in">
-                            <button v-if="1" class="btn btn-outline-success">
-                                Valider
-                                <i class="zmdi zmdi-check"></i>
-                            </button>
-                        </transition>
-
-                        <transition name="fade" mode="out-in">
-                            <span class="text-success" v-if="0">
+                            <span v-if="1">
+                                <button class="btn btn-link">
+                                    Déclarer un forfait
+                                    <i class="zmdi zmdi-close"></i>
+                                </button>
+                                <button class="btn btn-outline-success">
+                                    Valider
+                                    <i class="zmdi zmdi-check"></i>
+                                </button>
+                            </span>
+                            <span class="text-success" v-else>
                                 Ce match a été validé
                                 <i class="zmdi zmdi-check"></i>
                             </span>
                         </transition>
+
                     </div>
                 </div>
             </div>

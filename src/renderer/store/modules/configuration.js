@@ -4,6 +4,7 @@ const state = {
     POOL_MIN_SIZE: parseInt(process.env.ELECTRON_WEBPACK_APP_POOL_MIN_SIZE, 10),
     POOL_MAX_SIZE: parseInt(process.env.ELECTRON_WEBPACK_APP_POOL_MAX_SIZE, 10),
     LAST_POOL_OFFSET: parseInt(process.env.ELECTRON_WEBPACK_APP_LAST_POOL_OFFSET, 10), // The last pool can have a difference of X entries maximum (minus or plus)
+    FIGHT_LIMIT_SCORE: parseInt(process.env.ELECTRON_WEBPACK_APP_FIGHT_LIMIT_SCORE, 10)
 }
 
 const getters = {}

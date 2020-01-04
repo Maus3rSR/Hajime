@@ -1,35 +1,36 @@
 <script>
+import { mapState } from 'vuex'
 import ScoreDragContainer from './ScoreDragContainer'
 
 export default {
     components: { ScoreDragContainer },
     computed: {
-        
+        ...mapState("configuration", ["FIGHT_LIMIT_SCORE"])
+    },
+    methods: {
+        onMove() { return 1 } // Avoid swap on 2 elements
     },
     data() {
         return {
-            limit_score: 2,
             score_choosen: false,
             score_type_list: [{
                 name: "Men",
-                code: "M",
-                type: "score"
+                code: "M"
             },{
                 name: "Kote",
-                code: "K",
-                type: "score"
+                code: "K"
             },{
                 name: "Do",
-                code: "D",
-                type: "score"
+                code: "D"
             },{
                 name: "Tsuki",
-                code: "T",
-                type: "score"
+                code: "T"
             },{
+                name: "Hantei",
+                code: "Ht"
+            }, {
                 name: "Hansokku",
-                code: "△",
-                type: "fool"
+                code: "△"
             }]
         }
     }
@@ -40,7 +41,7 @@ export default {
     <div class="row fight-versus--content">
         <div class="col">
             <score-drag-container
-                :limit="limit_score"
+                :limit="FIGHT_LIMIT_SCORE"
                 :scoreChoosen="score_choosen"
             />
         </div>
@@ -49,10 +50,10 @@ export default {
             <draggable
                 class="card d-flex flex-column align-items-center justify-content-center"
                 
-                :class="{  }"
                 :list="score_type_list"
                 :group="{ name: 'score', pull: 'clone', put: false }"
                 :sort="false"
+                :move="onMove"
 
                 @choose="score_choosen = true"
                 @unchoose="score_choosen = false"
@@ -65,7 +66,7 @@ export default {
 
         <div class="col">
             <score-drag-container
-                :limit="limit_score"
+                :limit="FIGHT_LIMIT_SCORE"
                 :scoreChoosen="score_choosen"
             />
         </div>
