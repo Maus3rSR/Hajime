@@ -7,12 +7,7 @@ export default {
     components: { PoolListDraw },
     props: {},
     computed: {
-        ...mapState('configuration', {
-            competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT",
-            min_per_pool: "POOL_MIN_SIZE",
-            max_per_pool: "POOL_MAX_SIZE",
-            last_pool_offset: "LAST_POOL_OFFSET",
-        }),
+        ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT","POOL_MIN_SIZE","POOL_MAX_SIZE","LAST_POOL_OFFSET"]),
         ...mapState('competition', {
             competition_id: state => state.model.id,
             competition_type: state => state.model.type,
@@ -39,11 +34,11 @@ export default {
             return this.list.length
         },
         has_enough_entrant() {
-            return this.count >= this.competition_minimum_entrant
+            return this.count >= this.COMPETITION_MINIMUM_ENTRANT
         },
         minimum_nb_pool_tested()
         {
-            return parseInt(this.count / this.max_per_pool, 10)
+            return parseInt(this.count / this.POOL_MAX_SIZE, 10)
         },
         number_of_pool_value_list() { // @TODO : Need some comments
             if (!this.has_enough_entrant)
@@ -56,9 +51,9 @@ export default {
             do {
                 const number_of_entry_left = this.getNumberOfEntrantLeft(nb_pool_tested)
 
-                if (number_of_entry_per_pool <= this.max_per_pool && !(
-                    number_of_entry_left > 0 && number_of_entry_left < this.min_per_pool ||
-                    (number_of_entry_left > 0 && Math.abs(number_of_entry_left - number_of_entry_per_pool) > this.last_pool_offset) ||
+                if (number_of_entry_per_pool <= this.POOL_MAX_SIZE && !(
+                    number_of_entry_left > 0 && number_of_entry_left < this.POOL_MIN_SIZE ||
+                    (number_of_entry_left > 0 && Math.abs(number_of_entry_left - number_of_entry_per_pool) > this.LAST_POOL_OFFSET) ||
                     number_of_entry_left == number_of_entry_per_pool
                 ))
                     list.push({
@@ -70,7 +65,7 @@ export default {
 
                 nb_pool_tested++
                 number_of_entry_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
-            } while (number_of_entry_per_pool >= this.min_per_pool && number_of_entry_per_pool <= this.max_per_pool)
+            } while (number_of_entry_per_pool >= this.POOL_MIN_SIZE && number_of_entry_per_pool <= this.POOL_MAX_SIZE)
 
             return list
         },

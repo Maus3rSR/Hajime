@@ -10,9 +10,7 @@ export default {
             competition_type: state => state.model.type,
             is_fighter_list_lock: state => state.model.locked_fighter_list
         }),
-        ...mapState('configuration', {
-            competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT",
-        }),
+        ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),
         ...mapGetters({
             fighter_present_count: "competition/fighter_present_count",
             competition_saving: "competition/saving",
@@ -22,7 +20,7 @@ export default {
             locked_fighter_list: 'model.locked_fighter_list'
         }),
         step_is_valid() {
-            return this.fighter_present_count >= this.competition_minimum_entrant
+            return this.fighter_present_count >= this.COMPETITION_MINIMUM_ENTRANT
         },
     },
     methods: {

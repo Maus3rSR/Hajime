@@ -14,9 +14,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('configuration', {
-            competition_minimum_entrant: "COMPETITION_MINIMUM_ENTRANT"
-        }),
+        ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),
         ...mapState('pool', {
             pool_competition_formula_id: state => state.configuration.competition_formula_id,
             pool_locked: state => state.configuration.locked
@@ -35,7 +33,7 @@ export default {
             return this.entry_list.length
         },
         has_enough_entry() {
-            return this.entry_count >= this.competition_minimum_entrant
+            return this.entry_count >= this.COMPETITION_MINIMUM_ENTRANT
         },
         pool_list_validated() {
             return this.pool_locked && !this.is_pool_saving
