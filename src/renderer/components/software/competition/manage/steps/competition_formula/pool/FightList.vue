@@ -52,3 +52,13 @@ export default {
         </transition>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.competition__manage__pool__fight_list {
+    .nav-pills {
+        max-height: 61vh;
+        overflow: auto;
+        flex-wrap: nowrap;
+    }
+}
+</style>
