@@ -38,7 +38,6 @@ export default {
                     label: "Date de naissance (format DD/MM/YYYY)",
                     required: true,
                     is_date: true
-                    // validate: /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/
                 },
                 "license": {
                     label: "Licence",
@@ -69,6 +68,9 @@ export default {
             return "Prévisualisation de l'import des combattants " + (this.number_of_preview ? (this.number_of_preview+" premières lignes") : "")
         },
         final_list() {
+            this.miss_required_field = false
+            this.cell_error_matrix = {}
+
             if (Object.keys(this.match_field_list).length == 0)
                 return []
 
@@ -91,27 +93,36 @@ export default {
                 return final_row
             })
 
-            return list.filter(row => { // Validation && manipulation
+            return list.filter((row, index) => { // Validation && manipulation
             
                 for (let field_name in this.field_list) {
                     let field = this.field_list[field_name]
                     
                     if (field.required && row[field_name] === undefined)
+                    {
+                        this.miss_required_field = true
                         return false
+                    }
 
                     if (field.validate !== undefined && row[field_name] !== undefined && !field.validate.test(row[field_name]))
+                    {
+                        this.setCellError(field_name, index)
                         return false
+                    }
 
-                    if (field.is_date !== undefined && field.is_date && row[field_name] !== undefined) {
+                    if (field.is_date !== undefined && field.is_date && row[field_name] !== undefined && row[field_name] !== null) {
                         const date = DateTime.fromFormat(row[field_name], 'dd/mm/yyyy', { locale: 'fr' })
 
                         if (!date.isValid)
+                        {
+                            this.setCellError(field_name, index)
                             return false
+                        }
                         
                         row[field_name] = date.toSQLDate()
                     }
 
-                    if (field.replace !== undefined)
+                    if (field.replace !== undefined && null !== row[field_name])
                         row[field_name] = row[field_name].replace(field.replace.regex, field.replace.value)
                 }
 
@@ -119,7 +130,7 @@ export default {
             })
         },
         total() {
-            return this.list.length
+            return this.list.length - (this.import_first_line ? 0 : 1)
         },
         total_final_list() {
             return this.final_list.length
@@ -128,10 +139,27 @@ export default {
             if (Object.keys(this.match_field_list).length == 0)
                 return 0
 
-            return this.total - (this.import_first_line ? 0 : 1) - this.total_final_list
+            return this.total - this.total_final_list
         }
     },
     methods: {
+        setCellError(field_name, row_index) {
+            const column_index = Object.keys(this.match_field_list).find(key => this.match_field_list[key] === field_name)
+            
+            if (undefined === column_index)
+                return
+
+            if (undefined === this.cell_error_matrix[row_index])
+                this.cell_error_matrix[row_index] = []
+
+            this.cell_error_matrix[row_index].push(parseInt(column_index, 10))
+        },
+        isCellError(row_index, column_index) {
+            if (undefined === this.cell_error_matrix[row_index])
+                return false
+
+            return this.cell_error_matrix[row_index].includes(column_index)
+        },
         generateKey() {
             return (new Date().getTime() + Math.floor((Math.random()*10000)+1)).toString(16)
         },
@@ -164,16 +192,15 @@ export default {
         reset() {
             this.list = []
             
-        },
-        showLine(index) {
-            return index > 0 || index == 0 && this.import_first_line
         }
     },
     data() {
         return {
             list: [],
+            cell_error_matrix: {},
             match_field_list: {},
-            import_first_line: true,
+            import_first_line: false,
+            miss_required_field: true,
         }
     }
 }
@@ -184,9 +211,16 @@ export default {
         <div class="row">
             <div class="col-sm-12">
                 <transition name="fade">
-                    <div class="alert alert-danger" v-if="number_of_row_not_imported">
+                    <div class="alert alert-info" v-if="miss_required_field">
                         <div class="alert-heading">
-                            {{number_of_row_not_imported}} ligne(s) comportent des erreurs et ne seront pas importées
+                            <i class="zmdi zmdi-info-outline"></i>
+                            Colonnes requises
+                        </div>
+                        Veuillez renseignez les colonnes requises
+                    </div>
+                    <div class="alert alert-danger" v-else-if="number_of_row_not_imported">
+                        <div class="alert-heading">
+                            {{number_of_row_not_imported}} ligne(s) sur {{  }} comportent des erreurs et ne seront pas importées
                         </div>
                         Veuillez vérifier votre fichier CSV que le format de chaque cellule est correct
                     </div>
@@ -194,10 +228,10 @@ export default {
             </div>
 
             <div class="col-sm-12">
-                <table class="table" v-if="list.length">
+                <table class="table table-hover" v-if="list.length">
                     <tbody>
-                        <tr v-for="(row, index) in preview_list" v-show="showLine(index)" :key="'preview-row-'+index">
-                            <td v-for="(item, index) in row" :key="'preview-item-'+index">{{ item }}</td>
+                        <tr v-for="(row, index) in preview_list" :key="'preview-row-'+index">
+                            <td v-for="(item, column_index) in row" :key="'preview-item-'+column_index" :class="{ 'bg-danger': isCellError(index, column_index) }">{{ item }}</td>
                         </tr>
                     </tbody>
                     <thead>

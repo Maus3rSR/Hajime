@@ -132,6 +132,8 @@ export default {
 
             Papa.parse(e.target.files[0], {
                 skipEmptyLines: true,
+                dynamicTyping: true,
+                //encoding: "UTF-8",
                 complete: results => {
                     if (results.errors.length) {
                         this.$notify.error("Le fichier est invalide. Veuillez vérifier le format de votre fichier et le contenu des cellules")
@@ -203,6 +205,10 @@ export default {
 
             if (success)
                 this.$notify.success("L'équipe a bien été défini comme " + (is_favorite ? "favorie" : "non favorie"))
+        },
+        onButtonImportClick() {
+            this.$refs.fighterFileInput.value = null
+            this.$refs.fighterFileInput.click()
         },
         onFighterAdd(fighter) {
             if (this.readonly) return
@@ -316,7 +322,7 @@ export default {
                         class="actions__item zmdi zmdi-download"
                         title="Importer une liste existante (fichier .CSV)"
 
-                        @click.prevent="$refs.fighterFileInput.click()" 
+                        @click.prevent="onButtonImportClick" 
                     >
                     </a>
                 </template>

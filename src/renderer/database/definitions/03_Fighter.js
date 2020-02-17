@@ -35,12 +35,20 @@ export default {
                     len: {
                         args: [1,16],
                         msg: "Le numéro de licence doit être de 16 caractères maximum"
+                    },
+                    notNull: {
+                        msg: "Le numéro de licence est obligatoire"
                     }
                 }
             },
             name: {
                 type: Sequelize.STRING(255),
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    notNull: {
+                        msg: "Le nom est obligatoire"
+                    }
+                }
             },
             grade: {
                 type: Sequelize.STRING(15),
@@ -52,7 +60,12 @@ export default {
             },
             birthdate: {
                 type: Sequelize.DATEONLY,
-                allowNull: false
+                allowNull: false,
+                validate: {
+                    notNull: {
+                        msg: "La date de naissance est obligatoire"
+                    }
+                }
             },
             is_present: {
                 type: Sequelize.BOOLEAN,

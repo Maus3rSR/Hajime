@@ -38,11 +38,6 @@ export default {
             &nbsp;Tenter une reconnexion
         </button>
 
-        <button title="Configurer manuellement la connexion" class="btn btn-primary" @click.prevent="$router.push('/')">
-            <i class="zmdi zmdi-arrow-right"></i>&nbsp;
-            Configurer manuellement la connexion
-        </button>
-
         <button title="En cours de développement" class="btn btn-danger disabled">
             <i class="zmdi zmdi-bug"></i>&nbsp;
             Reporter un problème
