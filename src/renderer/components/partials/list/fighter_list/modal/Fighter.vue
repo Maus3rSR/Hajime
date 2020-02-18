@@ -104,7 +104,7 @@ export default {
 </script>
 
 <template>
-    <b-modal class="modal__filter" :title="modal_title" size="lg" hide-header-close ref="modalFighter" @hide="handleHide">
+    <b-modal class="modal__fighter" :title="modal_title" size="lg" hide-header-close ref="modalFighter" @hide="handleHide">
         <div class="row">
             
             <div class="col-sm-6">

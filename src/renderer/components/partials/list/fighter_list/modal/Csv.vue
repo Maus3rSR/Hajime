@@ -68,11 +68,11 @@ export default {
             return "Prévisualisation de l'import des combattants " + (this.number_of_preview ? (this.number_of_preview+" premières lignes") : "")
         },
         final_list() {
-            this.miss_required_field = false
-            this.cell_error_matrix = {}
-
             if (Object.keys(this.match_field_list).length == 0)
                 return []
+
+            this.cell_error_matrix = {}
+            this.miss_required_field = false
 
             let list = JSON.parse(JSON.stringify(this.list))
 
@@ -80,23 +80,30 @@ export default {
                 list.shift()
 
             list = list.map((row, index) => { // Transformation
-                let final_row = {}
+                let row_tmp = {}
                 
                 for (let csv_index in this.match_field_list) // Replace csv_index by fieldname in a new array
                 {
-                    if (this.match_field_list[csv_index].length == 0) // default value "" of select option
+                    csv_index = parseInt(csv_index, 10)
+
+                    if (this.match_field_list[csv_index].length === 0) // default value "" of select option
                         continue
 
-                    final_row[this.match_field_list[csv_index]] = row[csv_index]
+                    row_tmp[this.match_field_list[csv_index]] = {
+                        value: row[csv_index],
+                        csv_index: csv_index
+                    }
                 }
 
-                return final_row
+                return row_tmp
             })
 
-            return list.filter((row, index) => { // Validation && manipulation
+            list = list.filter((row, index) => { // Validation && manipulation
             
+                let row_has_error = false
+
                 for (let field_name in this.field_list) {
-                    let field = this.field_list[field_name]
+                    const field = this.field_list[field_name]
                     
                     if (field.required && row[field_name] === undefined)
                     {
@@ -104,29 +111,55 @@ export default {
                         return false
                     }
 
-                    if (field.validate !== undefined && row[field_name] !== undefined && !field.validate.test(row[field_name]))
+                    if (undefined === row[field_name])
+                        continue
+
+                    const row_value = row[field_name].value
+                    const column_index = parseInt(row[field_name].csv_index, 10)
+
+                    if (undefined === row_value || null === row_value)
                     {
-                        this.setCellError(field_name, index)
-                        return false
+                        if (field.required) {
+                            this.setCellError(index, column_index)
+                            row_has_error = true
+                        }
+
+                        continue
                     }
 
-                    if (field.is_date !== undefined && field.is_date && row[field_name] !== undefined && row[field_name] !== null) {
-                        const date = DateTime.fromFormat(row[field_name], 'dd/mm/yyyy', { locale: 'fr' })
+                    if (field.validate !== undefined && !field.validate.test(row_value))
+                    {
+                        this.setCellError(index, column_index)
+                        row_has_error = true
+                        continue
+                    }
+
+                    if (field.is_date !== undefined && field.is_date) {
+                        const date = DateTime.fromFormat(row_value, 'dd/mm/yyyy', { locale: 'fr' })
 
                         if (!date.isValid)
                         {
-                            this.setCellError(field_name, index)
-                            return false
+                            this.setCellError(index, column_index)
+                            row_has_error = true
+                            continue
                         }
                         
-                        row[field_name] = date.toSQLDate()
+                        row[field_name].value = date.toSQLDate()
                     }
 
-                    if (field.replace !== undefined && null !== row[field_name])
-                        row[field_name] = row[field_name].replace(field.replace.regex, field.replace.value)
+                    if (field.replace !== undefined)
+                        row[field_name].value = row_value.replace(field.replace.regex, field.replace.value)
                 }
 
-                return true
+                return !row_has_error
+            })
+
+            return list.map(row => {
+
+                for (let field_name in row)
+                    row[field_name] = row[field_name].value
+
+                return row
             })
         },
         total() {
@@ -143,19 +176,22 @@ export default {
         }
     },
     methods: {
-        setCellError(field_name, row_index) {
-            const column_index = Object.keys(this.match_field_list).find(key => this.match_field_list[key] === field_name)
-            
+        setCellError(row_index, column_index) {
             if (undefined === column_index)
                 return
+
+            row_index += (this.import_first_line ? 0 : 1)
 
             if (undefined === this.cell_error_matrix[row_index])
                 this.cell_error_matrix[row_index] = []
 
             this.cell_error_matrix[row_index].push(parseInt(column_index, 10))
         },
+        isRowError(row_index) {
+            return undefined !== this.cell_error_matrix[row_index]
+        },
         isCellError(row_index, column_index) {
-            if (undefined === this.cell_error_matrix[row_index])
+            if (!this.isRowError(row_index))
                 return false
 
             return this.cell_error_matrix[row_index].includes(column_index)
@@ -207,7 +243,7 @@ export default {
 </script>
 
 <template>
-    <b-modal scrollable class="modal__filter" :title="modal_title" size="xl" hide-header-close ref="previewCsvModal">
+    <b-modal scrollable class="modal__import_csv" :title="modal_title" size="xl" hide-header-close ref="previewCsvModal">
         <div class="row">
             <div class="col-sm-12">
                 <transition name="fade">
@@ -216,11 +252,11 @@ export default {
                             <i class="zmdi zmdi-info-outline"></i>
                             Colonnes requises
                         </div>
-                        Veuillez renseignez les colonnes requises
+                        Veuillez renseignez tous les champs requis par colonne en utilisant les listes déroulante
                     </div>
                     <div class="alert alert-danger" v-else-if="number_of_row_not_imported">
                         <div class="alert-heading">
-                            {{number_of_row_not_imported}} ligne(s) sur {{  }} comportent des erreurs et ne seront pas importées
+                            {{number_of_row_not_imported}} ligne(s) / {{ total }} comportent des erreurs et ne seront pas importées
                         </div>
                         Veuillez vérifier votre fichier CSV que le format de chaque cellule est correct
                     </div>
@@ -228,9 +264,9 @@ export default {
             </div>
 
             <div class="col-sm-12">
-                <table class="table table-hover" v-if="list.length">
+                <table class="table table-hover table--preview-import-csv" v-if="list.length">
                     <tbody>
-                        <tr v-for="(row, index) in preview_list" :key="'preview-row-'+index">
+                        <tr v-for="(row, index) in preview_list" :key="'preview-row-'+index" :class="{ 'row-error': isRowError(index) }">
                             <td v-for="(item, column_index) in row" :key="'preview-item-'+column_index" :class="{ 'bg-danger': isCellError(index, column_index) }">{{ item }}</td>
                         </tr>
                     </tbody>
@@ -238,8 +274,9 @@ export default {
                         <tr>
                             <th v-for="(item, index) in list[0]" :key="'preview-head-'+index">
                                 <select class="form-control" v-model="match_field_list[index]">
-                                    <option :selected="true" value="">Choisir un champ correspondant à cette colonne</option>
-                                    <option v-for="(field, key) in field_list" :key="key" :value="key">{{ field.label }} <span v-if="field.required">*</span></option>
+                                    <option v-for="(field, key) in field_list" :key="key" :value="key">
+                                        {{ field.label }}
+                                        <template v-if="field.required">*</template></option>
                                 </select>
                             </th>
                         </tr>
@@ -265,13 +302,15 @@ export default {
 </template>
 
 <style lang="scss">
-    .modal__fighter {
-        .mx-input-append {
-            color: #fff;
-            background-color: transparent;
+    .table--preview-import-csv {
+        tr{
+            &.row-error {
+                border-left: #dc3545 solid 3px;
+                background-color: rgba(#dc3545, .1);
+            }
 
-            svg {
-                color: #fff;
+            td {
+                padding: 5px;
             }
         }
     }

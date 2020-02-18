@@ -32,7 +32,7 @@ export default {
 </script>
 
 <template>
-    <b-modal class="modal__filter" :title="title" v-model="showModal" size="lg" hide-header-close>
+    <b-modal class="modal__confirmation" :title="title" v-model="showModal" size="lg" hide-header-close>
         <div class="h3">
             <slot name="label">
                 Confirmez-vous cette action ?

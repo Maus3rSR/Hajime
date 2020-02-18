@@ -37,7 +37,7 @@ export default {
 </script>
 
 <template>
-    <b-modal class="modal__filter" title="Confirmation de suppression" size="lg" hide-header-close ref="deleteConfirmationModal">
+    <b-modal class="modal__delete" title="Confirmation de suppression" size="lg" hide-header-close ref="deleteConfirmationModal">
         <div class="h3">
             Êtes-vous sûr de vouloir supprimer {{ deleteLabel }} ?
         </div>
