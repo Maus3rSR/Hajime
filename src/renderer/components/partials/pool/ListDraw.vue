@@ -2,6 +2,8 @@
 import { setTimeout } from 'timers';
 import PoolList from './List'
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
 export default {
     props: {
         config: {
@@ -17,6 +19,9 @@ export default {
     computed: {
         is_initial_state() {
             return !this.drawing_lot && this.draw_lot_progress == 0
+        },
+        is_development() {
+            return isDevelopment
         }
     },
     methods: {
@@ -126,7 +131,7 @@ export default {
 
                 <transition name="fade">
                     <div v-if="!is_initial_state" class="text-right">
-                        <button class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
+                        <button v-if="is_development" class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
                         <button class="btn animated" :class="{'btn-outline-success tada': !drawing_lot}" :disabled="drawing_lot" @click.prevent="validate()">Je valide ce tirage !</button>
                     </div>
                 </transition>
