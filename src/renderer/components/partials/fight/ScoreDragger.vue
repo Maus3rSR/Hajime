@@ -4,20 +4,33 @@ import ScoreDragContainer from './ScoreDragContainer'
 
 export default {
     components: { ScoreDragContainer },
+    props: {
+        readonly: {
+            type: Boolean,
+            default: false
+        }
+    },
     computed: {
         ...mapState("configuration", ["FIGHT_LIMIT_SCORE"]),
         full_score_list() {
             return this.score_type_list.concat(this.score_type_hidden_list)
+        },
+        is_disabled() {
+            return this.readonly || this.disabled
         }
     },
     methods: {
         onMove() { return 1 }, // Avoid swap on 2 elements
         getScoreByCode(code) {
             return this.full_score_list.find(score => score.code === code)
+        },
+        onScoreReached() {
+            this.disabled = true
         }
     },
     data() {
         return {
+            disabled: false,
             score_choosen: false,
             score_type_hidden_list: [{
                 name: "Ippon",
@@ -56,14 +69,16 @@ export default {
             <score-drag-container
                 :limit="FIGHT_LIMIT_SCORE"
                 :scoreChoosen="score_choosen"
+                :disabled="is_disabled"
 
                 ref="scoreContainerLeft"
 
                 @on-fool-reached="$refs.scoreContainerRight.addScore(getScoreByCode('I'))"
+                @on-score-reached="onScoreReached"
             />
         </div>
 
-        <div class="col-sm-1">
+        <div class="col-sm-1" v-if="!readonly">
             <draggable
                 class="card d-flex flex-column align-items-center justify-content-center"
                 
@@ -75,7 +90,7 @@ export default {
                 @choose="score_choosen = true"
                 @unchoose="score_choosen = false"
             >
-                <button v-for="(score_type, index) in score_type_list" :key="index" :title="score_type.name" class="btn btn-light btn--icon mb-4">
+                <button v-for="(score_type, index) in score_type_list" :key="index" :disabled="disabled" :title="score_type.name" class="btn btn-light btn--icon mb-4">
                     {{ score_type.code }}
                 </button>
             </draggable>
@@ -85,10 +100,12 @@ export default {
             <score-drag-container
                 :limit="FIGHT_LIMIT_SCORE"
                 :scoreChoosen="score_choosen"
+                :disabled="is_disabled"
 
                 ref="scoreContainerRight"
 
                 @on-fool-reached="$refs.scoreContainerLeft.addScore(getScoreByCode('I'))"
+                @on-score-reached="onScoreReached"
             />
         </div>
     </div>

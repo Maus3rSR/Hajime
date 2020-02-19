@@ -6,7 +6,8 @@ const state = {
     LAST_POOL_OFFSET: parseInt(process.env.ELECTRON_WEBPACK_APP_LAST_POOL_OFFSET, 10), // The last pool can have a difference of X entries maximum (minus or plus)
     FIGHT_LIMIT_SCORE: parseInt(process.env.ELECTRON_WEBPACK_APP_FIGHT_LIMIT_SCORE, 10),
     FIGHT_NB_FOOL_GIVE_IPPON: parseInt(process.env.ELECTRON_WEBPACK_APP_FIGHT_NB_FOOL_GIVE_IPPON, 10),
-    FIGHT_FOOL_CODE: process.env.ELECTRON_WEBPACK_APP_FIGHT_FOOL_CODE
+    FIGHT_FOOL_CODE: process.env.ELECTRON_WEBPACK_APP_FIGHT_FOOL_CODE,
+    FIGHT_SCORE_REACHED_CODE: process.env.ELECTRON_WEBPACK_APP_FIGHT_SCORE_REACHED_CODE
 }
 
 const getters = {}

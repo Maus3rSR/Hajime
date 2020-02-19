@@ -3,8 +3,14 @@ import ScoreDragger from '@partials/fight/ScoreDragger'
 
 export default {
     components: { ScoreDragger },
+    props: {
+        readonly: {
+            type: Boolean,
+            default: false
+        }
+    },
     computed: {
-        
+
     },
     data() {
         return {
@@ -34,18 +40,20 @@ export default {
                     </div>
                 </div>
 
-                <score-dragger />
+                <score-dragger
+                    :readonly="readonly"
+                />
 
                 <div class="row fight-versus-footer mt-3">
                     <div class="col-sm-3">
                         <label class="ml-2 custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox">
+                            <input class="custom-control-input" type="checkbox" :disabled="readonly">
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">Mort subite (Enshõ)</span>
                         </label>
                     </div>
 
-                    <div class="col text-right">
+                    <div class="col text-right" v-if="!readonly">
                         <transition name="fade" mode="out-in">
                             <span v-if="1">
                                 <button class="btn btn-link">
