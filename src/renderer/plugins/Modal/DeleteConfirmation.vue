@@ -42,6 +42,8 @@ export default {
             Êtes-vous sûr de vouloir supprimer {{ deleteLabel }} ?
         </div>
 
+        <slot name="content"></slot>
+
         <template slot="modal-footer">
             <button type="button" class="btn btn-link" @click.prevent="cancel">Annuler</button>
             <button type="button" class="btn btn-danger" @click.prevent="confirmDelete">Je confirme la suppression</button>

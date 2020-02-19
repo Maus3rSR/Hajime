@@ -26,7 +26,7 @@ export default {
         },
         onScoreReached() {
             this.disabled = true
-        }
+        },
     },
     data() {
         return {

@@ -55,17 +55,48 @@ export default {
 
             this.score_list.push(score)
 
+            this.$emit('on-score-update', this.score_list)
+
             if (this.limit_score_reached || score.code === this.FIGHT_SCORE_REACHED_CODE)
                 this.$emit('on-score-reached')
+        },
+        removeScore(score) {
+            const index = this.score_list.findIndex(s => s.code === score.code)
+            const was_limit_score_reached = this.limit_score_reached
+
+            this.score_list.splice(index, 1)
+            this.$emit('on-score-update', this.score_list)
+
+            if (was_limit_score_reached)
+                this.$emit('on-score-unreached')
+        },
+        removeFool() {
+            const was_limit_fool_reached = this.limit_fool_reached
+
+            this.fool_count--
+            this.$emit('on-fool-update', this.fool_count)
+
+            if (was_limit_fool_reached)
+                this.$emit('on-fool-unreached')
         },
         addFool() {
             if (this.is_disabled)
                 return
 
             this.fool_count++
+            this.$emit('on-fool-update', this.fool_count)
 
             if (this.limit_fool_reached)
                 this.$emit('on-fool-reached')
+        },
+        onModalRemoveConfirmation(item) {
+            if (undefined === item)
+                this.removeFool()
+            else
+                this.removeScore(item)
+        },
+        onButtonRemoveClick(item) {
+            this.$refs.modalDeleteScore.show(item)
         }
     },
     data() {
@@ -89,7 +120,15 @@ export default {
             
             @add="onAdd"
         >
-            <span v-for="(score, index) in score_list" :key="index" :title="score.name" class="">
+            <span v-for="(score, index) in score_list" :key="index" :title="score.name" class="animated flipInX score-item">
+                <button
+                    title="Supprimer le score"
+                    class="btn btn-danger btn-sm animated bounceIn faster"
+
+                    @click.prevent="onButtonRemoveClick(score)"
+                >
+                    <i class="zmdi zmdi-close"></i>
+                </button>
                 {{ score.code }}
             </span>
 
@@ -97,9 +136,26 @@ export default {
 
         <div class="fool-wrapper">
             <span v-for="fool_number in fool_count" :key="fool_number">
+                <button
+                    title="Supprimer la pénalité"
+                    class="btn btn-danger btn-sm animated bounceIn faster"
+
+                    @click.prevent="onButtonRemoveClick()"
+                >
+                    <i class="zmdi zmdi-close"></i>
+                </button>
                 {{ FIGHT_FOOL_CODE }}
             </span>
         </div>
+
+        <modal-delete-confirmation
+            ref="modalDeleteScore"
+            @on-delete="onModalRemoveConfirmation"
+        >
+            <template slot="content">
+                Attention, selon le score que vous enlevez, vous allez modifier l'ordre d'attribution des scores restants
+            </template>
+        </modal-delete-confirmation>
     </div>
 </template>
 
@@ -114,6 +170,7 @@ export default {
             align-items: center;
             
             > span {
+                position: relative;
                 margin: 15px;
                 font-size: 5rem;
                 font-weight: bold;
@@ -137,6 +194,23 @@ export default {
 
             > span:nth-child(2n) {
                 padding-right: 15px;
+            }
+        }
+
+        .score-item, .fool-wrapper {
+            &:hover {
+                .btn {
+                    display: block;
+                }    
+            }
+
+            .btn {
+                position: absolute;
+                display: none;
+                border-radius: 100%;
+                z-index: 1;
+                right: 0;
+                top: 0;
             }
         }
     }
