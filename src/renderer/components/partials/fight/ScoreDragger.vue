@@ -2,6 +2,8 @@
 import { mapState } from 'vuex'
 import ScoreDragContainer from './ScoreDragContainer'
 
+const containerList = ["scoreContainerLeft", "scoreContainerRight"]
+
 export default {
     components: { ScoreDragContainer },
     props: {
@@ -17,6 +19,9 @@ export default {
         },
         is_disabled() {
             return this.readonly || this.disabled
+        },
+        fool_score() {
+            return this.getScoreByCode('I')
         }
     },
     methods: {
@@ -24,13 +29,54 @@ export default {
         getScoreByCode(code) {
             return this.full_score_list.find(score => score.code === code)
         },
+        getContainerReference(container_index) {
+            container_index = parseInt(container_index, 0)
+
+            if (isNaN(container_index))
+                return undefined
+
+            return containerList[container_index]
+        },
         onScoreReached() {
             this.disabled = true
         },
+        onScoreUnreached() {
+            this.disabled = false
+        },
+        onFoolReached(to_container_index) {
+            if (this.ignoreNextEvent) {
+                this.ignoreNextEvent = false
+                return
+            }
+
+            this.$refs[this.getContainerReference(to_container_index)].addScore(this.fool_score)
+        },
+        onFoolUnreached(to_container_index) {
+            if (this.ignoreNextEvent) {
+                this.ignoreNextEvent = false
+                return
+            }
+            
+            this.ignoreNextEvent = true
+            this.$refs[this.getContainerReference(to_container_index)].removeScore(this.fool_score)
+        },
+        onScoreRemoved(score, to_container_index) {
+            if (this.ignoreNextEvent) {
+                this.ignoreNextEvent = false
+                return
+            }
+
+            if (score.code !== this.fool_score.code)
+                return
+
+            this.ignoreNextEvent = true
+            this.$refs[this.getContainerReference(to_container_index)].removeFool()
+        }
     },
     data() {
         return {
             disabled: false,
+            ignoreNextEvent: false, // This is to prevent ping pong $emit issue from container left/right
             score_choosen: false,
             score_type_hidden_list: [{
                 name: "Ippon",
@@ -65,19 +111,24 @@ export default {
 
 <template>
     <div class="row fight-versus--content">
+        <!-- LEFT SCORE CONTAINER FOR A FIGHTER -->
         <div class="col">
             <score-drag-container
                 :limit="FIGHT_LIMIT_SCORE"
                 :scoreChoosen="score_choosen"
                 :disabled="is_disabled"
+                :canRemove="!readonly"
+                :ref="getContainerReference(0)"
 
-                ref="scoreContainerLeft"
-
-                @on-fool-reached="$refs.scoreContainerRight.addScore(getScoreByCode('I'))"
+                @on-fool-reached="onFoolReached(1)"
+                @on-fool-unreached="onFoolUnreached(1)"
                 @on-score-reached="onScoreReached"
+                @on-score-unreached="onScoreUnreached"
+                @on-score-remove="score => onScoreRemoved(score, 1)"
             />
         </div>
 
+        <!-- MIDDLE CONTAINER WITH ALL SCORE -->
         <div class="col-sm-1" v-if="!readonly">
             <draggable
                 class="card d-flex flex-column align-items-center justify-content-center"
@@ -96,16 +147,20 @@ export default {
             </draggable>
         </div>
 
+        <!-- RIGHT SCORE CONTAINER FOR A FIGHTER -->
         <div class="col">
             <score-drag-container
                 :limit="FIGHT_LIMIT_SCORE"
                 :scoreChoosen="score_choosen"
                 :disabled="is_disabled"
+                :canRemove="!readonly"
+                :ref="getContainerReference(1)"
 
-                ref="scoreContainerRight"
-
-                @on-fool-reached="$refs.scoreContainerLeft.addScore(getScoreByCode('I'))"
+                @on-fool-reached="onFoolReached(0)"
+                @on-fool-unreached="onFoolUnreached(0)"
                 @on-score-reached="onScoreReached"
+                @on-score-unreached="onScoreUnreached"
+                @on-score-remove="score => onScoreRemoved(score, 0)"
             />
         </div>
     </div>

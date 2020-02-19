@@ -14,6 +14,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        canRemove: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -55,7 +59,7 @@ export default {
 
             this.score_list.push(score)
 
-            this.$emit('on-score-update', this.score_list)
+            this.$emit('on-score-add', score)
 
             if (this.limit_score_reached || score.code === this.FIGHT_SCORE_REACHED_CODE)
                 this.$emit('on-score-reached')
@@ -65,16 +69,17 @@ export default {
             const was_limit_score_reached = this.limit_score_reached
 
             this.score_list.splice(index, 1)
-            this.$emit('on-score-update', this.score_list)
 
-            if (was_limit_score_reached)
+            this.$emit('on-score-remove', score)
+
+            if (was_limit_score_reached || score.code === this.FIGHT_SCORE_REACHED_CODE)
                 this.$emit('on-score-unreached')
         },
         removeFool() {
             const was_limit_fool_reached = this.limit_fool_reached
 
             this.fool_count--
-            this.$emit('on-fool-update', this.fool_count)
+            this.$emit('on-fool-remove', this.fool_count)
 
             if (was_limit_fool_reached)
                 this.$emit('on-fool-unreached')
@@ -84,7 +89,7 @@ export default {
                 return
 
             this.fool_count++
-            this.$emit('on-fool-update', this.fool_count)
+            this.$emit('on-fool-add', this.fool_count)
 
             if (this.limit_fool_reached)
                 this.$emit('on-fool-reached')
@@ -125,6 +130,8 @@ export default {
                     title="Supprimer le score"
                     class="btn btn-danger btn-sm animated bounceIn faster"
 
+                    v-if="canRemove"
+
                     @click.prevent="onButtonRemoveClick(score)"
                 >
                     <i class="zmdi zmdi-close"></i>
@@ -139,6 +146,8 @@ export default {
                 <button
                     title="Supprimer la pénalité"
                     class="btn btn-danger btn-sm animated bounceIn faster"
+
+                    v-if="canRemove"
 
                     @click.prevent="onButtonRemoveClick()"
                 >
@@ -175,9 +184,9 @@ export default {
                 font-size: 5rem;
                 font-weight: bold;
                 text-align: center;
+                width: 100px;
 
                 &:first-child {
-                    width: 100px;
                     border-radius: 100%;
                     border: #fff solid 2px;
                 }
