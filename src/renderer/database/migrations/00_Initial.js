@@ -1,4 +1,6 @@
 import definition_list from '@database/definitions'
+import data_formula from './data/formula'
+import data_score_type from './data/score_type'
 
 const getCreateTablePromise = (queryInterface, definition) => {
     return queryInterface.createTable(definition.name, definition.getDefinition(true))
@@ -12,16 +14,6 @@ export default {
     up: queryInterface => {
 
         const name_list = Object.keys(definition_list)
-        const INSERT_DATA = [{
-            name: "Poule",
-            component_list: JSON.stringify(["Pool"])
-        }, {
-            name: "Arbre éliminatoire",
-            component_list: JSON.stringify(["Tree"])
-        }, {
-            name: "Poule & Arbre éliminatoire",
-            component_list: JSON.stringify(["Pool", "Tree"])
-        }]
 
         let promise = getCreateTablePromise(queryInterface, definition_list[name_list[0]]) // Chaining promise to create tables in order
         for (let i = 1; i < name_list.length; i++)
@@ -36,7 +28,9 @@ export default {
             def.constraint_list.forEach(constraint_option => promise = promise.then(() => getConstraintPromise(queryInterface, def.name, constraint_option)))
         })
 
-        return promise.then(() => queryInterface.bulkInsert('Formula', INSERT_DATA))
+        return promise
+            .then(() => queryInterface.bulkInsert('Formula', data_formula.list))
+            .then(() => queryInterface.bulkInsert('ScoreType', data_score_type.list))
     },
     down: queryInterface => queryInterface.dropAllTables()
 }
