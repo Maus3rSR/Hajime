@@ -287,7 +287,8 @@ const actions = {
             .then(competition => {
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
-            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
+            .catch((err) => console.log(err))
+            // .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise

@@ -1,5 +1,5 @@
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import ScoreDragContainer from './ScoreDragContainer'
 
 const containerList = ["scoreContainerLeft", "scoreContainerRight"]
@@ -13,22 +13,28 @@ export default {
         }
     },
     computed: {
-        ...mapState("configuration", ["FIGHT_LIMIT_SCORE"]),
-        full_score_list() {
-            return this.score_type_list.concat(this.score_type_hidden_list)
-        },
+        ...mapState("configuration", ["FIGHT_LIMIT_SCORE", "FIGHT_SCORE_FOOL_CODE"]),
+        ...mapState("score_type", {
+            full_score_list: state => state.list,
+            score_type_list_loading: state => state.loading
+        }),
+        ...mapGetters({
+            score_type_list_count: "score_type/count",
+            score_type_list: "score_type/list_visible",
+            getScoreByCode: "score_type/getByCode"
+        }),
         is_disabled() {
             return this.readonly || this.disabled
         },
         fool_score() {
-            return this.getScoreByCode('I')
+            return this.getScoreByCode(this.FIGHT_SCORE_FOOL_CODE)
         }
     },
     methods: {
+        ...mapActions({
+            loadScoreTypeList: "score_type/LOAD_ALL",
+        }),
         onMove() { return 1 }, // Avoid swap on 2 elements
-        getScoreByCode(code) {
-            return this.full_score_list.find(score => score.code === code)
-        },
         getContainerReference(container_index) {
             container_index = parseInt(container_index, 0)
 
@@ -57,7 +63,7 @@ export default {
                 return
             }
             
-            this.ignoreNextEvent = true
+            this.ignoreNextEvent = true // Avoid multiple event looping issue
             this.$refs[this.getContainerReference(to_container_index)].removeScore(this.fool_score)
         },
         onScoreRemoved(score, to_container_index) {
@@ -69,7 +75,7 @@ export default {
             if (score.code !== this.fool_score.code)
                 return
 
-            this.ignoreNextEvent = true
+            this.ignoreNextEvent = true // Avoid multiple event looping issue
             this.$refs[this.getContainerReference(to_container_index)].removeFool()
         }
     },
@@ -77,34 +83,12 @@ export default {
         return {
             disabled: false,
             ignoreNextEvent: false, // This is to prevent ping pong $emit issue from container left/right
-            score_choosen: false,
-            score_type_hidden_list: [{
-                name: "Ippon",
-                code: "I"
-            }, {
-                name: "Ippon",
-                code: "O"
-            }],
-            score_type_list: [{
-                name: "Men",
-                code: "M"
-            },{
-                name: "Kote",
-                code: "K"
-            },{
-                name: "Do",
-                code: "D"
-            },{
-                name: "Tsuki",
-                code: "T"
-            },{
-                name: "Hantei",
-                code: "Ht"
-            }, {
-                name: "Hansokku",
-                code: "△"
-            }]
+            score_choosen: false
         }
+    },
+    created() {
+        if (this.score_type_list_count === 0)
+            this.loadScoreTypeList()
     }
 }
 </script>
@@ -113,55 +97,70 @@ export default {
     <div class="row fight-versus--content">
         <!-- LEFT SCORE CONTAINER FOR A FIGHTER -->
         <div class="col">
-            <score-drag-container
-                :limit="FIGHT_LIMIT_SCORE"
-                :scoreChoosen="score_choosen"
-                :disabled="is_disabled"
-                :canRemove="!readonly"
-                :ref="getContainerReference(0)"
+            <transition name="fade" mode="out-in">
+                <score-drag-container
+                    v-if="!score_type_list_loading"
 
-                @on-fool-reached="onFoolReached(1)"
-                @on-fool-unreached="onFoolUnreached(1)"
-                @on-score-reached="onScoreReached"
-                @on-score-unreached="onScoreUnreached"
-                @on-score-remove="score => onScoreRemoved(score, 1)"
-            />
+                    :limit="FIGHT_LIMIT_SCORE"
+                    :scoreChoosen="score_choosen"
+                    :disabled="is_disabled"
+                    :canRemove="!readonly"
+                    :ref="getContainerReference(0)"
+
+                    @on-fool-reached="onFoolReached(1)"
+                    @on-fool-unreached="onFoolUnreached(1)"
+                    @on-score-reached="onScoreReached"
+                    @on-score-unreached="onScoreUnreached"
+                    @on-score-remove="score => onScoreRemoved(score, 1)"
+                />
+            </transition>
         </div>
 
         <!-- MIDDLE CONTAINER WITH ALL SCORE -->
         <div class="col-sm-1" v-if="!readonly">
-            <draggable
-                class="card d-flex flex-column align-items-center justify-content-center"
-                
-                :list="score_type_list"
-                :group="{ name: 'score', pull: 'clone', put: false }"
-                :sort="false"
-                :move="onMove"
+            <transition name="fade" mode="out-in">
+                <span v-if="score_type_list_loading">
+                    <clip-loader color="#ffffff"></clip-loader>
+                </span>
+                <draggable
+                    class="card d-flex flex-column align-items-center justify-content-center"
+                    
+                    v-else
 
-                @choose="score_choosen = true"
-                @unchoose="score_choosen = false"
-            >
-                <button v-for="(score_type, index) in score_type_list" :key="index" :disabled="disabled" :title="score_type.name" class="btn btn-light btn--icon mb-4">
-                    {{ score_type.code }}
-                </button>
-            </draggable>
+                    :list="score_type_list"
+                    :group="{ name: 'score', pull: 'clone', put: false }"
+                    :sort="false"
+                    :move="onMove"
+
+                    @choose="score_choosen = true"
+                    @unchoose="score_choosen = false"
+                >
+                    <button v-for="(score_type, index) in score_type_list" :key="index" :disabled="disabled" :title="score_type.name" class="btn btn-light btn--icon mb-4">
+                        <span v-html="score_type.code"></span> 
+                    </button>
+                </draggable>
+            </transition>
         </div>
 
         <!-- RIGHT SCORE CONTAINER FOR A FIGHTER -->
         <div class="col">
-            <score-drag-container
-                :limit="FIGHT_LIMIT_SCORE"
-                :scoreChoosen="score_choosen"
-                :disabled="is_disabled"
-                :canRemove="!readonly"
-                :ref="getContainerReference(1)"
+            <transition name="fade" mode="out-in">
+                <score-drag-container
+                    v-if="!score_type_list_loading"
 
-                @on-fool-reached="onFoolReached(0)"
-                @on-fool-unreached="onFoolUnreached(0)"
-                @on-score-reached="onScoreReached"
-                @on-score-unreached="onScoreUnreached"
-                @on-score-remove="score => onScoreRemoved(score, 0)"
-            />
+                    :limit="FIGHT_LIMIT_SCORE"
+                    :scoreChoosen="score_choosen"
+                    :disabled="is_disabled"
+                    :canRemove="!readonly"
+                    :ref="getContainerReference(1)"
+
+                    @on-fool-reached="onFoolReached(0)"
+                    @on-fool-unreached="onFoolUnreached(0)"
+                    @on-score-reached="onScoreReached"
+                    @on-score-unreached="onScoreUnreached"
+                    @on-score-remove="score => onScoreRemoved(score, 0)"
+                />
+            </transition>
         </div>
     </div>
 </template>

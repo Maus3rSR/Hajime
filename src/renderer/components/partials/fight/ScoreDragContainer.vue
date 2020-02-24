@@ -136,7 +136,7 @@ export default {
                 >
                     <i class="zmdi zmdi-close"></i>
                 </button>
-                {{ score.code }}
+                <span v-html="score.code"></span>
             </span>
 
         </draggable>
@@ -153,7 +153,7 @@ export default {
                 >
                     <i class="zmdi zmdi-close"></i>
                 </button>
-                {{ FIGHT_FOOL_CODE }}
+                <span v-html="FIGHT_FOOL_CODE"></span>
             </span>
         </div>
 
