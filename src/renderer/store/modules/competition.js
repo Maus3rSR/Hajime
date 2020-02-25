@@ -62,17 +62,17 @@ const getters = {
 
 const mutations = {
     updateField,
-    ADD_FORMULA_CONFIG(state, formula_config) {
-        state.model.formula_config_list.push(JSON.parse(JSON.stringify(formula_config)))
-    },
-    UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
-        state.model.formula_config_list.splice(index, 1, JSON.parse(JSON.stringify(formula_config)))
-    },
     RESET_STATE(state) {
         Object.assign(state, defaultState())
     },
     INJECT_MODEL_DATA(state, model) {
         Object.assign(state.model, model)
+    },
+    ADD_FORMULA_CONFIG(state, formula_config) {
+        state.model.formula_config_list.push(JSON.parse(JSON.stringify(formula_config)))
+    },
+    UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
+        state.model.formula_config_list.splice(index, 1, JSON.parse(JSON.stringify(formula_config)))
     },
     UPDATE_FIGHTER(state, fighter) {
         const index = state.model.fighter_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter.id, 10))
@@ -284,11 +284,8 @@ const actions = {
         const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: ['fighter_list', 'formula_config_list'] })
         
         promise
-            .then(competition => {
-                commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
-            })
-            .catch((err) => console.log(err))
-            // .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
+            .then(competition => commit('INJECT_MODEL_DATA', competition.get({ plain: true })))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise

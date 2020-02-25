@@ -35,8 +35,13 @@ export default {
         }
     },
     methods: {
-        openFightWindow(id) {
-            this.$ipc.send('open-window', `fight/${parseInt(id, 10)}`)
+        openFightWindow(fight) {
+            let url = `fight/${parseInt(fight.id, 10)}/fighter1/${parseInt(fight.fighter1.id, 10)}/fighter2/${parseInt(fight.fighter2.id, 10)}`
+
+            if (this.marking_board_reversed)
+                url += "?marking_board_reversed"
+            
+            this.$ipc.send('open-window', url)
         }
     },
     data() {
@@ -98,7 +103,7 @@ export default {
             </template>
 
             <template slot="action-cell" slot-scope="props">
-                <button title="Gérer le match" class="btn btn-sm btn-outline-primary" @click.prevent="openFightWindow(props.row.id)">
+                <button title="Gérer le match" class="btn btn-sm btn-outline-primary" @click.prevent="openFightWindow(props.row)">
                     <i class="zmdi zmdi-edit"></i>
                 </button>
             </template>

@@ -40,7 +40,7 @@ export default new Router({
             ]
         },
         {
-            path: '/fight/:id',
+            path: '/fight/:fight_id/fighter1/:fighter1_id/fighter2/:fighter2_id',
             props: true,
             component: require('@components/software/fight/Manage').default
         },

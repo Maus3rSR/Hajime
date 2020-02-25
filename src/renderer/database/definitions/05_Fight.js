@@ -44,5 +44,11 @@ export default {
                 })
             )
         )
+
+        Model.belongsTo(model_list.Pool, {
+            foreignKey: "fightable_id",
+            constraints: false,
+            as: "pool"
+        })
     }
 }
