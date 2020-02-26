@@ -39,16 +39,12 @@ export default {
             [1, 2].forEach(number =>
                 Model.belongsTo(model_list[entriable], {
                     foreignKey: `entriable${number}_id`,
-                    constraints: false,
+                    constraints: false, // for polymorphic relationship
                     as: `${entriable.toLowerCase()}${number}`
                 })
             )
         )
 
-        Model.belongsTo(model_list.Pool, {
-            foreignKey: "fightable_id",
-            constraints: false,
-            as: "pool"
-        })
+        Model.belongsTo(model_list.Pool, { foreignKey: "fightable_id", as: "pool" })
     }
 }

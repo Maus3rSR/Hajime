@@ -43,7 +43,7 @@ export default {
         ["Fighter", "Team"].forEach(entriable => // TODO Il faudrait pouvoir définir qu'une seule association `as: 'entry'` et qui va chercher dynamiquement soit sur Fighter, soit sur Team...
             Model.belongsTo(model_list[entriable], {
                 foreignKey: 'entriable_id',
-                constraints: false,
+                constraints: false, // for polymorphic relationship
                 as: entriable.toLowerCase()
             })
         )

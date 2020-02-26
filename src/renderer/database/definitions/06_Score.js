@@ -46,5 +46,7 @@ export default {
             ...with_timestamp && timestamp_definition
         }
     },
-    // getAssociation: Model => model_list => {}
+    getAssociation: Model => model_list => {
+        Model.belongsTo(model_list.ScoreType, { foreignKey: "score_type_id", as: "score_type" })
+    }
 }
