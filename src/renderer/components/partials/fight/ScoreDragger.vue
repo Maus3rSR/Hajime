@@ -2,7 +2,8 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import ScoreDragContainer from './ScoreDragContainer'
 
-const containerList = ["scoreContainerLeft", "scoreContainerRight"]
+const containerReferenceList = ["scoreContainerLeft", "scoreContainerRight"]
+const fighterReferenceList = ["fighter_left", "fighter_right"]
 
 export default {
     components: { ScoreDragContainer },
@@ -10,6 +11,14 @@ export default {
         readonly: {
             type: Boolean,
             default: false
+        },
+        fighter_left: {
+            type: Object,
+            required: true
+        },
+        fighter_right: {
+            type: Object,
+            required: true
         }
     },
     computed: {
@@ -35,13 +44,24 @@ export default {
             loadScoreTypeList: "score_type/LOAD_ALL",
         }),
         onMove() { return 1 }, // Avoid swap on 2 elements
-        getContainerReference(container_index) {
-            container_index = parseInt(container_index, 0)
+        getContainerReference(index) {
+            index = parseInt(index, 0)
 
-            if (isNaN(container_index))
+            if (isNaN(index))
                 return undefined
 
-            return containerList[container_index]
+            return containerReferenceList[index]
+        },
+        getFighterReference(index) {
+            index = parseInt(index, 0)
+
+            if (isNaN(index))
+                return undefined
+
+            return fighterReferenceList[index]
+        },
+        getFighterFromContainerIndex(index) {
+            return this[this.getFighterReference(index)]
         },
         onScoreReached() {
             this.disabled = true
@@ -49,24 +69,31 @@ export default {
         onScoreUnreached() {
             this.disabled = false
         },
-        onFoolReached(to_container_index) {
+        onFoolReached(from_container_index) {
             if (this.ignoreNextEvent) {
                 this.ignoreNextEvent = false
                 return
             }
 
-            this.$refs[this.getContainerReference(to_container_index)].addScore(this.fool_score)
+            this.$refs[this.getContainerReference(1 - from_container_index)].addScore(this.fool_score)
         },
-        onFoolUnreached(to_container_index) {
+        onFoolUnreached(from_container_index) {
             if (this.ignoreNextEvent) {
                 this.ignoreNextEvent = false
                 return
             }
             
             this.ignoreNextEvent = true // Avoid multiple event looping issue
-            this.$refs[this.getContainerReference(to_container_index)].removeScore(this.fool_score)
+            this.$refs[this.getContainerReference(1 - from_container_index)].removeScore(this.fool_score)
         },
-        onScoreRemoved(score, to_container_index) {
+        onScoreAdded(score, from_container_index) {
+            const fighter_id = this.getFighterFromContainerIndex(from_container_index).id
+            this.$emit('on-score-added', { fighter_id, score })
+        },
+        onScoreRemoved(score, from_container_index) {
+            const fighter_id = this.getFighterFromContainerIndex(from_container_index).id
+            this.$emit('on-score-removed', { fighter_id, score })
+
             if (this.ignoreNextEvent) {
                 this.ignoreNextEvent = false
                 return
@@ -76,7 +103,11 @@ export default {
                 return
 
             this.ignoreNextEvent = true // Avoid multiple event looping issue
-            this.$refs[this.getContainerReference(to_container_index)].removeFool()
+            this.$refs[this.getContainerReference(1 - from_container_index)].removeFool()
+        },
+        onFoolUpdated(fool_count, from_container_index) {
+            const fighter_id = this.getFighterFromContainerIndex(from_container_index).id
+            this.$emit('on-fool-updated', { fighter_id, fool_count })
         }
     },
     data() {
@@ -101,17 +132,20 @@ export default {
                 <score-drag-container
                     v-if="!score_type_list_loading"
 
+                    :initialScoreList="fighter_left.score_given_list"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
                     :canRemove="!readonly"
                     :ref="getContainerReference(0)"
 
-                    @on-fool-reached="onFoolReached(1)"
-                    @on-fool-unreached="onFoolUnreached(1)"
+                    @on-fool-reached="onFoolReached(0)"
+                    @on-fool-unreached="onFoolUnreached(0)"
                     @on-score-reached="onScoreReached"
+                    @on-fool-update="fool_count => onFoolUpdated(fool_count, 0)"
                     @on-score-unreached="onScoreUnreached"
-                    @on-score-remove="score => onScoreRemoved(score, 1)"
+                    @on-score-add="score => onScoreAdded(score, 0)"
+                    @on-score-remove="score => onScoreRemoved(score, 0)"
                 />
             </transition>
         </div>
@@ -148,17 +182,20 @@ export default {
                 <score-drag-container
                     v-if="!score_type_list_loading"
 
+                    :initialScoreList="fighter_right.score_given_list"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
                     :canRemove="!readonly"
                     :ref="getContainerReference(1)"
 
-                    @on-fool-reached="onFoolReached(0)"
-                    @on-fool-unreached="onFoolUnreached(0)"
+                    @on-fool-reached="onFoolReached(1)"
+                    @on-fool-unreached="onFoolUnreached(1)"
+                    @on-fool-update="fool_count => onFoolUpdated(fool_count, 1)"
                     @on-score-reached="onScoreReached"
                     @on-score-unreached="onScoreUnreached"
-                    @on-score-remove="score => onScoreRemoved(score, 0)"
+                    @on-score-add="score => onScoreAdded(score, 1)"
+                    @on-score-remove="score => onScoreRemoved(score, 1)"
                 />
             </transition>
         </div>

@@ -32,8 +32,10 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    LOAD({ dispatch, commit, rootGetters }, { fight_id, fighter1_id, fighter2_id }) {
-        
+    LOAD({ dispatch, commit, state, rootGetters }, { fight_id, fighter1_id, fighter2_id }) {
+        if (state.loading)
+            return
+
         const getFight = fight_id => rootGetters["database/getModel"]("Fight").findByPk(parseInt(fight_id, 10))
         const getFighter = (from_fighter_id, on_fighter_id) => rootGetters["database/getModel"]("Fighter").findByPk(
             parseInt(from_fighter_id, 10), {
@@ -84,8 +86,25 @@ const actions = {
 
         return promise
     },
-    SAVE_SCORE({ dispatch, commit, rootGetters }, score) {
+    ADD_SCORE({ dispatch, commit, state, rootGetters }, { fighter_id, score }) {
+        fighter_id = parseInt(fighter_id, 10)
+
+        if (parseInt(state.fighter1.id, 10) !== fighter_id || parseInt(state.fighter2.id, 10 !== fighter_id))
+            return this.$notify.error("Impossible d'attributer le score. Le combattant n'est pas valide")
+
         
+    },
+    REMOVE_SCORE({ dispatch, commit, rootGetters }, { fighter_id, score }) {
+        fighter_id = parseInt(fighter_id, 10)
+
+        if (parseInt(state.fighter1.id, 10) !== fighter_id || parseInt(state.fighter2.id, 10 !== fighter_id))
+            return this.$notify.error("Impossible de supprimer le score. Le combattant n'est pas valide")
+        },
+    UPDATE_FOOL_COUNT({ dispatch, commit, rootGetters }, { fighter_id, fool_count }) {
+        fighter_id = parseInt(fighter_id, 10)
+
+        if (parseInt(state.fighter1.id, 10) !== fighter_id || parseInt(state.fighter2.id, 10 !== fighter_id))
+            return this.$notify.error("Impossible de mettre à jour le nombre de pénalités. Le combattant n'est pas valide")
     }
 }
 

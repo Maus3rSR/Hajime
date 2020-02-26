@@ -19,7 +19,10 @@ export default {
     },
     methods: {
         ...mapActions({
-            loadFightBoard: "fight_board/LOAD"
+            loadFightBoard: "fight_board/LOAD",
+            addScore: "fight_board/ADD_SCORE",
+            removeScore: "fight_board/REMOVE_SCORE",
+            updateFoolCount: "fight_board/UPDATE_FOOL_COUNT",
         })
     },
     data() {
@@ -63,7 +66,15 @@ export default {
                 </div>
 
                 <score-dragger
+                    v-if="!is_empty_fighter1 && !is_empty_fighter2"
+
+                    @on-score-added="addScore"
+                    @on-score-removed="removeScore"
+                    @on-fool-updated="updateFoolCount"
+
                     :readonly="readonly"
+                    :fighter_left="fighter1"
+                    :fighter_right="fighter2"
                 />
 
                 <div class="row fight-versus-footer mt-3">

@@ -7,6 +7,10 @@ export default {
             type: Boolean,
             required: true
         },
+        initialScoreList: {
+            type: Array,
+            required: true
+        },
         limit: {
             type: Number,
             default: 0
@@ -79,7 +83,7 @@ export default {
             const was_limit_fool_reached = this.limit_fool_reached
 
             this.fool_count--
-            this.$emit('on-fool-remove', this.fool_count)
+            this.$emit('on-fool-update', this.fool_count)
 
             if (was_limit_fool_reached)
                 this.$emit('on-fool-unreached')
@@ -89,7 +93,7 @@ export default {
                 return
 
             this.fool_count++
-            this.$emit('on-fool-add', this.fool_count)
+            this.$emit('on-fool-update', this.fool_count)
 
             if (this.limit_fool_reached)
                 this.$emit('on-fool-reached')
@@ -109,6 +113,9 @@ export default {
             score_list: [],
             fool_count: 0,
         }
+    },
+    mounted() {
+        this.score_list = Array.from(this.initialScoreList) // copy score_list because it can be vuex data
     }
 }
 </script>
