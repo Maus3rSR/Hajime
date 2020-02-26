@@ -35,12 +35,27 @@ const actions = {
     LOAD({ dispatch, commit, rootGetters }, { fight_id, fighter1_id, fighter2_id }) {
         
         const getFight = fight_id => rootGetters["database/getModel"]("Fight").findByPk(parseInt(fight_id, 10))
-        const getFighter = fighter_id => rootGetters["database/getModel"]("Fighter").findByPk(parseInt(fighter_id, 10))
+        const getFighter = (from_fighter_id, on_fighter_id) => rootGetters["database/getModel"]("Fighter").findByPk(
+            parseInt(from_fighter_id, 10), {
+                include: [{
+                    association: "score_given_list",
+                    required: false,
+                    where: { 
+                        fight_id: parseInt(fight_id, 10),
+                        on_fighter_id: parseInt(on_fighter_id, 10), 
+                    }
+                }] 
+            }
+        )
 
         dispatch('CLEAR')
         commit('START_LOADING')
 
-        const promise = Promise.all([getFight(fight_id),getFighter(fighter1_id),getFighter(fighter2_id)])
+        const promise = Promise.all([
+            getFight(fight_id),
+            getFighter(fighter1_id, fighter2_id),
+            getFighter(fighter2_id, fighter1_id)
+        ])
 
         promise
             .then(([fight, fighter1, fighter2]) => {
@@ -68,6 +83,9 @@ const actions = {
             .finally(() => commit('STOP_LOADING'))
 
         return promise
+    },
+    SAVE_SCORE({ dispatch, commit, rootGetters }, score) {
+        
     }
 }
 
