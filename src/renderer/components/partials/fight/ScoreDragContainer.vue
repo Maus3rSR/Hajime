@@ -11,6 +11,10 @@ export default {
             type: Array,
             required: true
         },
+        initialFoolNumber: {
+            type: Number,
+            required: true
+        },
         limit: {
             type: Number,
             default: 0
@@ -116,6 +120,7 @@ export default {
     },
     mounted() {
         this.score_list = Array.from(this.initialScoreList) // copy score_list because it can be vuex data
+        this.fool_count = this.initialFoolNumber
     }
 }
 </script>

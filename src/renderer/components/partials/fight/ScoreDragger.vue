@@ -37,6 +37,18 @@ export default {
         },
         fool_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FOOL_CODE)
+        },
+        fighter_left_score_given_list() {
+            return this.fighter_left.score_given_list.map(score => score.score_type)
+        },
+        fighter_right_score_given_list() {
+            return this.fighter_right.score_given_list.map(score => score.score_type)
+        },
+        fighter_left_fool_number() {
+            return null === this.fighter_left.fool ? 0 : parseInt(this.fighter_left.fool.number, 10)
+        },
+        fighter_right_fool_number() {
+            return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_left.fool.number, 10)
         }
     },
     methods: {
@@ -86,20 +98,28 @@ export default {
             this.ignoreNextEvent = true // Avoid multiple event looping issue
             this.$refs[this.getContainerReference(1 - from_container_index)].removeScore(this.fool_score)
         },
-        onScoreAdded(score, from_container_index) {
-            const fighter_id = this.getFighterFromContainerIndex(from_container_index).id
-            this.$emit('on-score-added', { fighter_id, score })
+        onScoreAdded(score_type, from_container_index) {
+            const from_fighter_id = this.getFighterFromContainerIndex(from_container_index).id
+            const on_fighter_id = this.getFighterFromContainerIndex(1 - from_container_index).id
+            this.$emit('on-score-added', { from_fighter_id, on_fighter_id, score_type })
         },
-        onScoreRemoved(score, from_container_index) {
-            const fighter_id = this.getFighterFromContainerIndex(from_container_index).id
-            this.$emit('on-score-removed', { fighter_id, score })
+        onScoreRemoved(score_type, from_container_index) {
+            const fighter = this.getFighterFromContainerIndex(from_container_index)
+            const score = fighter.score_given_list.find(score => parseInt(score.score_type_id, 10) === parseInt(score_type.id, 10))
+
+            if (undefined === score) {
+                this.$notify.error("Score introuvable, impossible de procéder à sa suppression")
+                return
+            }
+
+            this.$emit('on-score-removed', { fighter_id: fighter.id, score_id: score.id })
 
             if (this.ignoreNextEvent) {
                 this.ignoreNextEvent = false
                 return
             }
 
-            if (score.code !== this.fool_score.code)
+            if (score_type.code !== this.fool_score.code)
                 return
 
             this.ignoreNextEvent = true // Avoid multiple event looping issue
@@ -132,7 +152,8 @@ export default {
                 <score-drag-container
                     v-if="!score_type_list_loading"
 
-                    :initialScoreList="fighter_left.score_given_list"
+                    :initialScoreList="fighter_left_score_given_list"
+                    :initialFoolNumber="fighter_left_fool_number"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
@@ -182,7 +203,8 @@ export default {
                 <score-drag-container
                     v-if="!score_type_list_loading"
 
-                    :initialScoreList="fighter_right.score_given_list"
+                    :initialScoreList="fighter_right_score_given_list"
+                    :initialFoolNumber="fighter_right_fool_number"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
