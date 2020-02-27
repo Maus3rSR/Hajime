@@ -2,6 +2,9 @@ import { updateField } from 'vuex-map-fields'
 
 const defaultState = () =>  ({
     loading: false,
+    saving: false,
+    saving_fool: false,
+    saved: false,
     fight: {},
     fighter1: {},
     fighter2: {}
@@ -13,6 +16,8 @@ const getters = {
     is_empty_fight: state => undefined === state.fight.id,
     is_empty_fighter1: state => undefined === state.fighter1.id,
     is_empty_fighter2: state => undefined === state.fighter2.id,
+    saving: state => state.saving || state.saving_fool,
+    saved: state => state.saved,
     isFighterNumber: state => (fighter_id, number) => undefined !== state[`fighter${parseInt(number, 10)}`].id && parseInt(state[`fighter${parseInt(number, 10)}`].id, 10) === parseInt(fighter_id, 10),
     isOneOfFighter: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) || getters.isFighterNumber(fighter_id, 2),
     getFighterNumber: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) ? 1 : 2,
@@ -30,8 +35,23 @@ const mutations = {
     STOP_LOADING(state) {
         state.loading = false
     },
+    START_SAVING(state) {
+        state.saved = false
+        state.saving = true
+    },
+    STOP_SAVING(state) {
+        state.saving = false
+    },
+    START_SAVING_FOOL(state) {
+        state.saved = false
+        state.saving_fool = true
+    },
+    STOP_SAVING_FOOL(state) {
+        state.saving_fool = false
+    },
     ADD_SCORE(state, { fighter_number, score }) {
         state[`fighter${parseInt(fighter_number, 10)}`].score_given_list.push(score)
+        state.saved = true
     },
     REMOVE_SCORE(state, { fighter_number, score_id }) {
         const index = state[`fighter${parseInt(fighter_number, 10)}`].score_given_list.findIndex(score => parseInt(score.id, 10) === parseInt(score_id, 10))
@@ -40,9 +60,11 @@ const mutations = {
             return
 
         state[`fighter${parseInt(fighter_number, 10)}`].score_given_list.splice(index, 1)
+        state.saved = true
     },
     UPDATE_FOOL(state, { fighter_number, fool }) {
         state[`fighter${parseInt(fighter_number, 10)}`].fool = Object.assign(state[`fighter${parseInt(fighter_number, 10)}`].fool || {}, fool)
+        state.saved = true
     }
 }
 
@@ -119,6 +141,8 @@ const actions = {
         from_fighter_id = parseInt(from_fighter_id, 10)
         on_fighter_id = parseInt(on_fighter_id, 10)
 
+        commit("START_SAVING")
+
         const promise = rootGetters["database/getModel"]("Score").create({
             fight_id: parseInt(state.fight.id, 10),
             from_fighter_id: from_fighter_id,
@@ -137,6 +161,7 @@ const actions = {
                     score: score
                 })
             })
+            .finally(() => commit("STOP_SAVING"))
 
         return promise
     },
@@ -146,6 +171,8 @@ const actions = {
 
         fighter_id = parseInt(fighter_id, 10)
 
+        commit("START_SAVING")
+
         const promise = rootGetters["database/getModel"]("Score").destroy({ where: { id: parseInt(score_id, 10) } })
 
         promise
@@ -154,6 +181,7 @@ const actions = {
                 score_id 
             }))
             .catch(() => this.$notify.error('Un problème est survenu lors de suppression du score'))
+            .finally(() => commit("STOP_SAVING"))
 
         return promise
     },
@@ -173,10 +201,11 @@ const actions = {
         const create = null === fighter_fool
         let promise
 
-        if (create)
-            promise = rootGetters["database/getModel"]("Fool").create({ fight_id: fight_id, fighter_id: fighter_id, number: fool_count })
-        else
-            promise = rootGetters["database/getModel"]("Fool").update({ number: fool_count }, { where: { fight_id: fight_id, fighter_id: fighter_id }})
+        commit("START_SAVING_FOOL")
+
+        promise = create ? 
+            rootGetters["database/getModel"]("Fool").create({ fight_id: fight_id, fighter_id: fighter_id, number: fool_count }) :
+            rootGetters["database/getModel"]("Fool").update({ number: fool_count }, { where: { fight_id: fight_id, fighter_id: fighter_id }})
 
         promise
             .then(f_fool => {
@@ -184,6 +213,9 @@ const actions = {
                 commit("UPDATE_FOOL", { fighter_number, count })
             })
             .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour des pénalités'))
+            .finally(() => commit("STOP_SAVING_FOOL"))
+
+        return promise
     }
 }
 

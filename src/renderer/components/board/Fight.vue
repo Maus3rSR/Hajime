@@ -15,6 +15,8 @@ export default {
             is_empty_fight: "fight_board/is_empty_fight",
             is_empty_fighter1: "fight_board/is_empty_fighter1",
             is_empty_fighter2: "fight_board/is_empty_fighter2",
+            is_saving: "fight_board/saving",
+            is_saved: "fight_board/saved"
         })
     },
     methods: {
@@ -84,6 +86,15 @@ export default {
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">Mort subite (Enshõ)</span>
                         </label>
+                    </div>
+
+                    <div class="col text-center">
+                        <div v-if="is_saving" class="animated fadeInUp faster">
+                            <clip-loader color="#ffffff" :size="'14px'" /> Enregistrement en cours...
+                        </div>
+                        <div v-else-if="is_saved" class="text-success animated fadeOutDown delay-3s">
+                            <i class="zmdi zmdi-check animated tada"></i> Enregistré !
+                        </div>
                     </div>
 
                     <div class="col text-right" v-if="!readonly">
@@ -179,6 +190,10 @@ main {
         .card {
             height: 100%;
         }
+    }
+
+    .v-spinner {
+        display: inline;
     }
 }
 </style>
