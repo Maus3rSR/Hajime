@@ -15,7 +15,8 @@ const getters = {
     is_empty_fighter2: state => undefined === state.fighter2.id,
     isFighterNumber: state => (fighter_id, number) => undefined !== state[`fighter${parseInt(number, 10)}`].id && parseInt(state[`fighter${parseInt(number, 10)}`].id, 10) === parseInt(fighter_id, 10),
     isOneOfFighter: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) || getters.isFighterNumber(fighter_id, 2),
-    getFighterNumber: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) ? 1 : 2
+    getFighterNumber: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) ? 1 : 2,
+    getFighterScoreGivenCount: (state, getters) => fighter_id => state[`fighter${parseInt(getters.getFighterNumber(fighter_id))}`].score_given_list.length
 }
 
 const mutations = {
@@ -112,6 +113,9 @@ const actions = {
         if (!getters.isOneOfFighter(from_fighter_id) || !getters.isOneOfFighter(on_fighter_id))
             return this.$notify.error("Impossible d'attributer le score. Le combattant n'est pas valide")
 
+        if (getters.getFighterScoreGivenCount(from_fighter_id) >= rootGetters["configuration/FIGHT_LIMIT_SCORE"])
+            return this.$notify.error("La limite d'attribution de score a déjà été atteinte")
+
         from_fighter_id = parseInt(from_fighter_id, 10)
         on_fighter_id = parseInt(on_fighter_id, 10)
 
@@ -159,6 +163,10 @@ const actions = {
 
         fighter_id = parseInt(fighter_id, 10)
         fool_count = parseInt(fool_count, 10)
+
+        if (fool_count > rootGetters["configuration/FIGHT_LIMIT_SCORE"] * rootGetters["configuration/FIGHT_NB_FOOL_GIVE_IPPON"])
+            return this.$notify.error("La limite d'attribution de pénalité a déjà été atteinte")
+
         const fight_id = parseInt(state.fight.id, 10)
         const fighter_number = getters.getFighterNumber(fighter_id)
         const fighter_fool = state[`fighter${fighter_number}`].fool
