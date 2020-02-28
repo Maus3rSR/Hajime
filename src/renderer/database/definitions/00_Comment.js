@@ -2,8 +2,7 @@ import Sequelize from 'sequelize'
 import timestamp_definition from './timestamp'
 
 export default {
-    name: "Fool",
-    constraint_list: [{ field_list: ['fight_id', 'fighter_id'], key: { type: 'unique' } }],
+    name: "Comment",
     getDefinition: with_timestamp => {
         return {
             id: {
@@ -12,26 +11,17 @@ export default {
                 primaryKey: true,
                 autoIncrement: true
             },
-            fight_id: {
+            commentable_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                references: {
-                    model: 'Fight',
-                    key: 'id'
-                }
             },
-            fighter_id: {
-                type: Sequelize.INTEGER(10).UNSIGNED,
+            commentable: {
+                type: Sequelize.STRING(45),
                 allowNull: false,
-                references: {
-                    model: 'Fighter',
-                    key: 'id'
-                }
             },
-            number: {
-                type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: true,
-                default: 0
+            text: {
+                type: Sequelize.TEXT(),
+                allowNull: false,
             },
             ...with_timestamp && timestamp_definition
         }

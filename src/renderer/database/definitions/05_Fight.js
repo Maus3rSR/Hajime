@@ -36,11 +36,6 @@ export default {
                 allowNull: true,
                 defaultValue: 0
             },
-            locked: {
-                type: Sequelize.BOOLEAN,
-                allowNull: true,
-                defaultValue: 0
-            },
             ...with_timestamp && timestamp_definition
         }
     },
@@ -56,5 +51,7 @@ export default {
         )
 
         Model.belongsTo(model_list.Pool, { foreignKey: "fightable_id", as: "pool" })
+        Model.hasOne(model_list.FighterFightMeta, { as: 'fighter_fight_meta', foreignKey: 'fight_id' })
+        Model.hasMany(model_list.Comment, { as: 'comment_list', foreignKey: 'commentable_id', scope: { commentable: 'Fight' } })
     }
 }

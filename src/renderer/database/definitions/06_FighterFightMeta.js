@@ -2,8 +2,8 @@ import Sequelize from 'sequelize'
 import timestamp_definition from './timestamp'
 
 export default {
-    name: "Fool",
-    constraint_list: [{ field_list: ['fight_id', 'fighter_id'], key: { type: 'unique' } }],
+    name: "FighterFightMeta",
+    constraint_list: [{ field_list: ['fight_id', 'fighter1_id', 'fighter2_id'], key: { type: 'unique' } }],
     getDefinition: with_timestamp => {
         return {
             id: {
@@ -20,7 +20,7 @@ export default {
                     key: 'id'
                 }
             },
-            fighter_id: {
+            fighter1_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
                 references: {
@@ -28,10 +28,18 @@ export default {
                     key: 'id'
                 }
             },
-            number: {
+            fighter2_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
+                allowNull: false,
+                references: {
+                    model: 'Fighter',
+                    key: 'id'
+                }
+            },
+            locked: {
+                type: Sequelize.BOOLEAN,
                 allowNull: true,
-                default: 0
+                defaultValue: 0
             },
             ...with_timestamp && timestamp_definition
         }

@@ -18,6 +18,7 @@ const getters = {
     is_empty_fighter1: state => undefined === state.fighter1.id,
     is_empty_fighter2: state => undefined === state.fighter2.id,
     is_team_fight: state => state.fight.entriable === "Team",
+    is_locked: state => (undefined === state.fight.fighter_fight_meta || null === state.fight.fighter_fight_meta) ? false : state.fight.fighter_fight_meta.locked,
     saving: state => state.saving || state.saving_fool,
     isFighterNumber: state => (fighter_id, number) => undefined !== state[`fighter${parseInt(number, 10)}`].id && parseInt(state[`fighter${parseInt(number, 10)}`].id, 10) === parseInt(fighter_id, 10),
     isOneOfFighter: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) || getters.isFighterNumber(fighter_id, 2),
@@ -67,8 +68,8 @@ const mutations = {
         state[`fighter${parseInt(fighter_number, 10)}`].fool = Object.assign(state[`fighter${parseInt(fighter_number, 10)}`].fool || {}, fool)
         state.saved = true
     },
-    VALIDATED(state) {
-        state.fight.locked = true
+    VALIDATED(state, fighter_fight_meta) {
+        state.fight.fighter_fight_meta = fighter_fight_meta
         state.saved = true
     }
 }
@@ -81,7 +82,16 @@ const actions = {
         if (state.loading)
             return
 
-        const getFight = fight_id => rootGetters["database/getModel"]("Fight").findByPk(parseInt(fight_id, 10))
+        const getFight = fight_id => rootGetters["database/getModel"]("Fight").findByPk(parseInt(fight_id, 10), {
+            include: [{
+                association: "fighter_fight_meta",
+                required: false,
+                where: {
+                    fighter1_id: parseInt(fighter1_id, 10),
+                    fighter2_id: parseInt(fighter2_id, 10)
+                }
+            }]
+        })
         const getFighter = (from_fighter_id, on_fighter_id) => rootGetters["database/getModel"]("Fighter").findByPk(
             parseInt(from_fighter_id, 10), {
                 include: [{
@@ -96,7 +106,7 @@ const actions = {
                     association: "fool",
                     required: false,
                     where: { fight_id: parseInt(fight_id, 10) }
-                }] 
+                }]
             }
         )
 
@@ -258,10 +268,23 @@ const actions = {
 
         commit("START_SAVING")
 
-        const promise = rootGetters["database/getModel"]("Fight").update({ locked: true }, { where: { id: parseInt(state.fight.id, 10) } })
+        let promise = undefined !== comment && null !== comment ? 
+            rootGetters["database/getModel"]("Comment").create({
+                commentable_id: parseInt(state.fight.id, 10),
+                commentable: "Fight",
+                text: comment
+            }) :
+            Promise.resolve()
+
+        promise = promise.then(() => rootGetters["database/getModel"]("FighterFightMeta").create({
+            fight_id: parseInt(state.fight.id, 10),
+            fighter1_id: parseInt(state.fighter1.id, 10),
+            fighter2_id: parseInt(state.fighter2.id, 10),
+            locked: true
+        }))
 
         promise
-            .then(() => commit("VALIDATED"))
+            .then(fighter_fight_meta => commit("VALIDATED", fighter_fight_meta.get({ plain: true })))
             .catch(() => this.$notify.error("Un problème est survenu lors de la validation du combat"))
             .finally(() => commit("STOP_SAVING"))
 

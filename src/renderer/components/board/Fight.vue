@@ -18,13 +18,14 @@ export default {
             is_empty_fighter1: "fight_board/is_empty_fighter1",
             is_empty_fighter2: "fight_board/is_empty_fighter2",
             is_team_fight: "fight_board/is_team_fight",
+            is_fight_locked: "fight_board/is_locked",
             is_saving: "fight_board/saving",
         }),
         modal_title() {
             return this.forfeit ? "Déclarer un forfait" : "Validation du combat"
         },
         is_readonly() {
-            return this.readonly || (null === this.fight.id ? true : this.fight.locked)
+            return this.readonly || (null === this.fight.id ? true : this.is_fight_locked)
         }
     },
     methods: {
@@ -110,7 +111,7 @@ export default {
                 <div class="row fight-versus-footer mt-3">
                     <div class="col-sm-3" v-if="!is_team_fight">
                         <label class="ml-2 custom-control custom-checkbox">
-                            <input class="custom-control-input" v-model="sudden_death" type="checkbox" :disabled="readonly" @change="updateSuddenDeath">
+                            <input class="custom-control-input" v-model="sudden_death" type="checkbox" :disabled="is_readonly" @change="updateSuddenDeath">
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">Mort subite (Enshõ)</span>
                         </label>
@@ -127,7 +128,7 @@ export default {
 
                     <div class="col text-right">
                         <transition name="fade" mode="out-in">
-                            <span v-if="!readonly">
+                            <span v-if="!is_readonly">
                                 <button class="btn btn-link" @click.prevent="showConfirm(true)">
                                     Déclarer un forfait
                                     <i class="zmdi zmdi-close"></i>
