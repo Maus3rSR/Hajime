@@ -22,7 +22,7 @@ export default {
         }
     },
     computed: {
-        ...mapState("configuration", ["FIGHT_LIMIT_SCORE", "FIGHT_SCORE_FOOL_CODE"]),
+        ...mapState("configuration", ["FIGHT_LIMIT_SCORE", "FIGHT_SCORE_FOOL_CODE", "FIGHT_SCORE_FORFEIT_CODE"]),
         ...mapState("score_type", {
             full_score_list: state => state.list,
             score_type_list_loading: state => state.loading
@@ -38,6 +38,9 @@ export default {
         fool_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FOOL_CODE)
         },
+        forfeit_score() {
+            return this.getScoreByCode(this.FIGHT_SCORE_FORFEIT_CODE)
+        },
         fighter_left_score_given_list() {
             return this.fighter_left.score_given_list.map(score => score.score_type)
         },
@@ -48,7 +51,7 @@ export default {
             return null === this.fighter_left.fool ? 0 : parseInt(this.fighter_left.fool.number, 10)
         },
         fighter_right_fool_number() {
-            return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_left.fool.number, 10)
+            return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_right.fool.number, 10)
         }
     },
     methods: {
@@ -114,6 +117,9 @@ export default {
 
             this.$emit('on-score-removed', { fighter_id: fighter.id, score_id: score.id })
 
+            if (this.cleaning)
+                return
+
             if (this.ignoreNextEvent) {
                 this.ignoreNextEvent = false
                 return
@@ -128,10 +134,32 @@ export default {
         onFoolUpdated(fool_count, from_container_index) {
             const fighter_id = this.getFighterFromContainerIndex(from_container_index).id
             this.$emit('on-fool-updated', { fighter_id, fool_count })
+        },
+        onFighterForfeit(fighter_id) {
+            let index = 0
+            let fighter = this.getFighterFromContainerIndex(index)
+            if (parseInt(fighter.id, 10) !== parseInt(fighter_id)) {
+                index = 1
+                fighter = this.getFighterFromContainerIndex(index)
+            }
+
+            if (parseInt(fighter.id, 10) !== parseInt(fighter_id))
+                return this.$notify.error("Le combattant déclarant forfait n'est pas valide. Impossible de proécéder à la modification des scores")
+
+            this.cleaning = true
+
+            this.$refs[this.getContainerReference(index)].clean()
+            this.$refs[this.getContainerReference(1 - index)].clean()
+            
+            this.cleaning = false
+
+            for (let i = 0; i < 2; i++)
+                this.$refs[this.getContainerReference(1 - index)].addScore(this.forfeit_score)
         }
     },
     data() {
         return {
+            cleaning: false,
             disabled: false,
             ignoreNextEvent: false, // This is to prevent ping pong $emit issue from container left/right
             score_choosen: false

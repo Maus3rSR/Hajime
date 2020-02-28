@@ -1,5 +1,6 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import ScoreDragger from '@partials/fight/ScoreDragger'
 
 export default {
@@ -10,14 +11,21 @@ export default {
         fighter2_id: { required: true },
     },
     computed: {
-        ...mapState('fight_board', ['fight','fighter1','fighter2']),
+        ...mapState('fight_board', ['fight','fighter1','fighter2', 'saved', 'saving_validate']),
+        ...mapFields('fight_board', ['fight.sudden_death']),
         ...mapGetters({
             is_empty_fight: "fight_board/is_empty_fight",
             is_empty_fighter1: "fight_board/is_empty_fighter1",
             is_empty_fighter2: "fight_board/is_empty_fighter2",
+            is_team_fight: "fight_board/is_team_fight",
             is_saving: "fight_board/saving",
-            is_saved: "fight_board/saved"
-        })
+        }),
+        modal_title() {
+            return this.forfeit ? "Déclarer un forfait" : "Validation du combat"
+        },
+        is_readonly() {
+            return this.readonly || (null === this.fight.id ? true : this.fight.locked)
+        }
     },
     methods: {
         ...mapActions({
@@ -25,12 +33,30 @@ export default {
             addScore: "fight_board/ADD_SCORE",
             removeScore: "fight_board/REMOVE_SCORE",
             updateFoolCount: "fight_board/UPDATE_FOOL_COUNT",
-        })
+            updateSuddenDeath: "fight_board/UPDATE_SUDDEN_DEATH",
+            validateFight: "fight_board/VALIDATE"
+        }),
+        showConfirm(forfeit) {
+            this.forfeit = forfeit ? true : false
+            this.$refs.modalConfirmFight.show()
+        },
+        confirm() {
+            if (this.forfeit && null === this.forfeit_fighter_id)
+                return this.$notify.error("Veuillez choisir un combattant qui déclare forfait")
+            
+            if (null !== this.forfeit_fighter_id)
+                this.$refs.scoreComponent.onFighterForfeit(this.forfeit_fighter_id)
+
+            this.validateFight(this.comment)
+        }
     },
     data() {
         return {
+            readonly: false,
             marking_board_reversed: false,
-            readonly: false
+            forfeit: false,
+            forfeit_fighter_id: null,
+            comment: null,
         }
     },
     created() {
@@ -70,48 +96,50 @@ export default {
                 <score-dragger
                     v-if="!is_empty_fighter1 && !is_empty_fighter2"
 
+                    ref="scoreComponent"
+
                     @on-score-added="addScore"
                     @on-score-removed="removeScore"
                     @on-fool-updated="updateFoolCount"
 
-                    :readonly="readonly"
+                    :readonly="is_readonly"
                     :fighter_left="fighter1"
                     :fighter_right="fighter2"
                 />
 
                 <div class="row fight-versus-footer mt-3">
-                    <div class="col-sm-3">
+                    <div class="col-sm-3" v-if="!is_team_fight">
                         <label class="ml-2 custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" :disabled="readonly">
+                            <input class="custom-control-input" v-model="sudden_death" type="checkbox" :disabled="readonly" @change="updateSuddenDeath">
                             <span class="custom-control-indicator"></span>
                             <span class="custom-control-description">Mort subite (Enshõ)</span>
                         </label>
                     </div>
 
                     <div class="col text-center">
-                        <div v-if="is_saving" class="animated fadeInUp faster">
+                        <div v-if="is_saving" class="animated fadeInUp faster h4">
                             <clip-loader color="#ffffff" :size="'14px'" /> Enregistrement en cours...
                         </div>
-                        <div v-else-if="is_saved" class="text-success animated fadeOutDown delay-3s">
-                            <i class="zmdi zmdi-check animated tada"></i> Enregistré !
+                        <div v-else-if="saved" class="text-success animated fadeOutDown delay-3s h4">
+                            <i class="zmdi zmdi-check animated flash"></i> Enregistré !
                         </div>
                     </div>
 
-                    <div class="col text-right" v-if="!readonly">
+                    <div class="col text-right">
                         <transition name="fade" mode="out-in">
-                            <span v-if="1">
-                                <button class="btn btn-link">
+                            <span v-if="!readonly">
+                                <button class="btn btn-link" @click.prevent="showConfirm(true)">
                                     Déclarer un forfait
                                     <i class="zmdi zmdi-close"></i>
                                 </button>
-                                <button class="btn btn-outline-success">
+                                <button class="btn btn-outline-success" @click.prevent="showConfirm()">
                                     Valider
                                     <i class="zmdi zmdi-check"></i>
                                 </button>
                             </span>
-                            <span class="text-success" v-else>
-                                Ce match a été validé
-                                <i class="zmdi zmdi-check"></i>
+                            <span v-else>
+                                <i class="zmdi zmdi-lock"></i>
+                                Lecture seule
                             </span>
                         </transition>
 
@@ -119,6 +147,47 @@ export default {
                 </div>
             </div>
         </section>
+
+        <modal-confirmation
+            ref="modalConfirmFight"
+            :title="modal_title"
+            :header="false"
+
+            @on-confirm="confirm"
+        >
+            <template slot="label"></template>
+            <template slot="content">
+
+                <div class="row">
+                    <div class="col-sm-12 mb-3" v-if="forfeit">
+                        <span class="card-body__title">Combattant</span>
+                        <div class="clearfix mt-3">
+                            <label class="custom-control custom-radio" v-for="fighter in [fighter1, fighter2]" :key="fighter.id">
+                                <input type="radio" name="fighter__forfeit" class="custom-control-input" :value="fighter.id" v-model="forfeit_fighter_id">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">{{ fighter.name }}</span>
+                            </label>
+                            <i class="form-group__bar"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12">
+                        <label for="fight__comment" class="card-body__title">Ajouter un commentaire à ce combat</label>
+                        <div class="form-group">
+                            <textarea id="fight__comment" class="form-control" cols="30" rows="10" v-model="comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 text-warning h5">
+                        Attention, cette action va valider le combat et ne sera plus modifiable !
+                        Il sera toujours disponible en lecture seule.
+                    </div>
+                </div>
+
+            </template>
+        </modal-confirmation>
     </main>
 </template>
 

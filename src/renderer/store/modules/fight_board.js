@@ -1,4 +1,4 @@
-import { updateField } from 'vuex-map-fields'
+import { getField, updateField } from 'vuex-map-fields'
 
 const defaultState = () =>  ({
     loading: false,
@@ -13,11 +13,12 @@ const defaultState = () =>  ({
 const state = defaultState()
 
 const getters = {
+    getField,
     is_empty_fight: state => undefined === state.fight.id,
     is_empty_fighter1: state => undefined === state.fighter1.id,
     is_empty_fighter2: state => undefined === state.fighter2.id,
+    is_team_fight: state => state.fight.entriable === "Team",
     saving: state => state.saving || state.saving_fool,
-    saved: state => state.saved,
     isFighterNumber: state => (fighter_id, number) => undefined !== state[`fighter${parseInt(number, 10)}`].id && parseInt(state[`fighter${parseInt(number, 10)}`].id, 10) === parseInt(fighter_id, 10),
     isOneOfFighter: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) || getters.isFighterNumber(fighter_id, 2),
     getFighterNumber: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) ? 1 : 2,
@@ -64,6 +65,10 @@ const mutations = {
     },
     UPDATE_FOOL(state, { fighter_number, fool }) {
         state[`fighter${parseInt(fighter_number, 10)}`].fool = Object.assign(state[`fighter${parseInt(fighter_number, 10)}`].fool || {}, fool)
+        state.saved = true
+    },
+    VALIDATED(state) {
+        state.fight.locked = true
         state.saved = true
     }
 }
@@ -132,6 +137,9 @@ const actions = {
         return promise
     },
     ADD_SCORE({ commit, state, getters, rootGetters }, { from_fighter_id, on_fighter_id, score_type }) {
+        if (state.fight.locked)
+            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+
         if (!getters.isOneOfFighter(from_fighter_id) || !getters.isOneOfFighter(on_fighter_id))
             return this.$notify.error("Impossible d'attributer le score. Le combattant n'est pas valide")
 
@@ -165,7 +173,10 @@ const actions = {
 
         return promise
     },
-    REMOVE_SCORE({ commit, getters, rootGetters }, { fighter_id, score_id }) {
+    REMOVE_SCORE({ commit, state, getters, rootGetters }, { fighter_id, score_id }) {
+        if (state.fight.locked)
+            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+
         if (!getters.isOneOfFighter(fighter_id))
             return this.$notify.error("Impossible de supprimer le score. Le combattant n'est pas valide")
 
@@ -186,6 +197,9 @@ const actions = {
         return promise
     },
     UPDATE_FOOL_COUNT({ commit, state, getters, rootGetters }, { fighter_id, fool_count }) {
+        if (state.fight.locked)
+            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+
         if (!getters.isOneOfFighter(fighter_id))
             return this.$notify.error("Impossible de mettre à jour le nombre de pénalités. Le combattant n'est pas valide")
 
@@ -214,6 +228,42 @@ const actions = {
             })
             .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour des pénalités'))
             .finally(() => commit("STOP_SAVING_FOOL"))
+
+        return promise
+    },
+    UPDATE_SUDDEN_DEATH({ commit, state, rootGetters }) { // Property is already updated through v-model
+        if (state.fight.locked)
+            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+
+        if (undefined === state.fight.id)
+            return this.$notify.error('Impossible de mettre à jour la mort subite. Le combat est inexistant')
+
+        commit("START_SAVING")
+
+        const promise = rootGetters["database/getModel"]("Fight").update({ sudden_death: state.fight.sudden_death }, { where: { id: parseInt(state.fight.id, 10) } })
+
+        promise
+            .then(() => commit("updateField", { path: 'saved', value: true }))
+            .catch(() => this.$notify.error("Un problème est survenu lors de la mise à jour de la mort subite"))
+            .finally(() => commit("STOP_SAVING"))
+
+        return promise
+    },
+    VALIDATE({ commit, state, rootGetters }, comment) {
+        if (state.fight.locked)
+            return this.$notify.error("C'est déjà validé ;-)")
+
+        if (undefined === state.fight.id)
+            return this.$notify.error('Impossible de valider le combat. Il est inexistant')
+
+        commit("START_SAVING")
+
+        const promise = rootGetters["database/getModel"]("Fight").update({ locked: true }, { where: { id: parseInt(state.fight.id, 10) } })
+
+        promise
+            .then(() => commit("VALIDATED"))
+            .catch(() => this.$notify.error("Un problème est survenu lors de la validation du combat"))
+            .finally(() => commit("STOP_SAVING"))
 
         return promise
     }

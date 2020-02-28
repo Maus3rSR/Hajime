@@ -4,6 +4,10 @@ export default {
         title: {
             type: String,
             default: "Confirmation d'une action"
+        },
+        header: {
+            type: Boolean,
+            default: true
         }
     },
     components: {},
@@ -33,7 +37,7 @@ export default {
 
 <template>
     <b-modal class="modal__confirmation" :title="title" v-model="showModal" size="lg" hide-header-close>
-        <div class="h3">
+        <div class="h3" v-if="header">
             <slot name="label">
                 Confirmez-vous cette action ?
             </slot>

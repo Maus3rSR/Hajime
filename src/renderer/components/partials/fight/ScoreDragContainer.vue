@@ -102,6 +102,15 @@ export default {
             if (this.limit_fool_reached)
                 this.$emit('on-fool-reached')
         },
+        clean() {
+            console.log(this.score_list.length)
+
+            if (this.score_list.length)
+                Array.from(this.score_list).forEach(score => this.removeScore(score))
+
+            this.fool_count = 0
+            this.$emit('on-fool-update', this.fool_count)
+        },
         onModalRemoveConfirmation(item) {
             if (undefined === item)
                 this.removeFool()

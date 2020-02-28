@@ -63,7 +63,7 @@ const actions = {
         const promise = sequelize_instance.authenticate()
         
         promise
-            .catch(() => this.$notify.error("Un problème est survenue lors de la connexion à la base de donnée"))
+            .catch(() => this.$notify.error("Un problème est survenu lors de la connexion à la base de donnée"))
             .finally(() => commit("STOP_CONNECTION"))
         
         return promise
@@ -110,7 +110,7 @@ const actions = {
 
         return sequelize_instance.close()
             .then(() => commit("DISCONNECT_SUCCESS"))
-            .catch(() => this.$notify.error("Un problème est survenue lors de la déconnexion à la base de donnée"))
+            .catch(() => this.$notify.error("Un problème est survenu lors de la déconnexion à la base de donnée"))
     }
 }
 

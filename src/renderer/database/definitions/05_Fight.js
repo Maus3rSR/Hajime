@@ -31,6 +31,16 @@ export default {
                 type: Sequelize.STRING(45),
                 allowNull: false
             },
+            sudden_death: {
+                type: Sequelize.BOOLEAN,
+                allowNull: true,
+                defaultValue: 0
+            },
+            locked: {
+                type: Sequelize.BOOLEAN,
+                allowNull: true,
+                defaultValue: 0
+            },
             ...with_timestamp && timestamp_definition
         }
     },
