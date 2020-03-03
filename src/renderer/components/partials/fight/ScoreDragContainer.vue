@@ -103,8 +103,6 @@ export default {
                 this.$emit('on-fool-reached')
         },
         clean() {
-            console.log(this.score_list.length)
-
             if (this.score_list.length)
                 Array.from(this.score_list).forEach(score => this.removeScore(score))
 
