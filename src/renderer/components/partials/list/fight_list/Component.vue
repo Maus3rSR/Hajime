@@ -40,13 +40,22 @@ export default {
 
             if (this.marking_board_reversed)
                 url += "?marking_board_reversed"
-            
+
             this.$ipc.send('open-window', url)
+        },
+        isFightReadonly(fight) {
+            return fight.is_locked
+        },
+        openModalCommentList(comment_list) {
+            this.comment_list = comment_list
+            this.showModal = true
         }
     },
     data() {
         return {
-            marking_board_color_list: []
+            marking_board_color_list: [],
+            comment_list: [],
+            showModal: false,
         }
     }
 }
@@ -99,16 +108,42 @@ export default {
             </template>
 
             <template slot="status" slot-scope="props">
-                <span class="badge badge-warning">{{ "à faire" | uppercase }}</span>
+                <transition name="fade" mode="out-in">
+                    <span v-if="!props.row.is_locked" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
+                    <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
+                </transition>
             </template>
 
             <template slot="action-cell" slot-scope="props">
-                <button title="Gérer le match" class="btn btn-sm btn-outline-primary" @click.prevent="openFightWindow(props.row)">
-                    <i class="zmdi zmdi-edit"></i>
-                </button>
-            </template>
 
+                <transition name="fade" mode="out-in">
+                    <button v-if="!isFightReadonly(props.row)" @click.prevent="openFightWindow(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
+                            <i class="zmdi zmdi-open-in-browser"></i>
+                    </button>
+                    <button v-else @click.prevent="openFightWindow(props.row)" title="Voir le détail du combat" class="btn btn-sm btn-outline-secondary">
+                            <i class="zmdi zmdi-eye"></i>
+                    </button>
+                </transition>
+
+                <transition name="fade" mode="out-in">
+                    <button v-if="props.row.has_comment_list" @click.prevent="openModalCommentList(props.row.comment_list)" title="Voir les commentaires" class="btn btn-sm btn-outline-secondary">
+                        <i class="zmdi zmdi-comment"></i>
+                    </button>
+                </transition>
+
+            </template>
         </data-list>
+
+        <b-modal title="Commentaires du combat" v-model="showModal" size="lg">
+            
+            <p v-for="comment in comment_list" :key="comment.id">
+                {{ comment.text }}
+            </p>
+
+            <template slot="modal-footer">
+                <button type="button" class="btn btn-primary" @click.prevent="showModal = false">Fermer</button>
+            </template>
+        </b-modal>
     </div>
 </template>
 

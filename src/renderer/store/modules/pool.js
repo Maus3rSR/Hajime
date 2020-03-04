@@ -4,7 +4,7 @@ import FightLib from '@root/lib/fight'
 const entriableList = ["Fighter", "Team"]
 const numberOfFighterPerFightList = [1, 2] 
 let entry_list_association_list = []
-let fight_list_association_list = []
+let fight_list_association_list = ["fighter_fight_meta","comment_list"]
 
 entriableList.forEach(entriable => { // TODO @see `src\renderer\database\definitions\05_Fight.js`
     entry_list_association_list.push(entriable.toLowerCase())
