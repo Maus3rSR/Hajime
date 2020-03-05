@@ -3,16 +3,6 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Fight",
-    options: {
-        getterMethods: {
-            is_locked() {
-              return null !== this.fighter_fight_meta && this.fighter_fight_meta.locked
-            },
-            has_comment_list() {
-                return undefined !== this.comment_list && this.comment_list.length > 0
-            }
-        },
-    },
     getDefinition: with_timestamp => {
         return {
             id: {
@@ -45,6 +35,14 @@ export default {
                 type: Sequelize.BOOLEAN,
                 allowNull: true,
                 defaultValue: 0
+            },
+            is_locked: {
+                type: Sequelize.VIRTUAL,
+                get() { return null !== this.fighter_fight_meta && this.fighter_fight_meta.locked }
+            },
+            has_comment_list: {
+                type: Sequelize.VIRTUAL,
+                get() { return undefined !== this.comment_list && this.comment_list.length > 0 }
             },
             ...with_timestamp && timestamp_definition
         }
