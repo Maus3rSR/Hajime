@@ -12,6 +12,10 @@ export default {
             type: Boolean,
             default: false
         },
+        locked: {
+            type: Boolean,
+            default: false
+        },
         fighter_left: {
             type: Object,
             required: true
@@ -32,8 +36,14 @@ export default {
             score_type_list: "score_type/list_visible",
             getScoreByCode: "score_type/getByCode"
         }),
+        is_readonly_or_locked() {
+            return this.readonly || this.locked
+        },
         is_disabled() {
-            return this.readonly || this.disabled
+            return this.is_readonly_or_locked || this.disabled
+        },
+        is_fight_ikiwake() {
+            return this.fighter_left_crossed && this.fighter_right_crossed
         },
         fool_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FOOL_CODE)
@@ -52,7 +62,13 @@ export default {
         },
         fighter_right_fool_number() {
             return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_right.fool.number, 10)
-        }
+        },
+        fighter_left_crossed() {
+            return this.locked && this.fighter_left_score_given_list.length === 0
+        },
+        fighter_right_crossed() {
+            return this.locked && this.fighter_right_score_given_list.length === 0
+        },
     },
     methods: {
         ...mapActions({
@@ -173,19 +189,20 @@ export default {
 </script>
 
 <template>
-    <div class="row fight-versus--content">
+    <div class="row fight-versus--content" :class="{ 'ikiwake': is_fight_ikiwake }">
         <!-- LEFT SCORE CONTAINER FOR A FIGHTER -->
         <div class="col">
             <transition name="fade" mode="out-in">
                 <score-drag-container
                     v-if="!score_type_list_loading"
 
+                    :class="{ 'crossed': fighter_left_crossed }"
                     :initialScoreList="fighter_left_score_given_list"
                     :initialFoolNumber="fighter_left_fool_number"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
-                    :canRemove="!readonly"
+                    :canRemove="!is_readonly_or_locked"
                     :ref="getContainerReference(0)"
 
                     @on-fool-reached="onFoolReached(0)"
@@ -200,7 +217,7 @@ export default {
         </div>
 
         <!-- MIDDLE CONTAINER WITH ALL SCORE -->
-        <div class="col-sm-1" v-if="!readonly">
+        <div class="col-sm-1" v-if="!is_readonly_or_locked">
             <transition name="fade" mode="out-in">
                 <span v-if="score_type_list_loading">
                     <clip-loader color="#ffffff"></clip-loader>
@@ -231,6 +248,7 @@ export default {
                 <score-drag-container
                     v-if="!score_type_list_loading"
 
+                    :class="{ 'crossed': fighter_right_crossed }"
                     :initialScoreList="fighter_right_score_given_list"
                     :initialFoolNumber="fighter_right_fool_number"
                     :limit="FIGHT_LIMIT_SCORE"
@@ -313,8 +331,47 @@ main {
     .fight-versus--content {
         height: 80%;
 
+        &.ikiwake {
+            position: relative;
+            overflow: hidden;
+
+            &:after, &:before {
+                content: "";
+                position: absolute;
+                background-color: #fff;
+                width: 100%;
+                height: 10px;
+                top: calc(50% - 10px);
+                z-index: 1;
+            }
+
+            &:after {
+                transform: rotate(-25deg);
+            }
+
+            &:before {
+                transform: rotate(25deg);
+            }
+
+            .crossed:after { display: none; }
+        }
+
         .card {
             height: 100%;
+        }
+
+        .crossed {
+            position: relative;
+
+            &:after {
+                content: "";
+                position: absolute;
+                background-color: #fff;
+                width: 100%;
+                height: 10px;
+                top: calc(50% - 10px);
+                transform: rotate(-45deg);
+            }
         }
     }
 }

@@ -18,7 +18,6 @@ const getters = {
     is_empty_fighter1: state => undefined === state.fighter1.id,
     is_empty_fighter2: state => undefined === state.fighter2.id,
     is_team_fight: state => state.fight.entriable === "Team",
-    is_locked: state => (undefined === state.fight.fighter_fight_meta || null === state.fight.fighter_fight_meta) ? false : state.fight.fighter_fight_meta.locked,
     saving: state => state.saving || state.saving_fool,
     isFighterNumber: state => (fighter_id, number) => undefined !== state[`fighter${parseInt(number, 10)}`].id && parseInt(state[`fighter${parseInt(number, 10)}`].id, 10) === parseInt(fighter_id, 10),
     isOneOfFighter: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) || getters.isFighterNumber(fighter_id, 2),
@@ -121,6 +120,7 @@ const actions = {
 
         promise
             .then(([fight, fighter1, fighter2]) => {
+                console.log(fight, fight.get({ plain: true }))
                 if (null === fight)
                     return this.$notify.error("Impossible de trouver les informations de combat")
                 else if (null === fighter1 || null === fighter2)
