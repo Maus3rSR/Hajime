@@ -43,7 +43,7 @@ export default {
             return this.is_readonly_or_locked || this.disabled
         },
         is_fight_ikiwake() {
-            return this.fighter_left_crossed && this.fighter_right_crossed
+            return this.locked && this.fighter_left_score_given_list.length === this.fighter_right_score_given_list.length
         },
         fool_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FOOL_CODE)
@@ -64,10 +64,10 @@ export default {
             return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_right.fool.number, 10)
         },
         fighter_left_crossed() {
-            return this.locked && this.fighter_left_score_given_list.length === 0
+            return this.locked && this.fighter_left_score_given_list.length < this.fighter_right_score_given_list
         },
         fighter_right_crossed() {
-            return this.locked && this.fighter_right_score_given_list.length === 0
+            return this.locked && this.fighter_right_score_given_list.length < this.fighter_left_score_given_list.length
         },
     },
     methods: {
@@ -254,7 +254,7 @@ export default {
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
-                    :canRemove="!readonly"
+                    :canRemove="!is_readonly_or_locked"
                     :ref="getContainerReference(1)"
 
                     @on-fool-reached="onFoolReached(1)"
