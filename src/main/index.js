@@ -20,6 +20,7 @@ const windowSharedParam = {
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow
+let fightBoardWindowList = {}
 let appCloseCalled = false
 
 function createMainWindow() {
@@ -76,24 +77,26 @@ function setFocus(window) {
 ipcMain.on('closed', () => {
     appCloseCalled = true
     mainWindow = null
-    if (process.platform !== 'darwin') {
+    fightBoardWindowList = {}
+
+    if (process.platform !== 'darwin')
         app.quit()
-    }
 })
 
 ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
-ipcMain.on('open-window', (e, vuePath) => {
-    const window = new BrowserWindow({
-        ...windowSharedParam
-    })
+ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
+    const fight_board_window = new BrowserWindow({ ...windowSharedParam })
 
     if (isDevelopment || isDebugBuild)
-        window.webContents.openDevTools()
+        fight_board_window.webContents.openDevTools()
     else
-        window.removeMenu()
+        fight_board_window.removeMenu()
 
-    window.loadURL(resolveUrl(baseUrl, `#${vuePath}`))
+    fightBoardWindowList[window_id] = fight_board_window
+    fight_board_window.on('closed', () => delete fightBoardWindowList[window_id])
+
+    fight_board_window.loadURL(resolveUrl(baseUrl, `#${vue_router_url}`))
 })
 
 /**

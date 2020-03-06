@@ -35,13 +35,17 @@ export default {
         }
     },
     methods: {
-        openFightWindow(fight) {
-            let url = `fight/${parseInt(fight.id, 10)}/fighter1/${parseInt(fight.fighter1.id, 10)}/fighter2/${parseInt(fight.fighter2.id, 10)}`
+        openFightBoard(fight) {
+            const fight_id = parseInt(fight.id, 10)
+            const fighter1_id = parseInt(fight.fighter1.id, 10)
+            const fighter2_id = parseInt(fight.fighter2.id, 10)
+
+            let url = `fight/${fight_id}/fighter1/${fighter1_id}/fighter2/${fighter2_id}`
 
             if (this.marking_board_reversed)
                 url += "?marking_board_reversed"
 
-            this.$ipc.send('open-window', url)
+            this.$ipc.send('open-fight-board', url, `${fight_id}_${fighter1_id}_${fighter2_id}`)
         },
         isFightReadonly(fight) {
             return fight.is_locked
@@ -117,10 +121,10 @@ export default {
             <template slot="action-cell" slot-scope="props">
 
                 <transition name="fade" mode="out-in">
-                    <button v-if="!isFightReadonly(props.row)" @click.prevent="openFightWindow(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
+                    <button v-if="!isFightReadonly(props.row)" @click.prevent="openFightBoard(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
                             <i class="zmdi zmdi-open-in-browser"></i>
                     </button>
-                    <button v-else @click.prevent="openFightWindow(props.row)" title="Voir le détail du combat" class="btn btn-sm btn-outline-secondary">
+                    <button v-else @click.prevent="openFightBoard(props.row)" title="Voir le détail du combat" class="btn btn-sm btn-outline-secondary">
                             <i class="zmdi zmdi-eye"></i>
                     </button>
                 </transition>
