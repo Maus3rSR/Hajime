@@ -118,7 +118,7 @@ export default {
         <div class="card">
             <div class="card-body">
                 <transition name="fade" mode="out-in" appear>
-                    <div v-if="is_competition_empty" class="text-center">
+                    <div v-if="is_competition_empty && !is_competition_loading" class="text-center">
                         <h1>Aucune données de compétition... :'(</h1>
                     </div>
 
