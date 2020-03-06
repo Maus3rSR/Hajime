@@ -24,7 +24,8 @@ export default {
             is_pool_loading: "pool/loading",
             is_pool_list_loading: "pool/list_loading",
             is_pool_saving: "pool/saving",
-            is_pool_configuration_empty: "pool/is_configuration_empty"
+            is_pool_configuration_empty: "pool/is_configuration_empty",
+            finished_percentage: "pool/finished_percentage"
         }),
         entry_list() { // TODO gérer retour liste d'équipes
             return this.fighter_list
@@ -40,6 +41,11 @@ export default {
         },
         pool_tab_title() {
             return this.pool_list_validated ? "Liste des poules" : "Tirage au sort"
+        },
+        fight_list_tab_style() {
+            return {
+                width: `${this.finished_percentage}%`
+            }
         }
     },
     methods: {
@@ -58,6 +64,9 @@ export default {
         if (this.competition_formula_id !== this.pool_competition_formula_id)
             this.loadPoolConfiguration(this.competition_formula_id).then(() => 
                 this.loadPoolList(this.competition_formula_id))
+
+        this.$ipc.on('fight-board-opened', (e, id) => null)
+        this.$ipc.on('fight-board-closed', (e, id) => null)
     }
 }
 </script>
@@ -88,6 +97,7 @@ export default {
                                     <b-tab :disabled="!pool_locked || is_pool_saving">
                                         <template slot="title">
                                             <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
+                                            <span class="nav-link__progress" :style="fight_list_tab_style"></span>
                                             Combats
                                         </template>
 

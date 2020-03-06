@@ -10,7 +10,8 @@ export default {
             list: state => state.list,
         }),
         ...mapGetters({
-            has_fight_list: "pool/has_fight_list"
+            has_fight_list: "pool/has_fight_list",
+            get_pool_finished_fight_list_percent: "pool/getTotalFightFinishedPercentageOfPool"
         })
     },
     methods: {
@@ -19,6 +20,11 @@ export default {
         }),
         onTabShown() {
             this.$softwareContainer.$emit('forceResize')
+        },
+        getPoolTabStyle(pool_id) {
+            return {
+                width: `${this.get_pool_finished_fight_list_percent(pool_id)}%`
+            }
         }
     },
     data() {
@@ -37,7 +43,10 @@ export default {
             <div v-else>
                 <b-tabs @input="onTabShown" pills card vertical>
                     <b-tab v-for="(pool, index) in list" :key="index" :active="index === 0">
-                        <template slot="title">Poule n°{{ pool.number }}</template>
+                        <template slot="title">
+                            <span class="nav-link__progress" :style="getPoolTabStyle(pool.id)"></span>
+                            Poule n°{{ pool.number }}
+                        </template>
                         
                         <fight-list
                             :list="pool.fight_list"

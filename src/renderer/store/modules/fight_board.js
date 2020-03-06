@@ -120,7 +120,6 @@ const actions = {
 
         promise
             .then(([fight, fighter1, fighter2]) => {
-                console.log(fight, fight.get({ plain: true }))
                 if (null === fight)
                     return this.$notify.error("Impossible de trouver les informations de combat")
                 else if (null === fighter1 || null === fighter2)

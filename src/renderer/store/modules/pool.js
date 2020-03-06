@@ -47,10 +47,25 @@ const getters = {
     list_loading: state => state.status_list === STATUS_LIST.LOADING,
     saving: state => state.status === STATUS_LIST.SAVING,
     count: state => state.list.length,
+    finished_percentage: (state, getters) => {
+        const total_finished = state.list.reduce((total, pool) => total + getters.getTotalFightListFinishedOfPool(pool.id), 0)
+        const total = state.list.reduce((total, pool) => total + getters.getTotalFightList(pool.id), 0)
+
+        return Math.round(total_finished / total * 100 * 10) / 10
+    },
     has_fight_list: state => state.list.length > 0 && state.list[0].fight_list !== undefined,
     entry_field: state => state.list.length === 0 ? "entry" : (null === state.list[0].fighter ? "team" : "fighter"),
     findPoolIndex: state => pool_id => state.list.findIndex(el => parseInt(el.id, 10) === parseInt(pool_id, 10)),
     existPool: (state, getters) => pool_id => getters.findPoolIndex(pool_id) !== -1,
+    getTotalFightList: (state, getters) => pool_id => {
+        const index = getters.findPoolIndex(pool_id)
+        return index === -1 ? 0 : (undefined === state.list[index].fight_list ? 0 : state.list[index].fight_list.length)
+    },
+    getTotalFightListFinishedOfPool: (state, getters) => pool_id => {
+        const index = getters.findPoolIndex(pool_id)
+        return index === -1 ? 0 : (undefined === state.list[index].fight_list ? 0 : state.list[index].fight_list.filter(f => undefined !== f.is_locked && f.is_locked).length)
+    },
+    getTotalFightFinishedPercentageOfPool: (state, getters) => pool_id => Math.round(getters.getTotalFightListFinishedOfPool(pool_id) / getters.getTotalFightList(pool_id) * 100 * 10) / 10
 }
 
 const mutations = {
@@ -190,7 +205,6 @@ const actions = {
         promise
             .then(result => commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) }))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
-            .catch(err => console.log(err))
             .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
         return promise

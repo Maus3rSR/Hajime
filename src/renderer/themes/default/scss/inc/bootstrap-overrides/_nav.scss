@@ -1,14 +1,50 @@
+@keyframes progress {
+    0% {
+        transform: translate3d(-100%, 0, 0);
+    }
+    100% {
+        transform: translate3d(100%, 0, 0);
+    }
+}
+
+$color-base: rgba($green, 0.4);
+$color-highlight: darken($color-base, 5%);
+
 .nav-link {
+  position: relative;
+  z-index: 0;
   color: $text-muted;
-  
+
   &:not(.disabled) {
     &:hover {
       color: $white;
     }
   }
-  
+
   &.disabled {
     color: $nav-link-disabled-color;
     cursor: default;
+  }
+
+  .nav-link__progress {
+    display: block;
+    background: $color-base;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, $color-base, $color-highlight, $color-base);
+        animation: progress 4s cubic-bezier(0.680, -0.550, 0.265, 1.550) infinite;
+    }
   }
 }
