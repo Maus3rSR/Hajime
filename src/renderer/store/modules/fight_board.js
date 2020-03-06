@@ -69,6 +69,7 @@ const mutations = {
     },
     VALIDATED(state, fighter_fight_meta) {
         state.fight.fighter_fight_meta = fighter_fight_meta
+        state.fight.is_locked = fighter_fight_meta.locked
         state.saved = true
     }
 }
