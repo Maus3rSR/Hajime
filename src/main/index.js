@@ -94,10 +94,17 @@ ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
         fight_board_window.removeMenu()
 
     fightBoardWindowList[window_id] = fight_board_window
-    fight_board_window.on('closed', () => delete fightBoardWindowList[window_id])
+
+    fight_board_window.on('closed', () => {
+        delete fightBoardWindowList[window_id]
+        mainWindow.webContents.send('fight-board-closed', window_id)
+    })
 
     fight_board_window.loadURL(resolveUrl(baseUrl, `#${vue_router_url}`))
+    mainWindow.webContents.send('fight-board-opened', window_id)
 })
+
+ipcMain.on('check-fight-board-already-opened', () => Object.keys(fightBoardWindowList).forEach(board_id => mainWindow.webContents.send('fight-board-opened', board_id)))
 
 /**
  * APP EVENTS

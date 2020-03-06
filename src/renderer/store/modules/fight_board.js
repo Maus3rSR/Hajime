@@ -5,6 +5,7 @@ const defaultState = () =>  ({
     saving: false,
     saving_fool: false,
     saved: false,
+    locked_board_list: [], // If a fight is in this list, then someone is already managing the fight in another fight board
     fight: {},
     fighter1: {},
     fighter2: {}
@@ -20,7 +21,9 @@ const getters = {
     is_team_fight: state => state.fight.entriable === "Team",
     saving: state => state.saving || state.saving_fool,
     isFighterNumber: state => (fighter_id, number) => undefined !== state[`fighter${parseInt(number, 10)}`].id && parseInt(state[`fighter${parseInt(number, 10)}`].id, 10) === parseInt(fighter_id, 10),
+    isFightBoardLocked: state => id => state.locked_board_list.indexOf(id) !== -1,
     isOneOfFighter: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) || getters.isFighterNumber(fighter_id, 2),
+    getBoardId: state => (fight_id, fighter1_id, fighter2_id) => `${fight_id}_${fighter1_id}_${fighter2_id}`,
     getFighterNumber: (state, getters) => fighter_id => getters.isFighterNumber(fighter_id, 1) ? 1 : 2,
     getFighterScoreGivenCount: (state, getters) => fighter_id => state[`fighter${parseInt(getters.getFighterNumber(fighter_id))}`].score_given_list.length
 }
@@ -49,6 +52,12 @@ const mutations = {
     },
     STOP_SAVING_FOOL(state) {
         state.saving_fool = false
+    },
+    LOCK_FIGHT_BOARD(state, fight_reference) {
+        state.locked_board_list.push(fight_reference)
+    },
+    UNLOCK_FIGHT_BOARD(state, fight_reference) {
+        state.locked_board_list.splice(state.locked_board_list.indexOf(fight_reference), 1)
     },
     ADD_SCORE(state, { fighter_number, score }) {
         state[`fighter${parseInt(fighter_number, 10)}`].score_given_list.push(score)

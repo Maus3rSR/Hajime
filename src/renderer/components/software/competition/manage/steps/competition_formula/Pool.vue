@@ -1,5 +1,5 @@
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import PoolConfiguration from './pool/Configuration'
 import PoolViewer from './pool/Viewer'
@@ -49,6 +49,7 @@ export default {
         }
     },
     methods: {
+        ...mapMutations('fight_board', ["LOCK_FIGHT_BOARD", "UNLOCK_FIGHT_BOARD"]),
         ...mapActions({
             loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
             loadPoolList: "pool/LOAD_LIST"
@@ -65,8 +66,10 @@ export default {
             this.loadPoolConfiguration(this.competition_formula_id).then(() => 
                 this.loadPoolList(this.competition_formula_id))
 
-        this.$ipc.on('fight-board-opened', (e, id) => null)
-        this.$ipc.on('fight-board-closed', (e, id) => null)
+        this.$ipc.send('check-fight-board-already-opened')
+        this.$ipc.on('fight-board-opened', (e, fight_board_id) => this.LOCK_FIGHT_BOARD(fight_board_id))
+        this.$ipc.on('fight-board-closed', (e, fight_board_id) => this.UNLOCK_FIGHT_BOARD(fight_board_id))
+        this.$ipc.on('fight-board-data-updated', (e, id, fight) => null)
     }
 }
 </script>

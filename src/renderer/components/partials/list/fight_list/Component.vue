@@ -19,6 +19,8 @@ export default {
     computed: {
         ...mapGetters({
             color_list: "marking_board/color_list",
+            getBoardId: "fight_board/getBoardId",
+            isFightBoardIdLocked: "fight_board/isFightBoardLocked"
         }),
         total() {
             return this.list.length
@@ -45,10 +47,13 @@ export default {
             if (this.marking_board_reversed)
                 url += "?marking_board_reversed"
 
-            this.$ipc.send('open-fight-board', url, `${fight_id}_${fighter1_id}_${fighter2_id}`)
+            this.$ipc.send('open-fight-board', url, this.getBoardId(fight_id, fighter1_id, fighter2_id))
         },
         isFightReadonly(fight) {
             return fight.is_locked
+        },
+        isFightBoardLocked(fight) {
+            return this.isFightBoardIdLocked(this.getBoardId(fight.id, fight.fighter1.id, fight.fighter2.id))
         },
         openModalCommentList(comment_list) {
             this.comment_list = comment_list
@@ -121,9 +126,12 @@ export default {
             <template slot="action-cell" slot-scope="props">
 
                 <transition name="fade" mode="out-in">
-                    <button v-if="!isFightReadonly(props.row)" @click.prevent="openFightBoard(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
+                    <i class="zmdi zmdi-lock" v-if="isFightBoardLocked(props.row)" title="La fenêtre de gestion de combat est déjà ouverte par quelqu'un"></i>
+
+                    <button v-else-if="!isFightReadonly(props.row)" @click.prevent="openFightBoard(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
                             <i class="zmdi zmdi-open-in-browser"></i>
                     </button>
+
                     <button v-else @click.prevent="openFightBoard(props.row)" title="Voir le détail du combat" class="btn btn-sm btn-outline-secondary">
                             <i class="zmdi zmdi-eye"></i>
                     </button>
