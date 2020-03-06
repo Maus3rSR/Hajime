@@ -331,18 +331,26 @@ main {
     .fight-versus--content {
         height: 80%;
 
+        &:after, &:before {
+            content: "";
+            position: absolute;
+            background-color: #fff;
+            width: 0%;
+            height: 10px;
+            top: calc(50% - 10px);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            z-index: 1;
+            transition: width 2s ease;
+        }
+
         &.ikiwake {
             position: relative;
             overflow: hidden;
 
             &:after, &:before {
-                content: "";
-                position: absolute;
-                background-color: #fff;
                 width: 100%;
-                height: 10px;
-                top: calc(50% - 10px);
-                z-index: 1;
             }
 
             &:after {
@@ -360,17 +368,28 @@ main {
             height: 100%;
         }
 
-        .crossed {
-            position: relative;
-
+        .score-drag-container {
             &:after {
                 content: "";
                 position: absolute;
                 background-color: #fff;
-                width: 100%;
+                width: 0%;
                 height: 10px;
                 top: calc(50% - 10px);
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                z-index: 1;
                 transform: rotate(-45deg);
+                transition: width 2s ease;
+            }
+
+            &.crossed {
+                position: relative;
+    
+                &:after {
+                    width: 100%;
+                }
             }
         }
     }
