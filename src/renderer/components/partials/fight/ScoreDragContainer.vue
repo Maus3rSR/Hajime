@@ -26,6 +26,10 @@ export default {
         canRemove: {
             type: Boolean,
             default: true
+        },
+        firstScoreRounded: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -144,7 +148,7 @@ export default {
             
             @add="onAdd"
         >
-            <span v-for="(score, index) in score_list" :key="index" :title="score.name" class="animated flipInX score-item">
+            <span v-for="(score, index) in score_list" :key="index" :title="score.name" class="animated flipInX score-item" :class="{ 'score-item__rounded': firstScoreRounded && index === 0 }">
                 <button
                     title="Supprimer le score"
                     class="btn btn-danger btn-sm animated bounceIn faster"
@@ -204,8 +208,9 @@ export default {
                 font-weight: bold;
                 text-align: center;
                 width: 100px;
+                transition: all 1s ease;
 
-                &:first-child {
+                &.score-item__rounded {
                     border-radius: 100%;
                     border: #fff solid 2px;
                 }

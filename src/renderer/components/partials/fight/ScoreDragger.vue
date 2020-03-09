@@ -51,6 +51,28 @@ export default {
         forfeit_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FORFEIT_CODE)
         },
+        is_fighter_left_first_score() {
+            if (this.fighter_right.score_given_list.length === 0 && this.fighter_left.score_given_list.length > 0)
+                return true
+            else if (this.fighter_left.score_given_list.length === 0)
+                return false
+
+            const left_score_date = this.fighter_left.score_given_list[0].createdAt
+            const right_score_date = this.fighter_right.score_given_list[0].createdAt
+
+            return left_score_date < right_score_date
+        },
+        is_fighter_right_first_score() {
+            if (this.fighter_right.score_given_list.length > 0 && this.fighter_left.score_given_list.length === 0)
+                return true
+            else if (this.fighter_right.score_given_list.length === 0)
+                return false
+
+            const left_score_date = this.fighter_left.score_given_list[0].createdAt
+            const right_score_date = this.fighter_right.score_given_list[0].createdAt
+
+            return left_score_date > right_score_date
+        },
         fighter_left_score_given_list() {
             return this.fighter_left.score_given_list.map(score => score.score_type)
         },
@@ -64,7 +86,7 @@ export default {
             return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_right.fool.number, 10)
         },
         fighter_left_crossed() {
-            return this.locked && this.fighter_left_score_given_list.length < this.fighter_right_score_given_list
+            return this.locked && this.fighter_left_score_given_list.length < this.fighter_right_score_given_list.length
         },
         fighter_right_crossed() {
             return this.locked && this.fighter_right_score_given_list.length < this.fighter_left_score_given_list.length
@@ -256,6 +278,7 @@ export default {
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
                     :canRemove="!is_readonly_or_locked"
+                    :firstScoreRounded="is_fighter_right_first_score"
                     :ref="getContainerReference(1)"
 
                     @on-fool-reached="onFoolReached(1)"
