@@ -203,6 +203,7 @@ export default {
                     :scoreChoosen="score_choosen"
                     :disabled="is_disabled"
                     :canRemove="!is_readonly_or_locked"
+                    :firstScoreRounded="is_fighter_left_first_score"
                     :ref="getContainerReference(0)"
 
                     @on-fool-reached="onFoolReached(0)"
