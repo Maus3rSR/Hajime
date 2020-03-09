@@ -48,6 +48,7 @@ export default {
                 this.$refs.scoreComponent.onFighterForfeit(this.forfeit_fighter_id)
 
             this.validateFight(this.comment)
+                .then(() => this.$ipc.send('fight-board-data-updated', this.fight))
         }
     },
     data() {

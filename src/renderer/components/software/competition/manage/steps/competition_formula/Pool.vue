@@ -50,6 +50,7 @@ export default {
     },
     methods: {
         ...mapMutations('fight_board', ["LOCK_FIGHT_BOARD", "UNLOCK_FIGHT_BOARD"]),
+        ...mapMutations('pool', ["MERGE_FIGHT"]),
         ...mapActions({
             loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
             loadPoolList: "pool/LOAD_LIST"
@@ -69,7 +70,7 @@ export default {
         this.$ipc.send('check-fight-board-already-opened')
         this.$ipc.on('fight-board-opened', (e, fight_board_id) => this.LOCK_FIGHT_BOARD(fight_board_id))
         this.$ipc.on('fight-board-closed', (e, fight_board_id) => this.UNLOCK_FIGHT_BOARD(fight_board_id))
-        this.$ipc.on('fight-board-data-updated', (e, id, fight) => null)
+        this.$ipc.on('fight-board-data-updated', (e, fight) => this.MERGE_FIGHT(fight))
     }
 }
 </script>

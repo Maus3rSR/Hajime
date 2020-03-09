@@ -76,10 +76,15 @@ const mutations = {
         state[`fighter${parseInt(fighter_number, 10)}`].fool = Object.assign(state[`fighter${parseInt(fighter_number, 10)}`].fool || {}, fool)
         state.saved = true
     },
-    VALIDATED(state, fighter_fight_meta) {
+    VALIDATED(state, { fighter_fight_meta, comment }) {
         state.fight.fighter_fight_meta = fighter_fight_meta
         state.fight.is_locked = fighter_fight_meta.locked
         state.saved = true
+
+        if (undefined !== comment) {
+            state.fight.has_comment_list = true
+            state.fight.comment_list.push(comment)
+        }
     }
 }
 
@@ -99,7 +104,7 @@ const actions = {
                     fighter1_id: parseInt(fighter1_id, 10),
                     fighter2_id: parseInt(fighter2_id, 10)
                 }
-            }]
+            }, "comment_list"]
         })
         const getFighter = (from_fighter_id, on_fighter_id) => rootGetters["database/getModel"]("Fighter").findByPk(
             parseInt(from_fighter_id, 10), {
@@ -277,7 +282,7 @@ const actions = {
 
         commit("START_SAVING")
 
-        let promise = undefined !== comment && null !== comment ? 
+        const createComment = () => undefined !== comment && null !== comment ? 
             rootGetters["database/getModel"]("Comment").create({
                 commentable_id: parseInt(state.fight.id, 10),
                 commentable: "Fight",
@@ -285,15 +290,25 @@ const actions = {
             }) :
             Promise.resolve()
 
-        promise = promise.then(() => rootGetters["database/getModel"]("FighterFightMeta").create({
+        const createFighterMeta = () => rootGetters["database/getModel"]("FighterFightMeta").create({
             fight_id: parseInt(state.fight.id, 10),
             fighter1_id: parseInt(state.fighter1.id, 10),
             fighter2_id: parseInt(state.fighter2.id, 10),
             locked: true
-        }))
+        })
+
+        const promise = Promise.all([createComment(), createFighterMeta()])
 
         promise
-            .then(fighter_fight_meta => commit("VALIDATED", fighter_fight_meta.get({ plain: true })))
+            .then(res => {
+                 let [comment, fighter_fight_meta] = res
+
+                commit("VALIDATED", {
+                    fighter_fight_meta: fighter_fight_meta.get({ plain: true }),
+                    comment: (undefined === comment ? undefined : comment.get({ plain: true }))
+                })
+            })
+            .catch(err => console.log(err))
             .catch(() => this.$notify.error("Un problème est survenu lors de la validation du combat"))
             .finally(() => commit("STOP_SAVING"))
 

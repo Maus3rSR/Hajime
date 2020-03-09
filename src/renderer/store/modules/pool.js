@@ -75,6 +75,18 @@ const mutations = {
     },
     INJECT_CONFIGURATION_DATA(state, config) {
         Object.assign(state.configuration, config)
+    },
+    MERGE_FIGHT(state, fight) {
+        for (let i = 0; i < state.list.length; i++) {
+            const pool = state.list[i]
+            const fight_index = pool.fight_list.findIndex(f => parseInt(f.id, 10) === parseInt(fight.id, 10))
+
+            if (fight_index === -1)
+                continue
+
+            state.list[i].fight_list.splice(fight_index, 1, { ...state.list[i].fight_list[fight_index], ...fight })
+            break
+        }
     }
 }
 
