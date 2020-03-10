@@ -51,7 +51,7 @@ export default {
         forfeit_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FORFEIT_CODE)
         },
-        is_fighter_left_first_score() {
+        is_fighter_left_first_score_rounded() {
             if (this.fighter_right.score_given_list.length === 0 && this.fighter_left.score_given_list.length > 0)
                 return true
             else if (this.fighter_left.score_given_list.length === 0)
@@ -62,7 +62,7 @@ export default {
 
             return left_score_date < right_score_date
         },
-        is_fighter_right_first_score() {
+        is_fighter_right_first_score_rounded() {
             if (this.fighter_right.score_given_list.length > 0 && this.fighter_left.score_given_list.length === 0)
                 return true
             else if (this.fighter_right.score_given_list.length === 0)
@@ -72,6 +72,12 @@ export default {
             const right_score_date = this.fighter_right.score_given_list[0].createdAt
 
             return left_score_date > right_score_date
+        },
+        is_fighter_left_first_score_ippon_gashi() {
+            return this.locked && this.is_fighter_left_first_score_rounded && this.fighter_right.score_given_list.length === 0
+        },
+        is_fighter_right_first_score_ippon_gashi() {
+            return this.locked && this.is_fighter_right_first_score_rounded && this.fighter_left.score_given_list.length === 0
         },
         fighter_left_score_given_list() {
             return this.fighter_left.score_given_list.map(score => score.score_type)
@@ -225,7 +231,8 @@ export default {
                     :scoreChoosen="score_choosen"
                     :canDragScore="can_drag_score"
                     :isLocked="is_readonly_or_locked"
-                    :firstScoreRounded="is_fighter_left_first_score"
+                    :firstScoreRounded="is_fighter_left_first_score_rounded"
+                    :firstScoreIpponGashi="is_fighter_left_first_score_ippon_gashi"
                     :ref="getContainerReference(0)"
 
                     @on-fool-reached="onFoolReached(0)"
@@ -278,7 +285,8 @@ export default {
                     :scoreChoosen="score_choosen"
                     :canDragScore="can_drag_score"
                     :isLocked="is_readonly_or_locked"
-                    :firstScoreRounded="is_fighter_right_first_score"
+                    :firstScoreRounded="is_fighter_right_first_score_rounded"
+                    :firstScoreIpponGashi="is_fighter_right_first_score_ippon_gashi"
                     :ref="getContainerReference(1)"
 
                     @on-fool-reached="onFoolReached(1)"

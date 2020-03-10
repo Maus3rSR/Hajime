@@ -30,6 +30,10 @@ export default {
         firstScoreRounded: {
             type: Boolean,
             default: false
+        },
+        firstScoreIpponGashi: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -148,7 +152,7 @@ export default {
             
             @add="onAdd"
         >
-            <span v-for="(score, index) in score_list" :key="index" :title="score.name" class="animated flipInX score-item" :class="{ 'score-item__rounded': firstScoreRounded && index === 0 }">
+            <span v-for="(score, index) in score_list" :key="index" :title="score.name" class="animated flipInX score-item" :class="{ 'score-item__rounded': firstScoreRounded && index === 0, 'score-item__ippon-gashi': firstScoreIpponGashi }">
                 <button
                     title="Supprimer le score"
                     class="btn btn-danger btn-sm animated bounceIn faster"
@@ -213,6 +217,19 @@ export default {
                 &.score-item__rounded {
                     border-radius: 100%;
                     border: #fff solid 2px;
+                }
+
+                &.score-item__ippon-gashi {
+                    &:after {
+                        content: "1";
+                        position: absolute;
+                        bottom: 0;
+                        right: -15px;
+                        border-radius: 100%;
+                        border: #fff solid 2px;
+                        font-size: 1rem;
+                        width: 23px;
+                    }
                 }
             }
         }
