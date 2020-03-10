@@ -39,8 +39,8 @@ export default {
         is_readonly_or_locked() {
             return this.readonly || this.locked
         },
-        is_disabled() {
-            return this.is_readonly_or_locked || this.disabled
+        can_drag_score() {
+            return !this.is_readonly_or_locked && !this.disabled
         },
         is_fight_ikiwake() {
             return this.locked && this.fighter_left_score_given_list.length === this.fighter_right_score_given_list.length
@@ -223,8 +223,8 @@ export default {
                     :initialFoolNumber="fighter_left_fool_number"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
-                    :disabled="is_disabled"
-                    :canRemove="!is_readonly_or_locked"
+                    :canDragScore="can_drag_score"
+                    :isLocked="is_readonly_or_locked"
                     :firstScoreRounded="is_fighter_left_first_score"
                     :ref="getContainerReference(0)"
 
@@ -276,8 +276,8 @@ export default {
                     :initialFoolNumber="fighter_right_fool_number"
                     :limit="FIGHT_LIMIT_SCORE"
                     :scoreChoosen="score_choosen"
-                    :disabled="is_disabled"
-                    :canRemove="!is_readonly_or_locked"
+                    :canDragScore="can_drag_score"
+                    :isLocked="is_readonly_or_locked"
                     :firstScoreRounded="is_fighter_right_first_score"
                     :ref="getContainerReference(1)"
 

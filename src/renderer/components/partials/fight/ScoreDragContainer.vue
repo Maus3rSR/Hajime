@@ -19,11 +19,11 @@ export default {
             type: Number,
             default: 0
         },
-        disabled: {
+        canDragScore: {
             type: Boolean,
-            default: false
+            default: true
         },
-        canRemove: {
+        isLocked: {
             type: Boolean,
             default: true
         },
@@ -49,8 +49,8 @@ export default {
         limit_fool_reached() {
             return this.fool_count > 0 && this.fool_count % this.FIGHT_NB_FOOL_GIVE_IPPON === 0
         },
-        is_disabled() {
-            return this.disabled || this.limit_score_reached
+        can_drag_score() {
+            return this.canDragScore && !this.limit_score_reached
         }
     },
     methods: {
@@ -66,7 +66,7 @@ export default {
                 this.addScore(last_item_added)
         },
         addScore(score) {
-            if (this.is_disabled)
+            if (!this.can_drag_score)
                 return
 
             this.score_list.push(score)
@@ -97,7 +97,7 @@ export default {
                 this.$emit('on-fool-unreached')
         },
         addFool() {
-            if (this.is_disabled)
+            if (!this.can_drag_score)
                 return
 
             this.fool_count++
@@ -137,14 +137,14 @@ export default {
 </script>
 
 <template>
-    <div class="card score-drag-container" :class="{ 'ripple-out': scoreChoosen && !is_disabled }">
+    <div class="card score-drag-container" :class="{ 'ripple-out': scoreChoosen && can_drag_score }">
         <draggable
             class="card-body"
 
             :list="score_list"
             :group="{ name: 'score', pull: false, put: true }"
             :sort="false"
-            :disabled="is_disabled"
+            :disabled="!can_drag_score"
             
             @add="onAdd"
         >
@@ -153,7 +153,7 @@ export default {
                     title="Supprimer le score"
                     class="btn btn-danger btn-sm animated bounceIn faster"
 
-                    v-if="canRemove"
+                    v-if="!isLocked"
 
                     @click.prevent="onButtonRemoveClick(score)"
                 >
@@ -170,7 +170,7 @@ export default {
                     title="Supprimer la pénalité"
                     class="btn btn-danger btn-sm animated bounceIn faster"
 
-                    v-if="canRemove"
+                    v-if="!isLocked"
 
                     @click.prevent="onButtonRemoveClick()"
                 >
