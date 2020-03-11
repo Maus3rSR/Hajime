@@ -28,6 +28,16 @@ export default {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
             },
+            score: {
+                type: Sequelize.INTEGER(10),
+                allowNull: false,
+                defaultValue: 0
+            },
+            victory_number: {
+                type: Sequelize.INTEGER(10).UNSIGNED,
+                allowNull: false,
+                defaultValue: 0
+            },
             entriable_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false
