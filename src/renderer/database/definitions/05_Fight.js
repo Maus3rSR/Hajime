@@ -4,6 +4,8 @@ import timestamp_definition from './timestamp'
 export default {
     name: "Fight",
     getDefinition: with_timestamp => {
+        const add_virtual_field = with_timestamp === true ? undefined : true
+
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -33,16 +35,18 @@ export default {
             },
             sudden_death: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
+                allowNull: false,
                 defaultValue: 0
             },
-            is_locked: {
-                type: Sequelize.VIRTUAL,
-                get() { return null !== this.fighter_fight_meta && this.fighter_fight_meta.locked }
-            },
-            has_comment_list: {
-                type: Sequelize.VIRTUAL,
-                get() { return undefined !== this.comment_list && this.comment_list.length > 0 }
+            ...add_virtual_field && {
+                is_locked: {
+                    type: Sequelize.VIRTUAL,
+                    get() { return null !== this.fighter_fight_meta && this.fighter_fight_meta.locked }
+                },
+                has_comment_list: {
+                    type: Sequelize.VIRTUAL,
+                    get() { return undefined !== this.comment_list && this.comment_list.length > 0 }
+                }
             },
             ...with_timestamp && timestamp_definition
         }
