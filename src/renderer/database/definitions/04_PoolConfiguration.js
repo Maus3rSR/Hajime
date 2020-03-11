@@ -22,28 +22,28 @@ export default {
             },
             dismiss_favorite: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             locked: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             number_of_qualified_fighter: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: true,
-                defaultValue: '1'
+                allowNull: false,
+                defaultValue: 1
             },
             number_of_pool: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: true,
-                defaultValue: '1'
+                allowNull: false,
+                defaultValue: 1
             },
             number_of_entry_per_pool: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: true,
-                defaultValue: '1'
+                allowNull: false,
+                defaultValue: 1
             },
             ...with_timestamp && timestamp_definition
         }

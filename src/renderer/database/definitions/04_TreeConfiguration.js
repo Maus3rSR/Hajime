@@ -22,18 +22,18 @@ export default {
             },
             dismiss_favorite: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             third_place: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             locked: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             ...with_timestamp && timestamp_definition
         }

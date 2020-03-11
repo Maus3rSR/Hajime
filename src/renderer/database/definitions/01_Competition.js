@@ -41,12 +41,12 @@ export default {
             },
             locked: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
+                allowNull: false,
                 defaultValue: 0
             },
             locked_fighter_list: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
+                allowNull: false,
                 defaultValue: 0
             },
             ...with_timestamp && timestamp_definition

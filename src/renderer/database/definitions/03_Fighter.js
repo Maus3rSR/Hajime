@@ -69,13 +69,13 @@ export default {
             },
             is_present: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             is_favorite: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
-                defaultValue: '0'
+                allowNull: false,
+                defaultValue: 0
             },
             ...with_timestamp && timestamp_definition
         }

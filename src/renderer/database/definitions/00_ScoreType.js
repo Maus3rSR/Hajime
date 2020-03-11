@@ -25,7 +25,7 @@ export default {
             visible: {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
-                defaultValue: '1'
+                defaultValue: 1
             },
             // ...with_timestamp && timestamp_definition
         }

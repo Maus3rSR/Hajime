@@ -26,7 +26,7 @@ export default {
             },
             marking_board_reversed: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
+                allowNull: false,
                 defaultValue: 0
             },
             ...with_timestamp && timestamp_definition

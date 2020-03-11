@@ -38,7 +38,7 @@ export default {
             },
             locked: {
                 type: Sequelize.BOOLEAN,
-                allowNull: true,
+                allowNull: false,
                 defaultValue: 0
             },
             ...with_timestamp && timestamp_definition
