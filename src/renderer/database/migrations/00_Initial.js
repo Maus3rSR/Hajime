@@ -15,7 +15,9 @@ export default {
 
         const name_list = Object.keys(definition_list)
 
-        let promise = getCreateTablePromise(queryInterface, definition_list[name_list[0]]) // Chaining promise to create tables in order
+        let promise = queryInterface.dropAllTables() // Chaining promise to create tables in order
+        promise = promise.then(() => getCreateTablePromise(queryInterface, definition_list[name_list[0]]))        
+
         for (let i = 1; i < name_list.length; i++)
             promise = promise.then(() => getCreateTablePromise(queryInterface, definition_list[name_list[i]]))
             
