@@ -89,7 +89,6 @@ export default {
             if (this.pool_saving)
                 return
 
-            this.pool_locked = true
             return this.savePoolConfiguration()
                 .then(() => {
                     this.pool_status = "NOTHING" // TODO, trouver une solution pour régler ce problème ...
@@ -103,14 +102,17 @@ export default {
                         
                     promise
                         .then(this.loadPoolList) // TODO, voir si hook afterBulkCreate serait pas plus intéréssant pour mettre à jour les données des relations ?
+                        .then(() => {
+                            this.pool_locked = true
+                            return this.savePoolConfiguration()
+                        })
                         .catch(() => {
                             this.pool_locked = false
-                            this.savePoolConfiguration()
+                            return this.savePoolConfiguration()
                         })
 
                     return promise
                 })
-                .catch(() => this.pool_locked = false)
         }
     },
     watch: {
