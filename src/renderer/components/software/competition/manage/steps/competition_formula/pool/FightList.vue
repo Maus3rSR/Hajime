@@ -62,7 +62,7 @@ export default {
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .competition__manage__pool__fight_list {
     .nav-pills {
         max-height: 61vh;
