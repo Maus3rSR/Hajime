@@ -42,7 +42,7 @@ export default {
         can_drag_score() {
             return !this.is_readonly_or_locked && !this.disabled
         },
-        is_fight_ikiwake() {
+        is_fight_draw() {
             return this.locked && this.fighter_left_score_given_list.length === this.fighter_right_score_given_list.length
         },
         fool_score() {
@@ -217,7 +217,7 @@ export default {
 </script>
 
 <template>
-    <div class="row fight-versus--content" :class="{ 'ikiwake': is_fight_ikiwake }">
+    <div class="row fight-versus--content" :class="{ 'draw': is_fight_draw }">
         <!-- LEFT SCORE CONTAINER FOR A FIGHTER -->
         <div class="col">
             <transition name="fade" mode="out-in">
@@ -377,7 +377,7 @@ main {
             transition: width 2s ease;
         }
 
-        &.ikiwake {
+        &.draw {
             position: relative;
             overflow: hidden;
 

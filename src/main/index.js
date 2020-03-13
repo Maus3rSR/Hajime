@@ -104,7 +104,7 @@ ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
     mainWindow.webContents.send('fight-board-opened', window_id)
 })
 
-ipcMain.on('fight-board-data-updated', (e, fight) => mainWindow.webContents.send('fight-board-data-updated', fight))
+ipcMain.on('fight-board-data-updated', (e, fight, fighter1, fighter2) => mainWindow.webContents.send('fight-board-data-updated', fight, fighter1, fighter2))
 ipcMain.on('check-fight-board-already-opened', () => Object.keys(fightBoardWindowList).forEach(board_id => mainWindow.webContents.send('fight-board-opened', board_id)))
 
 /**

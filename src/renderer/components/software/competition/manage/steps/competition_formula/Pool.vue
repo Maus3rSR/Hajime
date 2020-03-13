@@ -50,10 +50,10 @@ export default {
     },
     methods: {
         ...mapMutations('fight_board', ["LOCK_FIGHT_BOARD", "UNLOCK_FIGHT_BOARD"]),
-        ...mapMutations('pool', ["MERGE_FIGHT"]),
         ...mapActions({
             loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
-            loadPoolList: "pool/LOAD_LIST"
+            loadPoolList: "pool/LOAD_LIST",
+            updateDataFromFightBoard: "pool/UPDATE_DATA_FROM_FIGHT_BOARD"
         }),
         onTabShown() {
             this.$softwareContainer.$emit('forceResize')
@@ -70,7 +70,7 @@ export default {
         this.$ipc.send('check-fight-board-already-opened')
         this.$ipc.on('fight-board-opened', (e, fight_board_id) => this.LOCK_FIGHT_BOARD(fight_board_id))
         this.$ipc.on('fight-board-closed', (e, fight_board_id) => this.UNLOCK_FIGHT_BOARD(fight_board_id))
-        this.$ipc.on('fight-board-data-updated', (e, fight) => this.MERGE_FIGHT(fight))
+        this.$ipc.on('fight-board-data-updated', (e, fight, fighter1, fighter2) => this.updateDataFromFightBoard({ fight, fighter1, fighter2 }))
     }
 }
 </script>
