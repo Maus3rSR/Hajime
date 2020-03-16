@@ -86,7 +86,7 @@ ipcMain.on('closed', () => {
 ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
 ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
-    const fight_board_window = new BrowserWindow({ ...windowSharedParam })
+    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true })
 
     if (isDevelopment || isDebugBuild)
         fight_board_window.webContents.openDevTools()
