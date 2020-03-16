@@ -198,72 +198,6 @@ const actions = {
 
         return promise
     },
-    UPDATE_DATA_FROM_FIGHT_BOARD({ dispatch, commit, getters }, { fight, fighter1, fighter2 }) {
-        if (undefined === fight.is_locked || undefined === fighter1.score_given_list || undefined === fighter2.score_given_list) {
-            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel avec les données provenant du tableau de gestion de match")
-            return Promise.reject()
-        }
-
-        if (!getters.existPool(fight.fightable_id)) {
-            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
-            return Promise.reject()
-        }
-
-        if (undefined === fighter1.score_received_list)
-            fighter1.score_received_list = Array.from(fighter2.score_given_list)
-        if (undefined === fighter2.score_received_list)
-            fighter2.score_received_list = Array.from(fighter1.score_given_list)
-
-        let promise
-
-        if (undefined === fight.is_locked || !fight.is_locked)
-            promise = Promise.resolve()
-        else if (fighter1.score_given_list.length > fighter2.score_given_list.length)
-            promise = Promise.all([
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.WINNER }),
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.LOOSER })
-            ])
-        else if (fighter2.score_given_list.length > fighter1.score_given_list.length)
-            promise = Promise.all([
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.LOOSER }),
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.WINNER })
-            ])
-        else
-            promise = Promise.all([
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.DRAW }),
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.DRAW })
-            ])
-
-        promise
-            .then(() => commit("MERGE_FIGHT", fight))
-
-        return promise
-    },
-    UPDATE_POOL_ENTRY_SCORE({ dispatch, getters, rootGetters }, { pool_id, fighter, pool_scoring }) {
-        if (!getters.existPool(pool_id)) {
-            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
-            return Promise.reject()
-        }
-
-        const victory_number_increment_value = pool_scoring === POOL_SCORING.WINNER ? 1 : 0
-
-        const promise = rootGetters["database/getModel"]("PoolEntry").update({
-            score: rootGetters["database/instance"].literal(`score + ${parseInt(pool_scoring, 10)}`),
-            victory_number: rootGetters["database/instance"].literal(`victory_number + ${parseInt(victory_number_increment_value, 10)}`),
-        }, { 
-            where: { 
-                pool_id: parseInt(pool_id, 10) ,
-                entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
-                entriable: (null === fighter.team_id ? "Fighter" : "Team")
-            }
-        })
-
-        promise
-            .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
-            .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
-
-        return promise
-    },
     LOAD_POOL_ENTRY({ commit, rootGetters }, { pool_id, fighter }) {
         const promise = rootGetters["database/getModel"]("PoolEntry").findOne({
             where : {
@@ -333,6 +267,107 @@ const actions = {
             .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération de informations de configuration des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+
+        return promise
+    },
+    UPDATE_POOL_ENTRY_SCORE_NUMBER({ dispatch, getters, rootGetters }, { pool_id, fighter, score_number }) {
+        if (!getters.existPool(pool_id)) {
+            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            return Promise.reject()
+        }
+
+        const fields = score_number > 0
+            ? { score_given_number: rootGetters["database/instance"].literal(`score_given_number + ${parseInt(score_number, 10)}`) } 
+            : { score_received_number: rootGetters["database/instance"].literal(`score_received_number - ${parseInt(score_number, 10)}`) }
+
+        const promise = rootGetters["database/getModel"]("PoolEntry").update(fields, { 
+            where: { 
+                pool_id: parseInt(pool_id, 10) ,
+                entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
+                entriable: (null === fighter.team_id ? "Fighter" : "Team")
+            }
+        })
+
+        promise
+            .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
+            .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
+
+        return promise
+    },
+    UPDATE_POOL_ENTRY_SCORE({ dispatch, getters, rootGetters }, { pool_id, fighter, pool_scoring }) {
+        if (!getters.existPool(pool_id)) {
+            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            return Promise.reject()
+        }
+
+        const victory_number_increment_value = pool_scoring === POOL_SCORING.WINNER ? 1 : 0
+
+        const promise = rootGetters["database/getModel"]("PoolEntry").update({
+            score: rootGetters["database/instance"].literal(`score + ${parseInt(pool_scoring, 10)}`),
+            victory_number: rootGetters["database/instance"].literal(`victory_number + ${parseInt(victory_number_increment_value, 10)}`),
+        }, { 
+            where: { 
+                pool_id: parseInt(pool_id, 10) ,
+                entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
+                entriable: (null === fighter.team_id ? "Fighter" : "Team")
+            }
+        })
+
+        promise
+            .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
+            .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
+
+        return promise
+    },
+    ON_FIGHT_VALIDATED({ dispatch, commit, getters }, { fight, fighter1, fighter2 }) {
+        if (undefined === fight.is_locked || undefined === fighter1.score_given_list || undefined === fighter2.score_given_list) {
+            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel avec les données provenant du tableau de gestion de match")
+            return Promise.reject()
+        }
+
+        if (!getters.existPool(fight.fightable_id)) {
+            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            return Promise.reject()
+        }
+
+        let promise
+
+        if (undefined === fight.is_locked || !fight.is_locked)
+            promise = Promise.resolve()
+        else if (fighter1.score_given_list.length > fighter2.score_given_list.length)
+            promise = Promise.all([
+                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.WINNER }),
+                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.LOOSER })
+            ])
+        else if (fighter2.score_given_list.length > fighter1.score_given_list.length)
+            promise = Promise.all([
+                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.LOOSER }),
+                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.WINNER })
+            ])
+        else
+            promise = Promise.all([
+                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.DRAW }),
+                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.DRAW })
+            ])
+
+        promise
+            .then(() => commit("MERGE_FIGHT", fight))
+
+        return promise
+    },
+    ON_SCORE_FIGHT_UPDATED({ dispatch, commit, getters }, { fight, fighter_up, fighter_down, score_number }) {
+        if (!getters.existPool(fight.fightable_id)) {
+            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            return Promise.reject()
+        }
+
+        const promise = Promise.all([
+            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_up, score_number }),
+            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_down, score_number: -score_number })
+        ])
+
+        promise
+            .then(() => commit("MERGE_FIGHT", fight))
 
         return promise
     },

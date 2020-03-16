@@ -53,7 +53,8 @@ export default {
         ...mapActions({
             loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
             loadPoolList: "pool/LOAD_LIST",
-            updateDataFromFightBoard: "pool/UPDATE_DATA_FROM_FIGHT_BOARD"
+            onFightValidated: "pool/ON_FIGHT_VALIDATED",
+            onScoreFightUpdated: "pool/ON_SCORE_FIGHT_UPDATED"
         }),
         onTabShown() {
             this.$softwareContainer.$emit('forceResize')
@@ -70,7 +71,8 @@ export default {
         this.$ipc.send('check-fight-board-already-opened')
         this.$ipc.on('fight-board-opened', (e, fight_board_id) => this.LOCK_FIGHT_BOARD(fight_board_id))
         this.$ipc.on('fight-board-closed', (e, fight_board_id) => this.UNLOCK_FIGHT_BOARD(fight_board_id))
-        this.$ipc.on('fight-board-data-updated', (e, fight, fighter1, fighter2) => this.updateDataFromFightBoard({ fight, fighter1, fighter2 }))
+        this.$ipc.on('fight-board-score-updated', (e, fight, fighter_up, fighter_down, score_number) => this.onScoreFightUpdated({ fight, fighter_up, fighter_down, score_number }))
+        this.$ipc.on('fight-board-validated', (e, fight, fighter1, fighter2) => this.onFightValidated({ fight, fighter1, fighter2 }))
     }
 }
 </script>

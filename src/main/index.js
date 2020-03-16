@@ -86,7 +86,7 @@ ipcMain.on('closed', () => {
 ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
 ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
-    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true })
+    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true }) // modal is mandatory, we can't let the user use the mainWindow when he is managing a fight or some data will be lost
 
     if (isDevelopment || isDebugBuild)
         fight_board_window.webContents.openDevTools()
@@ -104,7 +104,8 @@ ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
     mainWindow.webContents.send('fight-board-opened', window_id)
 })
 
-ipcMain.on('fight-board-data-updated', (e, fight, fighter1, fighter2) => mainWindow.webContents.send('fight-board-data-updated', fight, fighter1, fighter2))
+ipcMain.on('fight-board-validated', (e, fight, fighter1, fighter2) => mainWindow.webContents.send('fight-board-validated', fight, fighter1, fighter2))
+ipcMain.on('fight-board-score-updated', (e, fight, fighter_up, fighter_down, score_number) => mainWindow.webContents.send('fight-board-score-updated', fight, fighter_up, fighter_down, score_number))
 ipcMain.on('check-fight-board-already-opened', () => Object.keys(fightBoardWindowList).forEach(board_id => mainWindow.webContents.send('fight-board-opened', board_id)))
 
 /**

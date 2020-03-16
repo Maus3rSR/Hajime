@@ -48,26 +48,39 @@ export default {
                 this.$refs.scoreComponent.onFighterForfeit(this.forfeit_fighter_id)
 
             this.validateFight(this.comment)
-                .then(() => this.$ipc.send('fight-board-data-updated', this.fight, this.fighter1, this.fighter2))
+                .then(() => this.$ipc.send('fight-board-validated', this.fight, this.fighter1, this.fighter2))
         },
-        onFighterStateChanged(fighter) { // TODO mettre à jour liste de score du fight
-            if (undefined === fighter.score_given_list)
-                return
-            // this.$ipc.send('fight-board-data-updated', this.fight)
-        }
     },
-    // watch: {
-    //     fighter1: {
-    //         handler: onFighterStateChanged,
-    //         deep: true,
-    //         immediate: false
-    //     },
-    //     fighter2: {
-    //         handler: onFighterStateChanged,
-    //         deep: true,
-    //         immediate: false
-    //     }
-    // },
+    watch: {
+        'fighter1.score_given_list': {
+            handler(score_given_list) { // old value don't work for Object/Array
+                if (undefined === score_given_list || this.old_fighter1_score_number === -1) return
+
+                const score_diff = score_given_list.length - this.old_fighter1_score_number
+                const fighter_score_up = score_diff > 0 ? this.fighter1 : this.fighter2
+                const fighter_score_down = score_diff < 0 ? this.fighter1 : this.fighter2
+
+                this.$ipc.send('fight-board-score-updated', this.fight, fighter_score_up, fighter_score_down, score_diff)
+
+                this.old_fighter1_score_number = score_given_list.length
+            },
+            immediate: false
+        },
+        'fighter2.score_given_list': {
+            handler(score_given_list) { // old value don't work for Object/Array
+                if (undefined === score_given_list || this.old_fighter2_score_number === -1) return
+
+                const score_diff = score_given_list.length - this.old_fighter2_score_number
+                const fighter_score_up = score_diff > 0 ? this.fighter2 : this.fighter1
+                const fighter_score_down = score_diff < 0 ? this.fighter2 : this.fighter1
+
+                this.$ipc.send('fight-board-score-updated', this.fight, fighter_score_up, fighter_score_down, score_diff)
+
+                this.old_fighter2_score_number = score_given_list.length
+            },
+            immediate: false
+        },
+    },
     data() {
         return {
             readonly: false,
@@ -75,6 +88,8 @@ export default {
             forfeit: false,
             forfeit_fighter_id: null,
             comment: null,
+            old_fighter1_score_number: -1,
+            old_fighter2_score_number: -1,
         }
     },
     created() {
@@ -84,6 +99,10 @@ export default {
                 fighter1_id: this.fighter1_id,
                 fighter2_id: this.fighter2_id
             })
+                .then(() => {
+                    this.old_fighter1_score_number = this.fighter1.score_given_list.length
+                    this.old_fighter2_score_number = this.fighter2.score_given_list.length
+                })
 
         this.marking_board_reversed = undefined !== this.$route.query.marking_board_reversed ? true : false
         this.readonly = undefined !== this.$route.query.readonly ? true : false
