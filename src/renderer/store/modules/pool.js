@@ -270,7 +270,8 @@ const actions = {
                 pool_id: parseInt(pool_id, 10) ,
                 entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
                 entriable: (null === fighter.team_id ? "Fighter" : "Team")
-            }
+            },
+            include: entry_list_association_list
         })
 
         promise
