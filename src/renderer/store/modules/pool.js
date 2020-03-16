@@ -81,6 +81,15 @@ const mutations = {
     INJECT_CONFIGURATION_DATA(state, config) {
         Object.assign(state.configuration, config)
     },
+    UPDATE_POOL_ENTRY(state, { pool_id, pool_entry }) {
+        const pool_index = state.list.findIndex(p => parseInt(p.id, 10) === parseInt(pool_id, 10))
+        if (pool_index === -1) return
+        
+        const pool_entry_index = state.list[pool_index].entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(pool_entry.id, 10))
+        if (pool_entry_index === -1) return
+
+        state.list[pool_index].entry_list.splice(pool_entry_index, 1, pool_entry)
+    },
     MERGE_FIGHT(state, fight) {
         for (let i = 0; i < state.list.length; i++) {
             const pool = state.list[i]
@@ -90,26 +99,6 @@ const mutations = {
                 continue
 
             state.list[i].fight_list.splice(fight_index, 1, { ...state.list[i].fight_list[fight_index], ...fight })
-            break
-        }
-    },
-    UPDATE_POOL_ENTRY_SCORE(state, { fighter, pool_scoring, victory_number_increment_value }) {
-        for (let i = 0; i < state.list.length; i++) {
-            const pool = state.list[i]
-            const entry_index = pool.entry_list.findIndex(f => parseInt(f.id, 10) === (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)))
-
-            if (entry_index === -1)
-                continue
-
-            const pool_entry = state.list[i].entry_list[entry_index]
-
-            state.list[i].entry_list.splice(entry_index, 1, { 
-                ...pool_entry,
-                ...{
-                    score: pool_entry.score + parseInt(pool_scoring, 10),
-                    victory_number: pool_entry.victory_number + parseInt(victory_number_increment_value, 10)
-                }
-            })
             break
         }
     }
@@ -250,7 +239,7 @@ const actions = {
 
         return promise
     },
-    UPDATE_POOL_ENTRY_SCORE({ commit, getters, rootGetters }, { pool_id, fighter, pool_scoring }) {
+    UPDATE_POOL_ENTRY_SCORE({ dispatch, getters, rootGetters }, { pool_id, fighter, pool_scoring }) {
         if (!getters.existPool(pool_id)) {
             this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
             return Promise.reject()
@@ -270,8 +259,26 @@ const actions = {
         })
 
         promise
-            .then(() => commit("UPDATE_POOL_ENTRY_SCORE", { fighter, pool_scoring, victory_number_increment_value })) // TODO REMOVE, on va préféré récupérer toutes les infos en db et mettre à jour plutôt que manuellement
+            .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
             .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
+
+        return promise
+    },
+    LOAD_POOL_ENTRY({ commit, rootGetters }, { pool_id, fighter }) {
+        const promise = rootGetters["database/getModel"]("PoolEntry").findOne({
+            where : {
+                pool_id: parseInt(pool_id, 10) ,
+                entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
+                entriable: (null === fighter.team_id ? "Fighter" : "Team")
+            }
+        })
+
+        promise
+            .then(pool_entry => {
+                if (null === pool_entry) return Promise.reject()
+                commit("UPDATE_POOL_ENTRY", { pool_id, pool_entry: pool_entry.get({ plain: true }) })
+            })
+            .catch(() => this.$notify.error("Impossible de récupérer l'entrée de poule"))
 
         return promise
     },
