@@ -3,6 +3,7 @@ import FightLib from '@root/lib/fight'
 
 const ENTRIABLE_LIST = ["Fighter", "Team"]
 const NUMBER_OF_FIGHT_PER_FIGHT_LIST = [1, 2]
+const SCORE_DATABASE_FIELD_LIST = ["score_given_number", "score_received_number"]
 const POOL_SCORING = {
     "WINNER": 1,
     "LOOSER": -1,
@@ -270,17 +271,16 @@ const actions = {
 
         return promise
     },
-    UPDATE_POOL_ENTRY_SCORE_NUMBER({ dispatch, getters, rootGetters }, { pool_id, fighter, score_number }) {
-        if (!getters.existPool(pool_id)) {
+    UPDATE_POOL_ENTRY_SCORE_NUMBER({ dispatch, getters, rootGetters }, { pool_id, fighter, score_number, field }) {
+        if (!getters.existPool(pool_id) || !SCORE_DATABASE_FIELD_LIST.includes(field)) {
             this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
             return Promise.reject()
         }
 
-        const fields = score_number > 0
-            ? { score_given_number: rootGetters["database/instance"].literal(`score_given_number + ${parseInt(score_number, 10)}`) } 
-            : { score_received_number: rootGetters["database/instance"].literal(`score_received_number - ${parseInt(score_number, 10)}`) }
+        let update_field_list = []
+        update_field_list[field] = rootGetters["database/instance"].literal(`${field} + ${parseInt(score_number, 10)}`)
 
-        const promise = rootGetters["database/getModel"]("PoolEntry").update(fields, { 
+        const promise = rootGetters["database/getModel"]("PoolEntry").update(update_field_list, { 
             where: { 
                 pool_id: parseInt(pool_id, 10) ,
                 entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
@@ -362,8 +362,8 @@ const actions = {
         }
 
         const promise = Promise.all([
-            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_up, score_number }),
-            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_down, score_number: -score_number })
+            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_up, score_number, field: 'score_given_number' }),
+            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_down, score_number, field: 'score_received_number' })
         ])
 
         promise
