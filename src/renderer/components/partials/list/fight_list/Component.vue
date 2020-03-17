@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import ScoreLib from '@root/lib/score'
 
 export default {
     props: {
@@ -54,6 +55,9 @@ export default {
         },
         isFightBoardLocked(fight) {
             return this.isFightBoardIdLocked(this.getBoardId(fight.id, fight.fighter1.id, fight.fighter2.id))
+        },
+        isFightDraw(fight) {
+            return fight.is_locked && ScoreLib.isDraw(fight.fighter1.score_given_list, fight.fighter2.score_given_list)
         },
         openModalCommentList(comment_list) {
             this.comment_list = comment_list
@@ -111,14 +115,24 @@ export default {
             <template slot="fighter" slot-scope="props">
                 <span class="row">
                     <div class="col text-right">{{ props.row.fighter1.name }}</div>
-                    <div class="col-xs-1"><span class="badge">VS</span></div>
+                    <div class="col-xs-1">
+                        <span class="badge">
+                            <template v-if="props.row.is_locked">{{ props.row.fighter1.score_given_list.length }}</template>
+
+                            <template v-if="props.row.is_locked">-</template>
+                            <template v-else>VS</template>
+                            
+                            <template v-if="props.row.is_locked">{{ props.row.fighter2.score_given_list.length }}</template>
+                        </span>
+                    </div>
                     <div class="col">{{ props.row.fighter2.name }}</div>
                 </span>
             </template>
 
             <template slot="status" slot-scope="props">
                 <transition name="fade" mode="out-in">
-                    <span v-if="!props.row.is_locked" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
+                    <span v-if="isFightBoardLocked(props.row) && !props.row.is_locked" class="badge badge-primary animated flash slow">{{ "en cours d'édition" | uppercase }}</span>
+                    <span v-else-if="!props.row.is_locked" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
                     <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
                 </transition>
             </template>

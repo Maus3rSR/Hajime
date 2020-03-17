@@ -1,7 +1,7 @@
 import { getField, updateField } from 'vuex-map-fields'
 import FightLib from '@root/lib/fight'
 
-const ENTRIABLE_LIST = ["Fighter", "Team"]
+const ENTRIABLE_LIST = ["Fighter", "Team"] // TODO: Improve perf. by only loading one of them only
 const NUMBER_OF_FIGHT_PER_FIGHT_LIST = [1, 2]
 const SCORE_DATABASE_FIELD_LIST = ["score_given_number", "score_received_number"]
 const POOL_SCORING = {
@@ -10,18 +10,35 @@ const POOL_SCORING = {
     "DRAW": 0
 }
 let entry_list_association_list = []
-let fight_list_association_list = ["fighter_fight_meta","comment_list"]
 
-ENTRIABLE_LIST.forEach(entriable => { // TODO @see `src\renderer\database\definitions\05_Fight.js`
-    entry_list_association_list.push(entriable.toLowerCase())
+ENTRIABLE_LIST.forEach(entriable => entry_list_association_list.push(entriable.toLowerCase())) // TODO @see `src\renderer\database\definitions\05_Fight.js`
 
-    NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number =>
-        fight_list_association_list.push({
-            association: `${entriable.toLowerCase()}${number}`,
-            include: entriable === "Team" ? ["fighter_list"] : []
+const getFightListAssociationList = Sequelize => {
+    let fight_list_association_list = ["fighter_fight_meta","comment_list"]
+
+    ENTRIABLE_LIST.forEach(entriable => { // TODO @see `src\renderer\database\definitions\05_Fight.js`
+        NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
+
+            const include_fighter_list_in_team = entriable === "Team" ? "->fighter_list" : ""
+            const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``), required: false }
+
+            if (entriable === "Team" ) { // Can't use ternary operator(?:)... It produce the following error "Not unique table/alias: 'fight_list->fighter2->score_given_list'"
+                fight_list_association_list.push({
+                    association: `${entriable.toLowerCase()}${number}`,
+                    include: { association: "fighter_list", include: { association: "score_given_list", ...score_list_include_option } },
+                })
+            } else {
+                fight_list_association_list.push({
+                    association: `${entriable.toLowerCase()}${number}`,
+                    include: { association: "score_given_list", ...score_list_include_option }
+                })
+            }
+
         })
-    )
-})
+    })
+
+    return fight_list_association_list
+}
 
 const STATUS_LIST = {
     NOTHING: "NOTHING",
@@ -232,7 +249,7 @@ const actions = {
 
         const Pool = rootGetters["database/getModel"]("Pool")
 
-        const promise = Pool.findAndCountAll({
+        const promise = Pool.findAll({
             where: { competition_formula_id: parseInt(state.configuration.competition_formula_id, 10) },
             order: [
                 ['number', 'ASC'],
@@ -244,12 +261,13 @@ const actions = {
                 include: entry_list_association_list
             }, {
                 association: 'fight_list',
-                include: fight_list_association_list,
+                include: getFightListAssociationList(rootGetters["database/instance"])
             }]
         })
 
         promise
-            .then(result => commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) }))
+            .then(list => commit("updateField", { path: 'list', value: list.map(row => row.get({ plain: true })) }))
+            .catch(err => console.log(err))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
             .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
@@ -277,9 +295,7 @@ const actions = {
             return Promise.reject()
         }
 
-        let update_field_list = []
-        update_field_list[field] = rootGetters["database/instance"].literal(`${field} + ${parseInt(score_number, 10)}`)
-
+        const update_field_list = { [field]: rootGetters["database/instance"].literal(`${field} + ${parseInt(score_number, 10)}`) }
         const promise = rootGetters["database/getModel"]("PoolEntry").update(update_field_list, { 
             where: { 
                 pool_id: parseInt(pool_id, 10) ,
