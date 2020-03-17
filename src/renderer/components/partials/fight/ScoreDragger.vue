@@ -1,5 +1,6 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import ScoreLib from '@root/lib/score'
 import ScoreDragContainer from './ScoreDragContainer'
 
 const containerReferenceList = ["scoreContainerLeft", "scoreContainerRight"]
@@ -42,42 +43,11 @@ export default {
         can_drag_score() {
             return !this.is_readonly_or_locked && !this.disabled
         },
-        is_fight_draw() {
-            return this.locked && this.fighter_left_score_given_list.length === this.fighter_right_score_given_list.length
-        },
         fool_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FOOL_CODE)
         },
         forfeit_score() {
             return this.getScoreByCode(this.FIGHT_SCORE_FORFEIT_CODE)
-        },
-        is_fighter_left_first_score_rounded() {
-            if (this.fighter_right.score_given_list.length === 0 && this.fighter_left.score_given_list.length > 0)
-                return true
-            else if (this.fighter_left.score_given_list.length === 0)
-                return false
-
-            const left_score_date = this.fighter_left.score_given_list[0].createdAt
-            const right_score_date = this.fighter_right.score_given_list[0].createdAt
-
-            return left_score_date < right_score_date
-        },
-        is_fighter_right_first_score_rounded() {
-            if (this.fighter_right.score_given_list.length > 0 && this.fighter_left.score_given_list.length === 0)
-                return true
-            else if (this.fighter_right.score_given_list.length === 0)
-                return false
-
-            const left_score_date = this.fighter_left.score_given_list[0].createdAt
-            const right_score_date = this.fighter_right.score_given_list[0].createdAt
-
-            return left_score_date > right_score_date
-        },
-        is_fighter_left_first_score_ippon_gashi() {
-            return this.locked && this.is_fighter_left_first_score_rounded && this.fighter_right.score_given_list.length === 0
-        },
-        is_fighter_right_first_score_ippon_gashi() {
-            return this.locked && this.is_fighter_right_first_score_rounded && this.fighter_left.score_given_list.length === 0
         },
         fighter_left_score_given_list() {
             return this.fighter_left.score_given_list.map(score => score.score_type)
@@ -85,17 +55,32 @@ export default {
         fighter_right_score_given_list() {
             return this.fighter_right.score_given_list.map(score => score.score_type)
         },
+        is_fight_draw() {
+            return this.locked && ScoreLib.isDraw(this.fighter_left.score_given_list, this.fighter_right.score_given_list)
+        },
+        is_fighter_left_first_score_rounded() {
+            return ScoreLib.isFirstScoreFirst(this.fighter_left.score_given_list, this.fighter_right.score_given_list)
+        },
+        is_fighter_right_first_score_rounded() {
+            return ScoreLib.isFirstScoreFirst(this.fighter_right.score_given_list, this.fighter_left.score_given_list)
+        },
+        is_fighter_left_first_score_ippon_gashi() {
+            return this.locked && ScoreLib.isThereOnlyOneScore(this.fighter_left.score_given_list, this.fighter_right.score_given_list)
+        },
+        is_fighter_right_first_score_ippon_gashi() {
+            return this.locked && ScoreLib.isThereOnlyOneScore(this.fighter_right.score_given_list, this.fighter_left.score_given_list)
+        },
+        fighter_left_crossed() {
+            return this.locked && ScoreLib.isBetterThan(this.fighter_right.score_given_list, this.fighter_left.score_given_list)
+        },
+        fighter_right_crossed() {
+            return this.locked && ScoreLib.isBetterThan(this.fighter_left.score_given_list, this.fighter_right.score_given_list)
+        },
         fighter_left_fool_number() {
             return null === this.fighter_left.fool ? 0 : parseInt(this.fighter_left.fool.number, 10)
         },
         fighter_right_fool_number() {
             return null === this.fighter_right.fool ? 0 : parseInt(this.fighter_right.fool.number, 10)
-        },
-        fighter_left_crossed() {
-            return this.locked && this.fighter_left_score_given_list.length < this.fighter_right_score_given_list.length
-        },
-        fighter_right_crossed() {
-            return this.locked && this.fighter_right_score_given_list.length < this.fighter_left_score_given_list.length
         },
     },
     methods: {
