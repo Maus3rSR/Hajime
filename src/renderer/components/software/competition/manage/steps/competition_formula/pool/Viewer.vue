@@ -6,13 +6,13 @@ export default {
     components: { PoolList },
     computed: {
         ...mapState('pool', {
-            list: state => state.list,
             number_of_entry_per_pool: state => state.configuration.number_of_entry_per_pool
         }),
         ...mapState('competition', { // @TODO il faut être sûr que la compétition soit chargée, à revoir ...
             competition_type: state => state.model.type,
         }),
         ...mapGetters({
+            list: "pool/ranked_list",
             constant_type_list: "competition/constant_type_list",
             pool_count: 'pool/count',
             entry_field: 'pool/entry_field'
@@ -66,6 +66,7 @@ export default {
                 id="poolListViewer"
                 :list="list"
                 :entry_field="entry_field"
+                :canShowDetail="true"
             />
         </software-container>
     </div>

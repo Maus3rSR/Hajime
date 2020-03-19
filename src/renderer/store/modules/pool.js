@@ -90,6 +90,25 @@ const getters = {
     list_loading: state => state.status_list === STATUS_LIST.LOADING,
     saving: state => state.status === STATUS_LIST.SAVING,
     count: state => state.list.length,
+    ranked_list: state => {
+        return JSON.parse(JSON.stringify(state.list)).map(pool => {
+            let rank_list = []
+
+            pool.entry_list = pool.entry_list.sort((fighter1, fighter2) => {
+                if (fighter1.ranking_score > fighter2.ranking_score) return -1
+                else if (fighter1.ranking_score < fighter2.ranking_score) return 1
+                return 0
+            })
+
+            pool.entry_list.forEach(entry => { if (-1 === rank_list.indexOf(entry.ranking_score)) rank_list.push(entry.ranking_score) })
+            pool.entry_list.map(entry => {
+                entry.rank_number = rank_list.indexOf(entry.ranking_score) + 1
+                return entry
+            })
+
+            return pool
+        })
+    },
     finished_percentage: (state, getters) => {
         const total_finished = state.list.reduce((total, pool) => total + getters.getTotalFightListFinishedOfPool(pool.id), 0)
         const total = state.list.reduce((total, pool) => total + getters.getTotalFightList(pool.id), 0)

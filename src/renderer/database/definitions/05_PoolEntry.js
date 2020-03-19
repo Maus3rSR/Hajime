@@ -9,6 +9,8 @@ export default {
         field_list: ['pool_id', 'number'], key: { type: 'unique' } 
     }],
     getDefinition: with_timestamp => {
+        const add_virtual_field = with_timestamp === true ? undefined : true
+
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -55,6 +57,12 @@ export default {
             entriable: {
                 type: Sequelize.STRING(45),
                 allowNull: false
+            },
+            ...add_virtual_field && {
+                ranking_score: {
+                    type: Sequelize.VIRTUAL,
+                    get() { return this.score * 1000000 + this.victory_number * 10000 + this.score_given_number * 100 - this.score_received_number }
+                }
             },
             ...with_timestamp && timestamp_definition
         }
