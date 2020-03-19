@@ -60,16 +60,23 @@ export default {
             this.drawing_lot = true
             let shuffle_index = 0
 
-            let shuffleInterval = setInterval(() => {
-                this.updatePoolList(this.getShuffleEntryList())
-                this.draw_lot_progress = (shuffle_index + 1) * 100 / this.nb_shuffle
+            let promise = new Promise((resolve, reject) => {
 
-                if (++shuffle_index == this.nb_shuffle)
-                {
-                    this.drawing_lot = false
-                    clearInterval(shuffleInterval)
-                }
-            }, this.time_each_shuffle)
+                let shuffleInterval = setInterval(() => {
+                    this.updatePoolList(this.getShuffleEntryList())
+                    this.draw_lot_progress = (shuffle_index + 1) * 100 / this.nb_shuffle
+
+                    if (++shuffle_index === this.nb_shuffle)
+                    {
+                        this.drawing_lot = false
+                        clearInterval(shuffleInterval)
+                        resolve()
+                    }
+                }, this.time_each_shuffle)
+
+            })
+
+            return promise
         },
         getShuffleEntryList() {
             let entry_list = JSON.parse(JSON.stringify(this.entry_list))
@@ -80,6 +87,12 @@ export default {
             }
 
             return entry_list
+        },
+        doDrawingLot() {
+            this.shuffle().then(() => {
+                if (this.is_development) return
+                this.validate()
+            })
         },
         validate() {
             this.$emit('on-validate', this.pool_list)
@@ -121,7 +134,7 @@ export default {
                     </div>
                 </transition>
 
-                <button v-if="is_initial_state" class="btn btn__draw btn-outline-success animated infinite pulse" @click.prevent="shuffle()">
+                <button v-if="is_initial_state" class="btn btn__draw btn-outline-success animated infinite pulse" @click.prevent="doDrawingLot">
                     Effectuer le tirage au sort
                 </button>
 
@@ -130,8 +143,9 @@ export default {
                 </div>
 
                 <transition name="fade">
-                    <div v-if="!is_initial_state" class="text-right">
-                        <button v-if="is_development" class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
+                    <div v-if="!is_initial_state && is_development" class="text-right">
+                        <span class="text-warning">Visible qu'en environnement de développement</span>
+                        <button class="btn btn-link" :disabled="drawing_lot" @click.prevent="shuffle()">Refaire le tirage</button>
                         <button class="btn animated" :class="{'btn-outline-success tada': !drawing_lot}" :disabled="drawing_lot" @click.prevent="validate()">Je valide ce tirage !</button>
                     </div>
                 </transition>
