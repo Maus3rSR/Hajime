@@ -41,7 +41,7 @@ export default {
             ...add_virtual_field && {
                 is_locked: {
                     type: Sequelize.VIRTUAL,
-                    get() { return null !== this.fighter_fight_meta && this.fighter_fight_meta.locked }
+                    get() { return undefined !== this.fighter_fight_meta && null !== this.fighter_fight_meta && this.fighter_fight_meta.locked }
                 },
                 has_comment_list: {
                     type: Sequelize.VIRTUAL,

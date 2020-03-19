@@ -9,35 +9,55 @@ const POOL_SCORING = {
     "LOOSER": -1,
     "DRAW": 0
 }
-let entry_list_association_list = []
 
+let entry_list_association_list = []
 ENTRIABLE_LIST.forEach(entriable => entry_list_association_list.push(entriable.toLowerCase())) // TODO @see `src\renderer\database\definitions\05_Fight.js`
 
 const getFightListAssociationList = Sequelize => {
     let fight_list_association_list = ["fighter_fight_meta","comment_list"]
 
-    ENTRIABLE_LIST.forEach(entriable => { // TODO @see `src\renderer\database\definitions\05_Fight.js`
+    ENTRIABLE_LIST.forEach(entriable => {
         NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
-
             const include_fighter_list_in_team = entriable === "Team" ? "->fighter_list" : ""
-            const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``), required: false }
+            const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
 
-            if (entriable === "Team" ) { // Can't use ternary operator(?:)... It produce the following error "Not unique table/alias: 'fight_list->fighter2->score_given_list'"
-                fight_list_association_list.push({
-                    association: `${entriable.toLowerCase()}${number}`,
-                    include: { association: "fighter_list", include: { association: "score_given_list", ...score_list_include_option } },
-                })
-            } else {
-                fight_list_association_list.push({
-                    association: `${entriable.toLowerCase()}${number}`,
-                    include: { association: "score_given_list", ...score_list_include_option }
-                })
-            }
-
+            fight_list_association_list.push(getScoreListAssociation(entriable, number, score_list_include_option))
         })
     })
 
     return fight_list_association_list
+}
+
+const getFightAssociationList = fight_id => {
+    let association_list = []
+
+    ENTRIABLE_LIST.forEach(entriable => {
+        NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
+            const score_list_include_option = { where: { fight_id: parseInt(fight_id, 10) } }
+            association_list.push(getScoreListAssociation(entriable, number, score_list_include_option))
+        })
+    })
+
+    return association_list
+}
+
+const getScoreListAssociation = (entriable, number, option_list) => {
+    let association = {}
+    const common_option = { required: false }
+
+    if (entriable === "Team" ) { // Can't use ternary operator(?:)... It produce the following error "Not unique table/alias: 'fighter2->score_given_list'"
+        association = {
+            association: `${entriable.toLowerCase()}${number}`,
+            include: { association: "fighter_list", include: { association: "score_given_list", ...common_option, ...option_list } },
+        }
+    } else {
+        association = {
+            association: `${entriable.toLowerCase()}${number}`,
+            include: { association: "score_given_list", ...common_option, ...option_list }
+        }
+    }
+
+    return association
 }
 
 const STATUS_LIST = {
@@ -99,8 +119,8 @@ const mutations = {
     INJECT_CONFIGURATION_DATA(state, config) {
         Object.assign(state.configuration, config)
     },
-    UPDATE_POOL_ENTRY(state, { pool_id, pool_entry }) {
-        const pool_index = state.list.findIndex(p => parseInt(p.id, 10) === parseInt(pool_id, 10))
+    UPDATE_POOL_ENTRY(state, pool_entry) {
+        const pool_index = state.list.findIndex(p => parseInt(p.id, 10) === parseInt(pool_entry.pool_id, 10))
         if (pool_index === -1) return
         
         const pool_entry_index = state.list[pool_index].entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(pool_entry.id, 10))
@@ -216,25 +236,6 @@ const actions = {
 
         return promise
     },
-    LOAD_POOL_ENTRY({ commit, rootGetters }, { pool_id, fighter }) {
-        const promise = rootGetters["database/getModel"]("PoolEntry").findOne({
-            where : {
-                pool_id: parseInt(pool_id, 10) ,
-                entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
-                entriable: (null === fighter.team_id ? "Fighter" : "Team")
-            },
-            include: entry_list_association_list
-        })
-
-        promise
-            .then(pool_entry => {
-                if (null === pool_entry) return Promise.reject()
-                commit("UPDATE_POOL_ENTRY", { pool_id, pool_entry: pool_entry.get({ plain: true }) })
-            })
-            .catch(() => this.$notify.error("Impossible de récupérer l'entrée de poule"))
-
-        return promise
-    },
     LOAD_LIST({ commit, getters, rootGetters, state }) {
         if (getters.list_loading)
             return
@@ -267,9 +268,44 @@ const actions = {
 
         promise
             .then(list => commit("updateField", { path: 'list', value: list.map(row => row.get({ plain: true })) }))
-            .catch(err => console.log(err))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
             .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
+
+        return promise
+    },
+    LOAD_POOL_ENTRY({ commit, rootGetters }, { pool_id, fighter }) {
+        if (!getters.existPool(pool_id)) {
+            this.$notify.error("Impossible de récupérer l'entrée de poule")
+            return Promise.reject()
+        }
+
+        const promise = rootGetters["database/getModel"]("PoolEntry").findOne({
+            where : {
+                pool_id: parseInt(pool_id, 10) ,
+                entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
+                entriable: (null === fighter.team_id ? "Fighter" : "Team")
+            },
+            include: entry_list_association_list
+        })
+
+        promise
+            .then(pool_entry => {
+                if (null === pool_entry) return Promise.reject()
+                commit("UPDATE_POOL_ENTRY", pool_entry.get({ plain: true }))
+            })
+            .catch(() => this.$notify.error("Impossible de récupérer l'entrée de poule"))
+
+        return promise
+    },
+    LOAD_FIGHT({ commit, rootGetters }, fight_id) {
+        const promise = rootGetters["database/getModel"]("Fight").findByPk(fight_id, { include: getFightAssociationList(fight_id) })
+
+        promise
+            .then(fight => {
+                if (null === fight) return Promise.reject()
+                commit("MERGE_FIGHT", fight.get({ plain: true }))
+            })
+            .catch(() => this.$notify.error("Impossible de récupérer le combat"))
 
         return promise
     },
@@ -289,8 +325,10 @@ const actions = {
 
         return promise
     },
-    UPDATE_POOL_ENTRY_SCORE_NUMBER({ dispatch, getters, rootGetters }, { pool_id, fighter, score_number, field }) {
-        if (!getters.existPool(pool_id) || !SCORE_DATABASE_FIELD_LIST.includes(field)) {
+    UPDATE_POOL_ENTRY_SCORE_NUMBER({ dispatch, getters, rootGetters }, { fight, fighter, score_number, field }) {
+        const pool_id = parseInt(fight.fightable_id, 10)
+
+        if (fight.fightable !== "Pool" || !getters.existPool(pool_id) || !SCORE_DATABASE_FIELD_LIST.includes(field)) {
             this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
             return Promise.reject()
         }
@@ -298,14 +336,17 @@ const actions = {
         const update_field_list = { [field]: rootGetters["database/instance"].literal(`${field} + ${parseInt(score_number, 10)}`) }
         const promise = rootGetters["database/getModel"]("PoolEntry").update(update_field_list, { 
             where: { 
-                pool_id: parseInt(pool_id, 10) ,
+                pool_id,
                 entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
                 entriable: (null === fighter.team_id ? "Fighter" : "Team")
             }
         })
 
         promise
-            .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
+            .then(() => Promise.all([
+                dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }),
+                dispatch("LOAD_FIGHT", parseInt(fight.id))
+            ]))
             .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
 
         return promise
@@ -378,8 +419,8 @@ const actions = {
         }
 
         const promise = Promise.all([
-            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_up, score_number, field: 'score_given_number' }),
-            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { pool_id: fight.fightable_id, fighter: fighter_down, score_number, field: 'score_received_number' })
+            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { fight, fighter: fighter_up, score_number, field: 'score_given_number' }),
+            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { fight, fighter: fighter_down, score_number, field: 'score_received_number' })
         ])
 
         promise
