@@ -129,6 +129,7 @@ const actions = {
             })
             .catch(Sequelize.UniqueConstraintError, () => this.$notify.error('Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !'))
             .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
+            .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
