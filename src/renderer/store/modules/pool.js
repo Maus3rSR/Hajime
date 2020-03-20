@@ -471,7 +471,7 @@ const actions = {
             body: []
         }
 
-        state.list.forEach((pool, index) => { // Each pool
+        state.ranked_list.forEach((pool, index) => { // Each pool
             let body = []
             let is_pair = (index + 1) % 2 === 0
 
