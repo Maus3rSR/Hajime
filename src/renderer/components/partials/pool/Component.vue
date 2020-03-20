@@ -35,12 +35,17 @@ export default {
             </div>
 
             <transition-group name="list" tag="ul">
-                <li class="list-item" v-for="pool_entry in pool_entry_list" :key="pool_entry.entriable_id+'_'+pool_entry.number">
-                    <span class="pool-id">
+                <li class="list-item row" v-for="pool_entry in pool_entry_list" :key="pool_entry.entriable_id+'_'+pool_entry.number">
+                    <span class="pool-id col-sm-2">
                         {{ pool.number }}.{{ pool_entry.number }}
                     </span>
-                    <span class="pool-entry_name" :class="{ 'pool-entry_name__blured': blured }">
-                        {{ pool_entry[entry_field].name }} 
+                    <span class="pool-entry_name col-sm-8" :class="{ 'pool-entry_name__blured': blured }">
+                        {{ pool_entry[entry_field].name }}
+                    </span>
+                    <span class="col text-right" v-if="canShowDetail">
+                        <span class="badge badge-pill" :class="{ 'badge-first-place': pool_entry.rank_number === 1, 'badge-second-place': pool_entry.rank_number === 2, 'badge-third-place': pool_entry.rank_number === 3 }">
+                            #{{ pool_entry.rank_number }}
+                        </span>
                     </span>
                 </li>
             </transition-group>
