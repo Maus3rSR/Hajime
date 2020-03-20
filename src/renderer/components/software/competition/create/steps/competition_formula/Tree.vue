@@ -24,6 +24,7 @@ export default { // TODO shared parent component
             name: "Arbre éliminatoire",
             config: {
                 dismiss_favorite: false,
+                dismiss_club: false,
                 third_place: false,
                 locked: false
             }
@@ -47,9 +48,18 @@ export default { // TODO shared parent component
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.dismiss_favorite">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Ecarter les têtes de séries (favoris)</span>
+                        <span class="custom-control-description">Ecarter les têtes de séries (favoris <i class="zmdi zmdi-star text-yellow"></i>)</span>
                     </label>
                 </div>
+
+                <div class="col-md-6">
+                    <label class="ml-2 custom-control custom-checkbox">
+                        <input class="custom-control-input" type="checkbox" v-model="config.dismiss_club">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Ecarter les combattants d'un même club</span>
+                    </label>
+                </div>
+
                 <div class="col-md-6">
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.third_place">

@@ -25,6 +25,7 @@ export default { // TODO shared parent component
             config: {
                 number_of_qualified_fighter: 1,
                 dismiss_favorite: false,
+                dismiss_club: false,
                 locked: false
             }
         }
@@ -43,7 +44,7 @@ export default { // TODO shared parent component
         <div class="card-header">Configuration des poules</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label for="pool_configuration__number_of_qualified_fighter" class="card-body__title">Nombre de combattants qualifiés par poule</label>
                         <input id="pool_configuration__number_of_qualified_fighter" type="number" min="1" class="form-control" v-model="config.number_of_qualified_fighter">
@@ -55,7 +56,15 @@ export default { // TODO shared parent component
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.dismiss_favorite">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Ecarter les têtes de séries (favoris)</span>
+                        <span class="custom-control-description">Ecarter les têtes de séries (favoris <i class="zmdi zmdi-star text-yellow"></i>)</span>
+                    </label>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="ml-2 custom-control custom-checkbox">
+                        <input class="custom-control-input" type="checkbox" v-model="config.dismiss_club">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Ecarter les combattants d'un même club</span>
                     </label>
                 </div>
             </div>

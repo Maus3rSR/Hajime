@@ -25,6 +25,11 @@ export default {
                 allowNull: false,
                 defaultValue: 0
             },
+            dismiss_club: {
+                type: Sequelize.INTEGER(3).UNSIGNED,
+                allowNull: false,
+                defaultValue: 0
+            },
             third_place: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
                 allowNull: false,
