@@ -30,8 +30,10 @@ export default { // TODO shared parent component
         }
     },
     mounted() {
-        if (undefined !== this.value)
+        if (undefined !== this.value) {
             this.config = this.value.tree_configuration
+            this.update()
+        }
     }
 }
 </script>
