@@ -76,7 +76,8 @@ const defaultState = () => ({
         number_of_qualified_fighter: 1,
         number_of_pool: 1,
         number_of_entry_per_pool: 1,
-        dismiss_favorite: false,
+        repulse_favorite: false,
+        repulse_club: false,
         locked: false,
     }
 })

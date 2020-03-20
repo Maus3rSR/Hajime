@@ -36,7 +36,7 @@ export default {
 
             <transition-group name="list" tag="ul">
                 <li class="list-item row" v-for="pool_entry in pool_entry_list" :key="pool_entry.entriable_id+'_'+pool_entry.number">
-                    <span class="pool-id col-sm-2">
+                    <span class="pool-id col-sm-2" v-if="!blured">
                         {{ pool.number }}.{{ pool_entry.number }}
                     </span>
                     <span class="pool-entry_name col-sm-8" :class="{ 'pool-entry_name__blured': blured }">

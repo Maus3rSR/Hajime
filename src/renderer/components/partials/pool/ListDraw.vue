@@ -6,7 +6,11 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 
 export default {
     props: {
-        config: {
+        option_list: {
+            type: Object,
+            required: true
+        },
+        configuration: {
             type: Object,
             required: true
         },
@@ -27,12 +31,13 @@ export default {
     methods: {
         updatePoolList(base_entry_list) {
             this.pool_list = []
+            let temp_pool_list = []
             let current_entry_index = 0
 
-            for (let i = 0; i < this.config.number_of_total_pool; i++) {
-                const next_entry_index = i == this.config.number_of_total_pool - 1 ?
+            for (let i = 0; i < this.option_list.number_of_total_pool; i++) {
+                const next_entry_index = i == this.option_list.number_of_total_pool - 1 ?
                     base_entry_list.length :
-                    current_entry_index + this.config.number_of_entry_per_pool
+                    current_entry_index + this.option_list.number_of_entry_per_pool
                 
                 let entry_list = []
                 
@@ -41,19 +46,34 @@ export default {
 
                 current_entry_index = next_entry_index
 
-                this.pool_list.push({
-                    number: this.pool_list.length + 1,
-                    entry_list: entry_list
-                        .map((entry, index) => {
-                            return {
-                                number: index + 1,
-                                entriable_id: entry.id,
-                                entriable: "Fighter",
-                                entry: entry
-                            }
-                        })
-                })
+                temp_pool_list.push(entry_list)
             }
+
+            if (this.configuration.repulse_club)
+                temp_pool_list = this.repulseClub(temp_pool_list)
+
+            this.pool_list = temp_pool_list.map((entry_list, index) => ({
+                number: index + 1,
+                entry_list: entry_list.map((entry, index_entry) => ({
+                    number: index_entry + 1,
+                    entriable_id: entry.id,
+                    entriable: "Fighter",
+                    entry: entry
+                }))
+            }))
+        },
+        
+        repulseClub(list) {
+            if (!this.configuration.repulse_club) return list
+
+            let pool_are_full = false
+            let there_is_entry_to_repulse = false
+
+            do {
+
+            } while (!pool_are_full && there_is_entry_to_repulse)
+
+            return list
         },
         shuffle() {
             this.draw_lot_progress = 0
@@ -99,7 +119,7 @@ export default {
         }
     },
     watch: {
-        config: {
+        option_list: {
             handler: function() {
                 this.updatePoolList(this.entry_list)
             },

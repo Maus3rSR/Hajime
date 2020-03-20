@@ -20,12 +20,12 @@ export default {
                 },
                 unique: true
             },
-            dismiss_favorite: {
+            repulse_favorite: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
                 allowNull: false,
                 defaultValue: 0
             },
-            dismiss_club: {
+            repulse_club: {
                 type: Sequelize.INTEGER(3).UNSIGNED,
                 allowNull: false,
                 defaultValue: 0

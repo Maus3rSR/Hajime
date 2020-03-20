@@ -13,7 +13,7 @@ export default {
             competition_type: state => state.model.type,
         }),
         ...mapState('pool', {
-            competition_formula_id: state => state.configuration.competition_formula_id,
+            pool_configuration: state => state.configuration
         }),
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",
@@ -94,7 +94,7 @@ export default {
                     this.pool_status = "NOTHING" // TODO, trouver une solution pour régler ce problème ...
 
                     this.pool_list = pool_list.map(pool => {
-                        pool.competition_formula_id = parseInt(this.competition_formula_id, 10)
+                        pool.competition_formula_id = parseInt(this.pool_configuration.competition_formula_id, 10)
                         return pool
                     })
 
@@ -121,12 +121,12 @@ export default {
                 if (!list.length)
                     return
 
-                if (null === this.pool_configuration)
-                    this.pool_configuration = list[0]
+                if (null === this.pool_option_list_choosen)
+                    this.pool_option_list_choosen = list[0]
             },
             deep: true
         },
-        pool_configuration: {
+        pool_option_list_choosen: {
             handler: function(config) {
                 if (null === config)
                     return
@@ -139,7 +139,7 @@ export default {
     },
     data() {
         return {
-            pool_configuration: null,
+            pool_option_list_choosen: null,
         }
     }
 }
@@ -150,7 +150,7 @@ export default {
         <div class="form-group row">
             <label for="pool_configuration" class="col-sm-3 col-xl-2 col-form-label card-body__title">Nombre de poules</label>
             <div class="col-sm-9 col-xl-10">
-                <select id="pool_configuration" class="form-control" v-model="pool_configuration">
+                <select id="pool_configuration" class="form-control" v-model="pool_option_list_choosen">
                     <option value="null" selected>Choisir une configuration</option>
                     <option v-for="pool_config in number_of_pool_value_list" :key="pool_config.number_of_pool" :value="pool_config">
                         {{ pool_config.number_of_pool }} poules de {{ pool_config.number_of_entry_per_pool }} {{ entrant_label }}
@@ -163,11 +163,12 @@ export default {
         </div>
 
         <transition name="fade" mode="out-in">
-            <software-container v-if="null != pool_configuration" limit-container="software__footer" element-scroll="poolListDraw">
+            <software-container v-if="null != pool_option_list_choosen" limit-container="software__footer" element-scroll="poolListDraw">
                 <pool-list-draw
                     id="poolListDraw"
 
-                    :config="pool_configuration"
+                    :option_list="pool_option_list_choosen"
+                    :configuration="pool_configuration"
                     :entry_list="fighter_list"
 
                     @on-validate="validatePoolList"
