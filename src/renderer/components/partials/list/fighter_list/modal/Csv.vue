@@ -135,7 +135,8 @@ export default {
                     }
 
                     if (field.is_date !== undefined && field.is_date) {
-                        const date = DateTime.fromFormat(row_value, 'dd/mm/yyyy', { locale: 'fr' })
+
+                        const date = undefined === row_value.length ? { isValid: false } : DateTime.fromFormat(row_value, 'dd/mm/yyyy', { locale: 'fr' })
 
                         if (!date.isValid)
                         {
