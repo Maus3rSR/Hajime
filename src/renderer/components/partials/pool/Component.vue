@@ -40,7 +40,7 @@ export default {
                         {{ pool.number }}.{{ pool_entry.number }}
                     </span>
                     <span class="pool-entry_name col-sm-8" :class="{ 'pool-entry_name__blured': blured }">
-                        {{ pool_entry[entry_field].name }}
+                        {{ pool_entry[entry_field].club }}
                     </span>
                     <span class="col text-right" v-if="canShowDetail">
                         <span class="badge badge-pill" :class="{ 'badge-first-place': pool_entry.rank_number === 1, 'badge-second-place': pool_entry.rank_number === 2, 'badge-third-place': pool_entry.rank_number === 3 }">
@@ -60,7 +60,7 @@ ul {
 .pool-entry_name
 {
     &.pool-entry_name__blured {
-        filter: blur(4px);
+        //filter: blur(4px);
     }
 }
 </style>
