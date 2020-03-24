@@ -28,46 +28,45 @@ export default {
         },
         is_development() {
             return isDevelopment
+        },
+        repulse_field_list() {
+            let repulse_field_list = []
+            
+            if (this.configuration.repulse_favorite) repulse_field_list.push({ name: "is_favorite", ignore_value_list: [false] })
+            if (this.configuration.repulse_club) repulse_field_list.push({ name: "club" })
+
+            return repulse_field_list
         }
     },
     methods: {
         initDrawLib() {
             if (null === this.draw_lib) this.draw_lib = new ListDrawLib(isDevelopment || isDebugBuild)
         },
-        updatePoolList(base_entry_list) {
+        buildShuffledPoolList(base_entry_list) {
             this.initDrawLib()
 
-            this.pool_list = []
-            let temp_pool_list = []
+            let base_entry_list_shuffled = this.draw_lib.shuffle(base_entry_list)
+            let pool_list = []
             let current_entry_index = 0
 
             for (let i = 0; i < this.option_list.number_of_total_pool; i++) {
                 const next_entry_index = i == this.option_list.number_of_total_pool - 1 ?
-                    base_entry_list.length :
+                    base_entry_list_shuffled.length :
                     current_entry_index + this.option_list.number_of_entry_per_pool
                 
                 let entry_list = []
                 
                 for (let j = current_entry_index; j < next_entry_index; j++)
-                    entry_list.push(base_entry_list[j])
+                    entry_list.push(base_entry_list_shuffled[j])
 
                 current_entry_index = next_entry_index
 
-                temp_pool_list.push(entry_list)
+                pool_list.push(entry_list)
             }
 
-            this.draw_lib.list = temp_pool_list
-
-            /**
-             * REPULSING PHASE
-             */
-            let repulse_field_list = []
-            if (this.configuration.repulse_club) repulse_field_list.push({ name: "club" })
-            if (this.configuration.repulse_favorite) repulse_field_list.push({ name: "is_favorite", ignore_value_list: [false] })
-            if (repulse_field_list.length > 0) this.draw_lib.repulse(repulse_field_list, [false])
-            
-            temp_pool_list = this.draw_lib.list
-
+            return this.draw_lib.shuffle(pool_list)
+        },
+        updatePoolList(temp_pool_list) {
             this.pool_list = temp_pool_list.map((entry_list, index) => ({
                 number: index + 1,
                 entry_list: entry_list.map((entry, index_entry) => ({
@@ -84,22 +83,37 @@ export default {
             this.draw_lot_progress = 0
             this.drawing_lot = true
             let shuffle_index = 0
+            let stop_shuffle = false
 
             let promise = new Promise((resolve, reject) => {
 
                 let shuffleInterval = setInterval(() => {
                     
-                    if (isDevelopment || isDebugBuild) console.clear()
-
-                    this.updatePoolList(this.draw_lib.shuffle(this.entry_list))
                     this.draw_lot_progress = (shuffle_index + 1) * 100 / this.nb_shuffle
 
-                    if (++shuffle_index === this.nb_shuffle)
+                    if (++shuffle_index > this.nb_shuffle)
+                        stop_shuffle = true
+
+                    let temp_pool_list =  this.buildShuffledPoolList(this.entry_list)
+
+                    if (stop_shuffle && this.repulse_field_list.length > 0)
+                        try {
+                            temp_pool_list = this.draw_lib.repulse(temp_pool_list, this.repulse_field_list)
+                        } catch (error) {
+                            console.error(error)
+                            shuffle_index--
+                            stop_shuffle = false
+                        }
+
+                    this.updatePoolList(temp_pool_list)
+
+                    if (stop_shuffle)
                     {
-                        this.drawing_lot = false
                         clearInterval(shuffleInterval)
+                        this.drawing_lot = false
                         resolve()
                     }
+
                 }, this.time_each_shuffle)
 
             })
@@ -119,7 +133,7 @@ export default {
     watch: {
         option_list: {
             handler: function() {
-                this.updatePoolList(this.entry_list)
+                this.updatePoolList(this.buildShuffledPoolList(this.entry_list))
             },
             deep: true,
             immediate: true
