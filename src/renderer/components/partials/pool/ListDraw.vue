@@ -58,8 +58,13 @@ export default {
 
             this.draw_lib.list = temp_pool_list
 
-            if (this.configuration.repulse_club)
-                this.draw_lib.repulse("club")
+            /**
+             * REPULSING PHASE
+             */
+            let repulse_field_list = []
+            if (this.configuration.repulse_club) repulse_field_list.push({ name: "club" })
+            if (this.configuration.repulse_favorite) repulse_field_list.push({ name: "is_favorite", ignore_value_list: [false] })
+            if (repulse_field_list.length > 0) this.draw_lib.repulse(repulse_field_list, [false])
             
             temp_pool_list = this.draw_lib.list
 
@@ -83,6 +88,9 @@ export default {
             let promise = new Promise((resolve, reject) => {
 
                 let shuffleInterval = setInterval(() => {
+                    
+                    if (isDevelopment || isDebugBuild) console.clear()
+
                     this.updatePoolList(this.draw_lib.shuffle(this.entry_list))
                     this.draw_lot_progress = (shuffle_index + 1) * 100 / this.nb_shuffle
 
