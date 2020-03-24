@@ -31,8 +31,11 @@ export default {
         }
     },
     methods: {
-        updatePoolList(base_entry_list) {
+        initDrawLib() {
             if (null === this.draw_lib) this.draw_lib = new ListDrawLib(isDevelopment || isDebugBuild)
+        },
+        updatePoolList(base_entry_list) {
+            this.initDrawLib()
 
             this.pool_list = []
             let temp_pool_list = []
@@ -71,6 +74,8 @@ export default {
             }))
         },
         shuffle() {
+            this.initDrawLib()
+
             this.draw_lot_progress = 0
             this.drawing_lot = true
             let shuffle_index = 0
@@ -78,7 +83,7 @@ export default {
             let promise = new Promise((resolve, reject) => {
 
                 let shuffleInterval = setInterval(() => {
-                    this.updatePoolList(this.getShuffleEntryList())
+                    this.updatePoolList(this.draw_lib.shuffle(this.entry_list))
                     this.draw_lot_progress = (shuffle_index + 1) * 100 / this.nb_shuffle
 
                     if (++shuffle_index === this.nb_shuffle)
@@ -92,16 +97,6 @@ export default {
             })
 
             return promise
-        },
-        getShuffleEntryList() {
-            let entry_list = JSON.parse(JSON.stringify(this.entry_list))
-
-            for (let i = entry_list.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [entry_list[i], entry_list[j]] = [entry_list[j], entry_list[i]];
-            }
-
-            return entry_list
         },
         doDrawingLot() {
             this.shuffle().then(() => {

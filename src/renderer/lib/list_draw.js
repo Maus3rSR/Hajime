@@ -125,11 +125,14 @@ export default class ListDrawLib {
         list_loop:
         for (index_list; canLoop(index_list); index_list += loop_step) {
             const entry_list = this.List[index_list]
-            if (-1 !== entry_list.findIndex(e => e[this.field] === entry[this.field])) continue
             
-            for (let index_entry = 0; index_entry < entry_list.length; index_entry++) {
-                if (-1 !== this.List[index_list_origin].findIndex(entry => entry[this.field] === entry_list[index_entry][this.field])) continue
-                entry_index_to_remove = index_entry
+            if (-1 !== entry_list.findIndex(e => e[this.field] === entry[this.field])) continue
+
+            const entry_list_shuffled = this.shuffle(entry_list)
+            
+            for (let index_entry = 0; index_entry < entry_list_shuffled.length; index_entry++) {
+                if (this.blocked_entry_list.includes(entry_list_shuffled[index_entry].id)) continue
+                entry_index_to_remove = entry_list.findIndex(e => parseInt(e.id, 10) === parseInt(entry_list_shuffled[index_entry].id, 10))
                 list_index_found = index_list
                 break list_loop
             }
@@ -141,9 +144,24 @@ export default class ListDrawLib {
 
         // SWITCH
         this.logger.info(`[ListDrawLib.repulse_entry] Switch with an entry at list[${list_index_found}][${entry_index_to_remove}]`, this.List[list_index_found][entry_index_to_remove])
+
         const removed_entry = this.List[list_index_found].splice(entry_index_to_remove, 1, entry)[0]
         this.List[index_list_origin].splice(index_entry_origin, 1, removed_entry)
+        this.blocked_entry_list.push(entry.id)
 
         this.logger.info("[ListDrawLib.repulse_entry] Repulse done")
+    }
+
+    shuffle(list) {
+        if (!Array.isArray(list)) throw new Error("[ListDrawLib.shuffle] list is not an array")
+
+        let list_shuffled = JSON.parse(JSON.stringify(list))
+
+        for (let i = list_shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [list_shuffled[i], list_shuffled[j]] = [list_shuffled[j], list_shuffled[i]];
+        }
+
+        return list_shuffled
     }
 }
