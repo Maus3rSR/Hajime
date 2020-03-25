@@ -41,5 +41,8 @@ textarea {
 select {
     option {
         color: black;
+        &:disabled {
+            color: #cececece;
+        }
     }
 }

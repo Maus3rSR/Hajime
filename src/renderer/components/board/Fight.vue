@@ -186,7 +186,6 @@ export default {
 
             @on-confirm="confirm"
         >
-            <template slot="label"></template>
             <template slot="content">
 
                 <div class="row">

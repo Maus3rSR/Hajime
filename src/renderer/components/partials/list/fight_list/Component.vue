@@ -15,6 +15,10 @@ export default {
         marking_board_reversed: {
             type: Boolean,
             default: false
+        },
+        title: {
+            type: String,
+            default: "Matchs"
         }
     },
     computed: {
@@ -78,7 +82,7 @@ export default {
     <div>
         <data-list
             :name="name"
-            title="Matchs"
+            :title="title"
             class="datalist__fight"
 
             :list="list"
@@ -111,6 +115,10 @@ export default {
                     </span>
                 </span>
             </template>
+
+            <div slot="table-actions-bottom">
+                <slot name="list-footer"></slot>
+            </div>
 
             <template slot="fighter" slot-scope="props">
                 <span class="row">
@@ -184,6 +192,15 @@ export default {
         transition: transform 0.3s ease-in-out;
         &:hover {
             transform: rotate(180deg);
+        }
+    }
+    .btn__add-fight {
+        margin: 0 auto;
+        border: #fff dashed 2px;
+        width: 100%;
+        padding: 0;
+        &:hover {
+            border-color: #cecece;
         }
     }
 }

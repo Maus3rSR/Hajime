@@ -10,13 +10,15 @@ export default {
             list: state => state.list,
         }),
         ...mapGetters({
+            entry_field: 'pool/entry_field',
             has_fight_list: "pool/has_fight_list",
             get_pool_finished_fight_list_percent: "pool/getTotalFightFinishedPercentageOfPool"
         })
     },
     methods: {
         ...mapActions({
-            reverse_marking_board: "pool/REVERSE_MARKING_BOARD"
+            reverseMarkingBoard: "pool/REVERSE_MARKING_BOARD",
+            addFight: "pool/ADD_FIGHT"
         }),
         onTabShown() {
             this.$softwareContainer.$emit('forceResize')
@@ -25,10 +27,26 @@ export default {
             return {
                 width: `${this.get_pool_finished_fight_list_percent(pool_id)}%`
             }
+        },
+        openNewFightModal(pool) {
+            this.new_fight.entry_left = pool.entry_list[0]
+            this.new_fight.entry_right = pool.entry_list[1]
+            this.new_fight.entry_list = pool.entry_list
+
+            this.$refs.modalAddFight.show()
+        },
+        addNewFight() {
+
         }
     },
     data() {
-        return {}
+        return {
+            new_fight: { 
+                entry_list: [],
+                entry_left: null,
+                entry_right: null
+            }
+        }
     },
 }
 </script>
@@ -51,14 +69,57 @@ export default {
                         <fight-list
                             :list="pool.fight_list"
                             :index="pool.number"
+                            :title="`Matchs de la poule N°${pool.number}`"
                             :marking_board_reversed="pool.marking_board_reversed"
                             
-                            @makeReverse="reverse_marking_board(pool.id)"
-                        />
+                            @makeReverse="reverseMarkingBoard(pool.id)"
+                        >
+
+                            <template slot="list-footer">
+                                <button class="btn btn-link btn-lg btn__add-fight" @click.prevent="openNewFightModal(pool)">
+                                    <i class="zmdi zmdi-plus"></i>
+                                    Ajouter un match supplémentaire
+                                </button>
+                            </template>
+
+                        </fight-list>
                     </b-tab>
                 </b-tabs>
             </div>
         </transition>
+
+        <modal-confirmation
+            ref="modalAddFight"
+            title="Ajout d'un combat supplémentaire"
+            :header="false"
+
+            @on-confirm="addFight(new_fight)"
+        >
+            <template slot="content">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="card-body__title">Combattant gauche</label>
+                        <select class="form-control" v-model="new_fight.entry_left">
+                            <option v-for="entry in new_fight.entry_list" :value="entry" :key="entry.id" :disabled="entry.id === new_fight.entry_right.id">
+                                {{ entry[entry_field].name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="card-body__title">Combattant droite</label>
+                        <select class="form-control" v-model="new_fight.entry_right">
+                            <option v-for="entry in new_fight.entry_list" :value="entry" :key="entry.id" :disabled="entry.id === new_fight.entry_left.id">
+                                {{ entry[entry_field].name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+            </template>
+        </modal-confirmation>
+
     </div>
 </template>
 

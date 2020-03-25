@@ -149,16 +149,19 @@ const mutations = {
         state.list[pool_index].entry_list.splice(pool_entry_index, 1, pool_entry)
     },
     MERGE_FIGHT(state, fight) {
-        for (let i = 0; i < state.list.length; i++) {
-            const pool = state.list[i]
-            const fight_index = pool.fight_list.findIndex(f => parseInt(f.id, 10) === parseInt(fight.id, 10))
+        const pool_id = fight.fightable_id
+        const pool_index = state.list.findIndex(pool => parseInt(pool.id, 10) === parseInt(pool_id, 10))
 
-            if (fight_index === -1)
-                continue
+        if (-1 === pool_index) return
 
-            state.list[i].fight_list.splice(fight_index, 1, { ...state.list[i].fight_list[fight_index], ...fight })
-            break
-        }
+        const pool = state.list[pool_index]
+        const fight_index = pool.fight_list.findIndex(f => parseInt(f.id, 10) === parseInt(fight.id, 10))
+
+        if (fight_index === -1)
+            state.list[pool_index].fight_list.push(fight)
+        else
+            state.list[pool_index].fight_list.splice(fight_index, 1, { ...state.list[pool_index].fight_list[fight_index], ...fight })
+
     }
 }
 
@@ -318,7 +321,11 @@ const actions = {
         return promise
     },
     LOAD_FIGHT({ commit, rootGetters }, fight_id) {
-        const promise = rootGetters["database/getModel"]("Fight").findByPk(fight_id, { include: getFightAssociationList(fight_id) })
+
+        const promise = rootGetters["database/getModel"]("Fight").findByPk(fight_id, { 
+            include: getFightAssociationList(fight_id),
+            where: { fightable: 'Pool' }
+        })
 
         promise
             .then(fight => {
@@ -326,6 +333,38 @@ const actions = {
                 commit("MERGE_FIGHT", fight.get({ plain: true }))
             })
             .catch(() => this.$notify.error("Impossible de récupérer le combat"))
+
+        return promise
+    },
+    ADD_FIGHT({ dispatch, getters, rootGetters }, { entry_left, entry_right }) {
+        if (undefined === entry_left.pool_id || !getters.existPool(entry_left.pool_id) || undefined === entry_right.pool_id || !getters.existPool(entry_right.pool_id)) {
+            this.$notify.error("Impossible de procéder à l'ajout du combat, la poule n'existe pas")
+            return Promise.reject()
+        }
+        
+        if (entry_left.pool_id !== entry_right.pool_id) {
+            this.$notify.error("Impossible de procéder à l'ajout du combat, les entrées n'appartiennent pas à la même poule")
+            return Promise.reject()
+        }
+
+        const pool_id = parseInt(entry_left.pool_id, 10)
+        const entriable = entry_left.entriable
+
+        const promise = rootGetters["database/getModel"]("Fight").create({
+            fightable_id: pool_id,
+            fightable: "Pool",
+            entriable1_id: parseInt(entry_left.entriable_id, 10),
+            entriable2_id: parseInt(entry_right.entriable_id, 10),
+            entriable,
+            added_manually: true
+        })
+
+        promise
+            .then(fight => {
+                this.$notify.success("Le combat a bien été ajouté à la poule")
+                return dispatch("LOAD_FIGHT", parseInt(fight.id))
+            })
+            .catch(() => this.$notify.error("Une erreur est survenue lors de l'ajout du nouveau combat"))
 
         return promise
     },
@@ -371,7 +410,9 @@ const actions = {
 
         return promise
     },
-    UPDATE_POOL_ENTRY_SCORE({ dispatch, getters, rootGetters }, { pool_id, fighter, pool_scoring }) {
+    UPDATE_POOL_ENTRY_RANKING({ dispatch, getters, rootGetters }, { fight, fighter, pool_scoring }) {
+        const pool_id = fight.fightable_id
+
         if (!getters.existPool(pool_id)) {
             this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
             return Promise.reject()
@@ -380,7 +421,7 @@ const actions = {
         const victory_number_increment_value = pool_scoring === POOL_SCORING.WINNER ? 1 : 0
 
         const promise = rootGetters["database/getModel"]("PoolEntry").update({
-            score: rootGetters["database/instance"].literal(`score + ${parseInt(pool_scoring, 10)}`),
+            ...!fight.added_manually && { score: rootGetters["database/instance"].literal(`score + ${parseInt(pool_scoring, 10)}`) },
             victory_number: rootGetters["database/instance"].literal(`victory_number + ${parseInt(victory_number_increment_value, 10)}`),
         }, { 
             where: { 
@@ -402,7 +443,9 @@ const actions = {
             return Promise.reject()
         }
 
-        if (!getters.existPool(fight.fightable_id)) {
+        const pool_id = parseInt(fight.fightable_id, 10)
+
+        if (!getters.existPool(pool_id)) {
             this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
             return Promise.reject()
         }
@@ -413,18 +456,18 @@ const actions = {
             promise = Promise.resolve()
         else if (fighter1.score_given_list.length > fighter2.score_given_list.length)
             promise = Promise.all([
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.WINNER }),
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.LOOSER })
+                dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter1, pool_scoring: POOL_SCORING.WINNER }),
+                dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter2, pool_scoring: POOL_SCORING.LOOSER })
             ])
         else if (fighter2.score_given_list.length > fighter1.score_given_list.length)
             promise = Promise.all([
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.LOOSER }),
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.WINNER })
+                dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter1, pool_scoring: POOL_SCORING.LOOSER }),
+                dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter2, pool_scoring: POOL_SCORING.WINNER })
             ])
         else
             promise = Promise.all([
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter1, pool_scoring: POOL_SCORING.DRAW }),
-                dispatch('UPDATE_POOL_ENTRY_SCORE', { pool_id: fight.fightable_id, fighter: fighter2, pool_scoring: POOL_SCORING.DRAW })
+                dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter1, pool_scoring: POOL_SCORING.DRAW }),
+                dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter2, pool_scoring: POOL_SCORING.DRAW })
             ])
 
         promise
@@ -433,7 +476,9 @@ const actions = {
         return promise
     },
     ON_SCORE_FIGHT_UPDATED({ dispatch, commit, getters }, { fight, fighter_up, fighter_down, score_number }) {
-        if (!getters.existPool(fight.fightable_id)) {
+        const pool_id = parseInt(fight.fightable_id, 10)
+
+        if (!getters.existPool(pool_id)) {
             this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
             return Promise.reject()
         }

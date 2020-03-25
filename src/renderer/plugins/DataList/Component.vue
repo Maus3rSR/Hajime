@@ -333,6 +333,10 @@ export default {
                         </slot>
                     </template>
 
+                    <template slot="table-actions-bottom">
+                        <slot name="table-actions-bottom"></slot>
+                    </template>
+
                 </vue-good-table>
 
             </div>

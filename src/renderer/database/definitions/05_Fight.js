@@ -38,6 +38,11 @@ export default {
                 allowNull: false,
                 defaultValue: 0
             },
+            added_manually: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: 0
+            },
             ...add_virtual_field && {
                 is_locked: {
                     type: Sequelize.VIRTUAL,
