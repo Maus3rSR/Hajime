@@ -1,3 +1,6 @@
+/**
+ * TODO à rendre plus dynamique !
+ */
 const color_list = [{
     color: "red",
     label: "ROUGE"

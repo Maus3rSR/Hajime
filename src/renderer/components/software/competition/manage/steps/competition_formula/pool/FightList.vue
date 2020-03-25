@@ -10,6 +10,7 @@ export default {
             list: state => state.list,
         }),
         ...mapGetters({
+            color_list: "marking_board/color_list",
             entry_field: 'pool/entry_field',
             has_fight_list: "pool/has_fight_list",
             get_pool_finished_fight_list_percent: "pool/getTotalFightFinishedPercentageOfPool"
@@ -29,23 +30,20 @@ export default {
             }
         },
         openNewFightModal(pool) {
-            this.new_fight.entry_left = pool.entry_list[0]
-            this.new_fight.entry_right = pool.entry_list[1]
-            this.new_fight.entry_list = pool.entry_list
+            this.new_fight = {
+                entry_left: pool.entry_list[0],
+                entry_right: pool.entry_list[1],
+                entry_list: pool.entry_list,
+                marking_board_left: this.color_list[+pool.marking_board_reversed],
+                marking_board_right: this.color_list[1 - pool.marking_board_reversed],
+            }
 
             this.$refs.modalAddFight.show()
-        },
-        addNewFight() {
-
         }
     },
     data() {
         return {
-            new_fight: { 
-                entry_list: [],
-                entry_left: null,
-                entry_right: null
-            }
+            new_fight: null
         }
     },
 }
@@ -95,11 +93,14 @@ export default {
 
             @on-confirm="addFight(new_fight)"
         >
-            <template slot="content">
+            <template slot="content" v-if="null !== new_fight">
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="card-body__title">Combattant gauche</label>
+                        <label class="card-body__title">
+                            Combattant 
+                            <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_left.color}`">{{ new_fight.marking_board_left.label }}</span>
+                        </label>
                         <select class="form-control" v-model="new_fight.entry_left">
                             <option v-for="entry in new_fight.entry_list" :value="entry" :key="entry.id" :disabled="entry.id === new_fight.entry_right.id">
                                 {{ entry[entry_field].name }}
@@ -108,13 +109,20 @@ export default {
                     </div>
 
                     <div class="col-md-6">
-                        <label class="card-body__title">Combattant droite</label>
+                        <label class="card-body__title">
+                            Combattant
+                            <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_right.color}`">{{ new_fight.marking_board_right.label }}</span>
+                        </label>
                         <select class="form-control" v-model="new_fight.entry_right">
                             <option v-for="entry in new_fight.entry_list" :value="entry" :key="entry.id" :disabled="entry.id === new_fight.entry_left.id">
                                 {{ entry[entry_field].name }}
                             </option>
                         </select>
                     </div>
+                </div>
+
+                <div class="text-info mt-4">
+                    <i class="zmdi zmdi-info-outline"></i> Un match ajouté manuellement n'influera pas le nombre de point dans le classement
                 </div>
 
             </template>

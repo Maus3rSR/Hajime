@@ -70,7 +70,6 @@ export default {
     },
     data() {
         return {
-            marking_board_color_list: [],
             comment_list: [],
             showModal: false,
         }
