@@ -300,7 +300,6 @@ export default {
             :list="list"
             :total="total"
             :groupedHeader="is_team"
-            :hasFooter="make_the_call"
             :isDynamic="false"
         >
             <template slot="action-bar">
@@ -398,7 +397,7 @@ export default {
                 </button>
             </template>
 
-            <template slot="footer">
+            <template slot="footer" v-if="make_the_call">
                 <span class="toolbar__label d-none d-sm-inline">
                     <template>
                         Présent&nbsp;

@@ -63,10 +63,6 @@ export default {
         groupedHeader: {
             type: Boolean,
             default: false
-        },
-        hasFooter: {
-            type: Boolean,
-            default: false
         }
     },
     computed: {
@@ -125,6 +121,9 @@ export default {
         },
         mode() {
             return this.isDynamic ? "remote" : "records"
+        },
+        has_footer() {
+            return !!this.$slots['footer']
         }
     },
     methods: {
@@ -338,7 +337,7 @@ export default {
 
             </div>
 
-            <div v-if="hasFooter" class="toolbar toolbar--inner mb-0">
+            <div v-if="has_footer" class="toolbar toolbar--inner mb-0">
                 <slot name="footer"></slot>
             </div>
 
