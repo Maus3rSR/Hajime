@@ -3,7 +3,7 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Team",
-    getDefinition: with_timestamp => {
+    getDefinition: is_migration => {
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -23,7 +23,12 @@ export default {
                 type: Sequelize.STRING(150),
                 allowNull: false
             },
-            ...with_timestamp && timestamp_definition
+            is_favorite: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
+                defaultValue: 0
+            },
+            ...is_migration && timestamp_definition
         }
     },
     getAssociation: Model => model_list => {

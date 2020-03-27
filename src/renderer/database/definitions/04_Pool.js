@@ -4,7 +4,7 @@ import timestamp_definition from './timestamp'
 export default {
     name: "Pool",
     constraint_list: [{ field_list: ['competition_formula_id', 'number'], key: { type: 'unique' } }],
-    getDefinition: with_timestamp => {
+    getDefinition: is_migration => {
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -29,7 +29,7 @@ export default {
                 allowNull: false,
                 defaultValue: 0
             },
-            ...with_timestamp && timestamp_definition
+            ...is_migration && timestamp_definition
         }
     },
     getAssociation: Model => model_list => {

@@ -23,9 +23,6 @@ export default {
             formula_list_count: "formula/count",
             getFormulaComponentList: "formula/getFormulaComponentList",
         }),
-        ...mapFields('competition', {
-            fighter_list: 'model.fighter_list',
-        }),
         step_component() {
             return this.step_list[this.current_step-1]
         },

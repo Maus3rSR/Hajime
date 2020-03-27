@@ -4,7 +4,7 @@ import timestamp_definition from './timestamp'
 export default {
     name: "Meta",
     constraint_list: [{ field_list: ['metaable_id', 'metaable', 'key', 'value'], key: { type: 'unique' } }],
-    getDefinition: with_timestamp => {
+    getDefinition: is_migration => {
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -28,7 +28,7 @@ export default {
                 type: Sequelize.STRING(255),
                 allowNull: false,
             },
-            ...with_timestamp && timestamp_definition
+            ...is_migration && timestamp_definition
         }
     },
     // getAssociation: Model => model_list => {}

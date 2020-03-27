@@ -1,19 +1,19 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import FighterList from '@partials/list/fighter_list/Component'
+import EntryList from '@partials/list/entry_list/Component'
 
 export default {
-    components: { FighterList },
+    components: { EntryList },
     computed: {
         ...mapState('competition', {
             competition_type: state => state.model.type,
         }),
         ...mapFields('competition', {
-            fighter_list: 'model.fighter_list'
+            entry_list: 'model.entry_list'
         }),
         step_is_valid() {
-            return this.fighter_list.length > 0
+            return this.entry_list.length > 0
         },
     },
     methods: {}
@@ -24,7 +24,7 @@ export default {
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <fighter-list v-model="fighter_list" :competition_type="competition_type" />
+                <entry-list v-model="entry_list" :competition_type="competition_type" />
             </div>
         </div>
 

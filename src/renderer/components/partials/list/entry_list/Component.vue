@@ -277,11 +277,12 @@ export default {
                 return
             }
 
-            fighter_list = fighter_list.map(fighter => {
+            fighter_list = fighter_list.map(fighter => { // TODO Transformation entry_list selon type ou fighter
                 fighter.is_present = false
                 fighter.is_favorite = false
                 return fighter
             })
+
             this.$emit("input", fighter_list)
             this.$notify.success("La liste des combattants a bien été ajoutée")
         }

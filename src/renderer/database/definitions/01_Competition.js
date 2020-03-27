@@ -3,7 +3,9 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Competition",
-    getDefinition: with_timestamp => {
+    getDefinition: is_migration => {
+        const add_virtual_field = is_migration === true ? undefined : true
+
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -44,16 +46,27 @@ export default {
                 allowNull: false,
                 defaultValue: 0
             },
-            locked_fighter_list: {
+            locked_entry_list: {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: 0
             },
-            ...with_timestamp && timestamp_definition
+            ...add_virtual_field && {
+                entry_list: {
+                    type: Sequelize.VIRTUAL,
+                    get() {
+                        if (!!this.fighter_list && this.fighter_list.length > 0) return this.fighter_list
+                        if (!!this.team_list && this.team_list.length > 0) return this.team_list
+                        return []
+                    }
+                },
+            },
+            ...is_migration && timestamp_definition
         }
     },
     getAssociation: Model => model_list => {
         Model.hasMany(model_list.Fighter, { as: 'fighter_list', foreignKey: 'competition_id' })
+        Model.hasMany(model_list.Team, { as: 'team_list', foreignKey: 'competition_id' })
         Model.hasMany(model_list.CompetitionFormula, { as: 'formula_config_list', foreignKey: 'competition_id' })
     }
 }

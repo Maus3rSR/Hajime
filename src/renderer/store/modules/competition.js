@@ -18,8 +18,8 @@ const defaultState = () => ({
         owner: null,
         type: TYPE_LIST.INDI,
         locked: false,
-        locked_fighter_list: false,
-        fighter_list: [],
+        locked_entry_list: false,
+        entry_list: [],
         formula_config_list: [],
     }
 })
@@ -165,7 +165,7 @@ const actions = {
             return Promise.reject()
         }
 
-        if (state.model.locked_fighter_list)
+        if (state.model.locked_entry_list)
         {
             this.$notify.error("Vous n'avez pas le droit de mettre à jour les combattants")
             return Promise.reject()
@@ -213,7 +213,7 @@ const actions = {
             return Promise.reject()
         }
         
-        if (state.model.locked_fighter_list)
+        if (state.model.locked_entry_list)
         {
             this.$notify.error("Vous n'avez pas le droit de supprimer les combattants")
             return Promise.reject()
@@ -246,7 +246,7 @@ const actions = {
             return Promise.reject()
         }
 
-        if (state.model.locked_fighter_list)
+        if (state.model.locked_entry_list)
         {
             this.$notify.error("Vous n'avez pas le droit de mettre à jour les combattants")
             return Promise.reject()

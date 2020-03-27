@@ -3,8 +3,8 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Fight",
-    getDefinition: with_timestamp => {
-        const add_virtual_field = with_timestamp === true ? undefined : true
+    getDefinition: is_migration => {
+        const add_virtual_field = is_migration === true ? undefined : true
 
         return {
             id: {
@@ -53,7 +53,7 @@ export default {
                     get() { return undefined !== this.comment_list && this.comment_list.length > 0 }
                 }
             },
-            ...with_timestamp && timestamp_definition
+            ...is_migration && timestamp_definition
         }
     },
     getAssociation: Model => model_list => {

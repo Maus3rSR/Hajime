@@ -1,14 +1,14 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import FighterList from '@partials/list/fighter_list/Component'
+import EntryList from '@partials/list/entry_list/Component'
 
 export default {
-    components: { FighterList },
+    components: { EntryList },
     computed: {
         ...mapState('competition', {
             competition_type: state => state.model.type,
-            is_fighter_list_lock: state => state.model.locked_fighter_list
+            is_fighter_list_lock: state => state.model.locked_entry_list
         }),
         ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),
         ...mapGetters({
@@ -16,8 +16,8 @@ export default {
             competition_saving: "competition/saving",
         }),
         ...mapFields('competition', {
-            fighter_list: 'model.fighter_list',
-            locked_fighter_list: 'model.locked_fighter_list'
+            entry_list: 'model.entry_list',
+            locked_entry_list: 'model.locked_entry_list'
         }),
         step_is_valid() {
             return this.fighter_present_count >= this.COMPETITION_MINIMUM_ENTRANT
@@ -33,10 +33,10 @@ export default {
         save() {
             if (this.competition_saving) return
 
-            this.locked_fighter_list = true
+            this.locked_entry_list = true
             this.saveCompetition()
                 .then(() => this.$emit('onValidate'))
-                .catch(() => this.locked_fighter_list = false)
+                .catch(() => this.locked_entry_list = false)
         },
         confirm() {
             this.$refs.modalConfirmCall.show()
@@ -60,8 +60,8 @@ export default {
         <div class="row">
             <div class="col-sm-12">
                 <transition name="fade" type="out-in" appear>
-                    <fighter-list
-                        v-model="fighter_list"
+                    <entry-list
+                        v-model="entry_list"
 
                         :competition_type="competition_type"
                         :make_the_call="true"

@@ -79,7 +79,7 @@ export default {
                         <template v-if="props.row.locked">
                             <span class="badge badge-success">TERMINÉE</span>
                         </template>
-                        <template v-else-if="props.row.locked_fighter_list">
+                        <template v-else-if="props.row.locked_entry_list">
                             <span class="badge badge-warning">EN COURS</span>
                         </template>
                         <template v-else>

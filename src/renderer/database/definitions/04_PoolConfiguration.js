@@ -3,7 +3,7 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "PoolConfiguration",
-    getDefinition: with_timestamp => {
+    getDefinition: is_migration => {
         return {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
@@ -50,7 +50,7 @@ export default {
                 allowNull: false,
                 defaultValue: 1
             },
-            ...with_timestamp && timestamp_definition
+            ...is_migration && timestamp_definition
         }
     },
     // getAssociation: Model => model_list => {}
