@@ -17,7 +17,7 @@ export default {
         }),
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",
-            fighter_list: "competition/fighter_present_list",
+            fighter_list: "competition/entry_present_list",
             pool_saving: "pool/saving",
         }),
         ...mapFields('pool', {

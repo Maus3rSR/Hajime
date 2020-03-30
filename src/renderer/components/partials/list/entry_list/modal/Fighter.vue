@@ -14,15 +14,16 @@ export default {
             type: String,
             required: true
         },
-        competition_type: {
-            type: String,
-            required: true,
+        is_team: {
+            type: Boolean,
+            default: false,
+        },
+        team_option_list: {
+            type: Array,
+            default() { return [] }
         }
     },
     computed: {
-        ...mapGetters({
-            constant_type_list: "competition/constant_type_list"
-        }),
         id_modal_filter() {
             return "modal-filter__"+this.id
         },
@@ -44,13 +45,16 @@ export default {
             return DateTime.fromSQL(date).toFormat('dd/MM/yyyy', { locale: 'fr' })
         },
         show(fighter) {
+            console.log("HEY")
+
             if (undefined !== fighter && null !== fighter) {
                 this.mode = MODE_TYPE.EDIT
                 this.fighter = fighter
 
                 this.fighter.birthdate = this.displayDate(this.fighter.birthdate)
                 this.$nextTick().then(() => this.$validator.validateAll())
-            }
+            } else if (this.team_option_list.length > 0)
+                this.fighter.team = this.team_option_list[0]
 
             this.$refs.modalFighter.show()
         },
@@ -97,6 +101,7 @@ export default {
             fighter: {
                 is_present: false,
                 is_favorite: false,
+                team: null
             }
         }
     }
@@ -178,22 +183,22 @@ export default {
                 </div>
             </div>
 
-            <div class="col-sm-12" v-if="competition_type == constant_type_list.TEAM">
+            <div class="col-sm-12" v-if="is_team">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__team">Equipe</label>
-                        <input
+                        <label for="fighter__team">Equipe *</label>
+                        <select
                             id="fighter__team"
                             class="form-control"
                             type="text"
                             name="team"
 
-                            v-validate
                             v-model="fighter.team"
 
                             :class="{ 'is-invalid': errors.has('team') }"
                         >
-                        <i class="form-group__bar"></i>
+                            <option v-for="team in team_option_list" :value="team" :key="team">{{ team }}</option>
+                        </select>
                     </div>
                     <span class="text-danger" v-if="errors.has('team')">{{ errors.first('team') }}</span>
                 </div>

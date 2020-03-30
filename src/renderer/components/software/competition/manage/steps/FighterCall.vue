@@ -12,7 +12,7 @@ export default {
         }),
         ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),
         ...mapGetters({
-            fighter_present_count: "competition/fighter_present_count",
+            entry_present_count: "competition/entry_present_count",
             competition_saving: "competition/saving",
         }),
         ...mapFields('competition', {
@@ -20,7 +20,7 @@ export default {
             locked_entry_list: 'model.locked_entry_list'
         }),
         step_is_valid() {
-            return this.fighter_present_count >= this.COMPETITION_MINIMUM_ENTRANT
+            return this.entry_present_count >= this.COMPETITION_MINIMUM_ENTRANT
         },
     },
     methods: {

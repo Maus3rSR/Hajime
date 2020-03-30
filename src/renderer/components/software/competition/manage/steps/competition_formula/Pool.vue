@@ -20,7 +20,7 @@ export default {
             pool_locked: state => state.configuration.locked
         }),
         ...mapGetters({
-            fighter_list: "competition/fighter_present_list",
+            fighter_list: "competition/entry_present_list",
             is_pool_loading: "pool/loading",
             is_pool_list_loading: "pool/list_loading",
             is_pool_saving: "pool/saving",

@@ -19,7 +19,7 @@ export default {
             is_competition_empty: "competition/is_empty",
             is_competition_loading: "competition/loading",
             is_competition_saving: "competition/saving",
-            fighter_present_count: "competition/fighter_present_count",
+            entry_present_count: "competition/entry_present_count",
             formula_list_count: "formula/count",
             getFormulaComponentList: "formula/getFormulaComponentList",
         }),
@@ -33,7 +33,7 @@ export default {
             let l = [{
                 name: "Liste d'appel",
                 component_name: "FighterCall",
-                count: this.fighter_present_count
+                count: this.entry_present_count
             }]
             
             const formula_component_list = this.getFormulaComponentList(this.competition.choosen_formula_id)

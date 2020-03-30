@@ -32,31 +32,23 @@ export default {
     computed: {
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",
-            present_count: "competition/fighter_present_count",
-            missing_count: "competition/fighter_missing_count",
-            is_all_present: "competition/is_all_fighter_present",
-            is_all_missing: "competition/is_all_fighter_missing",
+            present_count: "competition/entry_present_count",
+            missing_count: "competition/entry_missing_count",
+            is_all_present: "competition/is_all_entry_present",
+            is_all_missing: "competition/is_all_entry_missing",
         }),
         list() {
-            if (this.competition_type != this.constant_type_list.TEAM)
+            if (!this.is_team)
                 return this.value
 
-            return this.value.reduce((list, row) => {
-                let index = list.findIndex(el => el.label == row.team)
-
-                if (index == -1)
-                    index = list.push({
-                        mode: "span",
-                        label: row.team,
-                        html: false,
-                        is_favorite: false,
-                        children: []
-                    }) - 1
-
-                list[index].children.push(row)
-
-                if (row.is_favorite && !list[index].is_favorite)
-                    list[index].is_favorite = true
+            return this.value.reduce((list, team) => {
+                list.push({
+                    mode: "span",
+                    label: team.name,
+                    html: false,
+                    children: team.fighter_list,
+                    ...team
+                })
 
                 // TODO : Si on demande à ce que la liste soit ordonnée par nom d'équipe, il faudra gérer un problème d'index lors de la suppression d'un combattant ...
                 // return list.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0))
@@ -73,19 +65,19 @@ export default {
                 { label: '', field: 'action-cell' }
             ]
 
-            if (this.is_team)
-                column_list.splice(2, 0, { label: 'Equipe', field: 'team', sortable: false }) 
-
             if (this.make_the_call)
                 column_list.splice(0, 0, { label: 'Présence', field: 'is_present', sortable: false })
 
             return column_list
         },
         is_team() {
-            return this.competition_type == this.constant_type_list.TEAM
+            return this.competition_type === this.constant_type_list.TEAM
         },
         total() {
             return this.value.length
+        },
+        team_list() {
+            return this.is_team ? this.list.map(team => team.name) : []
         }
     },
     methods: {
@@ -96,7 +88,7 @@ export default {
             const index = object.originalIndex
             let list = JSON.parse(JSON.stringify(this.value))
             
-            if (undefined == list[index]) {
+            if (undefined === list[index]) {
                 this.$notify.error("Le combattant n'a pas été trouvé dans la liste")
                 return false
             }
@@ -104,6 +96,33 @@ export default {
             // from data-list component, remove artefacts
             delete object.originalIndex
             delete object.vgt_id
+
+            object[field] = value
+            list[index] = object
+
+            this.$emit("input", list)
+
+            return true
+        },
+        updateTeamField(object, field, value)
+        {
+            if (this.readonly) return false
+
+            const index = object.vgt_header_id
+            let list = JSON.parse(JSON.stringify(this.value))
+            
+            if (undefined === list[index]) {
+                this.$notify.error("L'équipe n'a pas été trouvé dans la liste")
+                return false
+            }
+
+            // from data-list component, remove artefacts
+            delete object.children
+            delete object.html
+            delete object.label
+            delete object.mode
+            delete object.vgt_header_id
+            delete object.vgt_header_id
 
             object[field] = value
             list[index] = object
@@ -182,29 +201,24 @@ export default {
                     id_list: [fighter.id],
                     field_list: { is_favorite: is_favorite }
                 })
-                return true // @TODO à supprimer quand markTeamFavorite sera correctement géré
-            }
-
-            const updateFieldSuccess = this.updateField(fighter, "is_favorite", is_favorite)
-            return updateFieldSuccess
-        },
-        markTeamFavorite(header_row, is_favorite) // @TODO, gérer la partie TEAM avec un champ is_favorite dans une table TEAM
-        {
-            if (this.readonly) return
-
-            if (undefined == header_row.children) {
-                this.$notify.error("Une erreur est survenue, il n'y a pas de combattants dans cette équipe")
                 return
             }
 
-            let success = false
-            header_row.children.forEach(row => {
-                if (this.markFavorite(row, is_favorite, false) && !success) // @TODO : à corriger pour être sûr que tous les combattants sont en favoris, conflit de boucle avec this.$emit('input') de updateField
-                    success = true
-            })
+            this.updateField(fighter, "is_favorite", is_favorite)
+        },
+        markTeamFavorite(team, is_favorite)
+        {
+            if (this.readonly) return
 
-            if (success)
-                this.$notify.success("L'équipe a bien été défini comme " + (is_favorite ? "favorie" : "non favorie"))
+            if (this.emit_change) {
+                this.$emit("on-team-bulk-update", {
+                    id_list: [team.id],
+                    field_list: { is_favorite: is_favorite }
+                })
+                return
+            }
+
+            this.updateTeamField(team, "is_favorite", is_favorite)
         },
         onButtonImportClick() {
             this.$refs.fighterFileInput.value = null
@@ -234,15 +248,33 @@ export default {
 
             const index = fighter.originalIndex
             let list = JSON.parse(JSON.stringify(this.value))
-            
-            if (undefined == list[index]) {
-                this.$notify.error("Le combattant à modifier n'a pas été trouvé dans la liste")
-                return
-            }
 
             // from data-list component, remove artefacts
             delete fighter.originalIndex
             delete fighter.vgt_id
+
+            let index_loop = 0  // TODO refactor
+            if (this.is_team) {
+                loop:
+                for (let i = 0; i < list.length; i++) {
+                    for (let j = 0; j < list[i].fighter_list.length; j++) {
+                        if (index_loop === index) {
+                            list[i].fighter_list[j] = fighter
+                            break loop
+                        }
+                        index_loop++
+                    }
+                }
+
+                if (index_loop > index) {
+                    this.$notify.error("Le combattant à modifier n'a pas été trouvé")
+                    return
+                }
+            }
+            else if (undefined === list[index]) {
+                this.$notify.error("Le combattant à modifier n'a pas été trouvé dans la liste")
+                return
+            }
 
             list[index] = fighter
 
@@ -258,32 +290,67 @@ export default {
             }
 
             let list = JSON.parse(JSON.stringify(this.value))
+            const index = fighter.originalIndex
 
-            if (undefined == list[fighter.originalIndex]) {
+            let index_loop = 0 // TODO refactor
+            if (this.is_team) {
+                loop:
+                for (let i = 0; i < list.length; i++) {
+                    for (let j = 0; j < list[i].fighter_list.length; j++) {
+                        if (index_loop === index) {
+                            list[i].fighter_list.splice(j, 1)
+                            break loop
+                        }
+                        index_loop++
+                    }
+                }
+
+                if (index_loop > index) {
+                    this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")
+                    return
+                }
+            }
+            else if (undefined === list[index]) {
                 this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")
                 return
             }
             
-            list.splice(fighter.originalIndex, 1)
-            this.$emit("input", list)
+            list.splice(index, 1)
 
+            this.$emit("input", list)
             this.$notify.success("Le combattant a bien été supprimé")
         },
-        onFighterListImport(fighter_list) {
+        onFighterListImport(entry_list) {
             if (this.readonly || !this.can_import) return
 
             if (this.emit_change) {
-                this.$emit('on-fighter-list-import', fighter_list)
+                this.$emit('on-fighter-list-import', entry_list)
                 return
             }
 
-            fighter_list = fighter_list.map(fighter => { // TODO Transformation entry_list selon type ou fighter
+            entry_list = entry_list.map(fighter => {
                 fighter.is_present = false
                 fighter.is_favorite = false
                 return fighter
             })
 
-            this.$emit("input", fighter_list)
+            if (this.is_team)
+                entry_list = entry_list.reduce((new_entry_list, fighter) => {
+                    let index = new_entry_list.findIndex(team => team.name === fighter.team)
+
+                    if (-1 === index)
+                        index = new_entry_list.push({
+                            is_favorite: false,
+                            name: fighter.team,
+                            fighter_list: []
+                        }) - 1
+
+                    new_entry_list[index].fighter_list.push(fighter)
+
+                    return new_entry_list
+                }, [])
+
+            this.$emit("input", entry_list)
             this.$notify.success("La liste des combattants a bien été ajoutée")
         }
     },
@@ -436,7 +503,8 @@ export default {
             id="fighter"
             ref="modalFighter"
 
-            :competition_type="competition_type"
+            :is_team="is_team"
+            :team_option_list="team_list"
 
             @on-fighter-edit="onFighterEdit"
             @on-fighter-add="onFighterAdd"

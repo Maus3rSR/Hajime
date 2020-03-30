@@ -34,13 +34,13 @@ const getters = {
     saving: state => state.status === STATUS_LIST.SAVING,
     deleting: state => state.status === STATUS_LIST.DELETING,
     count: state => state.list.length,
-    fighter_count: state => state.model.fighter_list.length,
-    fighter_present_list: state => state.model.fighter_list.filter(fighter => fighter.is_present),
-    fighter_missing_list: state => state.model.fighter_list.filter(fighter => !fighter.is_present),
-    fighter_present_count: (state, getters) => getters.fighter_present_list.length,
-    fighter_missing_count: (state, getters) => getters.fighter_missing_list.length,
-    is_all_fighter_present: (state, getters) => getters.fighter_count === getters.fighter_present_count,
-    is_all_fighter_missing: (state, getters) => getters.fighter_count === getters.fighter_missing_count,
+    entry_count: state => state.model.entry_list.length,
+    entry_present_list: state => state.model.entry_list.filter(fighter => fighter.is_present),
+    entry_missing_list: state => state.model.entry_list.filter(fighter => !fighter.is_present),
+    entry_present_count: (state, getters) => getters.entry_present_list.length,
+    entry_missing_count: (state, getters) => getters.entry_missing_list.length,
+    is_all_entry_present: (state, getters) => getters.entry_count === getters.entry_present_count,
+    is_all_entry_missing: (state, getters) => getters.entry_count === getters.entry_missing_count,
     constant_type_list: () => TYPE_LIST,
     type_list: () => [
         {
@@ -55,8 +55,8 @@ const getters = {
         },
     ],
     default_type: () => defaultState().type,
-    findFighterIndex: state => fighter_id => state.model.fighter_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter_id, 10)),
-    existFighter: (state, getters) => fighter_id => getters.findFighterIndex(fighter_id) !== -1,
+    findEntryIndex: state => fighter_id => state.model.entry_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter_id, 10)),
+    existFighter: (state, getters) => fighter_id => getters.findEntryIndex(fighter_id) !== -1,
     findFormulaConfigIndex: state => formula_config => state.model.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
 
@@ -75,22 +75,22 @@ const mutations = {
         state.model.formula_config_list.splice(index, 1, JSON.parse(JSON.stringify(formula_config)))
     },
     UPDATE_FIGHTER(state, fighter) {
-        const index = state.model.fighter_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter.id, 10))
+        const index = state.model.entry_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter.id, 10))
 
         if (index === -1) {
-            state.model.fighter_list.push(fighter)
+            state.model.entry_list.push(fighter)
             return
         }
 
-        state.model.fighter_list.splice(index, 1, fighter)
+        state.model.entry_list.splice(index, 1, fighter)
     },
     REMOVE_FIGHTER(state, id) {
-        const index = state.model.fighter_list.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10))
+        const index = state.model.entry_list.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10))
 
         if (index === -1)
             return
 
-        state.model.fighter_list.splice(index, 1)
+        state.model.entry_list.splice(index, 1)
     }
 }
 
@@ -115,7 +115,7 @@ const actions = {
         const promise = rootGetters["database/instance"].transaction(t => {
             return rootGetters["database/getModel"]("Competition").create(state.model, {
                 transaction: t,
-                include: ['fighter_list', {
+                include: ['entry_list', {
                     association: 'formula_config_list',
                     include: ['pool_configuration', 'tree_configuration']
                 }]
@@ -146,7 +146,7 @@ const actions = {
             return Promise.reject()
         }
 
-        const { id, fighter_list, formula_config_list, ...fields } = state.model
+        const { id, entry_list, formula_config_list, ...fields } = state.model
         const promise = rootGetters["database/getModel"]("Competition").update(fields, { where: { id: parseInt(id, 10) }})
 
         promise
@@ -264,8 +264,8 @@ const actions = {
         promise
             .then(() => {
                 id_list.forEach(id => {
-                    const index = getters.findFighterIndex(id)
-                    Object.keys(field_list).forEach(field => commit("updateField", { path: "model.fighter_list[" + index + "]." + field, value: field_list[field]}))
+                    const index = getters.findEntryIndex(id)
+                    Object.keys(field_list).forEach(field => commit("updateField", { path: "model.entry_list[" + index + "]." + field, value: field_list[field]}))
                 })
 
                 this.$notify.success('La mise à jour a bien été effectuée')
@@ -282,7 +282,7 @@ const actions = {
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: ['fighter_list', 'formula_config_list'] })
+        const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: ['entry_list', 'formula_config_list'] })
         
         promise
             .then(competition => commit('INJECT_MODEL_DATA', competition.get({ plain: true })))

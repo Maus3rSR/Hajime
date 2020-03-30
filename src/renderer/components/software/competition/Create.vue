@@ -11,7 +11,7 @@ export default {
             competition_id: state => state.model.id,
         }),
         ...mapGetters({
-            fighter_count: "competition/fighter_count"
+            entry_count: "competition/entry_count"
         }),
         step_component() {
             return this.step_list[this.current_step-1].component_name
@@ -25,7 +25,7 @@ export default {
                 {
                     name: "Import des combattants",
                     component_name: "Step2",
-                    count: this.fighter_count
+                    count: this.entry_count
                 },
                 {
                     name: "Formule de compétition",
