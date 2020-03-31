@@ -7,6 +7,11 @@ const MODE_TYPE = {
     EDIT: 'EDIT'
 }
 
+const getFighterModel = () => ({
+    is_present: false,
+    is_favorite: false
+})
+
 export default {
     components: {},
     props: {
@@ -35,6 +40,9 @@ export default {
         },
         modal_title() {
             return this.is_edit_mode ? "Modification d'un combattant" : "Ajout d'un combattant"
+        },
+        is_empty_team_option_list() {
+            return this.team_option_list.length === 0
         }
     },
     methods: {
@@ -45,16 +53,16 @@ export default {
             return DateTime.fromSQL(date).toFormat('dd/MM/yyyy', { locale: 'fr' })
         },
         show(fighter) {
-            console.log("HEY")
-
-            if (undefined !== fighter && null !== fighter) {
+            if (!!fighter) {
                 this.mode = MODE_TYPE.EDIT
+                this.is_new_team = false
                 this.fighter = fighter
 
                 this.fighter.birthdate = this.displayDate(this.fighter.birthdate)
+
                 this.$nextTick().then(() => this.$validator.validateAll())
-            } else if (this.team_option_list.length > 0)
-                this.fighter.team = this.team_option_list[0]
+            } else
+                this.is_new_team = this.team_option_list.length > 0 ? false : true
 
             this.$refs.modalFighter.show()
         },
@@ -90,19 +98,33 @@ export default {
             this.closeModal()
         },
         reset() {
-            this.fighter = {}
             this.mode = MODE_TYPE.ADD
+            this.is_new_team = false
+            this.fighter = getFighterModel()
+            this.fighter.team_id = this.team_option_list.length > 0 ? this.team_option_list[0].id : null
+
             this.$nextTick().then(() => this.$validator.validateAll().then(() => this.errors.clear()))
+        }
+    },
+    watch: {
+        is_new_team: {
+            handler(new_team) {
+                if (!this.is_team)
+                    return
+
+                if (new_team)
+                    this.fighter.team_id = null
+                else if (!new_team && this.mode === MODE_TYPE.ADD)
+                    this.fighter.team_id = this.team_option_list.length > 0 ? this.team_option_list[0].id : null
+            },
+            immediate: true
         }
     },
     data() {
         return {
             mode: MODE_TYPE.ADD,
-            fighter: {
-                is_present: false,
-                is_favorite: false,
-                team: null
-            }
+            fighter: getFighterModel(),
+            is_new_team: false
         }
     }
 }
@@ -183,7 +205,7 @@ export default {
                 </div>
             </div>
 
-            <div class="col-sm-12" v-if="is_team">
+            <div :class="{ 'col-sm-8': !is_edit_mode, 'col-sm-12': is_edit_mode }" v-if="is_team">
                 <div class="form-group">
                     <div>
                         <label for="fighter__team">Equipe *</label>
@@ -193,14 +215,41 @@ export default {
                             type="text"
                             name="team"
 
-                            v-model="fighter.team"
+                            v-model="fighter.team_id"
+                            v-if="!is_new_team"
 
                             :class="{ 'is-invalid': errors.has('team') }"
                         >
-                            <option v-for="team in team_option_list" :value="team" :key="team">{{ team }}</option>
+                            <option v-for="team in team_option_list" :value="team.id" :key="team.id">{{ team.name }}</option>
                         </select>
+
+                        <input
+                            id="fighter__team"
+                            class="form-control"
+                            type="text"
+                            name="team"
+
+                            required
+
+                            v-validate
+                            v-model="fighter.team_id"
+                            v-else
+
+                            :class="{ 'is-invalid': errors.has('team') }"
+                        >
+                        <i class="form-group__bar"></i>
                     </div>
                     <span class="text-danger" v-if="errors.has('team')">{{ errors.first('team') }}</span>
+                </div>
+            </div>
+
+            <div class="col-sm-4" v-if="!is_edit_mode">
+                <div class="form-group">
+                    <label class="ml-2 custom-control custom-checkbox">
+                        <input class="custom-control-input" v-model="is_new_team" type="checkbox" :disabled="is_empty_team_option_list">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Nouvelle équipe</span>
+                    </label>
                 </div>
             </div>
 

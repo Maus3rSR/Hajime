@@ -77,7 +77,10 @@ export default {
             return this.value.length
         },
         team_list() {
-            return this.is_team ? this.list.map(team => team.name) : []
+            return this.is_team ? this.list.map(team => ({
+                id: !!team.id ? parseInt(team.id, 10) : team.name,
+                name: team.name
+            })) : []
         }
     },
     methods: {
@@ -130,6 +133,58 @@ export default {
             this.$emit("input", list)
 
             return true
+        },
+        insertFighterToTeamList(team_list, team_name, fighter) {
+            let team_index = team_list.findIndex(team => team.name === team_name)
+
+            if (-1 === team_index)
+                team_list.push({ is_favorite: false, name: team_name, fighter_list: [fighter] })
+            else
+                team_list[team_index].fighter_list.push(fighter)
+
+            return team_list
+        },
+        deleteFighterFromTeamList(team_list, fighter_index) {
+            let index_loop = 0
+            for (let i = 0; i < team_list.length; i++) {
+                for (let j = 0; j < team_list[i].fighter_list.length; j++) {
+                    if (index_loop === fighter_index) {
+                        team_list[i].fighter_list.splice(j, 1)
+
+                        if (team_list[i].fighter_list.length === 0)
+                            team_list.splice(i, 1)
+
+                        return true
+                    }
+                    index_loop++
+                }
+            }
+
+            return false
+        },
+        updateFighterFromTeamList(team_list, fighter_index, fighter) {
+            const team_name = fighter.team_id
+            let index_loop = 0
+
+            for (let i = 0; i < team_list.length; i++) {
+                for (let j = 0; j < team_list[i].fighter_list.length; j++) {
+                    if (index_loop === fighter_index) {
+                        if (team_list[i].name === team_name)
+                            team_list[i].fighter_list[j] = fighter
+                        else { // In this case it's the team name which was updated => switch it to the new team
+                            team_list[i].fighter_list.splice(j, 1)
+                            this.insertFighterToTeamList(team_list, team_name, fighter)
+
+                            if (team_list[i].fighter_list.length === 0)
+                                team_list.splice(i, 1)
+                        }
+                        return true
+                    }
+                    index_loop++
+                }
+            }
+
+            return false
         },
         addFighter() {
             this.$refs.modalFighter.show()
@@ -233,9 +288,15 @@ export default {
             }
 
             let list = JSON.parse(JSON.stringify(this.value))
-            list.push(fighter)
-            this.$emit("input", list)
+            
+            if (!this.is_team)
+                list.push(fighter)
+            else {
+                const team_name = fighter.team_id
+                this.insertFighterToTeamList(list, team_name, fighter) // array is passed by reference
+            }
 
+            this.$emit("input", list)
             this.$notify.success("Le combattant a bien été ajouté")
         },
         onFighterEdit(fighter) {
@@ -253,30 +314,10 @@ export default {
             delete fighter.originalIndex
             delete fighter.vgt_id
 
-            let index_loop = 0  // TODO refactor
-            if (this.is_team) {
-                loop:
-                for (let i = 0; i < list.length; i++) {
-                    for (let j = 0; j < list[i].fighter_list.length; j++) {
-                        if (index_loop === index) {
-                            list[i].fighter_list[j] = fighter
-                            break loop
-                        }
-                        index_loop++
-                    }
-                }
-
-                if (index_loop > index) {
-                    this.$notify.error("Le combattant à modifier n'a pas été trouvé")
-                    return
-                }
-            }
-            else if (undefined === list[index]) {
-                this.$notify.error("Le combattant à modifier n'a pas été trouvé dans la liste")
-                return
-            }
-
-            list[index] = fighter
+            if (!this.is_team && !!list[index])
+                list[index] = fighter
+            else if (!this.is_team && !list[index] || !this.updateFighterFromTeamList(list, index, fighter))
+                return this.$notify.error("Le combattant à modifier n'a pas été trouvé")
 
             this.$emit("input", list)
             this.$notify.success("Le combattant a bien été modifié")
@@ -292,30 +333,10 @@ export default {
             let list = JSON.parse(JSON.stringify(this.value))
             const index = fighter.originalIndex
 
-            let index_loop = 0 // TODO refactor
-            if (this.is_team) {
-                loop:
-                for (let i = 0; i < list.length; i++) {
-                    for (let j = 0; j < list[i].fighter_list.length; j++) {
-                        if (index_loop === index) {
-                            list[i].fighter_list.splice(j, 1)
-                            break loop
-                        }
-                        index_loop++
-                    }
-                }
-
-                if (index_loop > index) {
-                    this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")
-                    return
-                }
-            }
-            else if (undefined === list[index]) {
-                this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")
-                return
-            }
-            
-            list.splice(index, 1)
+            if (!this.is_team && !!list[index])
+                list.splice(index, 1)
+            else if (!this.is_team && !list[index] || !this.deleteFighterFromTeamList(list, index))
+                return this.$notify.error("Le combattant à supprimer n'a pas été trouvé dans la liste")
 
             this.$emit("input", list)
             this.$notify.success("Le combattant a bien été supprimé")
@@ -339,11 +360,7 @@ export default {
                     let index = new_entry_list.findIndex(team => team.name === fighter.team)
 
                     if (-1 === index)
-                        index = new_entry_list.push({
-                            is_favorite: false,
-                            name: fighter.team,
-                            fighter_list: []
-                        }) - 1
+                        index = new_entry_list.push({ is_favorite: false, name: fighter.team, fighter_list: [] }) - 1
 
                     new_entry_list[index].fighter_list.push(fighter)
 
