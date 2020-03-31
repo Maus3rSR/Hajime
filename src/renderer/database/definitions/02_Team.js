@@ -8,7 +8,8 @@ export default {
             id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
                 allowNull: false,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
             competition_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,

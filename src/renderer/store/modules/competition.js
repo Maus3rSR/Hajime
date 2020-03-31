@@ -24,6 +24,18 @@ const defaultState = () => ({
     }
 })
 
+const getEntryListAssociation = competition_type => (
+    competition_type === TYPE_LIST.INDI
+        ? "fighter_list"
+        : {
+            association: "team_list",
+            include: {
+                association: "fighter_list",
+                attributes: { exclude: ["team_id"] } 
+            }
+        }
+)
+
 const state = defaultState()
 
 const getters = {
@@ -112,24 +124,31 @@ const actions = {
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
-        const promise = rootGetters["database/instance"].transaction(t => {
-            return rootGetters["database/getModel"]("Competition").create(state.model, {
-                transaction: t,
-                include: ['entry_list', {
-                    association: 'formula_config_list',
-                    include: ['pool_configuration', 'tree_configuration']
-                }]
+        const competition = {
+            ...state.model,
+            ...state.model.type === TYPE_LIST.INDI && { fighter_list: state.model.entry_list },
+            ...state.model.type === TYPE_LIST.TEAM && { team_list: state.model.entry_list }
+        }
+
+        // const promise = rootGetters["database/instance"].transaction(t => {
+            const promise = rootGetters["database/getModel"]("Competition").create(competition, {
+                // transaction: t,
+                include: [
+                    getEntryListAssociation(competition.type),
+                    { association: 'formula_config_list', include: ['pool_configuration', 'tree_configuration'] }
+                ]
             })
-        })
+        // })
 
         promise
             .then(competition => {
                 this.$notify.success("La compétition a bien été sauvegardée")
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
-            .catch(Sequelize.UniqueConstraintError, () => this.$notify.error('Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !'))
-            .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
-            .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
+            .catch(err => console.log(err))
+            // .catch(Sequelize.UniqueConstraintError, () => this.$notify.error('Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !'))
+            // .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
+            // .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise

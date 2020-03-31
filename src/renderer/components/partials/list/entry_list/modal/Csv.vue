@@ -54,7 +54,7 @@ export default {
             }
 
             if (this.competition_type == this.constant_type_list.TEAM)
-                field_list["team"] = { label: "Equipe" }
+                field_list["team"] = { label: "Equipe", required: true }
 
             return field_list
         },
