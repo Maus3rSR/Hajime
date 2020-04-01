@@ -3,6 +3,7 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Team",
+    constraint_list: [{ field_list: ['competition_id', 'name'], key: { type: 'unique' } }],
     getDefinition: is_migration => {
         return {
             id: {
@@ -17,8 +18,7 @@ export default {
                 references: {
                     model: 'Competition',
                     key: 'id'
-                },
-                unique: true
+                }
             },
             name: {
                 type: Sequelize.STRING(150),
