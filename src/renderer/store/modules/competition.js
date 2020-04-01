@@ -130,15 +130,15 @@ const actions = {
             ...state.model.type === TYPE_LIST.TEAM && { team_list: state.model.entry_list }
         }
 
-        // const promise = rootGetters["database/instance"].transaction(t => {
-            const promise = rootGetters["database/getModel"]("Competition").create(competition, {
-                // transaction: t,
+        const promise = rootGetters["database/instance"].transaction(t => {
+            return rootGetters["database/getModel"]("Competition").create(competition, {
+                transaction: t,
                 include: [
                     getEntryListAssociation(competition.type),
                     { association: 'formula_config_list', include: ['pool_configuration', 'tree_configuration'] }
                 ]
             })
-        // })
+        })
 
         promise
             .then(competition => {
@@ -146,9 +146,12 @@ const actions = {
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
             .catch(err => console.log(err))
-            // .catch(Sequelize.UniqueConstraintError, () => this.$notify.error('Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants !'))
-            // .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
-            // .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
+            .catch(Sequelize.UniqueConstraintError, () => {
+                let team_unique_error_msg = competition.type === TYPE_LIST.TEAM ? "ou des doublons de noms d'équipe" : ""
+                this.$notify.error(`Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants ${team_unique_error_msg} !`)
+            })
+            .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
+            .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
