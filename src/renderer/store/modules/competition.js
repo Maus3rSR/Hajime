@@ -147,8 +147,8 @@ const actions = {
             })
             .catch(err => console.log(err))
             .catch(Sequelize.UniqueConstraintError, () => {
-                let team_unique_error_msg = competition.type === TYPE_LIST.TEAM ? "ou des doublons de noms d'équipe" : ""
-                this.$notify.error(`Impossible de sauvegarder, il y a des doublons de licence dans la liste des combattants ${team_unique_error_msg} !`)
+                let team_unique_error_msg = competition.type === TYPE_LIST.TEAM ? "ou des équipes en double" : ""
+                this.$notify.error(`Impossible de sauvegarder, il y a des combattants en double ${team_unique_error_msg} !`)
             })
             .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
             .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
