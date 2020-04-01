@@ -11,6 +11,8 @@ const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
 
 log.transports.file.level = "info"
 
+const debugLogger = (queryString, queryObject) => console.log(queryString, queryObject.bind)
+
 const CreateSequelizeInstance = conf => {
     if (undefined === conf)
         throw new Error("[CreateSequelizeInstance] configuration is undefined")
@@ -43,10 +45,10 @@ const CreateSequelizeInstance = conf => {
             },
             timestamps: true
         },
-        logging: (isDevelopment || isDebugBuild ? console.log : log.info)
+        logging: (isDevelopment || isDebugBuild ? debugLogger : log.info)
     })
 
-    const model_list = {}
+    let model_list = {}
     Object.keys(model_definition_list).forEach(modelName => { // Define all models
         const model_def = model_definition_list[modelName]
 
