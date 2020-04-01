@@ -74,7 +74,7 @@ export default {
             return this.competition_type === this.constant_type_list.TEAM
         },
         total() {
-            return this.value.length
+            return !this.is_team ? this.value.length : this.value.reduce((count, entry) => count += entry.fighter_list.length, 0)
         },
         team_list() {
             return this.is_team ? this.list.map(team => ({
@@ -222,8 +222,15 @@ export default {
             if (this.readonly) return
 
             if (this.emit_change) {
+                let id_list = []
+
+                if (this.is_team)
+                    this.value.forEach(entry => id_list = [...id_list, ...entry.fighter_list.map(fighter => fighter.id)])
+                else
+                    id_list = this.value.map(fighter => fighter.id)
+
                 this.$emit("on-bulk-update", {
-                    id_list: this.value.map(fighter => fighter.id),
+                    id_list,
                     field_list: { is_present: is_present }
                 })
                 return
@@ -266,9 +273,10 @@ export default {
             if (this.readonly) return
 
             if (this.emit_change) {
-                this.$emit("on-team-bulk-update", {
+                this.$emit("on-bulk-update", {
                     id_list: [team.id],
-                    field_list: { is_favorite: is_favorite }
+                    field_list: { is_favorite: is_favorite },
+                    is_team_field: true
                 })
                 return
             }

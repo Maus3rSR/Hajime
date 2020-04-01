@@ -26,7 +26,7 @@ export default {
     methods: {
         ...mapActions({
             saveCompetition: "competition/SAVE",
-            bulkUpdateFighter: "competition/BULK_UPDATE_FIGHTER",
+            bulkUpdateEntry: "competition/BULK_UPDATE_ENTRY",
             saveFighter: "competition/SAVE_FIGHTER",
             deleteFighter: "competition/DELETE_FIGHTER"
         }),
@@ -72,7 +72,7 @@ export default {
                         @on-fighter-add="saveFighter"
                         @on-fighter-edit="saveFighter"
                         @on-fighter-delete="deleteFighter"
-                        @on-bulk-update="bulkUpdateFighter"
+                        @on-bulk-update="bulkUpdateEntry"
                     />
                 </transition>
             </div>

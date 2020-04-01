@@ -55,8 +55,8 @@ export default {
                 entry_list: {
                     type: Sequelize.VIRTUAL,
                     get() {
-                        if (!!this.fighter_list && this.fighter_list.length > 0) return this.fighter_list
-                        if (!!this.team_list && this.team_list.length > 0) return this.team_list
+                        if (!!this.fighter_list && this.fighter_list.length > 0) return this.fighter_list.map(row => row.get({ plain: true }))
+                        if (!!this.team_list && this.team_list.length > 0) return this.team_list.map(row => row.get({ plain: true }))
                         return []
                     }
                 },

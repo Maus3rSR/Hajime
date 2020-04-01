@@ -24,17 +24,8 @@ const defaultState = () => ({
     }
 })
 
-const getEntryListAssociation = competition_type => (
-    competition_type === TYPE_LIST.INDI
-        ? "fighter_list"
-        : {
-            association: "team_list",
-            include: {
-                association: "fighter_list",
-                attributes: { exclude: ["team_id"] } 
-            }
-        }
-)
+const getEntryListAssociation = competition_type => (competition_type === TYPE_LIST.INDI ? "fighter_list" : { association: "team_list", include: "fighter_list" })
+const getEntryListAssociationList = () => [ getEntryListAssociation(TYPE_LIST.INDI), getEntryListAssociation(TYPE_LIST.TEAM) ]
 
 const state = defaultState()
 
@@ -46,11 +37,33 @@ const getters = {
     saving: state => state.status === STATUS_LIST.SAVING,
     deleting: state => state.status === STATUS_LIST.DELETING,
     count: state => state.list.length,
-    entry_count: state => state.model.entry_list.length,
-    entry_present_list: state => state.model.entry_list.filter(fighter => fighter.is_present),
-    entry_missing_list: state => state.model.entry_list.filter(fighter => !fighter.is_present),
-    entry_present_count: (state, getters) => getters.entry_present_list.length,
-    entry_missing_count: (state, getters) => getters.entry_missing_list.length,
+    entry_count: state => (state.model.type === TYPE_LIST.INDI ? state.model.entry_list.length : state.model.entry_list.reduce((count, entry) => count += entry.fighter_list.length, 0)),
+    entry_present_list: state => JSON.parse(JSON.stringify(state.model.entry_list)).filter(entry => {
+        if (state.model.type === TYPE_LIST.INDI)
+            return entry.is_present
+
+        entry.fighter_list = entry.fighter_list.filter(fighter => fighter.is_present)
+        return entry.fighter_list.length !== 0
+    }),
+    entry_missing_list: state => JSON.parse(JSON.stringify(state.model.entry_list)).filter(entry => {
+        if (state.model.type === TYPE_LIST.INDI)
+            return !entry.is_present
+
+        entry.fighter_list = entry.fighter_list.filter(fighter => !fighter.is_present)
+        return entry.fighter_list.length !== 0
+    }),
+    entry_present_count: (state, getters) => {
+        if (state.model.type === TYPE_LIST.INDI)
+            return getters.entry_present_list.length
+
+        return getters.entry_present_list.reduce((count, entry) => count += entry.fighter_list.length, 0)
+    },
+    entry_missing_count: (state, getters) => {
+        if (state.model.type === TYPE_LIST.INDI)
+            return getters.entry_missing_list.length
+
+        return getters.entry_missing_list.reduce((count, entry) => count += entry.fighter_list.length, 0)
+    },
     is_all_entry_present: (state, getters) => getters.entry_count === getters.entry_present_count,
     is_all_entry_missing: (state, getters) => getters.entry_count === getters.entry_missing_count,
     constant_type_list: () => TYPE_LIST,
@@ -67,7 +80,18 @@ const getters = {
         },
     ],
     default_type: () => defaultState().type,
-    findEntryIndex: state => fighter_id => state.model.entry_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter_id, 10)),
+    findEntryIndex: state => entry_id => state.model.entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(entry_id, 10)),
+    findEntryAndFighterIndex: (state, getters) => fighter_id => {
+        if (state.model.type === TYPE_LIST.INDI)
+            return [undefined, getters.findEntryIndex(fighter_id)]
+
+        for (let i = 0; i < state.model.entry_list.length; i++)
+            for (let j = 0; j < state.model.entry_list[i].fighter_list.length; j++)
+                if (parseInt(fighter_id, 10) === parseInt(state.model.entry_list[i].fighter_list[j].id, 10))
+                    return [i,j]
+
+        return [undefined, undefined]
+    }, 
     existFighter: (state, getters) => fighter_id => getters.findEntryIndex(fighter_id) !== -1,
     findFormulaConfigIndex: state => formula_config => state.model.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
@@ -259,40 +283,48 @@ const actions = {
 
         return promise
     },
-    BULK_UPDATE_FIGHTER({ commit, getters, rootGetters, state }, { id_list, field_list }) {
+    BULK_UPDATE_ENTRY({ commit, getters, rootGetters, state }, { id_list, field_list, is_team_field }) {
+        is_team_field = !!is_team_field
+
+        const label = is_team_field ? "équipes" : "combattants"
+        const model_name = is_team_field ? "Team" : "Fighter"
+
         if (getters.saving)
             return
 
         if (getters.is_empty) {
-            this.$notify.error("Impossible de faire la mise à jour en masse de ces combattants. Aucune compétition n'est chargée.")
+            this.$notify.error(`Impossible de faire la mise à jour en masse de ces ${label}. Aucune compétition n'est chargée.`)
             return Promise.reject()
         }
 
         if (state.model.locked_entry_list)
         {
-            this.$notify.error("Vous n'avez pas le droit de mettre à jour les combattants")
+            this.$notify.error(`Vous n'avez pas le droit de mettre à jour les ${label}`)
             return Promise.reject()
         }
 
         if (!Array.isArray(id_list))
         {
-            this.$notify.error('Les données ne sont pas valides pour cette mise à jour en masse des combattants')
+            this.$notify.error(`Les données ne sont pas valides pour cette mise à jour en masse des ${label}`)
             return Promise.reject()
         }
 
+        const { id, competition_id, team_id, created_at, updated_at, ...field_list_to_update } = field_list // extract forbidden fields
+
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
-        const promise = rootGetters["database/getModel"]("Fighter").update(field_list, { where: { id: id_list, competition_id: state.model.id }})
+        const promise = rootGetters["database/getModel"](model_name).update(field_list_to_update, { where: { id: id_list }})
 
         promise
             .then(() => {
                 id_list.forEach(id => {
-                    const index = getters.findEntryIndex(id)
-                    Object.keys(field_list).forEach(field => commit("updateField", { path: "model.entry_list[" + index + "]." + field, value: field_list[field]}))
+                    const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(id)
+                    const path = undefined !== entry_index && state.model.type === TYPE_LIST.TEAM && !is_team_field ? `model.entry_list[${entry_index}].fighter_list[${fighter_index}]` : `model.entry_list[${fighter_index}]`
+                    Object.keys(field_list_to_update).forEach(field => commit("updateField", { path: `${path}.${field}`, value: field_list_to_update[field]}))
                 })
 
                 this.$notify.success('La mise à jour a bien été effectuée')
             })
-            .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour en masse des combattants'))
+            .catch(() => this.$notify.error(`Un problème est survenu lors de la mise à jour en masse des ${label}`))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
         return promise
@@ -304,7 +336,7 @@ const actions = {
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: ['entry_list', 'formula_config_list'] })
+        const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: [...getEntryListAssociationList(), 'formula_config_list'] })
         
         promise
             .then(competition => commit('INJECT_MODEL_DATA', competition.get({ plain: true })))
