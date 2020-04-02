@@ -62,12 +62,25 @@ export default {
                 ranking_score: {
                     type: Sequelize.VIRTUAL,
                     get() { return this.score * 1000000 + this.victory_number * 10000 + this.score_given_number * 100 - this.score_received_number }
+                },
+                entry: {
+                    type: Sequelize.VIRTUAL,
+                    get() {
+                        if (!!this.team) {
+                            this.fighter = null // @see todo above
+                            return this.team.get({ plain: true })
+                        }
+                        if (!!this.fighter) return this.fighter.get({ plain: true })
+                        return null
+                    }
                 }
             },
             ...is_migration && timestamp_definition
         }
     },
     getAssociation: Model => model_list => {
+        // TODO : Trouver un moyen de filtrer sur Entriable ... car sinon on a un fighter / team qui sort pour un ID en confusion...
+        // Les hooks ne fonctionne pas. Ne peut pas implémenter le hookAfterFind d'un belongsTo polymorphique : https://sequelize.org/master/manual/polymorphic-associations.html
         ["Fighter", "Team"].forEach(entriable => // TODO Il faudrait pouvoir définir qu'une seule association `as: 'entry'` et qui va chercher dynamiquement soit sur Fighter, soit sur Team...
             Model.belongsTo(model_list[entriable], {
                 foreignKey: 'entriable_id',

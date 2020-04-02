@@ -117,7 +117,6 @@ const getters = {
         return Math.round(total_finished / total * 100 * 10) / 10
     },
     has_fight_list: state => state.list.length > 0 && state.list[0].fight_list !== undefined,
-    entry_field: state => state.list.length === 0 ? "entry" : (null === state.list[0].fighter ? "team" : "fighter"),
     findPoolIndex: state => pool_id => state.list.findIndex(el => parseInt(el.id, 10) === parseInt(pool_id, 10)),
     existPool: (state, getters) => pool_id => getters.findPoolIndex(pool_id) !== -1,
     getTotalFightList: (state, getters) => pool_id => {
@@ -291,6 +290,7 @@ const actions = {
 
         promise
             .then(list => commit("updateField", { path: 'list', value: list.map(row => row.get({ plain: true })) }))
+            .catch(err => console.log(err))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
             .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
 
@@ -524,7 +524,7 @@ const actions = {
             if (!is_pair && index > 0)
                 startY = doc.autoTable.previous.finalY + margingBetweenEachPoolLine
 
-            pool.entry_list.forEach(entry => body.push([pool.number + "." + entry.number, entry[getters.entry_field].name])) // Each entry of pool
+            pool.entry_list.forEach(pool_entry => body.push([pool.number + "." + pool_entry.number, pool_entry.entry.name])) // Each entry of pool
 
             config.head[0][0] = "Poule n°" + (index + 1)
             config.body = body

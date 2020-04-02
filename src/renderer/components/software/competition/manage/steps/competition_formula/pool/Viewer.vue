@@ -14,8 +14,7 @@ export default {
         ...mapGetters({
             list: "pool/ranked_list",
             constant_type_list: "competition/constant_type_list",
-            pool_count: 'pool/count',
-            entry_field: 'pool/entry_field'
+            pool_count: 'pool/count'
         }),
         number_of_entry_left() {
             const last_pool = this.list[this.pool_count-1]
@@ -65,7 +64,6 @@ export default {
             <pool-list
                 id="poolListViewer"
                 :list="list"
-                :entry_field="entry_field"
                 :canShowDetail="true"
             />
         </software-container>

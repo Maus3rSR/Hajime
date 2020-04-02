@@ -19,6 +19,10 @@ export default {
         entry_list: {
             type: Array,
             required: true
+        },
+        entriable: {
+            type: String,
+            required: true
         }
     },
     components: { PoolList },
@@ -33,19 +37,19 @@ export default {
             let repulse_field_list = []
             
             if (this.configuration.repulse_favorite) repulse_field_list.push({ name: "is_favorite", ignore_value_list: [false] })
-            if (this.configuration.repulse_club) repulse_field_list.push({ name: "club" })
+            if (this.configuration.repulse_club) repulse_field_list.push({ name: "club", deep: this.is_team })
 
             return repulse_field_list
         }
     },
     methods: {
         initDrawLib() {
-            if (null === this.draw_lib) this.draw_lib = new ListDrawLib(isDevelopment || isDebugBuild)
+            if (null === this.listDrawLib) this.listDrawLib = new ListDrawLib(isDevelopment || isDebugBuild)
         },
         buildShuffledPoolList(base_entry_list) {
             this.initDrawLib()
 
-            let base_entry_list_shuffled = this.draw_lib.shuffle(base_entry_list)
+            let base_entry_list_shuffled = this.listDrawLib.shuffle(base_entry_list)
             let pool_list = []
             let current_entry_index = 0
 
@@ -64,7 +68,7 @@ export default {
                 pool_list.push(entry_list)
             }
 
-            return this.draw_lib.shuffle(pool_list)
+            return this.listDrawLib.shuffle(pool_list)
         },
         updatePoolList(temp_pool_list) {
             this.pool_list = temp_pool_list.map((entry_list, index) => ({
@@ -72,7 +76,7 @@ export default {
                 entry_list: entry_list.map((entry, index_entry) => ({
                     number: index_entry + 1,
                     entriable_id: entry.id,
-                    entriable: "Fighter",
+                    entriable: this.entriable,
                     entry: entry
                 }))
             }))
@@ -98,9 +102,10 @@ export default {
 
                     if (stop_shuffle && this.repulse_field_list.length > 0)
                         try {
-                            temp_pool_list = this.draw_lib.repulse(temp_pool_list, this.repulse_field_list)
+                            temp_pool_list = this.listDrawLib.repulse(temp_pool_list, this.repulse_field_list)
                         } catch (error) {
-                            console.error(error)
+                            if (isDevelopment || isDebugBuild)
+                                console.error(error)
                             shuffle_index--
                             stop_shuffle = false
                         }
@@ -141,7 +146,7 @@ export default {
     },
     data() {
         return {
-            draw_lib: null,
+            listDrawLib: null,
             pool_list: [],
             nb_shuffle: 4,
             time_each_shuffle: 800,

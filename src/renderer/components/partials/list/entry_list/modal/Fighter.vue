@@ -243,7 +243,7 @@ export default {
                 </div>
             </div>
 
-            <div class="col-sm-4" v-if="!is_edit_mode">
+            <div class="col-sm-4" v-if="is_team && !is_edit_mode">
                 <div class="form-group">
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" v-model="is_new_team" type="checkbox" :disabled="is_empty_team_option_list">

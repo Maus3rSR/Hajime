@@ -17,7 +17,7 @@ export default {
         }),
         ...mapGetters({
             constant_type_list: "competition/constant_type_list",
-            fighter_list: "competition/entry_present_list",
+            entry_list: "competition/entry_present_list",
             pool_saving: "pool/saving",
         }),
         ...mapFields('pool', {
@@ -28,7 +28,7 @@ export default {
             pool_status: 'status'
         }),
         list() { // TODO gérer retour liste d'équipes
-            return this.fighter_list
+            return this.entry_list
         },
         count() {
             return this.list.length
@@ -69,8 +69,14 @@ export default {
 
             return list
         },
+        is_team() {
+            return this.competition_type === this.constant_type_list.TEAM
+        },
         entrant_label() {
-            return this.competition_type == this.constant_type_list.TEAM ? "équipes" : "combattants"
+            return this.is_team ? "équipes" : "combattants"
+        },
+        entriable() {
+            return this.is_team ? "Team" : "Fighter"
         }
     },
     methods: {
@@ -169,7 +175,8 @@ export default {
 
                     :option_list="pool_option_list_choosen"
                     :configuration="pool_configuration"
-                    :entry_list="fighter_list"
+                    :entry_list="entry_list"
+                    :entriable="entriable"
 
                     @on-validate="validatePoolList"
                 />

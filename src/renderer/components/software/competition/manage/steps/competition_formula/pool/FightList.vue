@@ -11,7 +11,6 @@ export default {
         }),
         ...mapGetters({
             color_list: "marking_board/color_list",
-            entry_field: 'pool/entry_field',
             has_fight_list: "pool/has_fight_list",
             get_pool_finished_fight_list_percent: "pool/getTotalFightFinishedPercentageOfPool"
         })
@@ -33,7 +32,7 @@ export default {
             this.new_fight = {
                 entry_left: pool.entry_list[0],
                 entry_right: pool.entry_list[1],
-                entry_list: pool.entry_list,
+                pool_entry_list: pool.entry_list,
                 marking_board_left: this.color_list[+pool.marking_board_reversed],
                 marking_board_right: this.color_list[1 - pool.marking_board_reversed],
             }
@@ -98,24 +97,24 @@ export default {
                 <div class="row">
                     <div class="col-md-6">
                         <label class="card-body__title">
-                            Combattant 
+                            Entrée
                             <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_left.color}`">{{ new_fight.marking_board_left.label }}</span>
                         </label>
                         <select class="form-control" v-model="new_fight.entry_left">
-                            <option v-for="entry in new_fight.entry_list" :value="entry" :key="entry.id" :disabled="entry.id === new_fight.entry_right.id">
-                                {{ entry[entry_field].name }}
+                            <option v-for="pool_entry in new_fight.pool_entry_list" :value="pool_entry" :key="pool_entry.id" :disabled="pool_entry.id === new_fight.entry_right.id">
+                                {{ pool_entry.entry.name }}
                             </option>
                         </select>
                     </div>
 
                     <div class="col-md-6">
                         <label class="card-body__title">
-                            Combattant
+                            Entrée
                             <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_right.color}`">{{ new_fight.marking_board_right.label }}</span>
                         </label>
                         <select class="form-control" v-model="new_fight.entry_right">
-                            <option v-for="entry in new_fight.entry_list" :value="entry" :key="entry.id" :disabled="entry.id === new_fight.entry_left.id">
-                                {{ entry[entry_field].name }}
+                            <option v-for="pool_entry in new_fight.pool_entry_list" :value="entry" :key="pool_entry.id" :disabled="pool_entry.id === new_fight.entry_left.id">
+                                {{ pool_entry.entry.name }}
                             </option>
                         </select>
                     </div>
