@@ -83,16 +83,20 @@ const getters = {
     findEntryIndex: state => entry_id => state.model.entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(entry_id, 10)),
     findEntryAndFighterIndex: (state, getters) => fighter_id => {
         if (state.model.type === TYPE_LIST.INDI)
-            return [undefined, getters.findEntryIndex(fighter_id)]
+            return [-1, getters.findEntryIndex(fighter_id)]
 
         for (let i = 0; i < state.model.entry_list.length; i++)
             for (let j = 0; j < state.model.entry_list[i].fighter_list.length; j++)
                 if (parseInt(fighter_id, 10) === parseInt(state.model.entry_list[i].fighter_list[j].id, 10))
                     return [i,j]
 
-        return [undefined, undefined]
+        return [-1, -1]
     }, 
-    existFighter: (state, getters) => fighter_id => getters.findEntryIndex(fighter_id) !== -1,
+    existFighter: (state, getters) => fighter_id => {
+        return state.model.type === TYPE_LIST.INDI
+            ? getters.findEntryIndex(fighter_id) !== -1
+            : getters.findEntryAndFighterIndex(fighter_id)[1] !== -1
+    },
     findFormulaConfigIndex: state => formula_config => state.model.formula_config_list.findIndex(el => el.name == formula_config.name)
 }
 
@@ -110,8 +114,30 @@ const mutations = {
     UPDATE_FORMULA_CONFIG(state, { index, formula_config }) {
         state.model.formula_config_list.splice(index, 1, JSON.parse(JSON.stringify(formula_config)))
     },
+    ADD_ENTRY(state, entry) {
+        state.model.entry_list.push(entry)
+    },
     UPDATE_FIGHTER(state, fighter) {
-        const index = state.model.entry_list.findIndex(el => parseInt(el.id, 10) === parseInt(fighter.id, 10))
+        if (state.model.type === TYPE_LIST.TEAM) {
+            const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(state, getters)(fighter.id)
+
+            if (-1 === fighter_index) {
+                state.model.entry_list[getters.findEntryIndex(state)(fighter.team_id)].fighter_list.push(fighter)
+                return
+            }
+
+            if (parseInt(state.model.entry_list[entry_index].id, 10) !== parseInt(fighter.team_id, 10)) {
+                const to_entry_index = getters.findEntryIndex(state)(fighter.team_id)
+                state.model.entry_list[entry_index].fighter_list.splice(fighter_index, 1)
+                state.model.entry_list[to_entry_index].fighter_list.push(fighter)
+                return
+            }
+
+            state.model.entry_list[entry_index].fighter_list.splice(fighter_index, 1, fighter)
+            return
+        }
+
+        const index = getters.findEntryIndex(state)(fighter.id)
 
         if (index === -1) {
             state.model.entry_list.push(fighter)
@@ -121,7 +147,17 @@ const mutations = {
         state.model.entry_list.splice(index, 1, fighter)
     },
     REMOVE_FIGHTER(state, id) {
-        const index = state.model.entry_list.findIndex(el => parseInt(el.id, 10) === parseInt(id, 10))
+        if (state.model.type === TYPE_LIST.TEAM) {
+            const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(state, getters)(id)
+
+            if (-1 === fighter_index)
+                return
+
+            state.model.entry_list[entry_index].fighter_list.splice(fighter_index, 1)
+            return
+        }
+
+        const index = getters.findEntryIndex(state)(id)
 
         if (index === -1)
             return
@@ -169,7 +205,6 @@ const actions = {
                 this.$notify.success("La compétition a bien été sauvegardée")
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
-            .catch(err => console.log(err))
             .catch(Sequelize.UniqueConstraintError, () => {
                 let team_unique_error_msg = competition.type === TYPE_LIST.TEAM ? "ou des équipes en double" : ""
                 this.$notify.error(`Impossible de sauvegarder, il y a des combattants en double ${team_unique_error_msg} !`)
@@ -204,7 +239,7 @@ const actions = {
     },
     SAVE_FIGHTER({ commit, getters, rootGetters, state }, fighter) {
         if (getters.saving)
-            return
+            return Promise.reject()
 
         if (getters.is_empty) {
             this.$notify.error("Impossible de procéder à la sauvegarde de ce combattant. Aucune compétition n'est chargée.")
@@ -224,7 +259,7 @@ const actions = {
             return Promise.reject()
         }
 
-        if (!update)
+        if (!update && state.model.type === TYPE_LIST.INDI)
             fighter.competition_id = state.model.id
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
@@ -233,17 +268,22 @@ const actions = {
         if (update)
         {
             const { id, ...fields } = fighter
-            promise = rootGetters["database/getModel"]("Fighter").update(fields, { where: { id: fighter.id, competition_id: state.model.id }})
-        }
-        else
+            promise = rootGetters["database/getModel"]("Fighter").update(fields, { where: { id: fighter.id }})
+        } else if (state.model.type === TYPE_LIST.TEAM && -1 === getters.findEntryIndex(fighter.team_id)) {
+            const team_name = fighter.team_id
+            delete fighter.team_id
+            promise = rootGetters["database/getModel"]("Team").create({ competition_id: state.model.id, name: team_name, fighter_list: [fighter] }, { include: "fighter_list"  })
+        } else
             promise = rootGetters["database/getModel"]("Fighter").create(fighter)
 
         promise
             .then(f => {
                 const value = update ? fighter : f.get({ plain: true })
+                const mutation_name = !update && !!value.fighter_list ? "ADD_ENTRY" : "UPDATE_FIGHTER"
 
-                commit("UPDATE_FIGHTER", value)
-                this.$notify.success('Le combattant a bien été sauvegardé')
+                commit(mutation_name, value)
+
+                this.$notify.success(`Le combattant a bien été sauvegardé`)
             })
             .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde du combattant'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
