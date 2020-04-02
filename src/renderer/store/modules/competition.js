@@ -317,8 +317,14 @@ const actions = {
         promise
             .then(() => {
                 id_list.forEach(id => {
-                    const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(id)
-                    const path = undefined !== entry_index && state.model.type === TYPE_LIST.TEAM && !is_team_field ? `model.entry_list[${entry_index}].fighter_list[${fighter_index}]` : `model.entry_list[${fighter_index}]`
+                    let path = undefined
+
+                    if (!is_team_field && state.model.type === TYPE_LIST.TEAM) {
+                        const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(id)
+                        path = `model.entry_list[${entry_index}].fighter_list[${fighter_index}]`
+                    } else
+                        path = `model.entry_list[${getters.findEntryIndex(id)}]`
+
                     Object.keys(field_list_to_update).forEach(field => commit("updateField", { path: `${path}.${field}`, value: field_list_to_update[field]}))
                 })
 
