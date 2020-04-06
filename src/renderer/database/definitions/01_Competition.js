@@ -41,6 +41,11 @@ export default {
                 type: Sequelize.STRING(10),
                 allowNull: false
             },
+            team_place_number: {
+                type: Sequelize.INTEGER(2),
+                allowNull: false,
+                defaultValue: 2
+            },
             locked: {
                 type: Sequelize.BOOLEAN,
                 allowNull: false,
