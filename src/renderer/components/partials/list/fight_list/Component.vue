@@ -39,7 +39,7 @@ export default {
         },
         right_marking_board_data() {
             return this.color_list[1 - this.marking_board_reversed]
-        }
+        },
     },
     methods: {
         openFightBoard(fight) {
@@ -60,8 +60,8 @@ export default {
         isFightBoardLocked(fight) {
             return this.isFightBoardIdLocked(this.getBoardId(fight.id, fight.fighter1.id, fight.fighter2.id))
         },
-        isFightDraw(fight) {
-            return fight.is_locked && ScoreLib.isDraw(fight.fighter1.score_given_list, fight.fighter2.score_given_list)
+        isFightTeam(fight) {
+            return fight.entriable === "Team"
         },
         openModalCommentList(comment_list) {
             this.comment_list = comment_list
@@ -121,18 +121,18 @@ export default {
 
             <template slot="fighter" slot-scope="props">
                 <span class="row">
-                    <div class="col text-right">{{ props.row.fighter1.name }}</div>
+                    <div class="col text-right">{{ props.row.entry1.name }}</div>
                     <div class="col-xs-1">
                         <span class="badge">
-                            <template v-if="props.row.is_locked">{{ props.row.fighter1.score_given_list.length }}</template>
+                            <!-- <template v-if="props.row.is_locked">{{ props.row.fighter1.score_given_list.length }}</template> -->
 
                             <template v-if="props.row.is_locked">-</template>
                             <template v-else>VS</template>
                             
-                            <template v-if="props.row.is_locked">{{ props.row.fighter2.score_given_list.length }}</template>
+                            <!-- <template v-if="props.row.is_locked">{{ props.row.fighter2.score_given_list.length }}</template> -->
                         </span>
                     </div>
-                    <div class="col">{{ props.row.fighter2.name }}</div>
+                    <div class="col">{{ props.row.entry2.name }}</div>
                 </span>
             </template>
 
@@ -146,7 +146,9 @@ export default {
 
             <template slot="action-cell" slot-scope="props">
 
-                <transition name="fade" mode="out-in">
+                <!-- TODO : Bouton tableau de marquage en team -->
+
+                <transition name="fade" mode="out-in" v-if="!isFightTeam">
                     <i class="zmdi zmdi-lock" v-if="isFightBoardLocked(props.row)" title="La fenêtre de gestion de combat est déjà ouverte par quelqu'un"></i>
 
                     <button v-else-if="!isFightReadonly(props.row)" @click.prevent="openFightBoard(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
