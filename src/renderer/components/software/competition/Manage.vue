@@ -12,9 +12,7 @@ export default {
     },
     components: { FighterCall, ...FormulaTabsManagementList },
     computed: {
-        ...mapState('competition', {
-            competition: state => state.model,
-        }),
+        ...mapState('competition', { competition: state => state.model }),
         ...mapGetters({
             is_competition_empty: "competition/is_empty",
             is_competition_loading: "competition/loading",

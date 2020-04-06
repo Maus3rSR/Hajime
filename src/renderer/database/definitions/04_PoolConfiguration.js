@@ -53,5 +53,7 @@ export default {
             ...is_migration && timestamp_definition
         }
     },
-    // getAssociation: Model => model_list => {}
+    getAssociation: Model => model_list => {
+        Model.belongsTo(model_list.CompetitionFormula, { as: "competition_formula", foreignKey: "competition_formula_id" })
+    }
 }

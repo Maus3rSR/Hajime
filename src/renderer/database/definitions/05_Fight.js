@@ -76,17 +76,19 @@ export default {
         }
     },
     getAssociation: Model => model_list => {
-        // TODO : Trouver un moyen de filtrer sur Entriable ... car sinon on a un fighter / team qui sort pour un ID en confusion...
-        // Les hooks ne fonctionne pas. Ne peut pas implémenter le hookAfterFind d'un belongsTo polymorphique : https://sequelize.org/master/manual/polymorphic-associations.html
-        ["Fighter", "Team"].forEach(entriable => // TODO Il faudrait pouvoir définir qu'une seule association `as: 'entry'` et qui va chercher dynamiquement soit sur Fighter, soit sur Team...
-            [1, 2].forEach(number =>
+        [1, 2].forEach(number => {
+            // TODO : Trouver un moyen de filtrer sur Entriable ... car sinon on a un fighter / team qui sort pour un ID en confusion...
+            // Les hooks ne fonctionne pas. Ne peut pas implémenter le hookAfterFind d'un belongsTo polymorphique : https://sequelize.org/master/manual/polymorphic-associations.html
+            ["Fighter", "Team"].forEach(entriable => // TODO Il faudrait pouvoir définir qu'une seule association `as: 'entry'` et qui va chercher dynamiquement soit sur Fighter, soit sur Team...
                 Model.belongsTo(model_list[entriable], {
                     foreignKey: `entriable${number}_id`,
                     constraints: false, // for polymorphic relationship
                     as: `${entriable.toLowerCase()}${number}`
                 })
             )
-        )
+
+            Model.hasMany(model_list.FightFighterOrder, { as: `fight_fighter_order_list${number}`, foreignKey: 'fight_id' }) // Only used for creation, because fighters already exists
+        })
 
         Model.belongsTo(model_list.Pool, { foreignKey: "fightable_id", as: "pool" })
         Model.hasOne(model_list.FighterFightMeta, { as: 'fighter_fight_meta', foreignKey: 'fight_id' })

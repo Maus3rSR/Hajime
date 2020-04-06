@@ -1,7 +1,6 @@
 import { getField, updateField } from 'vuex-map-fields'
 import FightLib from '@root/lib/fight'
 
-const ENTRIABLE_LIST = ["Fighter", "Team"] // TODO: Improve perf. by only loading one of them only
 const NUMBER_OF_FIGHT_PER_FIGHT_LIST = [1, 2]
 const SCORE_DATABASE_FIELD_LIST = ["score_given_number", "score_received_number"]
 const POOL_SCORING = {
@@ -10,50 +9,64 @@ const POOL_SCORING = {
     "DRAW": 0
 }
 
-let entry_list_association_list = []
-ENTRIABLE_LIST.forEach(entriable => entry_list_association_list.push(entriable.toLowerCase())) // TODO @see `src\renderer\database\definitions\05_Fight.js`
+const getEntryListAssociation = (constant_type_list, competition_type) => {
+    return competition_type === constant_type_list.TEAM ? "team" : "fighter"
+}
 
-const getFightListAssociationList = Sequelize => {
+const getFightListAssociationList = (Sequelize, constant_type_list, competition_type) => {
+    const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
     let fight_list_association_list = ["fighter_fight_meta","comment_list"]
 
-    ENTRIABLE_LIST.forEach(entriable => {
-        NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
-            const include_fighter_list_in_team = entriable === "Team" ? "->fighter_list" : ""
-            const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
+    NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
+        const include_fighter_list_in_team = entriable === "Team" ? "->fighter_list" : ""
+        const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
 
-            fight_list_association_list.push(getScoreListAssociation(entriable, number, score_list_include_option))
-        })
+        let fight_order_include_option = undefined
+        if (entriable === "Team")
+            fight_order_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->fight_order\`.\`fight_id\` = \`fight_list\`.\`id\``) }
+
+        fight_list_association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option, fight_order_include_option, Sequelize))
     })
 
     return fight_list_association_list
 }
 
-const getFightAssociationList = fight_id => {
+const getFightAssociationList = (constant_type_list, fight_id, competition_type) => {
+    const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
     let association_list = []
 
-    ENTRIABLE_LIST.forEach(entriable => {
-        NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
-            const score_list_include_option = { where: { fight_id: parseInt(fight_id, 10) } }
-            association_list.push(getScoreListAssociation(entriable, number, score_list_include_option))
-        })
+    NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
+        const score_list_include_option = { where: { fight_id: parseInt(fight_id, 10) } }
+        association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option))
     })
 
     return association_list
 }
 
-const getScoreListAssociation = (entriable, number, option_list) => {
+const getEntryAssociationWithScoreListAssociation = (entriable, number, score_association_option_list, fight_order_association_option_list, sequelize) => { // TODO : All attributes is not necessary... to improve perfs
     let association = {}
     const common_option = { required: false }
 
-    if (entriable === "Team" ) { // Can't use ternary operator(?:)... It produce the following error "Not unique table/alias: 'fighter2->score_given_list'"
+    if (entriable === "Team" ) {
+        const fighter_list_association_list = [{ association: "score_given_list", ...common_option, ...score_association_option_list }]
+
+        if (!!fight_order_association_option_list)
+            fighter_list_association_list.push({ association: "fight_order", ...common_option, ...fight_order_association_option_list, attributes: ["order"] })
+
         association = {
             association: `${entriable.toLowerCase()}${number}`,
-            include: { association: "fighter_list", include: { association: "score_given_list", ...common_option, ...option_list } },
+            include: {
+                association: "fighter_list",
+                required: false,
+                where: { is_present: true },
+                attributes: ["name", "club", "is_favorite"],
+                include: fighter_list_association_list
+            }
         }
     } else {
         association = {
             association: `${entriable.toLowerCase()}${number}`,
-            include: { association: "score_given_list", ...common_option, ...option_list }
+            include: { association: "score_given_list", ...common_option, ...score_association_option_list }
         }
     }
 
@@ -168,9 +181,14 @@ const actions = {
     CLEAR({ commit }) {
         commit("RESET_STATE")
     },
-    CREATE({ commit, getters, state, rootGetters, rootState }) {
+    CREATE({ dispatch, commit, getters, state, rootGetters, rootState }) {
         if (getters.saving)
             return
+
+        if (!state.configuration.competition_formula_id) {
+            this.$notify.error("Impossible de créer les poules, l'identifiant de la formule de compétition n'est pas disponible dans la configuration des poules")
+            return Promise.reject()
+        }
 
         commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
 
@@ -185,27 +203,51 @@ const actions = {
                 return Promise.reject(error)
             }
 
-            commit("updateField", { 
+            commit("updateField", { path: `list[${index}].competition_formula_id`, value: parseInt(state.configuration.competition_formula_id, 10) })
+            commit("updateField", {
                 path: `list[${index}].fight_list`,
-                value: fight_list.map(fight => ({
-                    entriable1_id: parseInt(fight[0].entriable_id),
-                    entriable2_id: parseInt(fight[1].entriable_id),
-                    entriable: fight[0].entriable,
-                    entry1: fight[0].entry,
-                    entry2: fight[1].entry
-                }))
+                value: fight_list.map(fight => {
+                    const entriable = fight[0].entriable
+                    const fight1 = fight[0]
+                    const fight2 = fight[1]
+
+                    return {
+                        entriable1_id: parseInt(fight1.entriable_id),
+                        entriable2_id: parseInt(fight2.entriable_id),
+                        entriable,
+                        entry1: fight1.entry,
+                        entry2: fight2.entry,
+                        ...entriable === "Team" && {
+                            fight_fighter_order_list1: fight1.entry.fighter_list.map((fighter, index) => ({ fighter_id: parseInt(fighter.id, 10), order: index })),
+                            fight_fighter_order_list2: fight2.entry.fighter_list.map((fighter, index) => ({ fighter_id: parseInt(fighter.id, 10), order: index }))
+                        }
+                    }
+                })
             })
+
         })
 
         const promise = rootGetters["database/instance"].transaction(t => {
             return rootGetters["database/getModel"]("Pool").bulkCreate(state.list, {
                 transaction: t,
-                include: ["entry_list", "fight_list"]
+                include: ["entry_list", { association: "fight_list", include: ["fight_fighter_order_list1", "fight_fighter_order_list2"] }]
             })
         })
 
         promise
-            .then(() => this.$notify.success('Les poules ont bien été sauvegardées')) // There is no update from data here, too complex with the polymorphic relationship, maybe we need some callback onto model to retrieve fighter/team data after save
+            .then(() => {
+                this.$notify.success('Les poules ont bien été sauvegardées')
+                return dispatch("LOAD_LIST")
+                    .then(() => {
+                        commit("updateField", { path: 'configuration.locked', value: true })
+                        return dispatch("SAVE_CONFIGURATION")
+                    })
+                    .catch(() => {
+                        commit("updateField", { path: 'configuration.locked', value: false })
+                        dispatch("SAVE_CONFIGURATION")
+                        throw new Error()
+                    })
+            })
             .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde des poules'))
             .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
 
@@ -263,9 +305,8 @@ const actions = {
             return
 
         if (getters.is_configuration_empty) {
-            const msg = "Impossible de récupérer la liste des poules car la configuration liée à ces poules n'est pas chargée"
-            this.$notify.error(msg)
-            return Promise.reject(msg)
+            this.$notify.error("Impossible de récupérer la liste des poules car la configuration liée à ces poules n'est pas chargée")
+            return Promise.reject()
         }
 
         commit("updateField", { path: 'status_list', value: STATUS_LIST.LOADING })
@@ -281,10 +322,17 @@ const actions = {
             ],
             include: [{
                 association: 'entry_list',
-                include: entry_list_association_list
+                include: getEntryListAssociation(
+                    rootGetters["competition/constant_type_list"],
+                    state.configuration.competition_formula.competition.type
+                )
             }, {
                 association: 'fight_list',
-                include: getFightListAssociationList(rootGetters["database/instance"])
+                include: getFightListAssociationList(
+                    rootGetters["database/instance"],
+                    rootGetters["competition/constant_type_list"],
+                    state.configuration.competition_formula.competition.type
+                )
             }]
         })
 
@@ -323,7 +371,11 @@ const actions = {
     LOAD_FIGHT({ commit, rootGetters }, fight_id) {
 
         const promise = rootGetters["database/getModel"]("Fight").findByPk(fight_id, { 
-            include: getFightAssociationList(fight_id),
+            include: getFightAssociationList(
+                rootGetters["competition/constant_type_list"],
+                fight_id,
+                state.configuration.competition_formula.competition.type
+            ),
             where: { fightable: 'Pool' }
         })
 
@@ -375,7 +427,17 @@ const actions = {
         dispatch('CLEAR')
         commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
 
-        const promise = rootGetters["database/getModel"]("PoolConfiguration").findOne({ where: { competition_formula_id: parseInt(competition_formula_id, 10) } })
+        const promise = rootGetters["database/getModel"]("PoolConfiguration").findOne({ 
+            where: { competition_formula_id: parseInt(competition_formula_id, 10) },
+            include: [{
+                association: "competition_formula",
+                attributes: ["competition_id"],
+                include: [{
+                    association: "competition",
+                    attributes: ["type"]
+                }]
+            }]
+        })
 
         promise
             .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
@@ -493,7 +555,7 @@ const actions = {
 
         return promise
     },
-    GENERATE_PDF({ state, getters }) { // @todo Exporter dans une lib javascript
+    GENERATE_PDF({ getters }) { // @todo Exporter dans une lib javascript
         let doc = this.$pdf.getNewDocument()
 
         const margingLeftX = 15
@@ -517,7 +579,7 @@ const actions = {
             body: []
         }
 
-        state.ranked_list.forEach((pool, index) => { // Each pool
+        getters.ranked_list.forEach((pool, index) => { // Each pool
             let body = []
             let is_pair = (index + 1) % 2 === 0
 

@@ -23,7 +23,6 @@ export default {
         ...mapFields('pool', {
             number_of_pool: 'configuration.number_of_pool',
             number_of_entry_per_pool: 'configuration.number_of_entry_per_pool',
-            pool_locked: 'configuration.locked',
             pool_list: 'list',
             pool_status: 'status'
         }),
@@ -98,26 +97,8 @@ export default {
             return this.savePoolConfiguration()
                 .then(() => {
                     this.pool_status = "NOTHING" // TODO, trouver une solution pour régler ce problème ...
-
-                    this.pool_list = pool_list.map(pool => {
-                        pool.competition_formula_id = parseInt(this.pool_configuration.competition_formula_id, 10)
-                        return pool
-                    })
-
-                    const promise = this.createPool()
-                        
-                    promise
-                        .then(this.loadPoolList) // TODO, voir si hook afterBulkCreate serait pas plus intéréssant pour mettre à jour les données des relations ?
-                        .then(() => {
-                            this.pool_locked = true
-                            return this.savePoolConfiguration()
-                        })
-                        .catch(() => {
-                            this.pool_locked = false
-                            return this.savePoolConfiguration()
-                        })
-
-                    return promise
+                    this.pool_list = pool_list
+                    return this.createPool()
                 })
         }
     },

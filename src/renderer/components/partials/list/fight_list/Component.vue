@@ -137,7 +137,7 @@ export default {
             </template>
 
             <template slot="status" slot-scope="props">
-                <transition name="fade" mode="out-in">
+                <transition name="fade" mode="out-in" v-if="!isFightTeam">
                     <span v-if="isFightBoardLocked(props.row) && !props.row.is_locked" class="badge badge-primary animated flash slow">{{ "en cours d'édition" | uppercase }}</span>
                     <span v-else-if="!props.row.is_locked" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
                     <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
