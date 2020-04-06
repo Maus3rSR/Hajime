@@ -21,17 +21,17 @@ export default {
                 unique: true
             },
             repulse_favorite: {
-                type: Sequelize.INTEGER(3).UNSIGNED,
+                type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: 0
             },
             repulse_club: {
-                type: Sequelize.INTEGER(3).UNSIGNED,
+                type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: 0
             },
             locked: {
-                type: Sequelize.INTEGER(3).UNSIGNED,
+                type: Sequelize.BOOLEAN,
                 allowNull: false,
                 defaultValue: 0
             },
