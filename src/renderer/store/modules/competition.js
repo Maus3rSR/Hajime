@@ -1,8 +1,8 @@
 import { Sequelize } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 
-const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" }
-const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING", DELETING: "DELETING" }
+const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" } // TODO : export in a extern constant file and refactor other files using it
+const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING", DELETING: "DELETING" } // TODO : export in a extern constant file and refactor other files using it
 
 const defaultState = () => ({
     status: STATUS_LIST.NOTHING,
@@ -17,6 +17,7 @@ const defaultState = () => ({
         place: null,
         owner: null,
         type: TYPE_LIST.INDI,
+        team_place_number: parseInt(process.env.ELECTRON_WEBPACK_APP_TEAM_PLACE_NUMBER_MAX, 10),
         locked: false,
         locked_entry_list: false,
         entry_list: [],
@@ -31,6 +32,12 @@ const state = defaultState()
 
 const getters = {
     getField,
+    constant_type_list: () => TYPE_LIST,
+    type_list: () => [ // TODO : in database
+        { id: 1, name: "Individuelle", value: TYPE_LIST.INDI },
+        { id: 2, name: "Equipe", value: TYPE_LIST.TEAM }
+    ],
+    default_type: () => defaultState().type,
     is_empty: state => null === state.model.id,
     loading: state => state.status === STATUS_LIST.LOADING,
     list_loading: state => state.status_list === STATUS_LIST.LOADING,
@@ -66,20 +73,6 @@ const getters = {
     },
     is_all_entry_present: (state, getters) => getters.entry_count === getters.entry_present_count,
     is_all_entry_missing: (state, getters) => getters.entry_count === getters.entry_missing_count,
-    constant_type_list: () => TYPE_LIST,
-    type_list: () => [
-        {
-            id: 1,
-            name: "Individuelle",
-            value: TYPE_LIST.INDI
-        },
-        {
-            id: 2,
-            name: "Equipe",
-            value: TYPE_LIST.TEAM
-        },
-    ],
-    default_type: () => defaultState().type,
     findEntryIndex: state => entry_id => state.model.entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(entry_id, 10)),
     findEntryAndFighterIndex: (state, getters) => fighter_id => {
         if (state.model.type === TYPE_LIST.INDI)
