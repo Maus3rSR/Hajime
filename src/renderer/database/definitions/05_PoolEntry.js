@@ -66,10 +66,7 @@ export default {
                 entry: {
                     type: Sequelize.VIRTUAL,
                     get() {
-                        if (!!this.team) {
-                            this.fighter = null // @see todo above
-                            return this.team.get({ plain: true })
-                        }
+                        if (!!this.team) return this.team.get({ plain: true })
                         if (!!this.fighter) return this.fighter.get({ plain: true })
                         return null
                     }
