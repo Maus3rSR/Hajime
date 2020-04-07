@@ -20,19 +20,13 @@ export default {
             pool_locked: state => state.configuration.locked
         }),
         ...mapGetters({
-            fighter_list: "competition/entry_present_list",
+            entry_count: "competition/entry_present_count",
             is_pool_loading: "pool/loading",
             is_pool_list_loading: "pool/list_loading",
             is_pool_saving: "pool/saving",
             is_pool_configuration_empty: "pool/is_configuration_empty",
             finished_percentage: "pool/finished_percentage"
         }),
-        entry_list() { // TODO gérer retour liste d'équipes
-            return this.fighter_list
-        },
-        entry_count() {
-            return this.entry_list.length
-        },
         has_enough_entry() {
             return this.entry_count >= this.COMPETITION_MINIMUM_ENTRANT
         },
