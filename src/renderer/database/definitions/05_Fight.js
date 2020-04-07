@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize'
 import timestamp_definition from './timestamp'
+import { FIGHT_FIGHTER_NUMBER_LIST, ENTRIABLE_MODEL_NAME_LIST } from '@root/constant'
 
 export default {
     name: "Fight",
@@ -76,10 +77,10 @@ export default {
         }
     },
     getAssociation: Model => model_list => {
-        [1, 2].forEach(number => {
+        FIGHT_FIGHTER_NUMBER_LIST.forEach(number => {
             // TODO : Trouver un moyen de filtrer sur Entriable ... car sinon on a un fighter / team qui sort pour un ID en confusion...
             // Les hooks ne fonctionne pas. Ne peut pas implémenter le hookAfterFind d'un belongsTo polymorphique : https://sequelize.org/master/manual/polymorphic-associations.html
-            ["Fighter", "Team"].forEach(entriable => // TODO Il faudrait pouvoir définir qu'une seule association `as: 'entry'` et qui va chercher dynamiquement soit sur Fighter, soit sur Team...
+            ENTRIABLE_MODEL_NAME_LIST.forEach(entriable => // TODO Il faudrait pouvoir définir qu'une seule association `as: 'entry'` et qui va chercher dynamiquement soit sur Fighter, soit sur Team...
                 Model.belongsTo(model_list[entriable], {
                     foreignKey: `entriable${number}_id`,
                     constraints: false, // for polymorphic relationship

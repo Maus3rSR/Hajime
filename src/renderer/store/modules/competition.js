@@ -1,12 +1,10 @@
 import { Sequelize } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
-
-const TYPE_LIST = { INDI: "INDI", TEAM: "TEAM" } // TODO : export in a extern constant file and refactor other files using it
-const STATUS_LIST = { NOTHING: "NOTHING", SAVING: "SAVING", LOADING: "LOADING", DELETING: "DELETING" } // TODO : export in a extern constant file and refactor other files using it
+import { COMPETITION_MODE, LOADER_STATUS } from '@root/constant'
 
 const defaultState = () => ({
-    status: STATUS_LIST.NOTHING,
-    status_list: STATUS_LIST.NOTHING,
+    status: LOADER_STATUS.NOTHING,
+    status_list: LOADER_STATUS.NOTHING,
     list: [],
     list_total: 0,
     model: {
@@ -16,7 +14,7 @@ const defaultState = () => ({
         date: null,
         place: null,
         owner: null,
-        type: TYPE_LIST.INDI,
+        type: COMPETITION_MODE.INDI,
         team_place_number: parseInt(process.env.ELECTRON_WEBPACK_APP_TEAM_PLACE_NUMBER_MAX, 10),
         locked: false,
         locked_entry_list: false,
@@ -25,48 +23,48 @@ const defaultState = () => ({
     }
 })
 
-const getEntryListAssociation = competition_type => (competition_type === TYPE_LIST.INDI ? "fighter_list" : { association: "team_list", include: "fighter_list" })
-const getEntryListAssociationList = () => [ getEntryListAssociation(TYPE_LIST.INDI), getEntryListAssociation(TYPE_LIST.TEAM) ]
+const getEntryListAssociation = competition_type => (competition_type === COMPETITION_MODE.INDI ? "fighter_list" : { association: "team_list", include: "fighter_list" })
+const getEntryListAssociationList = () => [ getEntryListAssociation(COMPETITION_MODE.INDI), getEntryListAssociation(COMPETITION_MODE.TEAM) ]
 
 const state = defaultState()
 
 const getters = {
     getField,
-    constant_type_list: () => TYPE_LIST,
+    constant_type_list: () => COMPETITION_MODE,
     type_list: () => [ // TODO : in database
-        { id: 1, name: "Individuelle", value: TYPE_LIST.INDI },
-        { id: 2, name: "Equipe", value: TYPE_LIST.TEAM }
+        { id: 1, name: "Individuelle", value: COMPETITION_MODE.INDI },
+        { id: 2, name: "Equipe", value: COMPETITION_MODE.TEAM }
     ],
     default_type: () => defaultState().type,
     is_empty: state => null === state.model.id,
-    loading: state => state.status === STATUS_LIST.LOADING,
-    list_loading: state => state.status_list === STATUS_LIST.LOADING,
-    saving: state => state.status === STATUS_LIST.SAVING,
-    deleting: state => state.status === STATUS_LIST.DELETING,
+    loading: state => state.status === LOADER_STATUS.LOADING,
+    list_loading: state => state.status_list === LOADER_STATUS.LOADING,
+    saving: state => state.status === LOADER_STATUS.SAVING,
+    deleting: state => state.status === LOADER_STATUS.DELETING,
     count: state => state.list.length,
-    entry_count: state => (state.model.type === TYPE_LIST.INDI ? state.model.entry_list.length : state.model.entry_list.reduce((count, entry) => count += entry.fighter_list.length, 0)),
+    entry_count: state => (state.model.type === COMPETITION_MODE.INDI ? state.model.entry_list.length : state.model.entry_list.reduce((count, entry) => count += entry.fighter_list.length, 0)),
     entry_present_list: state => JSON.parse(JSON.stringify(state.model.entry_list)).filter(entry => {
-        if (state.model.type === TYPE_LIST.INDI)
+        if (state.model.type === COMPETITION_MODE.INDI)
             return entry.is_present
 
         entry.fighter_list = entry.fighter_list.filter(fighter => fighter.is_present)
         return entry.fighter_list.length !== 0
     }),
     entry_missing_list: state => JSON.parse(JSON.stringify(state.model.entry_list)).filter(entry => {
-        if (state.model.type === TYPE_LIST.INDI)
+        if (state.model.type === COMPETITION_MODE.INDI)
             return !entry.is_present
 
         entry.fighter_list = entry.fighter_list.filter(fighter => !fighter.is_present)
         return entry.fighter_list.length !== 0
     }),
     entry_present_count: (state, getters) => {
-        if (state.model.type === TYPE_LIST.INDI)
+        if (state.model.type === COMPETITION_MODE.INDI)
             return getters.entry_present_list.length
 
         return getters.entry_present_list.reduce((count, entry) => count += entry.fighter_list.length, 0)
     },
     entry_missing_count: (state, getters) => {
-        if (state.model.type === TYPE_LIST.INDI)
+        if (state.model.type === COMPETITION_MODE.INDI)
             return getters.entry_missing_list.length
 
         return getters.entry_missing_list.reduce((count, entry) => count += entry.fighter_list.length, 0)
@@ -75,7 +73,7 @@ const getters = {
     is_all_entry_missing: (state, getters) => getters.entry_count === getters.entry_missing_count,
     findEntryIndex: state => entry_id => state.model.entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(entry_id, 10)),
     findEntryAndFighterIndex: (state, getters) => fighter_id => {
-        if (state.model.type === TYPE_LIST.INDI)
+        if (state.model.type === COMPETITION_MODE.INDI)
             return [-1, getters.findEntryIndex(fighter_id)]
 
         for (let i = 0; i < state.model.entry_list.length; i++)
@@ -86,7 +84,7 @@ const getters = {
         return [-1, -1]
     }, 
     existFighter: (state, getters) => fighter_id => {
-        return state.model.type === TYPE_LIST.INDI
+        return state.model.type === COMPETITION_MODE.INDI
             ? getters.findEntryIndex(fighter_id) !== -1
             : getters.findEntryAndFighterIndex(fighter_id)[1] !== -1
     },
@@ -111,7 +109,7 @@ const mutations = {
         state.model.entry_list.push(entry)
     },
     UPDATE_FIGHTER(state, fighter) {
-        if (state.model.type === TYPE_LIST.TEAM) {
+        if (state.model.type === COMPETITION_MODE.TEAM) {
             const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(state, getters)(fighter.id)
 
             if (-1 === fighter_index) {
@@ -140,7 +138,7 @@ const mutations = {
         state.model.entry_list.splice(index, 1, fighter)
     },
     REMOVE_FIGHTER(state, id) {
-        if (state.model.type === TYPE_LIST.TEAM) {
+        if (state.model.type === COMPETITION_MODE.TEAM) {
             const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(state, getters)(id)
 
             if (-1 === fighter_index)
@@ -175,12 +173,12 @@ const actions = {
         if (getters.saving)
             return
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
 
         const competition = {
             ...state.model,
-            ...state.model.type === TYPE_LIST.INDI && { fighter_list: state.model.entry_list },
-            ...state.model.type === TYPE_LIST.TEAM && { team_list: state.model.entry_list }
+            ...state.model.type === COMPETITION_MODE.INDI && { fighter_list: state.model.entry_list },
+            ...state.model.type === COMPETITION_MODE.TEAM && { team_list: state.model.entry_list }
         }
 
         const promise = rootGetters["database/instance"].transaction(t => {
@@ -199,12 +197,12 @@ const actions = {
                 commit('INJECT_MODEL_DATA', competition.get({ plain: true }))
             })
             .catch(Sequelize.UniqueConstraintError, () => {
-                let team_unique_error_msg = competition.type === TYPE_LIST.TEAM ? "ou des équipes en double" : ""
+                let team_unique_error_msg = competition.type === COMPETITION_MODE.TEAM ? "ou des équipes en double" : ""
                 this.$notify.error(`Impossible de sauvegarder, il y a des combattants en double ${team_unique_error_msg} !`)
             })
             .catch(Sequelize.ValidationError, err => this.$notify.error(err.message))
             .catch(() => this.$notify.error("Un problème est survenu lors de la création de la compétition"))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -212,7 +210,7 @@ const actions = {
         if (getters.saving)
             return
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
 
         if (state.model.locked)
         {
@@ -226,7 +224,7 @@ const actions = {
         promise
             .then(() => this.$notify.success('La compétition a bien été mise à jour'))
             .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour de la compétition'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))        
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))        
 
         return promise
     },
@@ -252,17 +250,17 @@ const actions = {
             return Promise.reject()
         }
 
-        if (!update && state.model.type === TYPE_LIST.INDI)
+        if (!update && state.model.type === COMPETITION_MODE.INDI)
             fighter.competition_id = state.model.id
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
 
         let promise
         if (update)
         {
             const { id, ...fields } = fighter
             promise = rootGetters["database/getModel"]("Fighter").update(fields, { where: { id: fighter.id }})
-        } else if (state.model.type === TYPE_LIST.TEAM && -1 === getters.findEntryIndex(fighter.team_id)) {
+        } else if (state.model.type === COMPETITION_MODE.TEAM && -1 === getters.findEntryIndex(fighter.team_id)) {
             const team_name = fighter.team_id
             delete fighter.team_id
             promise = rootGetters["database/getModel"]("Team").create({ competition_id: state.model.id, name: team_name, fighter_list: [fighter] }, { include: "fighter_list"  })
@@ -279,7 +277,7 @@ const actions = {
                 this.$notify.success(`Le combattant a bien été sauvegardé`)
             })
             .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde du combattant'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -303,7 +301,7 @@ const actions = {
             return Promise.reject()
         }
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.DELETING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.DELETING })
         const promise = rootGetters["database/getModel"]("Fighter").destroy({ where: { id: fighter_id } })
 
         promise
@@ -312,7 +310,7 @@ const actions = {
                 this.$notify.success('Le combattant a bien été supprimé')
             })
             .catch(() => this.$notify.error('Un problème est survenu lors de suppression du combattant'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -344,7 +342,7 @@ const actions = {
 
         const { id, competition_id, team_id, created_at, updated_at, ...field_list_to_update } = field_list // extract forbidden fields
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
         const promise = rootGetters["database/getModel"](model_name).update(field_list_to_update, { where: { id: id_list }})
 
         promise
@@ -352,7 +350,7 @@ const actions = {
                 id_list.forEach(id => {
                     let path = undefined
 
-                    if (!is_team_field && state.model.type === TYPE_LIST.TEAM) {
+                    if (!is_team_field && state.model.type === COMPETITION_MODE.TEAM) {
                         const [ entry_index, fighter_index ] = getters.findEntryAndFighterIndex(id)
                         path = `model.entry_list[${entry_index}].fighter_list[${fighter_index}]`
                     } else
@@ -364,7 +362,7 @@ const actions = {
                 this.$notify.success('La mise à jour a bien été effectuée')
             })
             .catch(() => this.$notify.error(`Un problème est survenu lors de la mise à jour en masse des ${label}`))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -373,14 +371,14 @@ const actions = {
             return
 
         dispatch('CLEAR')
-        commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.LOADING })
 
         const promise = rootGetters["database/getModel"]("Competition").findByPk(parseInt(id, 10), { include: [...getEntryListAssociationList(), 'formula_config_list'] })
         
         promise
             .then(competition => commit('INJECT_MODEL_DATA', competition.get({ plain: true })))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -388,7 +386,7 @@ const actions = {
         if (getters.list_loading)
             return
 
-        commit("updateField", { path: 'status_list', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status_list', value: LOADER_STATUS.SAVING })
 
         const current_limit = payload.limit * payload.page
         const offset = current_limit - payload.limit
@@ -404,7 +402,7 @@ const actions = {
                 commit("updateField", { path: 'list', value: result.rows.map(row => row.get({ plain: true })) })
             })
         .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des compétitions'))
-        .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
+        .finally(() => commit("updateField", { path: 'status_list', value: LOADER_STATUS.NOTHING }))
 
         return promise
     }

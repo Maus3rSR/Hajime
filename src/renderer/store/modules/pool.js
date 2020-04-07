@@ -1,87 +1,11 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { COMPETITION_MODE, LOADER_STATUS, POOL_SCORING, SCORE_DATABASE_FIELD_LIST } from '@root/constant'
+import { getEntryListAssociation, getFightListAssociationList, getFightAssociationList } from './pool/association_helper'
 import FightLib from '@root/lib/fight'
 
-const NUMBER_OF_FIGHT_PER_FIGHT_LIST = [1, 2]
-const SCORE_DATABASE_FIELD_LIST = ["score_given_number", "score_received_number"]
-const POOL_SCORING = {
-    "WINNER": 1,
-    "LOOSER": -1,
-    "DRAW": 0
-}
-
-const getEntryListAssociation = (constant_type_list, competition_type) => {
-    return competition_type === constant_type_list.TEAM ? "team" : "fighter"
-}
-
-const getFightListAssociationList = (Sequelize, constant_type_list, competition_type) => {
-    const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
-    let fight_list_association_list = ["fighter_fight_meta","comment_list"]
-
-    NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
-        const include_fighter_list_in_team = entriable === "Team" ? "->fighter_list" : ""
-        const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
-
-        let fight_order_include_option = undefined
-        if (entriable === "Team")
-            fight_order_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->fight_order\`.\`fight_id\` = \`fight_list\`.\`id\``) }
-
-        fight_list_association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option, fight_order_include_option, Sequelize))
-    })
-
-    return fight_list_association_list
-}
-
-const getFightAssociationList = (constant_type_list, fight_id, competition_type) => {
-    const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
-    let association_list = []
-
-    NUMBER_OF_FIGHT_PER_FIGHT_LIST.forEach(number => {
-        const score_list_include_option = { where: { fight_id: parseInt(fight_id, 10) } }
-        association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option))
-    })
-
-    return association_list
-}
-
-const getEntryAssociationWithScoreListAssociation = (entriable, number, score_association_option_list, fight_order_association_option_list, sequelize) => { // TODO : All attributes is not necessary... to improve perfs
-    let association = {}
-    const common_option = { required: false }
-
-    if (entriable === "Team" ) {
-        const fighter_list_association_list = [{ association: "score_given_list", ...common_option, ...score_association_option_list }]
-
-        if (!!fight_order_association_option_list)
-            fighter_list_association_list.push({ association: "fight_order", ...common_option, ...fight_order_association_option_list, attributes: ["order"] })
-
-        association = {
-            association: `${entriable.toLowerCase()}${number}`,
-            include: {
-                association: "fighter_list",
-                required: false,
-                where: { is_present: true },
-                attributes: ["name", "club", "is_favorite"],
-                include: fighter_list_association_list
-            }
-        }
-    } else {
-        association = {
-            association: `${entriable.toLowerCase()}${number}`,
-            include: { association: "score_given_list", ...common_option, ...score_association_option_list }
-        }
-    }
-
-    return association
-}
-
-const STATUS_LIST = {
-    NOTHING: "NOTHING",
-    SAVING: "SAVING",
-    LOADING: "LOADING"
-}
-
 const defaultState = () => ({
-    status: STATUS_LIST.NOTHING,
-    status_list: STATUS_LIST.NOTHING,
+    status: LOADER_STATUS.NOTHING,
+    status_list: LOADER_STATUS.NOTHING,
     list: [],
     configuration: {
         id: null,
@@ -100,10 +24,12 @@ const state = defaultState()
 const getters = {
     getField,
     is_configuration_empty: state => null === state.configuration.id,
-    loading: state => state.status === STATUS_LIST.LOADING,
-    list_loading: state => state.status_list === STATUS_LIST.LOADING,
-    saving: state => state.status === STATUS_LIST.SAVING,
+    loading: state => state.status === LOADER_STATUS.LOADING,
+    list_loading: state => state.status_list === LOADER_STATUS.LOADING,
+    saving: state => state.status === LOADER_STATUS.SAVING,
     count: state => state.list.length,
+    team_place_number: state => !!state.configuration.competition_formula && !!state.configuration.competition_formula.competition ? state.configuration.competition_formula.competition.team_place_number : null,
+    is_team_mode: state => !!state.configuration.competition_formula && !!state.configuration.competition_formula.competition ? state.configuration.competition_formula.competition.type === COMPETITION_MODE.TEAM : false,
     ranked_list: state => {
         return JSON.parse(JSON.stringify(state.list)).map(pool => {
             let rank_list = []
@@ -190,7 +116,7 @@ const actions = {
             return Promise.reject()
         }
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
 
         state.list.forEach((pool, index) => { // Fight list generation for each pool
             let fight_list = []
@@ -199,7 +125,7 @@ const actions = {
                 const fl = new FightLib(pool.entry_list, rootState.configuration.POOL_MIN_NUMBER)
                 fight_list = fl.compile()
             } catch (error) {
-                commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING })
+                commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING })
                 return Promise.reject(error)
             }
 
@@ -249,7 +175,7 @@ const actions = {
                     })
             })
             .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde des poules'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -257,7 +183,7 @@ const actions = {
         // if (getters.saving)
         //     return
 
-        // commit("updateField", { path: 'status', value: STATUS_LIST.SAVING }) // TODO We encounter btab component reset when we update status....
+        // commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING }) // TODO We encounter btab component reset when we update status....
 
         const pool_index = getters.findPoolIndex(parseInt(pool_id, 10))
 
@@ -280,7 +206,7 @@ const actions = {
                 })
             })
             .catch(() => this.$notify.error("Un problème est survenu lors de l'inversion du tableau de marque"))
-            // .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            // .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -288,7 +214,7 @@ const actions = {
         if (getters.saving)
             return
 
-        commit("updateField", { path: 'status', value: STATUS_LIST.SAVING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
 
         const { id, competition_formula_id, ...fields } = state.configuration
         const promise = rootGetters["database/getModel"]("PoolConfiguration").update(fields, { where: { id: parseInt(id, 10) } })
@@ -296,7 +222,7 @@ const actions = {
         promise
             .then()
             .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour de la configuration des poules'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -309,7 +235,7 @@ const actions = {
             return Promise.reject()
         }
 
-        commit("updateField", { path: 'status_list', value: STATUS_LIST.LOADING })
+        commit("updateField", { path: 'status_list', value: LOADER_STATUS.LOADING })
 
         const Pool = rootGetters["database/getModel"]("Pool")
 
@@ -340,7 +266,7 @@ const actions = {
             .then(list => commit("updateField", { path: 'list', value: list.map(row => row.get({ plain: true })) }))
             .catch(err => console.log(err))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
-            .finally(() => commit("updateField", { path: 'status_list', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status_list', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
@@ -425,7 +351,7 @@ const actions = {
             return
 
         dispatch('CLEAR')
-        commit("updateField", { path: 'status', value: STATUS_LIST.LOADING })
+        commit("updateField", { path: 'status', value: LOADER_STATUS.LOADING })
 
         const promise = rootGetters["database/getModel"]("PoolConfiguration").findOne({ 
             where: { competition_formula_id: parseInt(competition_formula_id, 10) },
@@ -434,7 +360,7 @@ const actions = {
                 attributes: ["competition_id"],
                 include: [{
                     association: "competition",
-                    attributes: ["type"]
+                    attributes: ["type", "team_place_number"]
                 }]
             }]
         })
@@ -442,7 +368,7 @@ const actions = {
         promise
             .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération de informations de configuration des poules'))
-            .finally(() => commit("updateField", { path: 'status', value: STATUS_LIST.NOTHING }))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
