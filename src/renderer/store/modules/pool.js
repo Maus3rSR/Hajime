@@ -1,7 +1,11 @@
+import Vue from 'vue'
 import { getField, updateField } from 'vuex-map-fields'
 import { COMPETITION_MODE, LOADER_STATUS, POOL_SCORING, SCORE_DATABASE_FIELD_LIST } from '@root/constant'
 import { getEntryListAssociation, getFightListAssociationList, getFightAssociationList } from './pool/association_helper'
 import FightLib from '@root/lib/fight'
+import fight from './fight'
+
+const modules = { fight }
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,
@@ -29,7 +33,7 @@ const getters = {
     saving: state => state.status === LOADER_STATUS.SAVING,
     count: state => state.list.length,
     team_place_number: state => !!state.configuration.competition_formula && !!state.configuration.competition_formula.competition ? state.configuration.competition_formula.competition.team_place_number : null,
-    is_team_mode: state => !!state.configuration.competition_formula && !!state.configuration.competition_formula.competition ? state.configuration.competition_formula.competition.type === COMPETITION_MODE.TEAM : false,
+    is_team_mode: state => !!state.configuration.competition_formula && !!state.configuration.competition_formula.competition && state.configuration.competition_formula.competition.type === COMPETITION_MODE.TEAM,
     ranked_list: state => {
         return JSON.parse(JSON.stringify(state.list)).map(pool => {
             let rank_list = []
@@ -74,11 +78,11 @@ const mutations = {
     RESET_STATE(state) {
         Object.assign(state, defaultState())
     },
-    INJECT_CONFIGURATION_DATA(state, config) {
-        Object.assign(state.configuration, config)
+    SET_CONFIGURATION(state, config) {
+        Vue.set(state, 'configuration', config) // No reactivity issue here when using Object.assign...
     },
     UPDATE_POOL_ENTRY(state, pool_entry) {
-        const pool_index = state.list.findIndex(p => parseInt(p.id, 10) === parseInt(pool_entry.pool_id, 10))
+        const pool_index = getters.findPoolIndex(state)(pool_entry.pool_id)
         if (pool_index === -1) return
         
         const pool_entry_index = state.list[pool_index].entry_list.findIndex(entry => parseInt(entry.id, 10) === parseInt(pool_entry.id, 10))
@@ -88,7 +92,7 @@ const mutations = {
     },
     MERGE_FIGHT(state, fight) {
         const pool_id = fight.fightable_id
-        const pool_index = state.list.findIndex(pool => parseInt(pool.id, 10) === parseInt(pool_id, 10))
+        const pool_index = getters.findPoolIndex(state)(pool_id)
 
         if (-1 === pool_index) return
 
@@ -99,7 +103,6 @@ const mutations = {
             state.list[pool_index].fight_list.push(fight)
         else
             state.list[pool_index].fight_list.splice(fight_index, 1, { ...state.list[pool_index].fight_list[fight_index], ...fight })
-
     }
 }
 
@@ -226,6 +229,32 @@ const actions = {
 
         return promise
     },
+    LOAD_CONFIGURATION({ dispatch, commit, getters, rootGetters }, competition_formula_id) {
+        if (getters.loading)
+            return
+
+        dispatch('CLEAR')
+        commit("updateField", { path: 'status', value: LOADER_STATUS.LOADING })
+
+        const promise = rootGetters["database/getModel"]("PoolConfiguration").findOne({ 
+            where: { competition_formula_id: parseInt(competition_formula_id, 10) },
+            include: [{
+                association: "competition_formula",
+                attributes: ["competition_id"],
+                include: [{
+                    association: "competition",
+                    attributes: ["type", "team_place_number"]
+                }]
+            }]
+        })
+
+        promise
+            .then(config => commit('SET_CONFIGURATION', config.get({ plain: true })))
+            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération de informations de configuration des poules'))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
+
+        return promise
+    },
     LOAD_LIST({ commit, getters, rootGetters, state }) {
         if (getters.list_loading)
             return
@@ -346,32 +375,6 @@ const actions = {
 
         return promise
     },
-    LOAD_CONFIGURATION({ dispatch, commit, getters, rootGetters }, competition_formula_id) {
-        if (getters.loading)
-            return
-
-        dispatch('CLEAR')
-        commit("updateField", { path: 'status', value: LOADER_STATUS.LOADING })
-
-        const promise = rootGetters["database/getModel"]("PoolConfiguration").findOne({ 
-            where: { competition_formula_id: parseInt(competition_formula_id, 10) },
-            include: [{
-                association: "competition_formula",
-                attributes: ["competition_id"],
-                include: [{
-                    association: "competition",
-                    attributes: ["type", "team_place_number"]
-                }]
-            }]
-        })
-
-        promise
-            .then(config => commit('INJECT_CONFIGURATION_DATA', config.get({ plain: true })))
-            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération de informations de configuration des poules'))
-            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
-
-        return promise
-    },
     UPDATE_POOL_ENTRY_SCORE_NUMBER({ dispatch, getters, rootGetters }, { fight, fighter, score_number, field }) {
         const pool_id = parseInt(fight.fightable_id, 10)
 
@@ -481,6 +484,16 @@ const actions = {
 
         return promise
     },
+    ON_FIGHTER_ORDER_UP({ dispatch, commit, getters }, fighter_order) {
+        dispatch("fight/FIGHTER_ORDER_UP", fighter_order).then(fighter_order => {
+
+        })
+    },
+    ON_FIGHTER_ORDER_DOWN({ dispatch, commit, getters }, fighter_order) {
+        dispatch("fight/FIGHTER_ORDER_DOWN", fighter_order).then(fighter_order => {
+
+        })
+    },
     GENERATE_PDF({ getters }) { // @todo Exporter dans une lib javascript
         let doc = this.$pdf.getNewDocument()
 
@@ -549,5 +562,6 @@ export default {
     state,
     getters,
     mutations,
-    actions
+    actions,
+    modules
 }

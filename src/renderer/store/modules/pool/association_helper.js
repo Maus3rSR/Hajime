@@ -14,7 +14,7 @@ export const getFightListAssociationList = (Sequelize, constant_type_list, compe
 
         let fight_order_include_option = undefined
         if (entriable === "Team")
-            fight_order_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->fight_order\`.\`fight_id\` = \`fight_list\`.\`id\``) }
+            fight_order_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->fight_order_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
 
         fight_list_association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option, fight_order_include_option, Sequelize))
     })
@@ -42,7 +42,7 @@ export const getEntryAssociationWithScoreListAssociation = (entriable, number, s
         const fighter_list_association_list = [{ association: "score_given_list", ...common_option, ...score_association_option_list }]
 
         if (!!fight_order_association_option_list)
-            fighter_list_association_list.push({ association: "fight_order", ...common_option, ...fight_order_association_option_list, attributes: ["order"] })
+            fighter_list_association_list.push({ association: "fight_order_list", ...common_option, ...fight_order_association_option_list })
 
         association = {
             association: `${entriable.toLowerCase()}${number}`,

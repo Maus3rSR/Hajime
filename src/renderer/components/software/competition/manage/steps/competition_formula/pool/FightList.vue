@@ -6,12 +6,12 @@ import FightList from '@partials/list/fight_list/Component'
 export default {
     components: { FightList },
     computed: {
-        ...mapState('pool', {
-            list: state => state.list,
-        }),
+        ...mapState('pool', ["list"]),
         ...mapGetters({
             color_list: "marking_board/color_list",
             has_fight_list: "pool/has_fight_list",
+            is_team_mode: "pool/is_team_mode",
+            team_place_number: "pool/team_place_number",
             get_pool_finished_fight_list_percent: "pool/getTotalFightFinishedPercentageOfPool"
         })
     },
@@ -68,8 +68,12 @@ export default {
                             :index="pool.number"
                             :title="`Matchs de la poule N°${pool.number}`"
                             :marking_board_reversed="pool.marking_board_reversed"
+                            :is_team_mode="is_team_mode"
+                            :team_place_number="team_place_number"
                             
-                            @makeReverse="reverseMarkingBoard(pool.id)"
+                            @on-reverse-board="reverseMarkingBoard(pool.id)"
+                            @on-fighter-up="1"
+                            @on-fighter-down="1"
                         >
 
                             <template slot="list-footer">
