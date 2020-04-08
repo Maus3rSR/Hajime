@@ -60,8 +60,9 @@ const getters = {
         return Math.round(total_finished / total * 100 * 10) / 10
     },
     has_fight_list: state => state.list.length > 0 && state.list[0].fight_list !== undefined,
-    findPoolIndex: state => pool_id => state.list.findIndex(el => parseInt(el.id, 10) === parseInt(pool_id, 10)),
     existPool: (state, getters) => pool_id => getters.findPoolIndex(pool_id) !== -1,
+    findPoolIndex: state => pool_id => state.list.findIndex(el => parseInt(el.id, 10) === parseInt(pool_id, 10)),
+    findFightIndex: state => (pool_index, fight_id) => state.list[pool_index].fight_list.findIndex(el => parseInt(el.id, 10) === parseInt(fight_id, 10)),
     getTotalFightList: (state, getters) => pool_id => {
         const index = getters.findPoolIndex(pool_id)
         return index === -1 ? 0 : (undefined === state.list[index].fight_list ? 0 : state.list[index].fight_list.length)
@@ -484,15 +485,28 @@ const actions = {
 
         return promise
     },
-    ON_FIGHTER_ORDER_UP({ dispatch, commit, getters }, fighter_order) {
-        dispatch("fight/FIGHTER_ORDER_UP", fighter_order).then(fighter_order => {
+    ON_FIGHTER_ORDER_UPDATED({ getters, commit }, { pool_id, fighter_order, fighter_order_replaced }) {
+        const pool_index = getters.findPoolIndex(pool_id)
 
-        })
+        if (-1 === pool_index)
+            return Promise.reject()
+            
+        const fight_index = getters.findFightIndex(pool_index, fighter_order.fight_id)
+
+        if (-1 === fight_index)
+            return Promise.reject()
+
+        const fight = state.list[pool_index].fight_list[fight_index]
+
+        commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order })
+        if (!!fighter_order_replaced)
+            commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order: fighter_order_replaced })
     },
-    ON_FIGHTER_ORDER_DOWN({ dispatch, commit, getters }, fighter_order) {
-        dispatch("fight/FIGHTER_ORDER_DOWN", fighter_order).then(fighter_order => {
-
-        })
+    ON_FIGHTER_ORDER_UP({ dispatch }, { pool_id, fight_id, fighter, current_order }) {
+        return dispatch("fight/FIGHTER_ORDER_UP", { fight_id, fighter, current_order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+    },
+    ON_FIGHTER_ORDER_DOWN({ dispatch }, { pool_id, fight_id, fighter, current_order }) {
+        return dispatch("fight/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
     },
     GENERATE_PDF({ getters }) { // @todo Exporter dans une lib javascript
         let doc = this.$pdf.getNewDocument()

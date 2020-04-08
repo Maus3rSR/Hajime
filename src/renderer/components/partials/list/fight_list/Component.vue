@@ -61,6 +61,7 @@ export default {
                 for (let team_number = 0; team_number < team_max_length; team_number++) {
                     if (!children_list[team_number])
                         children_list.push({
+                            fight_id: fight.id,
                             fighter1: null,
                             fighter2: null,
                             number: team_number,
@@ -71,7 +72,9 @@ export default {
                     const fighter1 = fight.entry1.fighter_list.find(fighter => !!fighter.fight_order_list.find(fight_order => parseInt(fight_order.order, 10) === team_number))
                     const fighter2 = fight.entry2.fighter_list.find(fighter => !!fighter.fight_order_list.find(fight_order => parseInt(fight_order.order, 10) === team_number))
 
-                    if (!!fighter1) children_list[team_number].fighter1 = fighter1
+                    if (!!fighter1) {
+                        children_list[team_number].fighter1 = fighter1
+                    }
                     if (!!fighter2) children_list[team_number].fighter2 = fighter2
                 }
 
@@ -107,13 +110,20 @@ export default {
         isFightBoardLocked(fight) {
             return this.isFightBoardIdLocked(this.getBoardId(fight.id, fight.fighter1.id, fight.fighter2.id))
         },
-        isFightReserve(team_fight) {
-            if (!this.is_team_mode || this.is_team_mode && undefined === team_fight.number) return false
-            return team_fight.number > this.team_place_number - 1
+        isFightReserve(team_fight_row) {
+            if (!this.is_team_mode || this.is_team_mode && undefined === team_fight_row.number) return false
+            return team_fight_row.number > this.team_place_number - 1
         },
         openModalCommentList(comment_list) {
             this.comment_list = comment_list
             this.showModal = true
+        },
+        onFighterOrder(team_fight_row, action, fighter_number) {
+            this.$emit(`on-fighter-order-${action}`, {
+                fight_id: team_fight_row.fight_id,
+                fighter: team_fight_row[`fighter${fighter_number}`],
+                current_order: team_fight_row.number
+            })
         },
     },
     data() {
@@ -182,10 +192,10 @@ export default {
                         <span v-if="!!props.row.fighter1">
 
                             <span v-if="is_team_mode" class="float-left">
-                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau">
+                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'up', 1)">
                                     <i class="zmdi zmdi-chevron-up zmdi-hc-lg"></i>
                                 </button>
-                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" title="Descendre le combattant d'un niveau">
+                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" title="Descendre le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'down', 1)">
                                     <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i>
                                 </button>
                             </span>
@@ -224,10 +234,10 @@ export default {
                         <span v-if="!!props.row.fighter2">
 
                             <span v-if="is_team_mode" class="float-right">
-                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau">
+                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'up', 2)">
                                     <i class="zmdi zmdi-chevron-up zmdi-hc-lg"></i>
                                 </button>
-                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" title="Descendre le combattant d'un niveau">
+                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" title="Descendre le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'down', 2)">
                                     <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i>
                                 </button>
                             </span>

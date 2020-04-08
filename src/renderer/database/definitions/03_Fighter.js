@@ -81,9 +81,10 @@ export default {
         }
     },
     getAssociation: Model => model_list => {
+        Model.belongsTo(model_list.Team, { as: 'team', foreignKey: 'team_id' })
+        Model.hasOne(model_list.Fool, { as: 'fool', foreignKey: 'fighter_id' })
         Model.hasMany(model_list.Score, { as: 'score_given_list', foreignKey: 'from_fighter_id' })
         Model.hasMany(model_list.Score, { as: 'score_received_list', foreignKey: 'on_fighter_id' })
         Model.hasMany(model_list.FightFighterOrder, { as: 'fight_order_list', foreignKey: 'fighter_id' })
-        Model.hasOne(model_list.Fool, { as: 'fool', foreignKey: 'fighter_id' })
     }
 }

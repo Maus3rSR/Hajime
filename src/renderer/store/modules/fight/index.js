@@ -1,17 +1,94 @@
 const defaultState = () => ({})
 const state = defaultState()
 const getters = {}
-const mutations = {}
+
+const mutations = {
+    UPDATE_FIGHTER_ORDER(state, { fight, fighter_order }) {
+        const fighter_id = parseInt(fighter_order.fighter_id, 10)
+
+        let fighter = fight.entry1.fighter_list.find(f => parseInt(f.id, 10) === fighter_id)
+        
+        if (!fighter)
+            fighter = fight.entry2.fighter_list.find(f => parseInt(f.id, 10) === fighter_id)
+        
+
+        if (!fighter) return
+
+        const fo_index = fighter.fight_order_list.findIndex(fo => parseInt(fo.id, 10) === parseInt(fighter_order.id, 10))
+
+        if (-1 === fo_index) return
+
+        fighter.fight_order_list.splice(fo_index, 1, fighter_order)
+    }
+}
 
 const actions = {
-    ADD_FIGHTER_ORDER(context, { fight_id, fighter_id, order }) {
+    FIGHTER_ORDER_CHANGE({ rootGetters }, { fight_id, fighter, current_order, new_order }) {
+        fighter = JSON.parse(JSON.stringify(fighter))
 
-    },
-    FIGHTER_ORDER_UP(context, fighter_order) {
+        const current_fighter_order = !fighter.fight_order_list ? undefined : fighter.fight_order_list.find(fo => parseInt(fo.order, 10) === parseInt(current_order, 10))
+        const team_id = parseInt(fighter.team_id, 10)
+        const fightFighterModel = rootGetters["database/getModel"]("FightFighterOrder")
 
+        if (!current_fighter_order) {
+            this.$notify.error("Impossible de mettre à jour l'ordre de combat du combattant")
+            return Promise.reject()
+        }
+
+        const promise = new Promise((resolve, reject) => {
+
+            const fightFighterOrderToReplacePromise = fightFighterModel.findOne({
+                where: { fight_id: parseInt(fight_id, 10), order: parseInt(new_order, 10) },
+                include: { association: "fighter", attributes: [], where: { team_id } }
+            })
+
+            let fighter_order_to_replace
+
+            fightFighterOrderToReplacePromise
+                .then(fighter_order => fighter_order_to_replace = fighter_order)
+                .finally(() => {
+                    let other_instance_update_promise = Promise.resolve()
+
+                    if (!!fighter_order_to_replace) {
+                        fighter_order_to_replace.order = current_order
+                        other_instance_update_promise = fighter_order_to_replace.save()
+                    }
+
+                    other_instance_update_promise
+                        .then(() => {
+                            current_fighter_order.order = new_order
+
+                            return fightFighterModel
+                                .update({ order: new_order }, { where: { id: parseInt(current_fighter_order.id, 10) } })
+                                .then(() => {
+                                    this.$notify.success("La mise à jour de l'ordre de combat a bien été effectuée")
+                                    resolve({
+                                        fighter_order: current_fighter_order,
+                                        fighter_order_replaced: !!fighter_order_to_replace ? fighter_order_to_replace.get({ plain: true }) : undefined
+                                    })
+                                })
+                                .catch(() => {
+                                    this.$notify.error("Une erreur est survenue lors de la mise à jour de l'ordre de combat du combattant à replacer")
+                                    reject()
+                                })
+                        })
+                        .catch(() => {
+                            this.$notify.error("Une erreur est survenue lors de la mise à jour de l'ordre de combat du combattant qui est remplacé")
+                            reject()
+                        })
+                })
+        })
+
+        return promise
     },
-    FIGHTER_ORDER_DOWN(context, fighter_order) {
-        
+    FIGHTER_ORDER_ADD({}, {}) {},
+    FIGHTER_ORDER_UP({ dispatch }, { fight_id, fighter, current_order }) {
+        const new_order = parseInt(current_order, 10) - 1
+        return dispatch("FIGHTER_ORDER_CHANGE", { fight_id, fighter, current_order, new_order })
+    },
+    FIGHTER_ORDER_DOWN({ dispatch }, { fight_id, fighter, current_order }) {
+        const new_order = parseInt(current_order, 10) + 1
+        return dispatch("FIGHTER_ORDER_CHANGE", { fight_id, fighter, current_order, new_order })
     }
 }
 

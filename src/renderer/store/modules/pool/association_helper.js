@@ -34,7 +34,7 @@ export const getFightAssociationList = (constant_type_list, fight_id, competitio
     return association_list
 }
 
-export const getEntryAssociationWithScoreListAssociation = (entriable, number, score_association_option_list, fight_order_association_option_list, sequelize) => { // TODO : All attributes is not necessary... to improve perfs
+export const getEntryAssociationWithScoreListAssociation = (entriable, number, score_association_option_list, fight_order_association_option_list, sequelize) => {
     let association = {}
     const common_option = { required: false }
 
@@ -48,10 +48,9 @@ export const getEntryAssociationWithScoreListAssociation = (entriable, number, s
             association: `${entriable.toLowerCase()}${number}`,
             include: {
                 association: "fighter_list",
-                required: false,
                 where: { is_present: true },
-                attributes: ["name", "club", "is_favorite"],
-                include: fighter_list_association_list
+                include: fighter_list_association_list,
+                ...common_option
             }
         }
     } else {

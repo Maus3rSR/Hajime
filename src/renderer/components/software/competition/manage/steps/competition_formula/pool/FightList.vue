@@ -18,7 +18,10 @@ export default {
     methods: {
         ...mapActions({
             reverseMarkingBoard: "pool/REVERSE_MARKING_BOARD",
-            addFight: "pool/ADD_FIGHT"
+            addFight: "pool/ADD_FIGHT",
+            onFighterOrderUp: "pool/ON_FIGHTER_ORDER_UP",
+            onFighterOrderDown: "pool/ON_FIGHTER_ORDER_DOWN",
+            onFighterOrderAdd: "pool/ON_FIGHTER_ORDER_ADD",
         }),
         onTabShown() {
             this.$softwareContainer.$emit('forceResize')
@@ -72,8 +75,9 @@ export default {
                             :team_place_number="team_place_number"
                             
                             @on-reverse-board="reverseMarkingBoard(pool.id)"
-                            @on-fighter-up="1"
-                            @on-fighter-down="1"
+                            @on-fighter-order-up="args => onFighterOrderUp({ pool_id: pool.id, ...args })"
+                            @on-fighter-order-down="args => onFighterOrderDown({ pool_id: pool.id, ...args })"
+                            @on-fighter-order-add="args => onFighterOrderAdd({ pool_id: pool.id, ...args })"
                         >
 
                             <template slot="list-footer">

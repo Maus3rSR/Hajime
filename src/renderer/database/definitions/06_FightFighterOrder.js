@@ -37,5 +37,7 @@ export default {
             // ...is_migration && timestamp_definition
         }
     },
-    // getAssociation: Model => model_list => {}
+    getAssociation: Model => model_list => {
+        Model.belongsTo(model_list.Fighter, { as: 'fighter', foreignKey: 'fighter_id' })
+    }
 }
