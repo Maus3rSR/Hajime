@@ -294,7 +294,6 @@ const actions = {
 
         promise
             .then(list => commit("updateField", { path: 'list', value: list.map(row => row.get({ plain: true })) }))
-            .catch(err => console.log(err))
             .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
             .finally(() => commit("updateField", { path: 'status_list', value: LOADER_STATUS.NOTHING }))
 
@@ -337,7 +336,7 @@ const actions = {
 
         promise
             .then(fight => {
-                if (null === fight) return Promise.reject()
+                if (!fight) return Promise.reject()
                 commit("MERGE_FIGHT", fight.get({ plain: true }))
             })
             .catch(() => this.$notify.error("Impossible de récupérer le combat"))
@@ -467,7 +466,7 @@ const actions = {
 
         return promise
     },
-    ON_SCORE_FIGHT_UPDATED({ dispatch, commit, getters }, { fight, fighter_up, fighter_down, score_number }) {
+    ON_SCORE_FIGHT_UPDATED({ dispatch, getters }, { fight, fighter_up, fighter_down, score_number }) {
         const pool_id = parseInt(fight.fightable_id, 10)
 
         if (!getters.existPool(pool_id)) {

@@ -308,7 +308,6 @@ const actions = {
                     comment: (undefined === comment ? undefined : comment.get({ plain: true }))
                 })
             })
-            .catch(err => console.log(err))
             .catch(() => this.$notify.error("Un problème est survenu lors de la validation du combat"))
             .finally(() => commit("STOP_SAVING"))
 
