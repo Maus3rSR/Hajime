@@ -502,11 +502,14 @@ const actions = {
         if (!!fighter_order_replaced)
             commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order: fighter_order_replaced })
     },
-    ON_FIGHTER_ORDER_UP({ dispatch }, { pool_id, fight_id, fighter, current_order }) {
-        return dispatch("fight/FIGHTER_ORDER_UP", { fight_id, fighter, current_order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+    ON_FIGHTER_ORDER_ADD({ dispatch }, { pool_id, fight_id, fighter, order }) {
+        return dispatch("fight/FIGHTER_ORDER_ADD", { fight_id, fighter, order }).then(fighter_order => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, fighter_order }))
     },
-    ON_FIGHTER_ORDER_DOWN({ dispatch }, { pool_id, fight_id, fighter, current_order }) {
-        return dispatch("fight/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+    ON_FIGHTER_ORDER_UP({ dispatch }, { pool_id, fight_id, fighter, order }) {
+        return dispatch("fight/FIGHTER_ORDER_UP", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+    },
+    ON_FIGHTER_ORDER_DOWN({ dispatch }, { pool_id, fight_id, fighter, order }) {
+        return dispatch("fight/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
     },
     GENERATE_PDF({ getters }) { // @todo Exporter dans une lib javascript
         let doc = this.$pdf.getNewDocument()

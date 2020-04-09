@@ -4,7 +4,7 @@ import Sequelize from 'sequelize'
 export default {
     name: "FightFighterOrder",
     options: { timestamps: false },
-    constraint_list: [{ field_list: ['fight_id', 'fighter_id'], key: { type: 'unique' } }],
+    constraint_list: [{ field_list: ['fight_id', 'fighter_id', 'order'], key: { type: 'unique' } }],
     getDefinition: (/*is_migration*/) => {
         return {
             id: {

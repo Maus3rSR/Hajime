@@ -61,7 +61,7 @@ export default {
                 for (let team_number = 0; team_number < team_max_length; team_number++) {
                     if (!children_list[team_number])
                         children_list.push({
-                            fight_id: fight.id,
+                            fight: fight,
                             fighter1: null,
                             fighter2: null,
                             number: team_number,
@@ -118,18 +118,42 @@ export default {
             this.comment_list = comment_list
             this.showModal = true
         },
+        openModalFightOrder(team_fight_row, fighter_number) {
+            this.modalNewOrderFighter.team_fight_row = team_fight_row
+            this.modalNewOrderFighter.fighter_number = fighter_number
+            this.modalNewOrderFighter.fighter_selected = this.getFightListInModalFighterOrder()[0]
+            this.$refs.modalAddFighterOrder.show()
+        },
+        confirmModalFighterOrder() {
+            if (!this.modalNewOrderFighter.fighter_selected) {
+                this.$notify.error("Impossible d'ajouter l'ordre de combat. Veuillez choisir un combattant")
+                return
+            }
+
+            this.modalNewOrderFighter.team_fight_row[`fighter${this.modalNewOrderFighter.fighter_number}`] = this.modalNewOrderFighter.fighter_selected
+            this.onFighterOrder(this.modalNewOrderFighter.team_fight_row, 'add', this.modalNewOrderFighter.fighter_number)
+        },
+        getFightListInModalFighterOrder() {
+            if (!this.modalNewOrderFighter.team_fight_row) return []
+            return this.modalNewOrderFighter.team_fight_row.fight[`entry${this.modalNewOrderFighter.fighter_number}`].fighter_list
+        },
         onFighterOrder(team_fight_row, action, fighter_number) {
             this.$emit(`on-fighter-order-${action}`, {
-                fight_id: team_fight_row.fight_id,
+                fight_id: team_fight_row.fight.id,
                 fighter: team_fight_row[`fighter${fighter_number}`],
-                current_order: team_fight_row.number
+                order: team_fight_row.number
             })
-        },
+        }
     },
     data() {
         return {
             comment_list: [],
             showModal: false,
+            modalNewOrderFighter: {
+                team_fight_row: null,
+                fighter_selected: null,
+                fighter_number: null
+            }
         }
     }
 }
@@ -202,13 +226,13 @@ export default {
 
                             {{ props.row.fighter1.name }}
                         </span>
-                        <span v-else-if="!isFightReserve(props.row)">
+                        <span v-else-if="!isFightReserve(props.row) && is_team_mode">
                             <span class="badge badge-warning">
                                 Aucun combattant
                             </span>
 
                             <span class="float-left">
-                                <button class="btn btn-sm btn-link" title="Monter le combattant d'un niveau">
+                                <button class="btn btn-sm btn-link" @click.prevent="openModalFightOrder(props.row, 1)">
                                     <i class="zmdi zmdi-account-add"></i>
                                     Choisir un combattant
                                 </button>
@@ -250,7 +274,7 @@ export default {
                             </span>
 
                             <span class="float-right">
-                                <button class="btn btn-sm btn-link" title="Monter le combattant d'un niveau">
+                                <button class="btn btn-sm btn-link" @click.prevent="openModalFightOrder(props.row, 2)">
                                     <i class="zmdi zmdi-account-add"></i>
                                     Choisir un combattant
                                 </button>
@@ -301,6 +325,27 @@ export default {
                 <button type="button" class="btn btn-primary" @click.prevent="showModal = false">Fermer</button>
             </template>
         </b-modal>
+
+        <modal-confirmation
+            ref="modalAddFighterOrder"
+            title="Ajout d'un ordre de combat"
+            :header="false"
+
+            @on-confirm="confirmModalFighterOrder"
+        >
+            <template slot="content" v-if="!!modalNewOrderFighter.team_fight_row">
+
+                <label class="card-body__title">
+                    Sélectionnez le combattant
+                </label>
+                <select class="form-control" v-model="modalNewOrderFighter.fighter_selected">
+                    <option v-for="fighter in getFightListInModalFighterOrder()" :value="fighter" :key="fighter.id">
+                        {{ fighter.name }}
+                    </option>
+                </select>
+
+            </template>
+        </modal-confirmation>
     </div>
 </template>
 

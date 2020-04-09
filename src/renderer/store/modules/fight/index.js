@@ -16,7 +16,10 @@ const mutations = {
 
         const fo_index = fighter.fight_order_list.findIndex(fo => parseInt(fo.id, 10) === parseInt(fighter_order.id, 10))
 
-        if (-1 === fo_index) return
+        if (-1 === fo_index) {
+            fighter.fight_order_list.push(fighter_order)    
+            return
+        }
 
         fighter.fight_order_list.splice(fo_index, 1, fighter_order)
     }
@@ -35,16 +38,13 @@ const actions = {
             return Promise.reject()
         }
 
-        const promise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
+            let fighter_order_to_replace
 
-            const fightFighterOrderToReplacePromise = fightFighterModel.findOne({
+            fightFighterModel.findOne({
                 where: { fight_id: parseInt(fight_id, 10), order: parseInt(new_order, 10) },
                 include: { association: "fighter", attributes: [], where: { team_id } }
             })
-
-            let fighter_order_to_replace
-
-            fightFighterOrderToReplacePromise
                 .then(fighter_order => fighter_order_to_replace = fighter_order)
                 .finally(() => {
                     let other_instance_update_promise = Promise.resolve()
@@ -72,16 +72,47 @@ const actions = {
                                     reject()
                                 })
                         })
+                        .catch(Sequelize.UniqueConstraintError, () => {
+                            this.$notify.error("Impossible de mettr à jour deux ordres de combat pour un même combattant")
+                            reject()
+                        })
                         .catch(() => {
                             this.$notify.error("Une erreur est survenue lors de la mise à jour de l'ordre de combat du combattant qui est remplacé")
                             reject()
                         })
                 })
         })
-
-        return promise
     },
-    FIGHTER_ORDER_ADD({}, {}) {},
+    FIGHTER_ORDER_ADD({ rootGetters }, { fight_id, fighter, order }) {
+        fighter = JSON.parse(JSON.stringify(fighter))
+        const team_id = parseInt(fighter.team_id, 10)
+        const fightFighterModel = rootGetters["database/getModel"]("FightFighterOrder")
+
+        return new Promise((resolve, reject) => {
+
+            fightFighterModel.count({
+                where: { fight_id: parseInt(fight_id, 10), order: parseInt(order, 10) },
+                include: { association: "fighter", attributes: [], where: { team_id } }
+            })
+                .then(count => {
+                    if (count > 0) {
+                        this.$notify.error("Impossible d'ajouter l'ordre de combat, il en existe déjà un")
+                        return reject()
+                    }
+
+                    return fightFighterModel.create({ fight_id, fighter_id: fighter.id, order })
+                        .then(fighter_order => resolve(fighter_order.get({ plain: true })))
+                        .catch(() => {
+                            this.$notify.error("Une erreur est survenue lors de la création de l'ordre de combat")
+                            reject()
+                        })
+                })
+                .catch(() => {
+                    this.$notify.error("Une erreur est survenue lors de la vérification de l'ordre de combat à ajouter")
+                    reject()
+                })
+        })
+    },
     FIGHTER_ORDER_UP({ dispatch }, { fight_id, fighter, current_order }) {
         const new_order = parseInt(current_order, 10) - 1
         return dispatch("FIGHTER_ORDER_CHANGE", { fight_id, fighter, current_order, new_order })
