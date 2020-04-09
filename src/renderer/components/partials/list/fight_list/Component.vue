@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import FightLib from '@root/lib/fight'
 import ScoreLib from '@root/lib/score'
 
 export default {
@@ -62,11 +63,11 @@ export default {
                     if (!children_list[team_number])
                         children_list.push({
                             ...fight,
-                            fighter1: null,
-                            fighter2: null,
-                            number: team_number,
-                            is_first: team_number === 0,
-                            is_last: team_number === team_max_length - 1
+                            fighter1: null, // Simulate fighter1 in INDI mode
+                            fighter2: null, // Simulate fighter2 in INDI mode
+                            number: team_number, // Specific in TEAM mode
+                            is_first: team_number === 0, // Specific in TEAM mode
+                            is_last: team_number === team_max_length - 1 // Specific in TEAM mode
                         })
 
                     const fighter1 = fight.entry1.fighter_list.find(fighter => !!fighter.fight_order_list.find(fight_order => parseInt(fight_order.order, 10) === team_number))
@@ -92,10 +93,10 @@ export default {
         }
     },
     methods: {
-        openFightBoard(fight) {
-            const fight_id = parseInt(fight.id, 10)
-            const fighter1_id = parseInt(fight.fighter1.id, 10)
-            const fighter2_id = parseInt(fight.fighter2.id, 10)
+        openFightBoard(fight_row) {
+            const fight_id = parseInt(fight_row.id, 10)
+            const fighter1_id = parseInt(fight_row.fighter1.id, 10)
+            const fighter2_id = parseInt(fight_row.fighter2.id, 10)
 
             let url = `fight/${fight_id}/fighter1/${fighter1_id}/fighter2/${fighter2_id}`
 
@@ -104,25 +105,28 @@ export default {
 
             this.$ipc.send('open-fight-board', url, this.getBoardId(fight_id, fighter1_id, fighter2_id))
         },
-        isFightValid(fight) {
-            return !!fight.fighter1 && !!fight.fighter2
+        isFightValid(fight_row) {
+            return !!fight_row.fighter1 && !!fight_row.fighter2
         },
-        isFightLocked(fight) {
-            return fight.is_locked
+        isFightLocked(fight_row) {
+            return FightLib.isLocked(fight_row, fight_row.fighter1, fight_row.fighter2)
         },
-        isFightBoardLocked(fight) {
-            return this.isFightValid(fight) && this.isFightBoardIdLocked(this.getBoardId(fight.id, fight.fighter1.id, fight.fighter2.id))
+        isFightBoardLocked(fight_row) {
+            return this.isFightValid(fight_row) && this.isFightBoardIdLocked(this.getBoardId(fight_row.id, fight_row.fighter1.id, fight_row.fighter2.id))
         },
-        isFightReserve(team_fight) {
-            if (!this.is_team_mode || this.is_team_mode && undefined === team_fight.number) return false
-            return team_fight.number > this.team_place_number - 1
+        isFightReserve(fight_row) {
+            if (!this.is_team_mode || this.is_team_mode && undefined === fight_row.number) return false
+            return fight_row.number > this.team_place_number - 1
         },
-        openModalCommentList(comment_list) {
-            this.comment_list = comment_list
+        hasComment(fight_row) {
+            return !!FightLib.getComment(fight_row, fight_row.fighter1, fight_row.fighter2)
+        },
+        openModalComment(fight_row) {
+            this.comment = FightLib.getComment(fight_row, fight_row.fighter1, fight_row.fighter2)
             this.showModal = true
         },
-        openModalFightOrder(team_fight, fighter_number) {
-            this.modalNewOrderFighter.team_fight = team_fight
+        openModalFightOrder(fight_row, fighter_number) {
+            this.modalNewOrderFighter.fight_row = fight_row
             this.modalNewOrderFighter.fighter_number = fighter_number
             this.modalNewOrderFighter.fighter_selected = this.getFightListInModalFighterOrder()[0]
             this.$refs.modalAddFighterOrder.show()
@@ -133,27 +137,27 @@ export default {
                 return
             }
 
-            this.modalNewOrderFighter.team_fight[`fighter${this.modalNewOrderFighter.fighter_number}`] = this.modalNewOrderFighter.fighter_selected
-            this.onFighterOrder(this.modalNewOrderFighter.team_fight, 'add', this.modalNewOrderFighter.fighter_number)
+            this.modalNewOrderFighter.fight_row[`fighter${this.modalNewOrderFighter.fighter_number}`] = this.modalNewOrderFighter.fighter_selected
+            this.onFighterOrder(this.modalNewOrderFighter.fight_row, 'add', this.modalNewOrderFighter.fighter_number)
         },
         getFightListInModalFighterOrder() {
-            if (!this.modalNewOrderFighter.team_fight) return []
-            return this.modalNewOrderFighter.team_fight[`entry${this.modalNewOrderFighter.fighter_number}`].fighter_list
+            if (!this.modalNewOrderFighter.fight_row) return []
+            return this.modalNewOrderFighter.fight_row[`entry${this.modalNewOrderFighter.fighter_number}`].fighter_list
         },
-        onFighterOrder(team_fight, action, fighter_number) {
+        onFighterOrder(fight_row, action, fighter_number) {
             this.$emit(`on-fighter-order-${action}`, {
-                fight_id: team_fight.id,
-                fighter: team_fight[`fighter${fighter_number}`],
-                order: team_fight.number
+                fight_id: fight_row.id,
+                fighter: fight_row[`fighter${fighter_number}`],
+                order: fight_row.number
             })
         }
     },
     data() {
         return {
-            comment_list: [],
+            comment: null,
             showModal: false,
             modalNewOrderFighter: {
-                team_fight: null,
+                fight_row: null,
                 fighter_selected: null,
                 fighter_number: null
             }
@@ -245,15 +249,15 @@ export default {
 
                     <div class="col-xs-1">
                         <span class="badge">
-                            <template v-if="props.row.is_locked && !!props.row.fighter1">{{ props.row.fighter1.score_given_list.length }}</template>
+                            <template v-if="isFightLocked(props.row) && !!props.row.fighter1">{{ props.row.fighter1.score_given_list.length }}</template>
 
-                            <template v-if="props.row.is_locked">-</template>
+                            <template v-if="isFightLocked(props.row)">-</template>
                             <span v-else-if="isFightReserve(props.row)" class="badge badge-info">
                                 Remplaçant
                             </span>
                             <template v-else>VS</template>
                             
-                            <template v-if="props.row.is_locked && !!props.row.fighter2">{{ props.row.fighter2.score_given_list.length }}</template>
+                            <template v-if="isFightLocked(props.row) && !!props.row.fighter2">{{ props.row.fighter2.score_given_list.length }}</template>
                         </span>
                     </div>
 
@@ -292,7 +296,7 @@ export default {
                     <span v-if="is_team_mode && isFightReserve(props.row)"></span>
                     <span v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" class="badge badge-warning">{{ "à valider" | uppercase }}</span>
                     <span v-else-if="isFightBoardLocked(props.row) && !isFightLocked(props.row)" class="badge badge-primary animated flash slow">{{ "combat en cours" | uppercase }}</span>
-                    <span v-else-if="!props.row.is_locked" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
+                    <span v-else-if="!isFightLocked(props.row)" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
                     <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
                 </transition>
             </template>
@@ -318,7 +322,7 @@ export default {
                 </transition>
 
                 <transition name="fade" mode="out-in">
-                    <button v-if="props.row.has_comment_list" @click.prevent="openModalCommentList(props.row.comment_list)" title="Voir les commentaires" class="btn btn-sm btn-outline-secondary">
+                    <button v-if="hasComment(props.row)" @click.prevent="openModalComment(props.row)" title="Voir les commentaires" class="btn btn-sm btn-outline-secondary">
                         <i class="zmdi zmdi-comment"></i>
                     </button>
                 </transition>
@@ -328,9 +332,7 @@ export default {
 
         <b-modal title="Commentaires du combat" v-model="showModal" size="lg">
             
-            <p v-for="comment in comment_list" :key="comment.id">
-                {{ comment.text }}
-            </p>
+            <p v-if="!!comment">{{ comment.text }}</p>
 
             <template slot="modal-footer">
                 <button type="button" class="btn btn-primary" @click.prevent="showModal = false">Fermer</button>
@@ -344,7 +346,7 @@ export default {
 
             @on-confirm="confirmModalFighterOrder"
         >
-            <template slot="content" v-if="!!modalNewOrderFighter.team_fight">
+            <template slot="content" v-if="!!modalNewOrderFighter.fight_row">
 
                 <label class="card-body__title">
                     Sélectionnez le combattant

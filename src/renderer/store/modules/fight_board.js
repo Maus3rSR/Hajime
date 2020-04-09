@@ -76,15 +76,9 @@ const mutations = {
         state[`fighter${parseInt(fighter_number, 10)}`].fool = Object.assign(state[`fighter${parseInt(fighter_number, 10)}`].fool || {}, fool)
         state.saved = true
     },
-    VALIDATED(state, { fighter_fight_meta, comment }) {
-        state.fight.fighter_fight_meta = fighter_fight_meta
-        state.fight.is_locked = fighter_fight_meta.locked
+    VALIDATED(state, fighter_fight_meta) {
+        state.fight.fighter_fight_meta_list.push(fighter_fight_meta)
         state.saved = true
-
-        if (undefined !== comment) {
-            state.fight.has_comment_list = true
-            state.fight.comment_list.push(comment)
-        }
     }
 }
 
@@ -98,13 +92,14 @@ const actions = {
 
         const getFight = fight_id => rootGetters["database/getModel"]("Fight").findByPk(parseInt(fight_id, 10), {
             include: [{
-                association: "fighter_fight_meta",
+                association: "fighter_fight_meta_list",
                 required: false,
+                include: "comment",
                 where: {
                     fighter1_id: parseInt(fighter1_id, 10),
                     fighter2_id: parseInt(fighter2_id, 10)
                 }
-            }, "comment_list"]
+            }]
         })
         const getFighter = (from_fighter_id, on_fighter_id) => rootGetters["database/getModel"]("Fighter").findByPk(
             parseInt(from_fighter_id, 10), {
@@ -282,32 +277,25 @@ const actions = {
 
         commit("START_SAVING")
 
-        const createComment = () => undefined !== comment && null !== comment ? 
-            rootGetters["database/getModel"]("Comment").create({
-                commentable_id: parseInt(state.fight.id, 10),
-                commentable: "Fight",
-                text: comment
-            }) :
-            Promise.resolve()
-
-        const createFighterMeta = () => rootGetters["database/getModel"]("FighterFightMeta").create({
-            fight_id: parseInt(state.fight.id, 10),
-            fighter1_id: parseInt(state.fighter1.id, 10),
-            fighter2_id: parseInt(state.fighter2.id, 10),
-            locked: true
+        const promise = rootGetters["database/instance"].transaction(t => {
+            return rootGetters["database/getModel"]("FighterFightMeta").create({
+                fight_id: parseInt(state.fight.id, 10),
+                fighter1_id: parseInt(state.fighter1.id, 10),
+                fighter2_id: parseInt(state.fighter2.id, 10),
+                locked: true,
+                ...!!comment && {comment: {
+                    commentable_id: parseInt(state.fight.id, 10),
+                    commentable: "FighterFightMeta",
+                    text: comment
+                }}
+            }, {
+                transaction: t,
+                include: "comment"
+            })
         })
 
-        const promise = Promise.all([createComment(), createFighterMeta()])
-
         promise
-            .then(res => {
-                 let [comment, fighter_fight_meta] = res
-
-                commit("VALIDATED", {
-                    fighter_fight_meta: fighter_fight_meta.get({ plain: true }),
-                    comment: (undefined === comment ? undefined : comment.get({ plain: true }))
-                })
-            })
+            .then(fighter_fight_meta => commit("VALIDATED", fighter_fight_meta.get({ plain: true })))
             .catch(() => this.$notify.error("Un problème est survenu lors de la validation du combat"))
             .finally(() => commit("STOP_SAVING"))
 

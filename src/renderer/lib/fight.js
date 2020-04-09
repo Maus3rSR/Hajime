@@ -10,6 +10,25 @@ export default class FightLib {
         this.createMatrix()
     }
 
+    static findFighterFightMeta(model, fighter1, fighter2) {
+        const fighter1_id = !!fighter1 ? fighter1.id : null
+        const fighter2_id = !!fighter2 ? fighter2.id : null
+    
+        return !!model.fighter_fight_meta_list ?
+            model.fighter_fight_meta_list.find(ffm => ffm.fighter1_id === fighter1_id && ffm.fighter2_id === fighter2_id) :
+            undefined
+    }
+
+    static isLocked(fight, fighter1, fighter2) {
+        const fighter_fight_meta = this.findFighterFightMeta(fight, fighter1, fighter2)
+        return !!fighter_fight_meta && fighter_fight_meta.locked
+    }
+
+    static getComment(fight, fighter1, fighter2) {
+        const fighter_fight_meta = this.findFighterFightMeta(fight, fighter1, fighter2)
+        return !!fighter_fight_meta && !!fighter_fight_meta.comment ? fighter_fight_meta.comment : undefined
+    }
+
     createMatrix() {
         this.entry_list.forEach(entry => this.matrix[entry.number] = this.entry_list.map(e => e.number).filter(n => n !== entry.number))
     }

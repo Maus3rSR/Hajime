@@ -6,13 +6,13 @@ export const getEntryListAssociation = (constant_type_list, competition_type) =>
 
 export const getFightListAssociationList = (Sequelize, constant_type_list, competition_type) => {
     const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
-    let fight_list_association_list = ["fighter_fight_meta","comment_list"]
+    let fight_list_association_list = [{ association: "fighter_fight_meta_list", include: "comment" }]
 
     FIGHT_FIGHTER_NUMBER_LIST.forEach(number => {
         const include_fighter_list_in_team = entriable === "Team" ? "->fighter_list" : ""
         const score_list_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->score_given_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
 
-        let fight_order_include_option = undefined
+        let fight_order_include_option
         if (entriable === "Team")
             fight_order_include_option = { where: Sequelize.literal(`\`fight_list->${entriable.toLowerCase()}${number}${include_fighter_list_in_team}->fight_order_list\`.\`fight_id\` = \`fight_list\`.\`id\``) }
 
@@ -24,17 +24,20 @@ export const getFightListAssociationList = (Sequelize, constant_type_list, compe
 
 export const getFightAssociationList = (constant_type_list, fight_id, competition_type) => {
     const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
+    const fight_where_clause = { fight_id: parseInt(fight_id, 10) }
+    const score_list_include_option = { where: fight_where_clause }
     let association_list = []
 
-    FIGHT_FIGHTER_NUMBER_LIST.forEach(number => {
-        const score_list_include_option = { where: { fight_id: parseInt(fight_id, 10) } }
-        association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option))
-    })
+    let fight_order_include_option
+    if (entriable === "Team")
+        fight_order_include_option = { where: fight_where_clause }
+
+    FIGHT_FIGHTER_NUMBER_LIST.forEach(number => association_list.push(getEntryAssociationWithScoreListAssociation(entriable, number, score_list_include_option, fight_order_include_option)))
 
     return association_list
 }
 
-export const getEntryAssociationWithScoreListAssociation = (entriable, number, score_association_option_list, fight_order_association_option_list, sequelize) => {
+export const getEntryAssociationWithScoreListAssociation = (entriable, number, score_association_option_list, fight_order_association_option_list) => {
     let association = {}
     const common_option = { required: false }
 

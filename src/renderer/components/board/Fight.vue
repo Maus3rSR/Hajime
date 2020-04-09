@@ -2,6 +2,7 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import ScoreDragger from '@partials/fight/ScoreDragger'
+import FightLib from '@root/lib/fight'
 
 export default {
     components: { ScoreDragger },
@@ -24,7 +25,7 @@ export default {
             return this.forfeit ? "Déclarer un forfait" : "Validation du combat"
         },
         is_disabled() {
-            return this.readonly || (null === this.fight.id ? true : this.fight.is_locked)
+            return this.readonly || (!this.fight.id ? true : this.fightIsLocked(this.fight, this.fighter1, this.fighter2))
         }
     },
     methods: {
@@ -50,6 +51,9 @@ export default {
             this.validateFight(this.comment)
                 .then(() => this.$ipc.send('fight-board-validated', this.fight, this.fighter1, this.fighter2))
         },
+        fightIsLocked(fight, fighter1, fighter2) {
+            return FightLib.isLocked(fight, fighter1, fighter2)
+        }
     },
     watch: {
         'fighter1.score_given_list': {
@@ -132,7 +136,7 @@ export default {
                     @on-score-removed="removeScore"
                     @on-fool-updated="updateFoolCount"
 
-                    :locked="fight.is_locked"
+                    :locked="fightIsLocked(fight, fighter1, fighter2)"
                     :readonly="readonly"
                     :fighter_left="fighter1"
                     :fighter_right="fighter2"

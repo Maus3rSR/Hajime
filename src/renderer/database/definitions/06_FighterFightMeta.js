@@ -44,5 +44,7 @@ export default {
             ...is_migration && timestamp_definition
         }
     },
-    // getAssociation: Model => model_list => {}
+    getAssociation: Model => model_list => {
+        Model.hasOne(model_list.Comment, { as: 'comment', foreignKey: 'commentable_id', scope: { commentable: 'FighterFightMeta' } })
+    }
 }

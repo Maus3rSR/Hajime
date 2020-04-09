@@ -60,14 +60,6 @@ export default {
                         if (!!this.fighter2) return this.fighter2.get({ plain: true })
                         return null
                     }
-                },
-                is_locked: {
-                    type: Sequelize.VIRTUAL,
-                    get() { return undefined !== this.fighter_fight_meta && null !== this.fighter_fight_meta && this.fighter_fight_meta.locked }
-                },
-                has_comment_list: {
-                    type: Sequelize.VIRTUAL,
-                    get() { return undefined !== this.comment_list && this.comment_list.length > 0 }
                 }
             },
             ...is_migration && timestamp_definition
@@ -89,7 +81,6 @@ export default {
         })
 
         Model.belongsTo(model_list.Pool, { foreignKey: "fightable_id", as: "pool" })
-        Model.hasOne(model_list.FighterFightMeta, { as: 'fighter_fight_meta', foreignKey: 'fight_id' })
-        Model.hasMany(model_list.Comment, { as: 'comment_list', foreignKey: 'commentable_id', scope: { commentable: 'Fight' } })
+        Model.hasMany(model_list.FighterFightMeta, { as: 'fighter_fight_meta_list', foreignKey: 'fight_id' })
     }
 }

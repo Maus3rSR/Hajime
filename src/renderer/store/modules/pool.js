@@ -69,7 +69,15 @@ const getters = {
     },
     getTotalFightListFinishedOfPool: (state, getters) => pool_id => {
         const index = getters.findPoolIndex(pool_id)
-        return index === -1 ? 0 : (undefined === state.list[index].fight_list ? 0 : state.list[index].fight_list.filter(f => undefined !== f.is_locked && f.is_locked).length)
+        return index === -1 ? 0 : (undefined === state.list[index].fight_list ? 0 : state.list[index].fight_list.filter(f => {
+            if (!f.fighter_fight_meta_list || f.fighter_fight_meta_list.length === 0) return false
+
+            for (let i = 0; i < f.fighter_fight_meta_list.length; i++)
+                if (!f.fighter_fight_meta_list[i].locked)
+                    return false
+
+            return true
+        }).length)
     },
     getTotalFightFinishedPercentageOfPool: (state, getters) => pool_id => Math.round(getters.getTotalFightListFinishedOfPool(pool_id) / getters.getTotalFightList(pool_id) * 100 * 10) / 10
 }
@@ -299,7 +307,7 @@ const actions = {
 
         return promise
     },
-    LOAD_POOL_ENTRY({ commit, rootGetters }, { pool_id, fighter }) {
+    LOAD_POOL_ENTRY({ commit, state, rootGetters }, { pool_id, fighter }) {
         if (!getters.existPool(pool_id)) {
             this.$notify.error("Impossible de récupérer l'entrée de poule")
             return Promise.reject()
@@ -311,7 +319,7 @@ const actions = {
                 entriable_id: (null === fighter.team_id ? parseInt(fighter.id, 10) : parseInt(fighter.team_id, 10)),
                 entriable: (null === fighter.team_id ? "Fighter" : "Team")
             },
-            include: entry_list_association_list
+            include: getEntryListAssociation(rootGetters["competition/constant_type_list"], state.configuration.competition_formula.competition.type)
         })
 
         promise
@@ -393,10 +401,7 @@ const actions = {
         })
 
         promise
-            .then(() => Promise.all([
-                dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }),
-                dispatch("LOAD_FIGHT", parseInt(fight.id))
-            ]))
+            .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
             .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
 
         return promise
@@ -429,7 +434,7 @@ const actions = {
         return promise
     },
     ON_FIGHT_VALIDATED({ dispatch, commit, getters }, { fight, fighter1, fighter2 }) {
-        if (undefined === fight.is_locked || undefined === fighter1.score_given_list || undefined === fighter2.score_given_list) {
+        if (undefined === fighter1.score_given_list || undefined === fighter2.score_given_list) {
             this.$notify.error("Impossible de mettre à jour les données de poules en temps réel avec les données provenant du tableau de gestion de match")
             return Promise.reject()
         }
@@ -443,9 +448,7 @@ const actions = {
 
         let promise
 
-        if (undefined === fight.is_locked || !fight.is_locked)
-            promise = Promise.resolve()
-        else if (fighter1.score_given_list.length > fighter2.score_given_list.length)
+        if (fighter1.score_given_list.length > fighter2.score_given_list.length)
             promise = Promise.all([
                 dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter1, pool_scoring: POOL_SCORING.WINNER }),
                 dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter2, pool_scoring: POOL_SCORING.LOOSER })
@@ -462,7 +465,7 @@ const actions = {
             ])
 
         promise
-            .then(() => commit("MERGE_FIGHT", fight))
+            .then(() => dispatch("LOAD_FIGHT", parseInt(fight.id)))
 
         return promise
     },
@@ -480,7 +483,7 @@ const actions = {
         ])
 
         promise
-            .then(() => commit("MERGE_FIGHT", fight))
+            .finally(() => dispatch("LOAD_FIGHT", parseInt(fight.id)))
 
         return promise
     },
