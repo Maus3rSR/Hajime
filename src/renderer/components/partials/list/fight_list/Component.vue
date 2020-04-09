@@ -291,7 +291,7 @@ export default {
                 <transition name="fade" mode="out-in">
                     <span v-if="is_team_mode && isFightReserve(props.row)"></span>
                     <span v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" class="badge badge-warning">{{ "à valider" | uppercase }}</span>
-                    <span v-else-if="isFightBoardLocked(props.row) && !isFightLocked(props.row)" class="badge badge-primary animated flash slow">{{ "en cours d'édition" | uppercase }}</span>
+                    <span v-else-if="isFightBoardLocked(props.row) && !isFightLocked(props.row)" class="badge badge-primary animated flash slow">{{ "match en cours" | uppercase }}</span>
                     <span v-else-if="!props.row.is_locked" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
                     <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
                 </transition>
