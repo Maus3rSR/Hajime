@@ -26,7 +26,7 @@ export const getFightAssociationList = (constant_type_list, fight_id, competitio
     const entriable = competition_type === constant_type_list.TEAM ? "Team" : "Fighter"
     const fight_where_clause = { fight_id: parseInt(fight_id, 10) }
     const score_list_include_option = { where: fight_where_clause }
-    let association_list = []
+    let association_list = [{ association: "fighter_fight_meta_list", include: "comment" }]
 
     let fight_order_include_option
     if (entriable === "Team")
