@@ -3,7 +3,10 @@ import timestamp_definition from './timestamp'
 
 export default {
     name: "Fighter",
-    constraint_list: [{ field_list: ['license', 'name'], key: { type: 'unique' } }],
+    constraint_list: [
+        { field_list: ['license', 'name', 'competition_id'], key: { type: 'unique' } },
+        { field_list: ['license', 'name', 'team_id'], key: { type: 'unique' } }
+    ],
     getDefinition: is_migration => {
         return {
             id: {
