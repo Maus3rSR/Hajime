@@ -118,6 +118,9 @@ export default {
             if (!this.is_team_mode || this.is_team_mode && undefined === fight_row.number) return false
             return fight_row.number > this.team_place_number - 1
         },
+        canChangeOrder(fight_row) {
+            return !(!!fight_row.fighter_fight_meta_list && fight_row.fighter_fight_meta_list.length > 0)
+        },
         hasComment(fight_row) {
             return !!FightLib.getComment(fight_row, fight_row.fighter1, fight_row.fighter2)
         },
@@ -226,7 +229,7 @@ export default {
                     <div class="col text-right">
                         <span v-if="!!props.row.fighter1">
 
-                            <span v-if="is_team_mode" class="float-left">
+                            <span v-if="is_team_mode && canChangeOrder(props.row)" class="float-left">
                                 <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'up', 1)">
                                     <i class="zmdi zmdi-chevron-up zmdi-hc-lg"></i>
                                 </button>
@@ -268,7 +271,7 @@ export default {
                     <div class="col">
                         <span v-if="!!props.row.fighter2">
 
-                            <span v-if="is_team_mode" class="float-right">
+                            <span v-if="is_team_mode && canChangeOrder(props.row)" class="float-right">
                                 <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'up', 2)">
                                     <i class="zmdi zmdi-chevron-up zmdi-hc-lg"></i>
                                 </button>
