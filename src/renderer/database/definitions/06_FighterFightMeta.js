@@ -22,7 +22,7 @@ export default {
             },
             fighter1_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'Fighter',
                     key: 'id'
@@ -30,7 +30,7 @@ export default {
             },
             fighter2_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'Fighter',
                     key: 'id'

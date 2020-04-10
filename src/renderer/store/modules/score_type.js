@@ -34,6 +34,13 @@ const actions = {
             .finally(() => commit("STOP_LOADING"))
 
         return promise
+    },
+    GET_SCORE_ID_BY_CODE({ rootGetters }, score_code) {
+        return new Promise((resolve, reject) =>
+            rootGetters["database/getModel"]("ScoreType").findOne({ where: { code: score_code } })
+                .then(score_type => resolve(score_type.id))
+                .catch(reject)
+        )
     }
 }
 

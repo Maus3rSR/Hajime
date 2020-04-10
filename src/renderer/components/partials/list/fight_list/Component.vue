@@ -226,6 +226,7 @@ export default {
 
             <template slot="fighter" slot-scope="props">
                 <span class="row">
+                    <!-- FIGHTER LEFT -->
                     <div class="col text-right">
                         <span v-if="!!props.row.fighter1">
 
@@ -245,7 +246,7 @@ export default {
                                 Aucun combattant
                             </span>
 
-                            <span class="float-left" v-if="is_team_mode">
+                            <span class="float-left" v-if="is_team_mode && !isFightLocked(props.row)">
                                 <button class="btn btn-sm btn-link" @click.prevent="openModalFightOrder(props.row, 1)">
                                     <i class="zmdi zmdi-account-add"></i>
                                     Choisir un combattant
@@ -254,9 +255,11 @@ export default {
                         </span>
                     </div>
 
+                    <!-- VERSUS / SCORING -->
                     <div class="col-xs-1">
                         <span class="badge">
                             <template v-if="isFightLocked(props.row) && !!props.row.fighter1">{{ props.row.fighter1.score_given_list.length }}</template>
+                            <template v-else-if="isFightLocked(props.row) && !props.row.fighter1">0</template>
 
                             <template v-if="isFightLocked(props.row)">-</template>
                             <span v-else-if="isFightReserve(props.row)" class="badge badge-info">
@@ -265,9 +268,11 @@ export default {
                             <template v-else>VS</template>
                             
                             <template v-if="isFightLocked(props.row) && !!props.row.fighter2">{{ props.row.fighter2.score_given_list.length }}</template>
+                            <template v-else-if="isFightLocked(props.row) && !props.row.fighter2">0</template>
                         </span>
                     </div>
 
+                    <!-- FIGHTER RIGHT -->
                     <div class="col">
                         <span v-if="!!props.row.fighter2">
 
@@ -287,7 +292,7 @@ export default {
                                 Aucun combattant
                             </span>
 
-                            <span class="float-right" v-if="is_team_mode">
+                            <span class="float-right" v-if="is_team_mode && !isFightLocked(props.row)">
                                 <button class="btn btn-sm btn-link" @click.prevent="openModalFightOrder(props.row, 2)">
                                     <i class="zmdi zmdi-account-add"></i>
                                     Choisir un combattant
@@ -302,7 +307,9 @@ export default {
                 <transition name="fade" mode="out-in">
                     <span v-if="is_team_mode && isFightReserve(props.row)"></span>
                     <span v-else-if="isFightBoardLocked(props.row) && !isFightLocked(props.row)" class="badge badge-primary animated flash slow">{{ "combat en cours" | uppercase }}</span>
-                    <span v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" class="badge badge-warning">{{ "à valider" | uppercase }}</span>
+                    <span v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" class="badge badge-warning">
+                        <slot name="not_valid_and_locked_fight_status"></slot>
+                    </span>
                     <span v-else-if="!isFightLocked(props.row)" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
                     <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
                 </transition>
@@ -313,9 +320,9 @@ export default {
                 <transition name="fade" mode="out-in">
                     <span v-if="isFightReserve(props.row) || !isFightValid(props.row) && isFightLocked(props.row)"></span>
 
-                    <button v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" class="btn btn-sm btn-outline-success" title="Procéder à la validation de ce match pour attribuer les points">
-                        <i class="zmdi zmdi-check"></i>
-                    </button>
+                    <template v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" >
+                        <slot name="not_valid_and_locked_fight_action" :row="props.row"></slot>
+                    </template>
 
                     <i class="zmdi zmdi-lock" v-else-if="isFightBoardLocked(props.row)" title="La fenêtre de gestion de combat est déjà ouverte par quelqu'un"></i>
 

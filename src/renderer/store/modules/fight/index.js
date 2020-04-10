@@ -26,6 +26,28 @@ const mutations = {
 }
 
 const actions = {
+    LOCK({ rootGetters }, { fight_id, fighter1_id, fighter2_id, comment }) {
+        return rootGetters["database/instance"].transaction(t => {
+            return rootGetters["database/getModel"]("FighterFightMeta").create({
+                fight_id,
+                fighter1_id,
+                fighter2_id,
+                locked: true,
+                ...!!comment && {comment: {
+                    commentable_id: parseInt(state.fight.id, 10),
+                    commentable: "FighterFightMeta",
+                    text: comment
+                }}
+            }, {
+                transaction: t,
+                include: "comment"
+            })
+        })
+    },
+    ADD_SCORE({ rootGetters }, { fight_id, from_fighter_id, on_fighter_id, score_type_id }) {
+        on_fighter_id = on_fighter_id || null
+        return rootGetters["database/getModel"]("Score").create({ fight_id, from_fighter_id, on_fighter_id, score_type_id })
+    },
     FIGHTER_ORDER_CHANGE({ rootGetters }, { fight_id, fighter, current_order, new_order }) {
         fighter = JSON.parse(JSON.stringify(fighter))
 

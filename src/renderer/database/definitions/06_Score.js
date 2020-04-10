@@ -29,7 +29,7 @@ export default {
             },
             on_fighter_id: {
                 type: Sequelize.INTEGER(10).UNSIGNED,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'Fighter',
                     key: 'id'

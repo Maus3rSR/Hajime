@@ -451,9 +451,14 @@ const actions = {
 
         return promise
     },
-    ON_FIGHT_VALIDATED({ dispatch, commit, getters }, { fight, fighter1, fighter2 }) {
-        if (undefined === fighter1.score_given_list || undefined === fighter2.score_given_list) {
-            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel avec les données provenant du tableau de gestion de match")
+    ON_FIGHT_VALIDATED({ dispatch, getters }, { fight, fighter1, fighter2 }) {
+        if (!fighter1 && !fighter2) {
+            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel avec aucun combattant")
+            return Promise.reject()
+        }
+
+        if ((!!fighter1 && !fighter1.score_given_list) || (!!fighter2 && !fighter2.score_given_list)) {
+            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel, il manque les informations des scores")
             return Promise.reject()
         }
 
@@ -466,7 +471,9 @@ const actions = {
 
         let promise
 
-        if (fighter1.score_given_list.length > fighter2.score_given_list.length)
+        if (!fighter1 || !fighter2)
+            promise = dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: (fighter1 || fighter2), pool_scoring: POOL_SCORING.WINNER })
+        else if (fighter1.score_given_list.length > fighter2.score_given_list.length)
             promise = Promise.all([
                 dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter1, pool_scoring: POOL_SCORING.WINNER }),
                 dispatch('UPDATE_POOL_ENTRY_RANKING', { fight, fighter: fighter2, pool_scoring: POOL_SCORING.LOOSER })
@@ -497,7 +504,7 @@ const actions = {
 
         const promise = Promise.all([
             dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { fight, fighter: fighter_up, score_number, field: 'score_given_number' }),
-            dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { fight, fighter: fighter_down, score_number, field: 'score_received_number' })
+            !!fighter_down ? dispatch('UPDATE_POOL_ENTRY_SCORE_NUMBER', { fight, fighter: fighter_down, score_number, field: 'score_received_number' }) : Promise.resolve()
         ])
 
         promise
@@ -530,6 +537,45 @@ const actions = {
     },
     ON_FIGHTER_ORDER_DOWN({ dispatch }, { pool_id, fight_id, fighter, order }) {
         return dispatch("fight/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+    },
+    VALIDATE_FIGHT_WITH_ONE_FIGHTER({ dispatch, getters, state, rootState }, { pool_id, fight_id, fighter1, fighter2 }) {
+        const pool_index = getters.findPoolIndex(pool_id)
+
+        if (-1 === pool_index) {
+            this.$notify.error("Impossible de valider ce combat, la poule n'existe pas")
+            return Promise.reject()
+        }
+
+        const fight_index = getters.findFightIndex(pool_index, fight_id)
+
+        if (-1 === fight_index) {
+            this.$notify.error("Impossible de valider ce combat, le combat n'existe pas")
+            return Promise.reject()
+        }
+
+        const fight = state.list[pool_index].fight_list[fight_index]
+        const fighter1_id = !!fighter1 ? fighter1.id : undefined
+        const fighter2_id = !!fighter2 ? fighter2.id : undefined
+        const fighter_up = fighter1 || fighter2
+        
+        if (!!fighter1_id && !!fighter2_id) {
+            this.$notify.error("Impossible de valider ce combat car les combattants sont tous les deux existants")
+            return Promise.reject()
+        }
+
+        return dispatch("score_type/GET_SCORE_ID_BY_CODE", rootState.configuration.FIGHT_SCORE_FORFEIT_CODE, { root: true })
+            .then(forfeit_score_id => {
+                const add_score_parameter_list = { fight_id, from_fighter_id: (fighter1_id || fighter2_id), score_type_id: forfeit_score_id }
+                const on_score_fight_updated_parameter_list = { fight, fighter_up, score_number: 1 }
+
+                return Promise.all([
+                    dispatch("fight/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
+                    dispatch("fight/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
+                    dispatch("fight/LOCK", { fight_id, fighter1_id, fighter2_id }).then(() => dispatch("ON_FIGHT_VALIDATED", { fight, fighter1, fighter2 }))
+                ])
+            })
+            .then(() => this.$notify.success("Le combat a bien été validé"))
+            .catch(() => this.$notify.error("Impossible de valider ce combat"))
     },
     GENERATE_PDF({ getters }) { // @todo Exporter dans une lib javascript
         let doc = this.$pdf.getNewDocument()

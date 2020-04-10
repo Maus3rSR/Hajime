@@ -19,6 +19,7 @@ export default {
         ...mapActions({
             reverseMarkingBoard: "pool/REVERSE_MARKING_BOARD",
             addFight: "pool/ADD_FIGHT",
+            validateFightWithOneFighter: "pool/VALIDATE_FIGHT_WITH_ONE_FIGHTER",
             onFighterOrderUp: "pool/ON_FIGHTER_ORDER_UP",
             onFighterOrderDown: "pool/ON_FIGHTER_ORDER_DOWN",
             onFighterOrderAdd: "pool/ON_FIGHTER_ORDER_ADD",
@@ -41,6 +42,9 @@ export default {
             }
 
             this.$refs.modalAddFight.show()
+        },
+        validateNotValidFight(pool_id, fight_row) {
+            this.validateFightWithOneFighter({ pool_id, fight_id: fight_row.id, fighter1: fight_row.fighter1, fighter2: fight_row.fighter2 })
         }
     },
     data() {
@@ -79,6 +83,13 @@ export default {
                             @on-fighter-order-down="args => onFighterOrderDown({ pool_id: pool.id, ...args })"
                             @on-fighter-order-add="args => onFighterOrderAdd({ pool_id: pool.id, ...args })"
                         >
+
+                            <template slot="not_valid_and_locked_fight_status">{{ "à valider" | uppercase }}</template>
+                            <template slot="not_valid_and_locked_fight_action" slot-scope="props">
+                                <button class="btn btn-sm btn-outline-success" title="Procéder à la validation de ce match pour attribuer les points" @click.prevent="validateNotValidFight(pool.id, props.row)">
+                                    <i class="zmdi zmdi-check"></i>
+                                </button>
+                            </template>
 
                             <template slot="footer">
                                 <button class="btn btn-link btn-lg btn__add-fight" @click.prevent="openNewFightModal(pool)">
