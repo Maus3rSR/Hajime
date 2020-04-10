@@ -177,10 +177,12 @@ const actions = {
                 this.$notify.success('Les poules ont bien été sauvegardées')
                 return dispatch("LOAD_LIST")
                     .then(() => {
+                        commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING })
                         commit("updateField", { path: 'configuration.locked', value: true })
                         return dispatch("SAVE_CONFIGURATION")
                     })
                     .catch(() => {
+                        commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING })
                         commit("updateField", { path: 'configuration.locked', value: false })
                         dispatch("SAVE_CONFIGURATION")
                         throw new Error()
