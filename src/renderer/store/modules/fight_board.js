@@ -1,4 +1,7 @@
 import { getField, updateField } from 'vuex-map-fields'
+import fight from './fight'
+
+const modules = { fight }
 
 const defaultState = () =>  ({
     loading: false,
@@ -155,7 +158,7 @@ const actions = {
 
         return promise
     },
-    ADD_SCORE({ commit, state, getters, rootGetters }, { from_fighter_id, on_fighter_id, score_type }) {
+    ADD_SCORE({ dispatch, commit, state, getters, rootGetters }, { from_fighter_id, on_fighter_id, score_type }) {
         if (state.fight.locked)
             return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
 
@@ -170,12 +173,7 @@ const actions = {
 
         commit("START_SAVING")
 
-        const promise = rootGetters["database/getModel"]("Score").create({
-            fight_id: parseInt(state.fight.id, 10),
-            from_fighter_id: from_fighter_id,
-            on_fighter_id: on_fighter_id,
-            score_type_id: parseInt(score_type.id, 10)
-        })
+        const promise = dispatch("fight/ADD_SCORE", { fight_id: parseInt(state.fight.id, 10), from_fighter_id, on_fighter_id, score_type_id: parseInt(score_type.id, 10) })
 
         promise
             .catch(() => this.$notify.error("Un problème est survenu lors de l'attribution du score"))
@@ -192,7 +190,7 @@ const actions = {
 
         return promise
     },
-    REMOVE_SCORE({ commit, state, getters, rootGetters }, { fighter_id, score_id }) {
+    REMOVE_SCORE({ dispatch, commit, state, getters }, { fighter_id, score_id }) {
         if (state.fight.locked)
             return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
 
@@ -203,7 +201,7 @@ const actions = {
 
         commit("START_SAVING")
 
-        const promise = rootGetters["database/getModel"]("Score").destroy({ where: { id: parseInt(score_id, 10) } })
+        const promise = dispatch("fight/REMOVE_SCORE", score_id)
 
         promise
             .then(() => commit("REMOVE_SCORE", { 
@@ -268,31 +266,20 @@ const actions = {
 
         return promise
     },
-    VALIDATE({ commit, state, rootGetters }, comment) {
+    VALIDATE({ dispatch, commit, state }, comment) {
         if (state.fight.locked)
             return this.$notify.error("C'est déjà validé ;-)")
 
         if (undefined === state.fight.id)
             return this.$notify.error('Impossible de valider le combat. Il est inexistant')
 
+        const fight_id = parseInt(state.fight.id, 10)
+        const fighter1_id = parseInt(state.fighter1.id, 10)
+        const fighter2_id = parseInt(state.fighter2.id, 10)
+
         commit("START_SAVING")
 
-        const promise = rootGetters["database/instance"].transaction(t => {
-            return rootGetters["database/getModel"]("FighterFightMeta").create({
-                fight_id: parseInt(state.fight.id, 10),
-                fighter1_id: parseInt(state.fighter1.id, 10),
-                fighter2_id: parseInt(state.fighter2.id, 10),
-                locked: true,
-                ...!!comment && {comment: {
-                    commentable_id: parseInt(state.fight.id, 10),
-                    commentable: "FighterFightMeta",
-                    text: comment
-                }}
-            }, {
-                transaction: t,
-                include: "comment"
-            })
-        })
+        const promise = dispatch("fight/LOCK", { fight_id, fighter1_id, fighter2_id, comment })
 
         promise
             .then(fighter_fight_meta => commit("VALIDATED", fighter_fight_meta.get({ plain: true })))
@@ -309,5 +296,6 @@ export default {
     state,
     getters,
     mutations,
-    actions
+    actions,
+    modules
 }

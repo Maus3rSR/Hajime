@@ -48,6 +48,9 @@ const actions = {
         on_fighter_id = on_fighter_id || null
         return rootGetters["database/getModel"]("Score").create({ fight_id, from_fighter_id, on_fighter_id, score_type_id })
     },
+    REMOVE_SCORE({ rootGetters }, score_id) {
+        return rootGetters["database/getModel"]("Score").destroy({ where: { id: parseInt(score_id, 10) } })
+    },
     FIGHTER_ORDER_CHANGE({ rootGetters }, { fight_id, fighter, current_order, new_order }) {
         fighter = JSON.parse(JSON.stringify(fighter))
 
