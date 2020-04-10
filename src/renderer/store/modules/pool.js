@@ -59,7 +59,7 @@ const getters = {
 
         return Math.round(total_finished / total * 100 * 10) / 10
     },
-    has_fight_list: state => state.list.length > 0 && state.list[0].fight_list !== undefined,
+    has_fight_list: state => state.list.length > 0 && !!state.list[0].fight_list,
     existPool: (state, getters) => pool_id => getters.findPoolIndex(pool_id) !== -1,
     findPoolIndex: state => pool_id => state.list.findIndex(el => parseInt(el.id, 10) === parseInt(pool_id, 10)),
     findFightIndex: state => (pool_index, fight_id) => state.list[pool_index].fight_list.findIndex(el => parseInt(el.id, 10) === parseInt(fight_id, 10)),
@@ -351,7 +351,7 @@ const actions = {
 
         return promise
     },
-    ADD_FIGHT({ dispatch, getters, rootGetters }, { entry_left, entry_right }) {
+    ADD_FIGHT({ dispatch, getters, state, rootGetters }, { entry_left, entry_right }) {
         if (undefined === entry_left.pool_id || !getters.existPool(entry_left.pool_id) || undefined === entry_right.pool_id || !getters.existPool(entry_right.pool_id)) {
             this.$notify.error("Impossible de procéder à l'ajout du combat, la poule n'existe pas")
             return Promise.reject()
@@ -365,13 +365,31 @@ const actions = {
         const pool_id = parseInt(entry_left.pool_id, 10)
         const entriable = entry_left.entriable
 
-        const promise = rootGetters["database/getModel"]("Fight").create({
-            fightable_id: pool_id,
-            fightable: "Pool",
-            entriable1_id: parseInt(entry_left.entriable_id, 10),
-            entriable2_id: parseInt(entry_right.entriable_id, 10),
-            entriable,
-            added_manually: true
+        let promise = entriable === "Team" ?
+            Promise.all([
+                rootGetters["database/getModel"]("Fighter").findAll({ where: { team_id: entry_left.entriable_id }, attributes: ["id"] }),
+                rootGetters["database/getModel"]("Fighter").findAll({ where: { team_id: entry_right.entriable_id }, attributes: ["id"] })
+            ]) :
+            Promise.resolve()
+
+        promise = promise.then(result => {
+            return rootGetters["database/instance"].transaction(t => {
+                return rootGetters["database/getModel"]("Fight").create({
+                    fightable_id: pool_id,
+                    fightable: "Pool",
+                    entriable1_id: parseInt(entry_left.entriable_id, 10),
+                    entriable2_id: parseInt(entry_right.entriable_id, 10),
+                    entriable,
+                    added_manually: true,
+                    ...entriable === "Team" && !!result && {
+                        fight_fighter_order_list1: result[0].map((fighter, index) => ({ fighter_id: parseInt(fighter.id, 10), order: index })),
+                        fight_fighter_order_list2: result[1].map((fighter, index) => ({ fighter_id: parseInt(fighter.id, 10), order: index }))
+                    }
+                }, {
+                    transaction: t,
+                    include: ["fight_fighter_order_list1", "fight_fighter_order_list2"]
+                })
+            })
         })
 
         promise

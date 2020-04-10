@@ -80,7 +80,7 @@ export default {
                             @on-fighter-order-add="args => onFighterOrderAdd({ pool_id: pool.id, ...args })"
                         >
 
-                            <template slot="list-footer">
+                            <template slot="footer">
                                 <button class="btn btn-link btn-lg btn__add-fight" @click.prevent="openNewFightModal(pool)">
                                     <i class="zmdi zmdi-plus"></i>
                                     Ajouter un match supplémentaire
@@ -121,7 +121,7 @@ export default {
                             <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_right.color}`">{{ new_fight.marking_board_right.label }}</span>
                         </label>
                         <select class="form-control" v-model="new_fight.entry_right">
-                            <option v-for="pool_entry in new_fight.pool_entry_list" :value="entry" :key="pool_entry.id" :disabled="pool_entry.id === new_fight.entry_left.id">
+                            <option v-for="pool_entry in new_fight.pool_entry_list" :value="pool_entry" :key="pool_entry.id" :disabled="pool_entry.id === new_fight.entry_left.id">
                                 {{ pool_entry.entry.name }}
                             </option>
                         </select>

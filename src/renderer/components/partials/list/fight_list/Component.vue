@@ -217,6 +217,10 @@ export default {
                 <slot name="list-footer"></slot>
             </div>
 
+            <template slot="footer">
+                <slot name="footer"></slot>
+            </template>
+
             <template slot="fighter" slot-scope="props">
                 <span class="row">
                     <div class="col text-right">
