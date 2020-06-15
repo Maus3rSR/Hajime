@@ -134,8 +134,8 @@ const actions = {
             let fight_list = []
 
             try {
-                const fl = new FightLib(pool.entry_list, rootState.configuration.POOL_MIN_NUMBER)
-                fight_list = fl.compile()
+                const fl = new FightLib(pool.entry_list)
+                fight_list = pool.entry_list.length < rootState.configuration.POOL_MIN_NUMBER ? [] : fl.compile()
             } catch (error) {
                 commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING })
                 return Promise.reject(error)

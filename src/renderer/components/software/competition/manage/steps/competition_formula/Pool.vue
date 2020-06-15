@@ -1,14 +1,14 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import PoolConfiguration from './pool/Configuration'
-import PoolViewer from './pool/Viewer'
-import PoolFightList from './pool/FightList'
+import Configuration from './pool/Configuration'
+import Viewer from './pool/Viewer'
+import FightList from './pool/FightList'
 
 export default {
-    components: { PoolConfiguration, PoolViewer, PoolFightList },
+    components: { Configuration, Viewer, FightList },
     props: {
-        competition_formula_id: {
+        formula_id: {
             type: Number,
             required: true
         }
@@ -16,25 +16,25 @@ export default {
     computed: {
         ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),
         ...mapState('pool', {
-            pool_competition_formula_id: state => state.configuration.competition_formula_id,
-            pool_locked: state => state.configuration.locked
+            competition_formula_id: state => state.configuration.competition_formula_id,
+            is_locked: state => state.configuration.locked
         }),
         ...mapGetters({
             entry_count: "competition/entry_present_count",
-            is_pool_loading: "pool/loading",
-            is_pool_list_loading: "pool/list_loading",
-            is_pool_saving: "pool/saving",
-            is_pool_configuration_empty: "pool/is_configuration_empty",
+            is_loading: "pool/loading",
+            is_list_loading: "pool/list_loading",
+            is_saving: "pool/saving",
+            is_configuration_empty: "pool/is_configuration_empty",
             finished_percentage: "pool/finished_percentage"
         }),
         has_enough_entry() {
             return this.entry_count >= this.COMPETITION_MINIMUM_ENTRANT
         },
-        pool_list_validated() {
-            return this.pool_locked && !this.is_pool_saving
+        list_validated() {
+            return this.is_locked && !this.is_saving
         },
-        pool_tab_title() {
-            return this.pool_list_validated ? "Liste des poules" : "Tirage au sort"
+        tab_title() {
+            return this.list_validated ? "Liste des poules" : "Tirage au sort"
         },
         fight_list_tab_style() {
             return {
@@ -45,8 +45,8 @@ export default {
     methods: {
         ...mapMutations('fight_board', ["LOCK_FIGHT_BOARD", "UNLOCK_FIGHT_BOARD"]),
         ...mapActions({
-            loadPoolConfiguration: "pool/LOAD_CONFIGURATION",
-            loadPoolList: "pool/LOAD_LIST",
+            loadConfiguration: "pool/LOAD_CONFIGURATION",
+            loadList: "pool/LOAD_LIST",
             onFightValidated: "pool/ON_FIGHT_VALIDATED",
             onScoreFightUpdated: "pool/ON_SCORE_FIGHT_UPDATED"
         }),
@@ -58,9 +58,8 @@ export default {
         return {}
     },
     created() {
-        if (this.competition_formula_id !== this.pool_competition_formula_id)
-            this.loadPoolConfiguration(this.competition_formula_id).then(() => 
-                this.loadPoolList(this.competition_formula_id))
+        if (this.formula_id !== this.competition_formula_id)
+            this.loadConfiguration(this.formula_id).then(() => this.loadList(this.formula_id))
 
         this.$ipc.send('check-fight-board-already-opened')
         this.$ipc.on('fight-board-opened', (e, fight_board_id) => this.LOCK_FIGHT_BOARD(fight_board_id))
@@ -74,11 +73,11 @@ export default {
 <template>
     <div class="competition__manage__pool">
         <transition name="fade" mode="out-in" appear>
-            <div v-if="is_pool_configuration_empty" class="text-center">
+            <div v-if="is_configuration_empty" class="text-center">
                 <h1>Aucune données de poule... :'(</h1>
             </div>
 
-            <clip-loader v-else-if="is_pool_loading || is_pool_list_loading" :color="'#fff'"></clip-loader>
+            <clip-loader v-else-if="is_loading || is_list_loading" :color="'#fff'"></clip-loader>
 
             <span v-else>
                 <transition name="fade" mode="out-in" appear>
@@ -88,20 +87,20 @@ export default {
                                 <b-tabs @input="onTabShown" pills card vertical>
                                     <b-tab active>
                                         <template slot="title">
-                                            {{ pool_tab_title }}
+                                            {{ tab_title }}
                                         </template>
 
-                                        <pool-configuration v-if="!pool_list_validated" />
-                                        <pool-viewer v-else />
+                                        <configuration v-if="!list_validated" />
+                                        <viewer v-else />
                                     </b-tab>
-                                    <b-tab :disabled="!pool_locked || is_pool_saving">
+                                    <b-tab :disabled="!is_locked || is_saving">
                                         <template slot="title">
-                                            <i v-if="!pool_locked" class="zmdi zmdi-block"></i>
+                                            <i v-if="!is_locked" class="zmdi zmdi-block"></i>
                                             <span class="nav-link__progress" :style="fight_list_tab_style"></span>
                                             Combats
                                         </template>
 
-                                        <pool-fight-list v-if="pool_locked" />
+                                        <fight-list v-if="is_locked" />
                                     </b-tab>
                                 </b-tabs>
                             </div>

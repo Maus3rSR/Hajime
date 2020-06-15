@@ -1,11 +1,10 @@
 export default class FightLib {
     
-    constructor(entry_list, min_per_pool) {
+    constructor(entry_list) {
         if (!Array.isArray(entry_list))
             throw new Error("entry_list is not an array")
         
         this.matrix = {}
-        this.min_per_pool = min_per_pool
         this.entry_list = entry_list
         this.createMatrix()
     }
@@ -33,14 +32,11 @@ export default class FightLib {
         this.entry_list.forEach(entry => this.matrix[entry.number] = this.entry_list.map(e => e.number).filter(n => n !== entry.number))
     }
 
-    getEntry(entry_list, pool_entry_number) {
-        return entry_list.find(entry => entry.number === pool_entry_number)
+    getEntry(entry_list, entry_number) {
+        return entry_list.find(entry => entry.number === entry_number)
     }
 
     compile() {
-        if (this.entry_list.length < this.min_per_pool)
-            return []
-
         const total_fight = this.entry_list.length * (this.entry_list.length - 1) / 2
         let fight_list = []
 

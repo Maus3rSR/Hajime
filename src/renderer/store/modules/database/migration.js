@@ -52,6 +52,7 @@ const actions = {
         status()
             .then(res => commit("SET_STATUS", res))
             .catch(error => {
+                console.log(error)
                 commit("ERROR")
                 this.$notify.error("Une erreur est survenue sur le système de migration")
             })
@@ -65,6 +66,7 @@ const actions = {
         promise
             .then(() => commit("DONE"))
             .catch(error => {
+                console.log(error)
                 commit("ERROR")
                 this.$notify.error("Une erreur est survenue sur le système de migration")
             })

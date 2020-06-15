@@ -133,7 +133,7 @@ export default {
                         <transition name="fade" mode="out-in">
                             <component
                                 :is="step_component_name"
-                                :competition_formula_id="step_component.competition_formula_id"
+                                :formula_id="step_component.competition_formula_id"
                                 
                                 @onValidate="is_last_step ? true : nextStep()" @onBack="previousStep()"
                             ></component>

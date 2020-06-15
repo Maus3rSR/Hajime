@@ -26,11 +26,8 @@ export default {
             pool_list: 'list',
             pool_status: 'status'
         }),
-        list() { // TODO gérer retour liste d'équipes
-            return this.entry_list
-        },
         count() {
-            return this.list.length
+            return this.entry_list.length
         },
         has_enough_entrant() {
             return this.count >= this.COMPETITION_MINIMUM_ENTRANT
@@ -80,9 +77,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            createPool: "pool/CREATE",
-            savePoolConfiguration: "pool/SAVE_CONFIGURATION",
-            loadPoolList: "pool/LOAD_LIST"
+            create: "pool/CREATE",
+            saveConfiguration: "pool/SAVE_CONFIGURATION",
         }),
         getNumberOfEntrantPerPool(number_of_pool) {
             return parseInt(this.count / number_of_pool, 10)
@@ -90,15 +86,15 @@ export default {
         getNumberOfEntrantLeft(number_of_pool) {
             return this.count % number_of_pool
         },
-        validatePoolList(pool_list) {
+        validateList(pool_list) {
             if (this.pool_saving)
                 return
 
-            return this.savePoolConfiguration()
+            return this.saveConfiguration()
                 .then(() => {
                     this.pool_status = "NOTHING" // TODO, trouver une solution pour régler ce problème ...
                     this.pool_list = pool_list
-                    return this.createPool()
+                    return this.create()
                 })
         }
     },
@@ -159,7 +155,7 @@ export default {
                     :entry_list="entry_list"
                     :entriable="entriable"
 
-                    @on-validate="validatePoolList"
+                    @on-validate="validateList"
                 />
             </software-container>
         </transition>
