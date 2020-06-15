@@ -1,0 +1,32 @@
+$extended-theme-bgs: (
+  "competition": 'competition-bg.png',
+  "graduation": 'passage-grade-bg.png'
+);
+
+[data-sa-theme-extended] {
+    &::before {
+        content: "";
+        display: block;
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        z-index: 0;
+        opacity: 0;
+        -webkit-transition: all 1s ease-in-out;
+        transition: opacity 1s ease-in-out;
+        background-size: cover;
+        background-position: center;
+        filter: blur(3px);
+        -webkit-filter: blur(3px);
+    }
+}
+
+@each $bg, $bgimg in $extended-theme-bgs {
+    [data-sa-theme-extended="#{$bg}"] {
+        &::before {
+            opacity: 1;
+            background-image: url('~@images/software/#{$bgimg}');
+        }
+    }
+}
+  

@@ -1,0 +1,35 @@
+{
+    "list" : [{
+        "name": "Men",
+        "code": "M",
+        "visible": 1
+    },{
+        "name": "Kote",
+        "code": "K",
+        "visible": 1
+    },{
+        "name": "Do",
+        "code": "D",
+        "visible": 1
+    },{
+        "name": "Tsuki",
+        "code": "T",
+        "visible": 1
+    },{
+        "name": "Hantei",
+        "code": "Ht",
+        "visible": 1
+    }, {
+        "name": "Hansokku",
+        "code": "&#9651",
+        "visible": 1
+    },{
+        "name": "Ippon Hansokku",
+        "code": "H",
+        "visible": 0
+    }, {
+        "name": "Ippon",
+        "code": "O",
+        "visible": 0
+    }]
+}

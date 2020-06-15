@@ -1,0 +1,10 @@
+.close {
+  @include transition(opacity 300ms);
+  cursor: pointer;
+  color: $secondary;
+
+  &, &:hover {
+    opacity: 1;
+    color: $secondary;
+  }
+}

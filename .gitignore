@@ -1,6 +1,10 @@
 # ############
 # Project
 # ############
+.vscode
+*.bak
+*.hot*
+.env*.local
 # ############
 # Windows
 # ############
@@ -60,11 +64,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 # ############
-# Electron-vue
+# Electron
 # ############
 .DS_Store
-dist/electron/*
-dist/web/*
+dist/
 build/*
 !build/icons
 coverage

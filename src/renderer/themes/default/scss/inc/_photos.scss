@@ -1,0 +1,13 @@
+.photos {
+  margin: 0 -4px;
+
+  & > a {
+    padding: 0;
+    border: 4px solid transparent;
+
+    img {
+      border-radius: $border-radius;
+      width: 100%;
+    }
+  }
+}

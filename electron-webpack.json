@@ -1,0 +1,5 @@
+{
+    "renderer": {
+        "webpackConfig": "webpack/webpack.renderer.additions.js"
+    }
+}

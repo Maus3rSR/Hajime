@@ -1,0 +1,118 @@
+.listview__header {
+  color: $headings-color;
+  text-transform: uppercase;
+  padding: 1.2rem 1rem 1rem;
+  border-bottom: 1px solid $border-lightest;
+  text-align: center;
+
+  .actions {
+    position: absolute;
+    top: 0.8rem;
+    right: 1rem;
+  }
+}
+
+.listview__scroll {
+  overflow-y: auto;
+}
+
+.listview__item {
+  padding: 15px $card-spacer-x;
+  @include transition(background-color 300ms, border-color 300ms);
+}
+
+.listview:not(.listview--block) {
+  .listview__item {
+    display: flex;
+    @include media-breakpoint-up(md) {
+      align-items: center;
+    }
+  }
+}
+
+.listview__img {
+  height: 3rem;
+  border-radius: $border-radius;
+  vertical-align: top;
+  margin: -0.1rem 1.2rem 0 0;
+}
+
+.listview__content {
+  flex: 1;
+  min-width: 0;
+
+  & > p {
+    @include text-truncate();
+    color: $text-muted;
+    margin-bottom: 0;
+  }
+}
+
+.listview__heading {
+  font-size: 1rem;
+  color: $headings-color;
+  position: relative;
+
+  &:hover {
+    color: $white;
+  }
+
+  & > small {
+    float: right;
+    color: $text-muted;
+    font-weight: $font-weight-bold;
+    font-size: 0.85rem;
+    margin-top: 0.1rem;
+  }
+
+  & + p {
+    margin: 0.2rem 0 0;
+    font-size: 0.95rem;
+  }
+}
+
+.listview__attrs {
+  flex: 1 100%;
+  margin-top: 0.7rem;
+
+  & > span {
+    padding: 0.55rem 0.7rem 0.6rem;
+    border: 1px solid $border-light;
+    display: inline-block;
+    line-height: 100%;
+    font-size: 0.9rem;
+    margin: 0.2rem 0.05rem 0.055rem 0;
+  }
+}
+
+// Listview modifier classes
+.listview--hover {
+  .listview__item {
+    &:hover {
+      border-color: transparent !important;
+      background-color: $listview-item-hover-bg;
+    }
+  }
+}
+
+.listview--striped {
+  .listview__item:nth-child(even) {
+    background-color: $listview-item-striped-bg;
+  }
+}
+
+.listview__item--active {
+  background-color: $listview-item-active-bg;
+}
+
+.listview--bordered {
+  .listview__item + .listview__item {
+    border-top: 1px solid rgba($white, 0.05);
+  }
+}
+
+.listview__actions {
+  margin-left: auto;
+  align-self: flex-start;
+  margin-right: -1rem;
+}

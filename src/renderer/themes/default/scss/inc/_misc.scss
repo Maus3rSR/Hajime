@@ -1,0 +1,163 @@
+// View More Link
+.view-more {
+  display: block;
+  padding: 1.1rem 0;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: $font-weight-bold;
+  @include transition(color 300ms);
+  color: $text-muted;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.load-more {
+  text-align: center;
+  margin-top: 2rem;
+
+  & > a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 2px solid rgba($black, 0.065);
+    border-radius: $border-radius;
+    color: $body-color;
+    @include transition(border-color 300ms);
+
+    & > i {
+      font-size: 1.2rem;
+      vertical-align: middle;
+      margin: 0 0.3rem 0 -0.1rem;
+      @include transition(transform 300ms);
+    }
+
+    &:hover {
+      border-color: rgba($black, 0.12);
+
+      & > i {
+        transform: rotate(-360deg);
+      }
+    }
+  }
+}
+
+.card-body {
+  .view-more {
+    padding: 1rem 0 0;
+  }
+}
+
+// Action Icons
+.actions {
+  & > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.actions__item {
+  line-height: 35px;
+  text-align: center;
+  font-size: 1.55rem;
+  cursor: pointer;
+  color: $body-color;
+  @include transition(background-color 300ms, color 300ms);
+  @include size(35px, 35px);
+  border-radius: 50%;
+
+  &.show,
+  &:hover {
+    background-color: $bg-highlighted-light;
+    color: $white;
+  }
+
+  & > i {
+    display: inline-block;
+    width: 100%;
+  }
+}
+
+.actions__item--active {
+  background-color: $bg-highlighted-light;
+}
+
+
+// Icon Lists
+.icon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  & > li {
+    position: relative;
+    padding: 0.3rem 0;
+
+    address {
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    & > i {
+      width: 2.5rem;
+      text-align: center;
+      font-size: 1.25rem;
+      top: 0.12rem;
+      position: relative;
+      margin-left: -0.5rem;
+    }
+  }
+}
+
+
+// Avatars
+.avatar-img,
+.avatar-char {
+  border-radius: $border-radius;
+  @include size(3rem, 3rem);
+  margin-right: 1.2rem;
+}
+
+.avatar-char {
+  line-height: 2.9rem;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  text-align: center;
+  color: $white;
+  background-color: $bg-highlighted-light;
+  font-style: normal;
+
+  & > .zmdi {
+    line-height: 3.1rem;
+  }
+}
+
+
+// Backdrops
+.sa-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  @include size(100%, 100%);
+  cursor: pointer;
+  z-index: $sidebar-z-index - 1;
+}
+
+
+// Tags
+.tags__body {
+  & > a {
+    display: inline-block;
+    padding: 0.65rem 1rem;
+    border: 2px solid $bg-highlighted-light;
+    color: $body-color;
+    margin: 0 0.3rem 0.5rem 0;
+    @include transition(border-color 300ms);
+
+    &:hover {
+      border-color: rgba($white, 0.2);
+    }
+  }
+}

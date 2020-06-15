@@ -1,0 +1,116 @@
+.dropzone {
+  border: 0;
+  background-color: $bg-highlighted-dark;
+  border-radius: $border-radius;
+  @include transition(border-color 300ms, background-color 300ms);
+  min-height: 50px;
+  position: relative;
+
+
+  &:before {
+    font-family: $font-family-icon;
+    content: '\f22a';
+    font-size: 2rem;
+    color: $body-color;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background-color: $bg-highlighted-light;
+    border-radius: 50%;
+    opacity: 0;
+    @include transition(opacity 300ms);
+  }
+
+  .dz-preview {
+    &.dz-file-preview,
+    &.dz-image-preview {
+      .dz-image {
+        border-radius: $border-radius;
+        border: 2px solid $white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .dz-remove {
+      position: absolute;
+      top: -9px;
+      right: -9px;
+      z-index: $header-z-index - 1;
+      font-size: 0;
+      width: 22px;
+      height: 22px;
+      background-color: $red;
+      border-radius: 50%;
+      border: 2px solid $white;
+
+      &:hover {
+        background-color: darken($red, 5%);
+        text-decoration: none;
+      }
+
+      &:before {
+        content: '\f136';
+        font-size: 0.8rem;
+        font-family: $font-family-icon;
+        color: $white;
+        font-weight: bold;
+        line-height: 19px;
+        padding: 0 6px;
+      }
+    }
+  }
+
+  .dz-message {
+    @include transition(opacity 300ms);
+
+    span {
+      color: lighten($body-color, 15%);
+      display: inline-block;
+      border-radius: $border-radius-lg;
+      @include transition(color 300ms, box-shadow, 300ms);
+      padding: 0.5rem 1.4rem 0.8rem;
+      background-color: $bg-highlighted-light;
+
+      &:before {
+        content: '\f21e';
+        font-family: $font-family-icon;
+        font-size: 1.4rem;
+        display: inline-block;
+        position: relative;
+        top: 2px;
+        margin-right: 0.8rem;
+      }
+    }
+  }
+
+  &:hover {
+    .dz-message {
+      span {
+        color: $body-color;
+      }
+    }
+  }
+
+  &:hover,
+  &.dz-drag-hover {
+    background-color: rgba($black, 0.25);
+  }
+
+  &.dz-drag-hover {
+    .dz-message {
+      opacity: 0;
+    }
+
+    &:before {
+      opacity: 1;
+    }
+  }
+}
+

@@ -1,0 +1,50 @@
+.todo__item {
+  padding-left: 4.5rem;
+  display: block;
+
+  small {
+    display: block;
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+  }
+
+  .custom-control-input {
+    &:checked {
+      & ~ .todo__info {
+        text-decoration: line-through;
+      }
+
+      & ~ .custom-control--char__helper {
+        & > i {
+
+        }
+      }
+    }
+  }
+}
+
+.todo__info {
+  & > span {
+    color: $headings-color;
+  }
+
+  & > small {
+    color: $text-muted;
+  }
+}
+
+.todo__labels {
+  & > a {
+    color: $white;
+    background-color: $bg-highlighted-light;
+    border-radius: $border-radius;
+    padding: 0.55rem 0.9rem;
+    display: inline-block;
+    margin: 0 0.1rem 0.4rem;
+    @include transition(background-color 300ms);
+
+    &:hover {
+      background-color: rgba($white, 0.1);
+    }
+  }
+}

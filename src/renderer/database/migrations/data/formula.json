@@ -1,0 +1,12 @@
+{
+    "list" : [{
+        "name": "Poule",
+        "component_list": "[\"Pool\"]"
+    }, {
+        "name": "Arbre éliminatoire",
+        "component_list": "[\"Tree\"]"
+    }, {
+        "name": "Poule & Arbre éliminatoire",
+        "component_list": "[\"Pool\", \"Tree\"]"
+    }]
+}
