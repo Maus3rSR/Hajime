@@ -1,1 +1,0 @@
-© Copyright since 2019 Kevin UNFRICHT, all rights reserved.
