@@ -10,7 +10,7 @@ If you have a **general question** about **Hajime**, [you can send me an email][
 
 ## Fork & create a branch
 
-If this something you can contribute, then [fork Hajime] and create a branch with a descriptive name.
+If this something you can contribute, then [fork Hajime][repo-fork] and create a branch with a descriptive name.
 
 A good branch name would be (where issue #123 is the ticket you're working on):
 ```
