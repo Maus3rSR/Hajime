@@ -1,64 +1,95 @@
-# Installation du projet
+![MIT License][badge-license]
 
-## Dépendances système
+# Hajime
 
-Installer ces dépendances système permettant de développer sur le projet
+Hajime is an Electron application for managing Kendo's competition
 
-* [NodeJS](https://nodejs.org/en/) : Permet d'exécuter javascript hors d'un navigateur
-* [Yarn](https://yarnpkg.com/lang/en/) : Gestionnaire de modules de nodeJS (plus fiable que `npm`)
+# Project status
 
-## GIT
+The project is currently slowed down due to lack of resources _(currently only the main author is working on **Hajime**)_:
+- Developers that want to contribute to the project
+- Donations that can help actively growing the project and finish the MVP that every Kendo's dojo can use it in a Kendo's competition event
 
-Faire un git clone ou git pull sur votre ordinateur
+# Roadmap (MVP)
 
-## Installation des paquets
+TODO: add more details, explanations, images
 
-Lancer la commande `yarn`
+* :white_check_mark: Create competition workflow
+  * :white_check_mark: General informations
+  * :white_check_mark: Importing fighters or teams
+  * :white_check_mark: Setup the competition formula _(rules)_
+* Competition **'D-Day'** workflow
+  * :white_check_mark: Fighters/Teams list review and lock
+  * :white_check_mark: Pools _(Todo: more detail)_
+  * Tournament bracket in the same UX/UI than Pools _(Todo: more detail)_
+* i18n _(:fr:, :gb: for the begining)_
+* Marking board
+* Live-scoring application
+  * Slave application connected to a master application through [socket.io](https://socket.io/)
+  * Must work without internet (local network)
+  * Reflexion about making an mobile / tablet app (using Flutter, React Native, etc.) or keep using Electron as it can be installed on a windows tablet (can be enough)
+  * It should shared a part of the components as we already handle list of fights, fight scoring, etc...
 
-# Détails techniques du projet
+## Scoring application
 
-## Technologies et librairies utilisées
+# Installation
 
-* [Electron](https://electronjs.org/) : basé sur NodeJS et Chromium, permet de créer des applications hybride multi OS
-* [Webpack](https://webpack.js.org/) : Permet de compiler les ressources de tout types et endroits (`.js, .vue, .css, .sass, .png, .jpg`, etc...) en quelques fichiers statiques
-* [Electron-Webpack](https://webpack.electron.build/) : Permet de s'affranchir des difficultés que nécéssite la configuration webpack adaptée à Electron et permet de facilement étendre sa configuration au besoin
-* [Vuejs](https://fr.vuejs.org/v2/guide/) : Permet de créer des interfaces utilisateurs réactives
-* [Vuex](https://vuex.vuejs.org/) : Gestionnaire d'état de données de Vuejs
-* [Vue-router](https://router.vuejs.org/) : Système de routes de vue pour les applications mono-page
-* [Bootstrap](https://getbootstrap.com/) : Framework CSS
-* [Bootstrap-Vue](https://bootstrap-vue.js.org/) : Permet de facilement utiliser les composants dynamiques bootstrap avec Vue (modal, tooltip, popover, etc... et d'éviter d'utiliser d'autres fichiers javascript de bootstrap qui utilisent des dépendances que nous ne voulons pas)
-* [Thème super-admin](http://byrushan.com/projects/super-admin/app/2.1/index.html) : Un joli thème fait sur Bootstrap
-* [Material icon](http://zavoloklom.github.io/material-design-iconic-font/) : Librairie d'icônes utilisé par le thème
-* [Sass](https://sass-lang.com/documentation/syntax) : Permet d'écrire du CSS dynamique, avec variables, etc... et avec une syntaxe plus robuste et flexible
-* [Sequelize](https://sequelize.org/v5/) : [ORM](https://www.base-de-donnees.com/orm/) basé sur NodeJS pour communiquer avec une base de données
+## Dependancies
 
-## Arborescence du projet
+You need to install these dependancies to launch the project
 
-* `.git` : contient les fichiers git locaux
-* `/dist` : contient les fichiers lorsque l'on fait un build pour créer un éxécutable de production
-* `/node_modules` : contient toutes dépendances du projet définis dans le package.json. Chaque module peut également avoir des sous-dépendances, ils sont tous placés dans ce dossier
-* `/src` : contient les fichiers sources du projet
-  * `/src/main` : [processus principal](https://electronjs.org/docs/tutorial/application-architecture). Contient le code qui permet de créer le GUI Electron
-  * `/src/renderer` : [processus de rendu](https://electronjs.org/docs/tutorial/application-architecture). Contient le code source contenu dans le GUI principal d'Electron. 90% du code sera situé à ce niveau
-    * `/src/renderer/index.js` : Point d'entrée de l'application
-    * `/src/renderer/App.vue` : Point d'entrée de l'application vue. Nous faisons donc ici une [SPA](https://fr.wikipedia.org/wiki/Application_web_monopage) (Application mono-page)
-    * `/src/renderer/assets` : Contient différentes ressources (images, css, fonts, etc...)
-    * `/src/renderer/components` : Composants VueJS organisés selon une arborescence arbitraire
-    * `/src/renderer/database` : Contient les éléments permettant de se connecter à une base de données via `Sequelize` et également de faire un système de migration, si souhaité
-    * `/src/renderer/plugins` : Plugins VueJS permettant de les utiliser dans n'importe quel composant Vue
-    * `/src/renderer/router` : Contient le fichier de configuration de Vue-router
-    * `/src/renderer/store` : Contient les éléments pour Vuex
-* `/webpack/webpack.renderer.additions.js` : contient une configuration étendue à webpack
-* `.env` : permet de définir des variables d'environnement
-* `package.json` : descripteur du projet pour nodejs et parfois utilisé par les dépendances basées sur nodejs
+* [NodeJS](https://nodejs.org/en/)
+* [Yarn](https://yarnpkg.com/lang/en/) (More reliable than `npm` to manage packages)
+
+Then you need to install the project dependancies by launching `yarn`
 
 ## Scripts
 
-En ligne de commande, vous serez en mesure de lancer plusieurs scripts "raccourcis" définis dans `package.json` :
-- `dev` : Permet de lancer Electron en mode développement. Vous bénéficiez également un système de mise à jour automatique pendant que vous écrivez du code, ce code modifié sera directement injecté et vous aurez pas besoin de lancer ce script à chaque fois. Merci Electron-webpack ;-)
-- `compile` : Permet de compiler un paquet du code source
-- `build` : Créer un exécutable installable sur le système courant
-- `build:fast` : Pareil que build mais plus rapide à des fins de test en mode production
-- `postinstall` : Compile les dépendances binaires (par exemple les drivers mysql, sqlite, etc...)
+Defined in  `package.json` :
+- `yarn dev` : launch the application in development mode
+- `compile` : Compile source code with webpack
+- `build` : Create an executable installation on the current OS environment
+- `build:fast` : Faster build only for test purposes in production mode
+- `postinstall` : Compile binaries dependancies (eg. drivers like mysql, sqlite, etc.)
 
-Il suffira de lancer la commande `yarn dev` par exemple, pour lancer l'application.
+# Technical details of the project
+
+## Main technologies and libraries
+
+* [Electron](https://electronjs.org/)
+* [Webpack](https://webpack.js.org/)
+* [Electron-Webpack](https://webpack.electron.build/)
+* [Vuejs](https://fr.vuejs.org/v2/guide/)
+* [Vuex](https://vuex.vuejs.org/)
+* [Vue-router](https://router.vuejs.org/)
+* [Bootstrap](https://getbootstrap.com/)
+* [Bootstrap-Vue](https://bootstrap-vue.js.org/)
+* [Bootstrap theme](http://byrushan.com/projects/super-admin/app/2.1/index.html)
+* [Material icon](http://zavoloklom.github.io/material-design-iconic-font/)
+* [Sass](https://sass-lang.com/documentation/syntax)
+* [Sequelize](https://sequelize.org/v5/)
+
+## Directory structure
+
+* `/dist` : contain production files when `yarn build` was used
+  * `/src/main` : [main process](https://electronjs.org/docs/tutorial/application-architecture) of Electron
+  * `/src/renderer` : [render process](https://electronjs.org/docs/tutorial/application-architecture) of Electron
+    * `/src/renderer/index.js` : Entry point
+    * `/src/renderer/App.vue` : Vue JS entry point
+    * `/src/renderer/assets` : Images, fonts, etc...
+    * `/src/renderer/components` : VueJS screens. (TODO: should rename this folder to `screens`)
+    * `/src/renderer/database` : Contain all files related to the database. models definition, sequelize, migrations
+    * `/src/renderer/plugins` : Custom Vue JS components loaded as a plugin
+    * `/src/renderer/router` : Vue-router configuration files
+    * `/src/renderer/store` : Vuex files
+* `/database` : Mysql workbench files
+* `/webpack/webpack.renderer.additions.js` : Webpack's override configuration
+* `.env` : environment variables
+
+## Contributing
+
+You can contribute to **Hajime** by following [CONTRIBUTING.MD][contributing]
+
+[//]: # (List of reference)
+[contributing]: https://github.com/Maus3rSR/Hajime/blob/master/CONTRIBUTING.md
+[badge-license]: https://img.shields.io/github/license/Maus3rSR/hajime?style=flat-square
