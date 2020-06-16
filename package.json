@@ -7,13 +7,13 @@
         "email": "unfricht.kevin@hotmail.fr"
     },
     "license": "SEE LICENSE IN LICENSE.md",
-    "homepage": "https://framagit.org/kendo/askc.git",
+    "homepage": "https://github.com/Maus3rSR/Hajime.git",
     "repository": {
         "type": "git",
-        "url": "https://framagit.org/kendo/askc.git"
+        "url": "https://github.com/Maus3rSR/Hajime.git"
     },
     "build": {
-        "appId": "com.askc.app",
+        "appId": "com.hajime.app",
         "publish": {
             "provider": "generic",
             "url": "BUILD_PUBLISH_URL_AUTO_GENERATED"
