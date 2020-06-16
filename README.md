@@ -21,6 +21,7 @@ TODO: add more details, explanations, images
 * Competition **'D-Day'** workflow
   * :white_check_mark: Fighters/Teams list review and lock
   * :white_check_mark: Pools _(Todo: more detail)_
+  * :white_check_mark: Fight scoring
   * Tournament bracket in the same UX/UI than Pools _(Todo: more detail)_
 * i18n _(:fr:, :gb: for the begining)_
 * Marking board
