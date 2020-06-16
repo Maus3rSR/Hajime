@@ -8,6 +8,8 @@ If you have noticed a :bug: or have a **feature request**, [submit an issue][git
 
 If you have a **general question** about **Hajime**, [you can send me an email][author-email].
 
+Also be sure to take note of our [code of conduct][code-of-conduct].
+
 ## Fork & create a branch
 
 If this something you can contribute, then [fork Hajime][repo-fork] and create a branch with a descriptive name.
@@ -65,6 +67,7 @@ git push --force-with-lease 123-add-japanese-translations
 * CI/CD
 
 [//]: # (List of reference)
+[code-of-conduct]: https://github.com/Maus3rSR/Hajime/blob/master/CODE_OF_CONDUCT.md
 [readme]: https://github.com/Maus3rSR/Hajime/blob/master/README.md
 [repo-fork]: https://help.github.com/en/github/getting-started-with-github/fork-a-repo
 [repo-pr]: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
