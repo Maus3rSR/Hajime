@@ -92,5 +92,5 @@ Defined in  `package.json` :
 You can contribute to **Hajime** by following [CONTRIBUTING.MD][contributing]
 
 [//]: # (List of reference)
-[contributing]: CONTRIBUTING.md
+[contributing]: .github/CONTRIBUTING.md
 [badge-license]: https://img.shields.io/github/license/Maus3rSR/hajime?style=flat-square

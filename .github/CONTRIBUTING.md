@@ -67,7 +67,7 @@ git push --force-with-lease 123-add-japanese-translations
 * CI/CD
 
 [//]: # (List of reference)
-[code-of-conduct]: CODE_OF_CONDUCT.md
+[code-of-conduct]: .github/CODE_OF_CONDUCT.md
 [readme]: README.md
 [repo-fork]: https://help.github.com/en/github/getting-started-with-github/fork-a-repo
 [repo-pr]: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
