@@ -48,6 +48,7 @@ export default {
     <main id="welcome" class="main" data-sa-theme="1">
         <section class="welcome">
             <div class="welcome__inner">
+                <!-- TODO: App name .env -->
                 <h2>Bienvenue sur le logiciel Hajime, Kenshi</h2>
                 <p>C'est la première fois que tu utilises cette application, il faut que tu nous indiques comment fonctionnera le logiciel</p>
                 <hr/>
