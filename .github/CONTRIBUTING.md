@@ -68,7 +68,7 @@ git push --force-with-lease 123-add-japanese-translations
 
 [//]: # (List of reference)
 [code-of-conduct]: .github/CODE_OF_CONDUCT.md
-[readme]: README.md
+[readme]: ../README.md
 [repo-fork]: https://help.github.com/en/github/getting-started-with-github/fork-a-repo
 [repo-pr]: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request
 [author-email]: mailto://unfricht.kevin@hotmail.fr
