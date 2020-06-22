@@ -11,7 +11,7 @@ export default {
         formula_id: {
             type: Number,
             required: true
-        }
+        },
     },
     computed: {
         ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),

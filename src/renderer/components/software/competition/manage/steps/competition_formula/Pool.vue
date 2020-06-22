@@ -11,7 +11,7 @@ export default {
         formula_id: {
             type: Number,
             required: true
-        }
+        },
     },
     computed: {
         ...mapState('configuration', ["COMPETITION_MINIMUM_ENTRANT"]),
@@ -40,6 +40,9 @@ export default {
             return {
                 width: `${this.finished_percentage}%`
             }
+        },
+        is_completed() {
+            return this.finished_percentage === 100;
         }
     },
     methods: {
@@ -96,7 +99,14 @@ export default {
                                     <b-tab :disabled="!is_locked || is_saving">
                                         <template slot="title">
                                             <i v-if="!is_locked" class="zmdi zmdi-block"></i>
-                                            <span class="nav-link__progress" :style="fight_list_tab_style"></span>
+                                            <span
+                                                class="nav-link__progress"
+                                                :class="{'nav-link__progress-finished': is_completed}"
+                                                :style="fight_list_tab_style"
+                                            >
+                                                <i v-if="is_completed" class="zmdi zmdi-check-circle"></i>
+                                            </span>
+
                                             Combats
                                         </template>
 
@@ -108,12 +118,13 @@ export default {
 
                         <div class="row software__container--offset-element">
                             <div class="col">
-                                <button :disabled="true" :class="{'btn-outline-success tada': false}" class="btn float-right animated" @click="true">
-                                    Tour suivant
-                                    <transition name="fade" mode="out-in">
-                                        <i v-if="true" class="zmdi zmdi-arrow-right"></i>
-                                        <clip-loader v-else :size="'14px'"></clip-loader>
-                                    </transition>
+                                <button :disabled="!is_completed" :class="{'btn-outline-success tada': is_completed}" class="btn float-right animated" @click="$emit('onValidate')">
+                                    <slot name="validate-content-button">
+                                        Tour suivant
+                                        <transition name="fade" mode="out-in">
+                                            <i class="zmdi zmdi-arrow-right"></i>
+                                        </transition>
+                                    </slot>
                                 </button>
 
                                 <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">

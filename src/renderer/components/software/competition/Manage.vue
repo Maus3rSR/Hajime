@@ -134,8 +134,10 @@ export default {
                             <component
                                 :is="step_component_name"
                                 :formula_id="step_component.competition_formula_id"
+                                :is_last="is_last_step"
                                 
-                                @onValidate="is_last_step ? true : nextStep()" @onBack="previousStep()"
+                                @onValidate="is_last_step ? true : nextStep()"
+                                @onBack="previousStep()"
                             ></component>
                         </transition>
                     </span>

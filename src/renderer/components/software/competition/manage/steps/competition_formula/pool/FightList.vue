@@ -32,6 +32,9 @@ export default {
                 width: `${this.get_pool_finished_fight_list_percent(pool_id)}%`
             }
         },
+        isPoolFinished(pool_id) {
+            return this.get_pool_finished_fight_list_percent(pool_id) === 100;
+        },
         openNewFightModal(pool) {
             this.new_fight = {
                 entry_left: pool.entry_list[0],
@@ -66,7 +69,14 @@ export default {
                 <b-tabs @input="onTabShown" pills card vertical>
                     <b-tab v-for="(pool, index) in list" :key="index" :active="index === 0">
                         <template slot="title">
-                            <span class="nav-link__progress" :style="getPoolTabStyle(pool.id)"></span>
+                            <span
+                                class="nav-link__progress"
+                                :class="{'nav-link__progress-finished': isPoolFinished(pool.id)}"
+                                :style="getPoolTabStyle(pool.id)"
+                            >
+                                <i v-if="isPoolFinished(pool.id)" class="zmdi zmdi-check-circle"></i>
+                            </span>
+                            
                             Poule n°{{ pool.number }}
                         </template>
                         
