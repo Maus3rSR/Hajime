@@ -93,7 +93,10 @@ Indiquez votre adresse email si souhaité
         },
         openGithubPage() {
             this.$shell.openExternal(process.env.ELECTRON_WEBPACK_GITHUB_PAGE)
-        }
+        },
+        openLicensePage() {
+            this.$shell.openExternal(process.env.ELECTRON_WEBPACK_LICENSE_PAGE)
+        },
     },
     data() {
         return {
@@ -164,7 +167,7 @@ Indiquez votre adresse email si souhaité
                     </button>
                 </div>
                 <div class="col-sm-6 text-right">
-                    <a href="javascript:void(0)" @click.prevent="openAuthorPage" class="badge badge-info">
+                    <a href="javascript:void(0)" @click.prevent="openLicensePage" class="btn btn-sm btn-dark btn--icon-text">
                         MIT License
                     </a>
                     2020 - Made with <span class="text-red">&#10084;</span>
