@@ -53,7 +53,9 @@ export default {
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="col-md-12 col-lg-6">
                 <data-list
                     name="competitionList"
                     title="Liste des compétitions"
@@ -97,8 +99,8 @@ export default {
                 </data-list>
             </div>
 
-            <div class="col-md-12 col-lg-6">
-                <!-- Passage de grade -->
+            <!-- Passage de grade -->
+            <!-- <div class="col-md-12 col-lg-6">
                 <div class="card">
                     <img class="card-img" src="~@images/software/passage-grade-bg.png">
 
@@ -128,7 +130,7 @@ export default {
                     :isDynamic="false"
                 >
                 </data-list>
-            </div>
+            </div> -->
         </div>
 
     </div>
