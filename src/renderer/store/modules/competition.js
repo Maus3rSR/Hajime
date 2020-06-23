@@ -228,6 +228,24 @@ const actions = {
 
         return promise
     },
+    LOCK({ commit, getters, rootGetters, state }) {
+        if (getters.saving)
+            return
+
+        commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING })
+
+        const promise = rootGetters["database/getModel"]("Competition").update({ locked: true }, { where: { id: parseInt(state.model.id, 10) }})
+
+        promise
+            .then(() => {
+                commit("updateField", { path: 'model.locked', value: true })
+                this.$notify.success('La compétition a bien été mise à jour')
+            })
+            .catch(() => this.$notify.error('Un problème est survenu lors du verrouillage de la compétition'))
+            .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))        
+
+        return promise
+    },
     SAVE_FIGHTER({ commit, getters, rootGetters, state }, fighter) {
         if (getters.saving)
             return Promise.reject()

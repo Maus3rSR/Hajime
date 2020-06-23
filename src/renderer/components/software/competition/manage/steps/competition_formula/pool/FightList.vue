@@ -7,6 +7,7 @@ export default {
     components: { FightList },
     computed: {
         ...mapState('pool', ["list"]),
+        ...mapState('competition', { competition: state => state.model }),
         ...mapGetters({
             color_list: "marking_board/color_list",
             has_fight_list: "pool/has_fight_list",
@@ -102,7 +103,7 @@ export default {
                             </template>
 
                             <template slot="footer">
-                                <button class="btn btn-link btn-lg btn__add-fight" @click.prevent="openNewFightModal(pool)">
+                                <button v-if="!competition.locked" class="btn btn-link btn-lg btn__add-fight" @click.prevent="openNewFightModal(pool)">
                                     <i class="zmdi zmdi-plus"></i>
                                     Ajouter un match supplémentaire
                                 </button>

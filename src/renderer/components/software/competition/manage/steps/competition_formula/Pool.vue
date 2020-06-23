@@ -118,14 +118,14 @@ export default {
 
                         <div class="row software__container--offset-element">
                             <div class="col">
-                                <button :disabled="!is_completed" :class="{'btn-outline-success tada': is_completed}" class="btn float-right animated" @click="$emit('onValidate')">
-                                    <slot name="validate-content-button">
-                                        Tour suivant
-                                        <transition name="fade" mode="out-in">
+                                <slot name="confirmation-section">
+                                    <button :disabled="!is_completed" :class="{'btn-outline-success tada': is_completed}" class="btn float-right animated" @click="$emit('onValidate')">
+                                        <slot name="validate-button-content">
+                                            Tour suivant
                                             <i class="zmdi zmdi-arrow-right"></i>
-                                        </transition>
-                                    </slot>
-                                </button>
+                                        </slot>
+                                    </button>
+                                </slot>
 
                                 <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">
                                     <i class="zmdi zmdi-arrow-left"></i>

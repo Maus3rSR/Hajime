@@ -54,6 +54,7 @@ export default {
     },
     methods: {
         ...mapActions({
+            lockCompetition: "competition/LOCK",
             loadCompetition: "competition/LOAD",
             loadFormulaList: "formula/LOAD_ALL",
         }),
@@ -68,7 +69,7 @@ export default {
                 return
 
             this.current_step = step
-        }
+        },
     },
     data() {
         return {
@@ -94,6 +95,17 @@ export default {
                 </empty-placeholder>
                 <empty-placeholder :loaded="!is_competition_empty" :tag="'small'" :width="'5%'" :height="'10px'">
                     Du {{ competition.date | luxon:locale('date_short') }}
+                </empty-placeholder>
+                <empty-placeholder :loaded="!is_competition_empty" :tag="'small'" :width="'5%'" :height="'10px'">
+                    <template v-if="competition.locked">
+                        <span class="badge badge-success">TERMINÉE</span>
+                    </template>
+                    <template v-else-if="competition.locked_entry_list">
+                        <span class="badge badge-warning">EN COURS</span>
+                    </template>
+                    <template v-else>
+                        <span class="badge badge-dark">EN ATTENTE CONFIRMATION COMBATTANTS</span>
+                    </template>
                 </empty-placeholder>
             </template>
 
@@ -136,9 +148,25 @@ export default {
                                 :formula_id="step_component.competition_formula_id"
                                 :is_last="is_last_step"
                                 
-                                @onValidate="is_last_step ? true : nextStep()"
+                                @onValidate="is_last_step ? lockCompetition() : nextStep()"
                                 @onBack="previousStep()"
-                            ></component>
+                            >
+                            
+                                <template v-if="competition.locked" slot="confirmation-section">
+                                    <span class="float-right btn">
+                                        La compétition est clôturée <i class="zmdi zmdi-lock"></i>
+                                    </span>
+                                </template>
+
+                                <template v-if="is_last_step" slot="validate-button-content">
+                                    Clôre la compétition
+                                    <transition name="fade" mode="out-in">
+                                        <clip-loader v-if="is_competition_saving" color="#ffffff" size="14px"></clip-loader>
+                                        <i v-else class="zmdi zmdi-check"></i>
+                                    </transition>
+                                </template>
+                            
+                            </component>
                         </transition>
                     </span>
                 </transition>
@@ -148,9 +176,12 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-h1 {
-    display: inline-block;
-    + small {
+header.content__title {
+    h1 {
+        display: inline-block;
+    }
+
+    small {
         display: inline-block;
         margin: 0;
     }
