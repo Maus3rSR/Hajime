@@ -89,7 +89,10 @@ Indiquez votre adresse email si souhaité
             this.$shell.openExternal(`mailto:${this.mail_to}?subject=${this.mail_subject}&body=${this.mail_body}`)
         },
         openAuthorPage() {
-            this.$shell.openExternal('https://www.linkedin.com/in/kevinunfricht/') // @TODO env
+            this.$shell.openExternal(process.env.ELECTRON_WEBPACK_AUTHOR_PAGE)
+        },
+        openGithubPage() {
+            this.$shell.openExternal(process.env.ELECTRON_WEBPACK_GITHUB_PAGE)
         }
     },
     data() {
@@ -147,7 +150,7 @@ Indiquez votre adresse email si souhaité
         <!-- Footer -->
         <footer id="software__footer" class="footer" v-if="displayFooter">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-sm-6">
                     <button title="Voir la note de version" class="btn btn-sm btn-dark btn--icon-text">
                         {{ $app.version }}
                     </button>
@@ -155,9 +158,16 @@ Indiquez votre adresse email si souhaité
                         <i class="zmdi zmdi-bug"></i>
                         Bug / Suggestion
                     </button>
+                    <button class="btn btn-sm btn-dark btn--icon-text" @click="openGithubPage">
+                        <i class="zmdi zmdi-github"></i>
+                        Github
+                    </button>
                 </div>
-                <div class="col-sm-3 text-right">
-                    © {{ current_year }} - Made with <span class="text-red">&#10084;</span>
+                <div class="col-sm-6 text-right">
+                    <a href="javascript:void(0)" @click.prevent="openAuthorPage" class="badge badge-info">
+                        MIT License
+                    </a>
+                    2020 - Made with <span class="text-red">&#10084;</span>
                     <a id="k_logo" href="javascript:void(0)" @click.prevent="openAuthorPage">
                         <img src="@images/k.png" alt="Kevin UNFRICHT">
                     </a>
