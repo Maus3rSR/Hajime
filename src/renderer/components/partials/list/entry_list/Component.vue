@@ -1,8 +1,9 @@
 <script>
 import { mapGetters } from 'vuex'
+import path from 'path'
+import Papa from 'papaparse'
 import ModalFighter from './modal/Fighter'
 import ModalPreviewCsv from './modal/Csv'
-import Papa from 'papaparse'
 
 export default {
     props: {
@@ -194,6 +195,9 @@ export default {
         },
         deleteFighter(fighter) {
             this.$refs.modalDeleteFighter.show(fighter)
+        },
+        downloadCsvSample() {
+            this.$shell.openItem(path.join(__static, `/import-sample${this.is_team ? '-team' : ''}.csv`));
         },
         previewImport(e) {
             if (!this.can_import)
@@ -411,10 +415,19 @@ export default {
                         v-if="can_import"
 
                         href="javascript:void(0)"
-                        class="actions__item zmdi zmdi-download"
+                        class="actions__item zmdi zmdi-upload"
                         title="Importer une liste existante (fichier .CSV)"
 
                         @click.prevent="onButtonImportClick" 
+                    >
+                    </a>
+
+                    <a
+                        href="javascript:void(0)"
+                        class="actions__item btn-link zmdi zmdi-download"
+                        title="Télécharger un fichier example (fichier .CSV)"
+
+                        @click.prevent="downloadCsvSample" 
                     >
                     </a>
                 </template>
