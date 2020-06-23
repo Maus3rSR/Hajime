@@ -29,7 +29,7 @@ export default {
             return this.total_final_list > 0
         },
         field_list() {
-            let field_list = {
+            return {
                 "name": {
                     label: "Nom",
                     required: true
@@ -45,6 +45,12 @@ export default {
                     replace: {regex: /\s/g, value: '' },
                     validate: /^(?!\s*$).+/
                 },
+                ...this.competition_type == this.constant_type_list.TEAM && {
+                    "team": {
+                        label: "Equipe",
+                        required: true
+                    }
+                },
                 "grade": {
                     label: "Grade"
                 },
@@ -52,11 +58,6 @@ export default {
                     label: "Club"
                 }
             }
-
-            if (this.competition_type == this.constant_type_list.TEAM)
-                field_list["team"] = { label: "Equipe", required: true }
-
-            return field_list
         },
         preview_list() {
             if (!this.number_of_preview)
@@ -235,7 +236,12 @@ export default {
         return {
             list: [],
             cell_error_matrix: {},
-            match_field_list: {},
+            match_field_list: {
+                "0": "name",
+                "1": "birthdate",
+                "2": "license",
+                "3": "team" // automatically ignored by v-model in individual mode
+            },
             import_first_line: false,
             miss_required_field: true,
         }
@@ -275,6 +281,7 @@ export default {
                         <tr>
                             <th v-for="(item, index) in list[0]" :key="'preview-head-'+index">
                                 <select class="form-control" v-model="match_field_list[index]">
+                                    <option value=""></option>
                                     <option v-for="(field, key) in field_list" :key="key" :value="key">
                                         {{ field.label }}
                                         <template v-if="field.required">*</template></option>
