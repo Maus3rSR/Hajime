@@ -153,7 +153,7 @@ Indiquez votre adresse email si souhaité
         <!-- Footer -->
         <footer id="software__footer" class="footer" v-if="displayFooter">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-7">
                     <button title="Voir la note de version" class="btn btn-sm btn-dark btn--icon-text">
                         {{ $app.version }}
                     </button>
@@ -165,11 +165,11 @@ Indiquez votre adresse email si souhaité
                         <i class="zmdi zmdi-github"></i>
                         Github
                     </button>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a href="javascript:void(0)" @click.prevent="openLicensePage" class="btn btn-sm btn-dark btn--icon-text">
+                    <button href="javascript:void(0)" @click.prevent="openLicensePage" class="btn btn-sm btn-dark btn--icon-text">
                         MIT License
-                    </a>
+                    </button>
+                </div>
+                <div class="col-sm-5 text-right">
                     2020 - Made with <span class="text-red">&#10084;</span>
                     <a id="k_logo" href="javascript:void(0)" @click.prevent="openAuthorPage">
                         <img src="@images/k.png" alt="Kevin UNFRICHT">
