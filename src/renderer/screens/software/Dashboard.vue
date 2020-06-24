@@ -44,11 +44,11 @@ export default {
 
                     <div class="card-img-overlay">
                         <div class="card-body">
-                            <h4 class="card-title">Compétition</h4>
+                            <h4 class="card-title">{{ $t("competition.label") }}</h4>
 
                             <router-link class="card-link btn btn-light btn--icon-text" :to="{ name: 'create-competition'}">
                                 <i class="zmdi zmdi-plus"></i>
-                                Créer une nouvelle compétition
+                                {{ $t("competition.create") }}
                             </router-link>
                         </div>
                     </div>

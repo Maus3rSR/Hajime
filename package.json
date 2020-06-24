@@ -53,11 +53,12 @@
         "postinstall": "electron-builder install-app-deps"
     },
     "devDependencies": {
+        "@growthbunker/vueflags": "^0.1.2",
         "@tweenjs/tween.js": "^17.2.0",
         "animate.css": "^3.7.0",
         "axios": "^0.18.0",
         "bootstrap": "^4.3.1",
-        "bootstrap-vue": "^2.0.1",
+        "bootstrap-vue": "^2.15.0",
         "electron": "5.0.6",
         "electron-builder": "^20.39.0",
         "electron-log": "^3.0.8",
@@ -79,6 +80,7 @@
         "vue": "^2.6.10",
         "vue-breadcrumbs": "^1.1.2",
         "vue-good-table": "^2.16.0",
+        "vue-i18n": "^8.18.2",
         "vue-infinite-loading": "^2.4.3",
         "vue-luxon": "^0.7.0",
         "vue-router": "^3.0.2",
@@ -103,7 +105,6 @@
         "sequelize": "^5.19.6",
         "source-map-support": "^0.5.9",
         "sqlite3": "^4.1.0",
-        "umzug": "^2.2.0",
-        "vue-i18n": "^8.18.2"
+        "umzug": "^2.2.0"
     }
 }

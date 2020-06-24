@@ -134,6 +134,10 @@ Indiquez votre adresse email si souhaité
 
             <breadcrumbs></breadcrumbs>
 
+            <div class="top-nav">
+                <lang-switcher />
+            </div>
+
         </header>
 
         <!-- Sidebar -->

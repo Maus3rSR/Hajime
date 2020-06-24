@@ -26,9 +26,7 @@ Vue.app = Vue.prototype.$app = {
 }
 Vue.http = Vue.prototype.$http = axios
 
-Object.keys(plugins).forEach(key => {
-    Vue.use(plugins[key])
-})
+Object.keys(plugins).forEach(key => Vue.use(plugins[key]))
 Vue.use(VeeValidate) // @TODO Problem when loaded as a plugin
 Vue.use(VueMask) // @TODO Problem when loaded as a plugin
 

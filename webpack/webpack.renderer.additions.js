@@ -6,6 +6,7 @@ module.exports = {
             '@src': path.join(__dirname, '../src'),
             '@root': path.join(__dirname, '../src/renderer'),
             '@database': path.join(__dirname, '../src/renderer/database'),
+            '@config': path.join(__dirname, '../src/renderer/config'),
             '@lang': path.join(__dirname, '../src/renderer/lang'),
             '@screens': path.join(__dirname, '../src/renderer/screens'),
             '@partials': path.join(__dirname, '../src/renderer/screens/partials'),

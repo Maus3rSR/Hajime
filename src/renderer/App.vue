@@ -1,5 +1,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
+import { loadLanguageAsync } from '@config/i18n.js'
 
 export default {
     computed: {
@@ -42,6 +43,8 @@ export default {
         },
     },
     created() {
+        loadLanguageAsync(this.$configuration.get("app_lang"))
+
         this.$ipc.on('app-close', () => this.disconnectDb().then(() => this.$ipc.send('closed')))
 
         if (this.isAppFirstEntry() && !this.on_welcome_page)
@@ -49,7 +52,7 @@ export default {
     
         if (!this.on_app_update_page && this.isAppUpdateNeeded())
             this.$router.push('/app/update')
-        
+
         this.checkDbConnection()
     },
     updated() {
@@ -65,6 +68,7 @@ export default {
 <style lang="scss">
     @import "~@themes/default/scss/app.scss";
     @import "~@styles/transitions.scss";
+    @import '~bootstrap-vue/src/index.scss';
 </style>
 
 <style>
