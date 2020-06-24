@@ -78,7 +78,7 @@ Defined in  `package.json` :
     * `/src/renderer/index.js` : Entry point
     * `/src/renderer/App.vue` : Vue JS entry point
     * `/src/renderer/assets` : Images, fonts, etc...
-    * `/src/renderer/components` : VueJS screens. (TODO: should rename this folder to `screens`)
+    * `/src/renderer/screens` : VueJS components which are screens of the app
     * `/src/renderer/database` : Contain all files related to the database. models definition, sequelize, migrations
     * `/src/renderer/plugins` : Custom Vue JS components loaded as a plugin
     * `/src/renderer/router` : Vue-router configuration files

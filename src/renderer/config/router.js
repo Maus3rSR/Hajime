@@ -8,7 +8,7 @@ export default new Router({
         {
             // Software contain the default layout
             path: '/',
-            component: require('@components/layouts/Software').default,
+            component: require('@screens/layouts/Software').default,
             meta: {
                 breadcrumb: 'Accueil',
             },
@@ -16,12 +16,12 @@ export default new Router({
                 {
                     name: 'dashboard',
                     path: '', // root of software
-                    component: require('@components/software/Dashboard').default
+                    component: require('@screens/software/Dashboard').default
                 },
                 {
                     name: 'create-competition',
                     path: 'competition/new',
-                    component: require('@components/software/competition/Create').default,
+                    component: require('@screens/software/competition/Create').default,
                     meta: {
                         breadcrumb: 'Nouvelle compétition',
                         theme: 'competition'
@@ -31,7 +31,7 @@ export default new Router({
                     name: 'manage-competition',
                     path: 'competition/:id',
                     props: true,
-                    component: require('@components/software/competition/Manage').default,
+                    component: require('@screens/software/competition/Manage').default,
                     meta: {
                         breadcrumb: 'Gestion d\'une compétition', // @todo Dynamique
                         theme: 'competition'
@@ -42,22 +42,22 @@ export default new Router({
         {
             path: '/fight/:fight_id/fighter1/:fighter1_id/fighter2/:fighter2_id',
             props: true,
-            component: require('@components/board/Fight').default
+            component: require('@screens/board/Fight').default
         },
         {
             path: '/welcome',
-            component: require('@components/Welcome').default
+            component: require('@screens/Welcome').default
         },
         {
             path: '/app/update',
-            component: require('@components/app/Update').default
+            component: require('@screens/app/Update').default
         },
         {
             path: '/error',
-            component: require('@components/layouts/Error').default,
+            component: require('@screens/layouts/Error').default,
             children: [
-                { path: '404', component: require('@components/error/NotFound').default },
-                { path: 'db', component: require('@components/error/DatabaseConnection').default },
+                { path: '404', component: require('@screens/error/NotFound').default },
+                { path: 'db', component: require('@screens/error/DatabaseConnection').default },
             ]
         },
         { path: '*', redirect: '/error/404' },
