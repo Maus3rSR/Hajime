@@ -63,9 +63,6 @@ export default {
 </template>
 
 <style lang="scss">
-    /**
-     * @todo Le thème pourrait être variable
-     */
     @import "~@themes/default/scss/app.scss";
     @import "~@styles/transitions.scss";
 </style>

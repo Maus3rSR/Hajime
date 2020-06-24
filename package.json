@@ -103,6 +103,7 @@
         "sequelize": "^5.19.6",
         "source-map-support": "^0.5.9",
         "sqlite3": "^4.1.0",
-        "umzug": "^2.2.0"
+        "umzug": "^2.2.0",
+        "vue-i18n": "^8.18.2"
     }
 }

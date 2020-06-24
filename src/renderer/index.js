@@ -5,7 +5,8 @@ import VeeValidate from 'vee-validate'
 import VueMask from 'v-mask'
 
 import App from './App'
-import router from './router'
+import router from './config/router'
+import i18n from './config/i18n'
 import store from './store'
 import plugins from './plugins'
 
@@ -34,5 +35,6 @@ Vue.use(VueMask) // @TODO Problem when loaded as a plugin
 new Vue({
   render: h => h(App),
   router,
+  i18n,
   store,
 }).$mount('#app')
