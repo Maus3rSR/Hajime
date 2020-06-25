@@ -1,14 +1,24 @@
 {
     "gb": {
         "competition": {
-            "label": "competition",
-            "plural": "competitions"
+            "label": "Competition",
+            "plural": "Competitions",
+            "status": {
+                "waiting": "Waiting for fighter's list validation",
+                "ongoing": "Ongoing",
+                "finished": "Finished"
+            }
         }
     },
     "fr": {
         "competition": {
-            "label": "compétition",
-            "plural": "compétitions"
+            "label": "Compétition",
+            "plural": "Compétitions",
+            "status": {
+                "waiting": "En attente confirmation des combattants",
+                "ongoing": "En cours",
+                "finished": "Terminée"
+            }
         }
     }
 }

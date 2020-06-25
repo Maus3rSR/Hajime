@@ -1,12 +1,12 @@
 {
     "gb": {
         "competition": {
-            "create": "create a new @:competition.label"
+            "create": "Create a new @.lower:competition.label"
         }
     },
     "fr": {
         "competition": {
-            "create": "créer une nouvelle @:competition.label"
+            "create": "Créer une nouvelle @.lower:competition.label"
         }
     }
 }

@@ -1,0 +1,28 @@
+{
+    "gb": {
+        "common": {
+            "list": {
+                "of": "List of {item}"
+            },
+            "date": "Date",
+            "name": "Name",
+            "organizer": "Organizer",
+            "place": "Place",
+            "status": "Statuts",
+            "type": "Type"
+        }
+    },
+    "fr": {
+        "common": {
+            "list": {
+                "of": "Liste des {item}"
+            },
+            "date": "Date",
+            "name": "Nom",
+            "organizer": "Organisateur",
+            "place": "Lieu",
+            "status": "Statut",
+            "type": "Type"
+        }
+    }
+}

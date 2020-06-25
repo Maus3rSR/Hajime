@@ -13,12 +13,12 @@ export default {
         }),
         competition_column_list() {
             return [
-                { label: "Nom", field: "name" },
-                { label: "Date", field: "date" },
-                { label: "Lieu", field: "place" },
-                { label: "Organisateur", field: "owner" },
-                { label: "Type", field: "type" },
-                { label: "Statut", field: "status" },
+                { label: this.$t("common.name"), field: "name" },
+                { label: this.$t("common.date"), field: "date" },
+                { label: this.$t("common.place"), field: "place" },
+                { label: this.$t("common.organizer"), field: "owner" },
+                { label: this.$t("common.type"), field: "type" },
+                { label: this.$t("common.status"), field: "status" },
                 { label: "", field: "action-cell" }
             ]
         }
@@ -34,6 +34,7 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
 <i18n src="@lang/generic/competition.json"></i18n>
 <i18n src="@lang/screens/dashboard.json"></i18n>
 
@@ -47,11 +48,11 @@ export default {
 
                     <div class="card-img-overlay">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $t("competition.label") | capitalize }}</h4>
+                            <h4 class="card-title">{{ $t("competition.label") }}</h4>
 
                             <router-link class="card-link btn btn-light btn--icon-text" :to="{ name: 'create-competition'}">
                                 <i class="zmdi zmdi-plus"></i>
-                                {{ $t("competition.create") | capitalize }}
+                                {{ $t("competition.create") }}
                             </router-link>
                         </div>
                     </div>
@@ -61,7 +62,7 @@ export default {
             <div class="col-md-12 col-lg-6">
                 <data-list
                     name="competitionList"
-                    :title="$t('general.listOf', { item: $t('competition.plural') })"
+                    :title="$t('common.list.of', { item: this.$options.filters.lowercase($t('competition.plural')) })"
 
                     @on-load="loadCompetitionList"
 
@@ -82,13 +83,13 @@ export default {
 
                     <template slot="status" slot-scope="props">
                         <template v-if="props.row.locked">
-                            <span class="badge badge-success">TERMINÉE</span>
+                            <span class="badge badge-success">{{ $t('competition.status.finished') | uppercase }}</span>
                         </template>
                         <template v-else-if="props.row.locked_entry_list">
-                            <span class="badge badge-warning">EN COURS</span>
+                            <span class="badge badge-warning">{{ $t('competition.status.ongoing') | uppercase }}</span>
                         </template>
                         <template v-else>
-                            <span class="badge badge-dark">EN ATTENTE CONFIRMATION COMBATTANTS</span>
+                            <span class="badge badge-dark">{{ $t('competition.status.waiting') | uppercase }}</span>
                         </template>
                     </template>
 
