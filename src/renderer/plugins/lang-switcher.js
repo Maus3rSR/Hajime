@@ -1,4 +1,3 @@
-import path from 'path'
 import VueFlags from "@growthbunker/vueflags";
 import { DropdownPlugin } from 'bootstrap-vue'
 import LangSwitcher from './LangSwitcher/Component'

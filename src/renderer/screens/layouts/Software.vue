@@ -132,7 +132,7 @@ Indiquez votre adresse email si souhaité
                 </h1>
             </div>
 
-            <breadcrumbs></breadcrumbs>
+            <breadcrumb />
 
             <div class="top-nav">
                 <lang-switcher />
