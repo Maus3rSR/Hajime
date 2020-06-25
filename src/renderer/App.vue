@@ -1,6 +1,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
-import { loadLanguageAsync } from '@config/i18n.js'
+import { setLanguage } from '@config/i18n.js'
 
 export default {
     computed: {
@@ -43,7 +43,7 @@ export default {
         },
     },
     created() {
-        loadLanguageAsync(this.$configuration.get("app_lang"))
+        setLanguage(this.$configuration.get("app_lang"))
 
         this.$ipc.on('app-close', () => this.disconnectDb().then(() => this.$ipc.send('closed')))
 

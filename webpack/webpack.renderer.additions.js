@@ -21,6 +21,11 @@ module.exports = {
             {
                 test: /\.svg$/,
                 loader: 'file-loader'
+            },
+            {
+                resourceQuery: /blockType=i18n/,
+                type: 'javascript/auto',
+                loader: '@kazupon/vue-i18n-loader'
             }
         ]
     },

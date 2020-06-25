@@ -34,6 +34,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/competition.json"></i18n>
+<i18n src="@lang/screens/dashboard.json"></i18n>
+
 <template>
     <div id="dashboard">
         <div class="row">
@@ -44,11 +47,11 @@ export default {
 
                     <div class="card-img-overlay">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $t("competition.label") }}</h4>
+                            <h4 class="card-title">{{ $t("competition.label") | capitalize }}</h4>
 
                             <router-link class="card-link btn btn-light btn--icon-text" :to="{ name: 'create-competition'}">
                                 <i class="zmdi zmdi-plus"></i>
-                                {{ $t("competition.create") }}
+                                {{ $t("competition.create") | capitalize }}
                             </router-link>
                         </div>
                     </div>
@@ -58,7 +61,7 @@ export default {
             <div class="col-md-12 col-lg-6">
                 <data-list
                     name="competitionList"
-                    title="Liste des compétitions"
+                    :title="$t('general.listOf', { item: $t('competition.plural') })"
 
                     @on-load="loadCompetitionList"
 

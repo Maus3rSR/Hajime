@@ -1,0 +1,12 @@
+{
+    "gb": {
+        "competition": {
+            "create": "create a new @:competition.label"
+        }
+    },
+    "fr": {
+        "competition": {
+            "create": "créer une nouvelle @:competition.label"
+        }
+    }
+}

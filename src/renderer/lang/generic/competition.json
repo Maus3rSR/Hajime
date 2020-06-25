@@ -1,0 +1,14 @@
+{
+    "gb": {
+        "competition": {
+            "label": "competition",
+            "plural": "competitions"
+        }
+    },
+    "fr": {
+        "competition": {
+            "label": "compétition",
+            "plural": "compétitions"
+        }
+    }
+}

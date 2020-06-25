@@ -1,5 +1,5 @@
 <script>
-import { loadLanguageAsync } from '@config/i18n.js'
+import { setLanguage } from '@config/i18n.js'
 
 export default {
     computed: {
@@ -15,7 +15,7 @@ export default {
     },
     methods: {
         switchToLocale(locale) {
-            loadLanguageAsync(locale)
+            setLanguage(locale)
             this.$configuration.set("app_lang", locale)
         }
     }
