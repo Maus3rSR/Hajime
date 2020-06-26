@@ -3,7 +3,7 @@ import { getField, updateField } from 'vuex-map-fields'
 import { COMPETITION_MODE, LOADER_STATUS } from '@root/constant'
 import i18n from '@config/i18n'
 
-i18n.setLocaleMessage("gb", {
+i18n.mergeLocaleMessage("gb", {
     "competition": { 
         "type": {
             "individual": "Individual",
@@ -12,7 +12,7 @@ i18n.setLocaleMessage("gb", {
     }
 })
 
-i18n.setLocaleMessage("fr", {
+i18n.mergeLocaleMessage("fr", {
     "competition": { 
         "type": {
             "individual": "Individuelle",

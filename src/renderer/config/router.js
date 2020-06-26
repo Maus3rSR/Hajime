@@ -4,13 +4,13 @@ import i18n from './i18n'
 
 Vue.use(Router)
 
-i18n.setLocaleMessage("gb", {
+i18n.mergeLocaleMessage("gb", {
     "home": "Dashboard",
     "new-competition": "New competition",
     "manage-competition": "Manage competition"
 })
 
-i18n.setLocaleMessage("fr", {
+i18n.mergeLocaleMessage("fr", {
     "home": "Tableau de bord",
     "new-competition": "Nouvelle compétition",
     "manage-competition": "Gestion de la compétition"
