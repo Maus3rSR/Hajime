@@ -22,14 +22,12 @@ export default new Router({
             // Software contain the default layout
             path: '/',
             component: require('@screens/layouts/Software').default,
+            meta: { breadcrumb: 'home' },
             children: [
                 {
                     name: 'dashboard',
                     path: '', // root of software
                     component: require('@screens/software/Dashboard').default,
-                    meta: {
-                        breadcrumb: 'home',
-                    }
                 },
                 {
                     name: 'create-competition',
