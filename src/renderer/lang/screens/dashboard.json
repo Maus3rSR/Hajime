@@ -1,12 +1,14 @@
 {
     "gb": {
         "competition": {
-            "create": "Create a new @.lower:competition.label"
+            "create": "Create a new @.lower:competition.label",
+            "goto": "Go to the @.lower:competition.label"
         }
     },
     "fr": {
         "competition": {
-            "create": "Créer une nouvelle @.lower:competition.label"
+            "create": "Créer une nouvelle @.lower:competition.label",
+            "goto": "Aller sur la @.lower:competition.label"
         }
     }
 }

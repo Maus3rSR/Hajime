@@ -58,7 +58,6 @@ export default {
                     </div>
                 </div>
             </div>
-
             <div class="col-md-12 col-lg-6">
                 <data-list
                     name="competitionList"
@@ -95,7 +94,7 @@ export default {
 
                     <template slot="action-cell" slot-scope="props">
 
-                        <router-link title="Aller sur la compétition" class="btn btn-sm btn-outline-primary" :to="{ name: 'manage-competition', params: { id: props.row.id } }">
+                        <router-link :title="$t('competition.goto')" class="btn btn-sm btn-outline-primary" :to="{ name: 'manage-competition', params: { id: props.row.id } }">
                             <i class="zmdi zmdi-arrow-right"></i>
                         </router-link>
                     </template>

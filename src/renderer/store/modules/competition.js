@@ -1,6 +1,25 @@
 import { Sequelize } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 import { COMPETITION_MODE, LOADER_STATUS } from '@root/constant'
+import i18n from '@config/i18n'
+
+i18n.setLocaleMessage("gb", {
+    "competition": { 
+        "type": {
+            "individual": "Individual",
+            "team": "Team"
+        }
+    }
+})
+
+i18n.setLocaleMessage("fr", {
+    "competition": { 
+        "type": {
+            "individual": "Individuelle",
+            "team": "Équipe"
+        }
+    }
+})
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,
@@ -32,8 +51,8 @@ const getters = {
     getField,
     constant_type_list: () => COMPETITION_MODE,
     type_list: () => [ // TODO : in database
-        { id: 1, name: "Individuelle", value: COMPETITION_MODE.INDI },
-        { id: 2, name: "Equipe", value: COMPETITION_MODE.TEAM }
+        { id: 1, name: i18n.t("competition.type.individual"), value: COMPETITION_MODE.INDI },
+        { id: 2, name: i18n.t("competition.type.team"), value: COMPETITION_MODE.TEAM }
     ],
     default_type: () => defaultState().type,
     is_empty: state => null === state.model.id,

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import i18n from '@config/i18n'
 import notifyPlugin from '@root/plugins/notify'
 import pdfPlugin from '@root/plugins/pdf'
 import configurationPlugin from '@root/plugins/configuration'
@@ -22,5 +23,7 @@ const store = new Vuex.Store({
 store.$notify = Vue.notify
 store.$pdf = Vue.pdf
 store.$configuration = Vue.configuration
+store.$t = i18n.t
+store.$tc = i18n.tc
 
 export default store
