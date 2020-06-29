@@ -34,17 +34,20 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/create.json"></i18n>
+
 <template>
     <div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <div>
-                        <label for="competition__name" class="card-body__title">Nom *</label>
+                        <label for="competition__name" class="card-body__title">{{ $t("common.name") }} *</label>
                         <input
                             id="competition__name"
                             class="form-control"
-                            placeholder="ex.: Compétition inter-régionales individuelle hommes"
+                            :placeholder="$t('competition-create.placeholder.name')"
                             type="text"
                             name="name"
 
@@ -64,7 +67,7 @@ export default {
             <div class="col-sm-12">
                 <div class="form-group">
                     <div>
-                        <label for="competition__date" class="card-body__title">Date *</label>
+                        <label for="competition__date" class="card-body__title">{{ $t("common.date") }} *</label>
                         <input
                             id="competition__date"
                             class="form-control"
@@ -88,7 +91,7 @@ export default {
 
             <div :class="{ 'col-sm-12': competition.type === constant_type_list.INDI, 'col-sm-6': competition.type === constant_type_list.TEAM }">
                 <div class="form-group">
-                    <span class="card-body__title">Type *</span>
+                    <span class="card-body__title">{{ $t("common.type") }} *</span>
                     <div class="clearfix mt-3">
                         <label class="custom-control custom-radio" v-for="competition_type in type_list" :key="competition_type.value">
                             <input type="radio" name="competition__type" :value="competition_type.value" v-model="type" class="custom-control-input">
@@ -104,7 +107,7 @@ export default {
             <div class="col-sm-6" v-if="competition.type === constant_type_list.TEAM">
                 <div class="form-group">
                     <div>
-                        <label for="competition__team_place_number" class="card-body__title">Nombre de combattants par équipe (hors remplaçant)</label>
+                        <label for="competition__team_place_number" class="card-body__title">{{ $t("competition-create.team-seat") }}</label>
                         <input
                             id="competition__team_place_number"
                             class="form-control"
@@ -125,7 +128,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="competition__place" class="card-body__title">Lieu</label>
+                        <label for="competition__place" class="card-body__title">{{ $t("common.place") }}</label>
                         <input
                             id="competition__place"
                             class="form-control"
@@ -145,7 +148,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="competition__owner" class="card-body__title">Organisateur</label>
+                        <label for="competition__owner" class="card-body__title">{{ $t("common.organizer") }}</label>
                         <input
                             id="competition__owner"
                             class="form-control"
@@ -166,11 +169,11 @@ export default {
 
         <div class="row">
             <div class="col">
-                <span class="text-warning text-sm">Les champs * sont requis</span>
+                <span class="text-warning text-sm">{{ $t("common.form.required") }}</span>
             </div>
             <div class="col">
                 <button :disabled="!step_is_valid" :class="{'btn-outline-success tada': step_is_valid}" type="button" class="btn float-right animated" @click="$emit('onValidate')">
-                    Etape suivante
+                    {{ $t("common.action.step-next") }}
                     <i class="zmdi zmdi-arrow-right"></i>
                 </button>
             </div>

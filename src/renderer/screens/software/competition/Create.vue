@@ -19,16 +19,16 @@ export default {
         step_list() {
             return [
                 {
-                    name: "Informations générales",
+                    name: this.$t("competition-create.step1"),
                     component_name: "Step1"
                 },
                 {
-                    name: "Import des combattants",
+                    name: this.$t("competition-create.step2"),
                     component_name: "Step2",
                     count: this.entry_count
                 },
                 {
-                    name: "Formule de compétition",
+                    name: this.$t("competition-create.step3"),
                     component_name: "Step3"
                 }
             ]
@@ -68,20 +68,24 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/generic/competition.json"></i18n>
+<i18n src="@lang/screens/software/competition/create.json"></i18n>
+
 <template>
     <section id="competition__create">
 
         <header class="content__title">
-            <h1>Nouvelle compétition</h1>
+            <h1>{{ $t('competition.new') }}</h1>
 
             <div class="actions">
                 <router-link to="/" class="btn btn-dark btn--icon-text">
-                    <i class="zmdi zmdi-close"></i> Annuler et revenir à l'écran principal
+                    <i class="zmdi zmdi-close"></i> {{ $t('competition-create.action.cancel-back') }}
                 </router-link>
                 
                 <transition name="fade" mode="out-in">
                     <button v-if="current_step > 1" class="btn btn-dark btn--icon-text" @click.prevent="previousStep()">
-                        <i class="zmdi zmdi-arrow-left"></i> Revenir à l'étape précédente
+                        <i class="zmdi zmdi-arrow-left"></i> {{ $t('common.action.step-back') }}
                     </button>
                 </transition>
             </div>

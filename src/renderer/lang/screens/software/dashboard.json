@@ -1,0 +1,18 @@
+{
+    "gb": {
+        "dashboard": {
+            "competition": {
+                "create": "Create a new @.lower:competition.label",
+                "goto": "Go to the @.lower:competition.label"
+            }
+        }
+    },
+    "fr": {
+        "dashboard": {
+            "competition": {
+                "create": "Créer une nouvelle @.lower:competition.label",
+                "goto": "Aller sur la @.lower:competition.label"
+            }
+        }
+    }
+}

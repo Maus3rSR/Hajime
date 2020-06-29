@@ -3,6 +3,7 @@
         "competition": {
             "label": "Competition",
             "plural": "Competitions",
+            "new": "New competition",
             "status": {
                 "waiting": "Waiting for fighter's list validation",
                 "ongoing": "Ongoing",
@@ -14,6 +15,7 @@
         "competition": {
             "label": "Compétition",
             "plural": "Compétitions",
+            "new": "Nouvelle compétition",
             "status": {
                 "waiting": "En attente confirmation des combattants",
                 "ongoing": "En cours",

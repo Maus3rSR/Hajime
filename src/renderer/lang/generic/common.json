@@ -1,26 +1,70 @@
 {
     "gb": {
         "common": {
-            "list": {
-                "of": "List of {item}"
+            "action": {
+                "set": "Set {adjective}",
+                "step-back": "Back to previous step",
+                "step-next": "Next step",
+                "step-previous": "Previous step"
             },
+            "form": {
+                "required": "* fields are required"
+            },
+            "of": {
+                "list": "List of {item}",
+                "number": "{item} number",
+                "total": "Total of {item}"
+            },
+            "verb": {
+                "is": "Is {something}"
+            },
+            "club": "Club",
             "date": "Date",
+            "date-birth": "Birthdate",
+            "fighter": "Fighter",
+            "fighters": "Fighters",
+            "grade": "Grade",
+            "license": "License",
             "name": "Name",
             "organizer": "Organizer",
             "place": "Place",
+            "presence": "Présence",
+            "readonly": "Readonly",
             "status": "Statuts",
             "type": "Type"
         }
     },
     "fr": {
         "common": {
-            "list": {
-                "of": "Liste des {item}"
+            "action": {
+                "set": "Rendre {adjective}",
+                "step-back": "Revenir à l'étape précédente",
+                "step-next": "Étape suivante",
+                "step-previous": "Étape précédente"
             },
+            "form": {
+                "required": "Les champs * sont requis"
+            },
+            "of": {
+                "list": "Liste des {item}",
+                "number": "N° de {item}",
+                "total": "Total de {item}"
+            },
+            "verb": {
+                "is": "Est {something}"
+            },
+            "club": "Club",
             "date": "Date",
+            "date-birth": "Date de naissance",
+            "fighter": "Combattant",
+            "fighters": "Combattants",
+            "grade": "Grade",
+            "license": "Licence",
             "name": "Nom",
             "organizer": "Organisateur",
             "place": "Lieu",
+            "presence": "Présence",
+            "readonly": "Lecture seule",
             "status": "Statut",
             "type": "Type"
         }

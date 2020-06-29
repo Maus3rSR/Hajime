@@ -58,16 +58,16 @@ export default {
         },
         column_list() {
             let column_list = [
-                { label: 'Combattant', field: 'name' },
-                { label: 'N° de licence', field: 'license' },
-                { label: 'Date de naissance', field: 'birthdate' },
-                { label: 'Grade', field: 'grade' },
-                { label: 'Club', field: 'club' },
-                { label: '', field: 'action-cell' }
+                { label: this.$t("common.fighter"), field: "name" },
+                { label: this.$t("common.of.number", { item: this.$options.filters.lowercase(this.$t("common.license")) }), field: "license" },
+                { label: this.$t("common.date-birth"), field: "birthdate" },
+                { label: this.$t("common.grade"), field: "grade" },
+                { label: this.$t("common.club"), field: "club" },
+                { label: "", field: "action-cell" }
             ]
 
             if (this.make_the_call)
-                column_list.splice(0, 0, { label: 'Présence', field: 'is_present', sortable: false })
+                column_list.splice(0, 0, { label: this.$t("common.presence"), field: "is_present", sortable: false })
 
             return column_list
         },
@@ -386,11 +386,14 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/list/entry.json"></i18n>
+
 <template>
     <div>
         <data-list
             name="fighters"
-            title="Total de combattants"
+            :title="$t('common.of.total', { item: $t('common.fighters') }) | lowercase | capitalize({ onlyFirstLetter: true })"
             ref="FighterList"
 
             :columns="column_list"
@@ -405,7 +408,7 @@ export default {
                     <a
                         href="javascript:void(0)"
                         class="actions__item zmdi zmdi-plus"
-                        title="Ajouter un combattant"
+                        :title="$t('entry-list.action.add')"
 
                         @click.prevent="addFighter"
                     >
@@ -416,7 +419,7 @@ export default {
 
                         href="javascript:void(0)"
                         class="actions__item zmdi zmdi-upload"
-                        title="Importer une liste existante (fichier .CSV)"
+                        :title="$t('entry-list.action.upload')"
 
                         @click.prevent="onButtonImportClick" 
                     >
@@ -425,7 +428,7 @@ export default {
                     <a
                         href="javascript:void(0)"
                         class="actions__item btn-link zmdi zmdi-download"
-                        title="Télécharger un fichier example (fichier .CSV)"
+                        :title="$t('entry-list.action.download')"
 
                         @click.prevent="downloadCsvSample" 
                     >
@@ -434,7 +437,7 @@ export default {
 
                 <span v-else>
                     <i class="zmdi zmdi-lock"></i>
-                    Lecture seule
+                    {{ $t("common.readonly") }}
                 </span>
             </template>
 
@@ -443,7 +446,7 @@ export default {
                     class="zmdi btn btn-sm btn-link"
 
                     :disabled="readonly"
-                    :title="'Rendre ' + (props.row.is_favorite ? 'non favorie' : 'favorie')"
+                    :title="$t('common.action.set', { adjective: $t(props.row.is_favorite ? 'entry-list.unfavorite-team' : 'entry-list.favorite-team') }) | lowercase | capitalize({ onlyFirstLetter: true })"
                     :class="{ 'zmdi-star text-yellow': props.row.is_favorite, 'zmdi-star-outline text-muted': !props.row.is_favorite }"
 
                     @click.prevent="markTeamFavorite(props.row, !props.row.is_favorite)"
@@ -458,7 +461,7 @@ export default {
                     v-if="!is_team"
 
                     :disabled="readonly"
-                    :title="'Rendre ' + (props.row.is_favorite ? 'non favori' : 'favori')"
+                    :title="$t('common.action.set', { adjective: $t(props.row.is_favorite ? 'entry-list.unfavorite-fighter' : 'entry-list.favorite-fighter') }) | lowercase | capitalize({ onlyFirstLetter: true })"
                     :class="{ 'zmdi-star text-yellow': props.row.is_favorite, 'zmdi-star-outline text-muted': !props.row.is_favorite }"
 
                     @click.prevent="markFavorite(props.row, !props.row.is_favorite)"
@@ -477,7 +480,7 @@ export default {
                     
                     v-if="!readonly"
 
-                    :title="'Rendre ' + (props.row.is_present ? 'absent' : 'présent')"
+                    :title="$t('common.action.set', { adjective: $t(props.row.is_present ? 'entry-list.missing' : 'entry-list.present') }) | lowercase | capitalize({ onlyFirstLetter: true })"
                     :class="{ 'zmdi-mood text-success': props.row.is_present, 'zmdi-mood-bad text-danger': !props.row.is_present }"
 
                     @click.prevent="markPresence(props.row, !props.row.is_present)"
@@ -489,16 +492,16 @@ export default {
                     v-else
 
                     :class="{ 'zmdi-mood text-success': props.row.is_present, 'zmdi-mood-bad text-danger': !props.row.is_present }"
-                    :title="'Est ' + (props.row.is_present ? 'présent' : 'absent')"
+                    :title="$t('common.action.is', { adjective: $t(props.row.is_present ? 'entry-list.present' : 'entry-list.missing') }) | lowercase | capitalize({ onlyFirstLetter: true })"
                 ></i>
             </template>
 
             <template v-if="!readonly" slot="action-cell" slot-scope="props">
-                <button title="Modifier ce combattant" class="btn btn-sm btn-outline-primary" @click.prevent="editFighter(props.row)">
+                <button :title="$t('entry-list.action.edit')" class="btn btn-sm btn-outline-primary" @click.prevent="editFighter(props.row)">
                     <i class="zmdi zmdi-edit"></i>
                 </button>
 
-                <button title="Supprimer ce combattant de la liste" class="btn btn-sm btn-outline-danger" @click.prevent="deleteFighter(props.row)">
+                <button :title="$t('entry-list.action.delete')" class="btn btn-sm btn-outline-danger" @click.prevent="deleteFighter(props.row)">
                     <i class="zmdi zmdi-close"></i>
                 </button>
             </template>
@@ -506,7 +509,7 @@ export default {
             <template slot="footer" v-if="make_the_call">
                 <span class="toolbar__label d-none d-sm-inline">
                     <template>
-                        Présent&nbsp;
+                        {{ $t('entry-list.present') }}&nbsp;
                         <span class="badge badge-pill" :class="{ 'badge-success': is_all_present, 'badge-primary': !is_all_present }">
                             <counter :value="present_count" /> / <counter :value="total" />
                         </span>
@@ -514,7 +517,7 @@ export default {
                     
                     <transition name="fade" mode="out-in">
                         <span v-if="!is_all_present">
-                            / Absent&nbsp;
+                            / {{ $t('entry-list.missing') }}&nbsp;
                             <span class="badge badge-pill badge-danger">
                                 <counter :value="missing_count" /> / <counter :value="total" />
                             </span>
@@ -525,11 +528,11 @@ export default {
                 <span v-if="!readonly">
                     <a href="javascript:void(0)" class="btn btn-link" @click.prevent="markAllPresence(true)">
                         <i class="text-success zmdi zmdi-mood"></i>
-                        Tous présent
+                        {{ $t('entry-list.present-all') }}
                     </a>
                     <a href="javascript:void(0)" class="btn btn-link" @click.prevent="markAllPresence(false)">
                         <i class="text-danger zmdi zmdi-mood-bad"></i>
-                        Tous absent
+                        {{ $t('entry-list.missing-all') }}
                     </a>
                 </span>
             </template>

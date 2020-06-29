@@ -39,7 +39,7 @@ export default {
             return this.mode == MODE_TYPE.EDIT
         },
         modal_title() {
-            return this.is_edit_mode ? "Modification d'un combattant" : "Ajout d'un combattant"
+            return this.is_edit_mode ? this.$t('entry-list.action.editing') : this.$t('entry-list.action.adding')
         },
         is_empty_team_option_list() {
             return this.team_option_list.length === 0
@@ -130,6 +130,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/list/entry.json"></i18n>
+
 <template>
     <b-modal class="modal__fighter" :title="modal_title" size="lg" hide-header-close ref="modalFighter" @hide="handleHide">
         <div class="row">
@@ -137,7 +140,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__name">Nom *</label>
+                        <label for="fighter__name">{{ $t('common.name') }} *</label>
                         <input
                             id="fighter__name"
                             class="form-control"
@@ -160,7 +163,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__birthdate">Date de naissance *</label>
+                        <label for="fighter__birthdate">{{ $t('common.date-birth') }} *</label>
                         <input
                             id="fighter__birthdate"
                             class="form-control"
@@ -185,7 +188,7 @@ export default {
             <div class="col-sm-12">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__license">N° licence *</label>
+                        <label for="fighter__license">{{ $t("common.of.number", { item: $t("common.license") }) | lowercase | capitalize({ onlyFirstLetter: true }) }} *</label>
                         <input
                             id="fighter__license"
                             class="form-control"
@@ -208,7 +211,7 @@ export default {
             <div :class="{ 'col-sm-8': !is_edit_mode, 'col-sm-12': is_edit_mode }" v-if="is_team">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__team">Equipe *</label>
+                        <label for="fighter__team">{{ $t('common.team') }} *</label>
                         <select
                             id="fighter__team"
                             class="form-control"
@@ -256,7 +259,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__grade">Grade</label>
+                        <label for="fighter__grade">{{ $t('common.grade') }}</label>
                         <input
                             id="fighter__grade"
                             class="form-control"
@@ -277,7 +280,7 @@ export default {
             <div class="col-sm-6">
                 <div class="form-group">
                     <div>
-                        <label for="fighter__club">Club</label>
+                        <label for="fighter__club">{{ $t('common.club') }}</label>
                         <input
                             id="fighter__club"
                             class="form-control"

@@ -36,7 +36,7 @@ export default {
 
 <i18n src="@lang/generic/common.json"></i18n>
 <i18n src="@lang/generic/competition.json"></i18n>
-<i18n src="@lang/screens/dashboard.json"></i18n>
+<i18n src="@lang/screens/software/dashboard.json"></i18n>
 
 <template>
     <div id="dashboard">
@@ -52,7 +52,7 @@ export default {
 
                             <router-link class="card-link btn btn-light btn--icon-text" :to="{ name: 'create-competition'}">
                                 <i class="zmdi zmdi-plus"></i>
-                                {{ $t("competition.create") }}
+                                {{ $t("dashboard.competition.create") }}
                             </router-link>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ export default {
             <div class="col-md-12 col-lg-6">
                 <data-list
                     name="competitionList"
-                    :title="$t('common.list.of', { item: this.$options.filters.lowercase($t('competition.plural')) })"
+                    :title="$t('common.of.list', { item: this.$options.filters.lowercase($t('competition.plural')) })"
 
                     @on-load="loadCompetitionList"
 
@@ -94,7 +94,7 @@ export default {
 
                     <template slot="action-cell" slot-scope="props">
 
-                        <router-link :title="$t('competition.goto')" class="btn btn-sm btn-outline-primary" :to="{ name: 'manage-competition', params: { id: props.row.id } }">
+                        <router-link :title="$t('dashboard.competition.goto')" class="btn btn-sm btn-outline-primary" :to="{ name: 'manage-competition', params: { id: props.row.id } }">
                             <i class="zmdi zmdi-arrow-right"></i>
                         </router-link>
                     </template>

@@ -20,6 +20,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/create.json"></i18n>
+
 <template>
     <div>
         <div class="row">
@@ -31,13 +34,13 @@ export default {
         <div class="row software__container--offset-element">
             <div class="col">
                 <button :disabled="!step_is_valid" :class="{'btn-outline-success tada': step_is_valid}" class="btn float-right animated" @click="$emit('onValidate')">
-                    Etape suivante
+                    {{ $t("common.action.step-next") }}
                     <i class="zmdi zmdi-arrow-right"></i>
                 </button>
                 
                 <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">
                     <i class="zmdi zmdi-arrow-left"></i>
-                    Etape précédente
+                    {{ $t("common.action.step-previous") }}
                 </button>
             </div>
         </div>

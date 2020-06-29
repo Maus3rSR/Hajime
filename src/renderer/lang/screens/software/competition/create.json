@@ -1,0 +1,32 @@
+{
+    "gb": {
+        "competition-create": {
+            "action": {
+                "cancel-back": "Cancel and come back to main screen",
+                "step-back": "Back to previous step"
+            },
+            "placeholder": {
+                "name": "eg.: Regional invidual woman"
+            },
+            "team-seat": "Fighters number per team (substitude excluded)",
+            "step1": "General information",
+            "step2": "Fighters import",
+            "step3": "Competition formula"
+        }
+    },
+    "fr": {
+        "competition-create": {
+            "action": {
+                "cancel-back": "Annuler et revenir à l'écran principal",
+                "step-back": "Revenir à l'étape précédente"
+            },
+            "placeholder": {
+                "name": "ex. : Compétition inter-régionales individuelle femmes"
+            },
+            "team-seat": "Nombre de combattants par équipe (hors remplaçant)",
+            "step1": "Informations générales",
+            "step2": "Import des combattants",
+            "step3": "Formule de compétition"
+        }
+    }
+}

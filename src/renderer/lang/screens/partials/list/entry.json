@@ -1,0 +1,43 @@
+{
+    "gb": {
+        "entry-list": {
+            "action": {
+                "add": "Add a @.lower:common.fighter",
+                "adding": "Adding a @.lower:common.fighter",
+                "delete": "Delete this @.lower:common.fighter",
+                "edit": "Edit this @.lower:common.fighter",
+                "editing": "Editing a @.lower:common.fighter",
+                "upload": "Upload an entry list (.CSV file)",
+                "download": "Download a sample (.CSV file)"
+            },
+            "present": "Present",
+            "missing": "Missing",
+            "present-all": "All present",
+            "missing-all": "All missing",
+            "unfavorite-team": "Not favorite",
+            "favorite-team": "Favorite",
+            "unfavorite-fighter": "Not favorite",
+            "favorite-fighter": "Favorite"
+        }
+    },
+    "fr": {
+        "entry-list": {
+            "action": {
+                "add": "Ajouter un @.lower:common.fighter",
+                "adding": "Ajout d'un @.lower:common.fighter",
+                "delete": "Supprimer ce @.lower:common.fighter",
+                "edit": "Modifier ce @.lower:common.fighter",
+                "upload": "Importer une liste d'entrées (fichier .CSV)",
+                "download": "Télécharger un fichier example (fichier .CSV)"
+            },
+            "present": "Présent",
+            "missing": "Absent",
+            "present-all": "Tous présent",
+            "missing-all": "Tous absent",
+            "unfavorite-team": "Non favorie",
+            "favorite-team": "Favorie",
+            "unfavorite-fighter": "Non favori",
+            "favorite-fighter": "Favori"
+        }
+    }
+}
