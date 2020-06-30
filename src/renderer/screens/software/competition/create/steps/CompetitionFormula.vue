@@ -52,10 +52,13 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/create.json"></i18n>
+
 <template>
     <div>
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label card-body__title" for="competition_formula">Choisir une formule de compétition</label>
+            <label class="col-sm-3 col-form-label card-body__title" for="competition_formula">{{ $t("competition-create.action.choose-formula") }}</label>
             <div class="col-sm-9">
                 <div v-if="formula_count == 0 && !formula_list_loading" class="h4 alert alert-warning">
                     <i class="zmdi zmdi-alert-triangle"></i>
@@ -84,12 +87,12 @@ export default {
                         <i v-if="!competition_saving" class="zmdi zmdi-check"></i>
                         <clip-loader v-else :size="'14px'"></clip-loader>
                     </transition>
-                    Je confirme la création de la compétition
+                    {{ $t("competition-create.action.confirm") }}
                 </button>
 
                 <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">
                     <i class="zmdi zmdi-arrow-left"></i>
-                    Etape précédente
+                    {{ $t("common.action.step-previous") }}
                 </button>
             </div>
         </div>

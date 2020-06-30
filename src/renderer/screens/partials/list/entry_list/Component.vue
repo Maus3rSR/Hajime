@@ -426,6 +426,8 @@ export default {
                     </a>
 
                     <a
+                        v-if="can_import"
+
                         href="javascript:void(0)"
                         class="actions__item btn-link zmdi zmdi-download"
                         :title="$t('entry-list.action.download')"
@@ -492,7 +494,7 @@ export default {
                     v-else
 
                     :class="{ 'zmdi-mood text-success': props.row.is_present, 'zmdi-mood-bad text-danger': !props.row.is_present }"
-                    :title="$t('common.action.is', { adjective: $t(props.row.is_present ? 'entry-list.present' : 'entry-list.missing') }) | lowercase | capitalize({ onlyFirstLetter: true })"
+                    :title="$t(props.row.is_present ? 'entry-list.is-present' : 'entry-list.is-missing')"
                 ></i>
             </template>
 

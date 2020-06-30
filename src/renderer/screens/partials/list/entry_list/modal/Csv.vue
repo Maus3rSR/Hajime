@@ -31,31 +31,31 @@ export default {
         field_list() {
             return {
                 "name": {
-                    label: "Nom",
+                    label: this.$t("common.name"),
                     required: true
                 },
                 "birthdate": {
-                    label: "Date de naissance (format DD/MM/YYYY)",
+                    label: this.$t("common.date-birth") + " (format DD/MM/YYYY)",
                     required: true,
                     is_date: true
                 },
                 "license": {
-                    label: "Licence",
+                    label: this.$t("common.license"),
                     required: true,
                     replace: {regex: /\s/g, value: '' },
                     validate: /^(?!\s*$).+/
                 },
                 ...this.competition_type == this.constant_type_list.TEAM && {
                     "team": {
-                        label: "Equipe",
+                        label: this.$t("common.team"),
                         required: true
                     }
                 },
                 "grade": {
-                    label: "Grade"
+                    label: this.$t("common.grade")
                 },
                 "club": {
-                    label: "Club"
+                    label: this.$t("common.club")
                 }
             }
         },
@@ -66,7 +66,7 @@ export default {
             return this.list.filter((row, index) => index <= this.number_of_preview)
         },
         modal_title() {
-            return "Prévisualisation de l'import des combattants " + (this.number_of_preview ? (this.number_of_preview+" premières lignes") : "")
+            return this.$t("entry-list.import.preview")
         },
         final_list() {
             if (Object.keys(this.match_field_list).length == 0)
@@ -249,6 +249,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/list/entry.json"></i18n>
+
 <template>
     <b-modal scrollable class="modal__import_csv" :title="modal_title" size="xl" hide-header-close ref="previewCsvModal">
         <div class="row">
@@ -257,15 +260,15 @@ export default {
                     <div class="alert alert-info" v-if="miss_required_field">
                         <div class="alert-heading">
                             <i class="zmdi zmdi-info-outline"></i>
-                            Colonnes requises
+                            {{ $t("entry-list.import.info.required") }}
                         </div>
-                        Veuillez renseignez tous les champs requis par colonne en utilisant les listes déroulante
+                        {{ $t("entry-list.import.info.message") }}
                     </div>
                     <div class="alert alert-danger" v-else-if="number_of_row_not_imported">
                         <div class="alert-heading">
-                            {{number_of_row_not_imported}} ligne(s) / {{ total }} comportent des erreurs et ne seront pas importées
+                            {{ $tc("entry-list.import.error.heading", number_of_row_not_imported, { n: number_of_row_not_imported, total: total }) }}
                         </div>
-                        Veuillez vérifier votre fichier CSV que le format de chaque cellule est correct
+                        {{ $t("entry-list.import.error.message") }}
                     </div>
                 </transition>
             </div>
@@ -295,16 +298,16 @@ export default {
 
         <template slot="modal-footer">
             <div class="mr-auto">
-                * Champs requis
+                {{ $t("common.form.required") }}
 
                 <label class="ml-2 custom-control custom-checkbox">
                     <input class="custom-control-input" type="checkbox" v-model="import_first_line">
                     <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Importer la 1ère ligne</span>
+                    <span class="custom-control-description">{{ $t("entry-list.import.first-line") }}</span>
                 </label>
             </div>
-            <button type="button" class="btn btn-link" @click.prevent="cancel">Annuler</button>
-            <button type="button" class="btn" :disabled="!can_do_import" :class="{'btn-outline-primary': can_do_import}" @click.prevent="applyAndClose">Importer {{ total_final_list }} combattant(s)</button>
+            <button type="button" class="btn btn-link" @click.prevent="cancel">{{ $t("common.action.cancel") }}</button>
+            <button type="button" class="btn" :disabled="!can_do_import" :class="{'btn-outline-primary': can_do_import}" @click.prevent="applyAndClose">{{ $tc("entry-list.import.submit", total_final_list, { n: total_final_list }) }}</button>
         </template>
     </b-modal>
 </template>

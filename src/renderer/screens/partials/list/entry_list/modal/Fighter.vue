@@ -251,7 +251,7 @@ export default {
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" v-model="is_new_team" type="checkbox" :disabled="is_empty_team_option_list">
                         <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Nouvelle équipe</span>
+                        <span class="custom-control-description">{{ $t("common.team-new") }}</span>
                     </label>
                 </div>
             </div>
@@ -301,16 +301,16 @@ export default {
         </div>
 
         <template slot="modal-footer">
-            <div class="mr-auto">* Champs requis</div>
+            <div class="mr-auto">{{ $t("common.form.required") }}</div>
 
-            <button type="button" class="btn btn-link" @click.prevent="cancel">Annuler</button>
+            <button type="button" class="btn btn-link" @click.prevent="cancel">{{ $t("common.action.cancel") }}</button>
 
             <template v-if="!is_edit_mode">
-                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyAndClose">Ajouter</button>
-                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="apply">Ajouter et saisir un nouveau combattant</button>
+                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyAndClose">{{ $t("common.action.add") }}</button>
+                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="apply">{{ $t("entry-list.action.add-enter") }}</button>
             </template>
             <template v-else>
-                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyEditAndClose">Modifier</button>
+                <button type="button" class="btn" :disabled="!form_is_valid" :class="{'btn-outline-primary': form_is_valid}" @click.prevent="applyEditAndClose">{{ $t("common.action.edit") }}</button>
             </template>
         </template>
     </b-modal>

@@ -2,6 +2,10 @@
     "gb": {
         "common": {
             "action": {
+                "add": "Add",
+                "cancel": "Cancel",
+                "confirm": "I confirm",
+                "edit": "Edit",
                 "set": "Set {adjective}",
                 "step-back": "Back to previous step",
                 "step-next": "Next step",
@@ -16,11 +20,14 @@
                 "total": "Total of {item}"
             },
             "verb": {
-                "is": "Is {something}"
+                "choose": "Choose",
+                "is": "Is"
             },
             "club": "Club",
+            "competition-formula": "Competition formula",
             "date": "Date",
             "date-birth": "Birthdate",
+            "fight": "Fight",
             "fighter": "Fighter",
             "fighters": "Fighters",
             "grade": "Grade",
@@ -31,12 +38,18 @@
             "presence": "Présence",
             "readonly": "Readonly",
             "status": "Statuts",
+            "team": "Team",
+            "team-new": "New team",
             "type": "Type"
         }
     },
     "fr": {
         "common": {
             "action": {
+                "add": "Ajouter",
+                "cancel": "Annuler",
+                "confirm": "Je confirme",
+                "edit": "Modifier",
                 "set": "Rendre {adjective}",
                 "step-back": "Revenir à l'étape précédente",
                 "step-next": "Étape suivante",
@@ -51,11 +64,14 @@
                 "total": "Total de {item}"
             },
             "verb": {
-                "is": "Est {something}"
+                "choose": "Choisir",
+                "is": "Est"
             },
             "club": "Club",
+            "competition-formula": "Formule de compétition",
             "date": "Date",
             "date-birth": "Date de naissance",
+            "fight": "Combat",
             "fighter": "Combattant",
             "fighters": "Combattants",
             "grade": "Grade",
@@ -66,6 +82,8 @@
             "presence": "Présence",
             "readonly": "Lecture seule",
             "status": "Statut",
+            "team": "Équipe",
+            "team-new": "Nouvelle équipe",
             "type": "Type"
         }
     }
