@@ -29,17 +29,11 @@ export default {
         count() {
             return this.entry_list.length
         },
-        has_enough_entrant() {
-            return this.count >= this.COMPETITION_MINIMUM_ENTRANT
-        },
         minimum_nb_pool_tested()
         {
             return parseInt(this.count / this.POOL_MAX_SIZE, 10)
         },
         number_of_pool_value_list() { // @TODO : Need some comments
-            if (!this.has_enough_entrant)
-                return []
-
             let list = []
             let nb_pool_tested = this.minimum_nb_pool_tested
             let number_of_entry_per_pool = this.getNumberOfEntrantPerPool(nb_pool_tested)
