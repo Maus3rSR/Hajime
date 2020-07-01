@@ -57,6 +57,8 @@ const getters = {
         const total_finished = state.list.reduce((total, pool) => total + getters.getTotalFightListFinishedOfPool(pool.id), 0)
         const total = state.list.reduce((total, pool) => total + getters.getTotalFightList(pool.id), 0)
 
+        if (total === 0) return 0
+
         return Math.round(total_finished / total * 100 * 10) / 10
     },
     has_fight_list: state => state.list.length > 0 && !!state.list[0].fight_list,
