@@ -29,7 +29,7 @@ export default {
         },
         step_list() {
             let l = [{
-                name: "Liste d'appel",
+                name: this.$t("competition-manage.list-call"),
                 component_name: "FighterCall",
                 count: this.entry_present_count
             }]
@@ -86,6 +86,10 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/generic/competition.json"></i18n>
+<i18n src="@lang/screens/software/competition/manage.json"></i18n>
+
 <template>
     <section id="competition__manage">
         <header class="content__title">
@@ -94,29 +98,29 @@ export default {
                     {{ competition.name }}
                 </empty-placeholder>
                 <empty-placeholder :loaded="!is_competition_empty" :tag="'small'" :width="'5%'" :height="'10px'">
-                    Du {{ competition.date | luxon:locale('date_short') }}
+                - {{ competition.date | luxon:locale('date_short') }}
                 </empty-placeholder>
                 <empty-placeholder :loaded="!is_competition_empty" :tag="'small'" :width="'5%'" :height="'10px'">
                     <template v-if="competition.locked">
-                        <span class="badge badge-success">TERMINÉE</span>
+                        <span class="badge badge-success">{{ $t('competition.status.finished') | uppercase }}</span>
                     </template>
                     <template v-else-if="competition.locked_entry_list">
-                        <span class="badge badge-warning">EN COURS</span>
+                        <span class="badge badge-warning">{{ $t('competition.status.ongoing') | uppercase }}</span>
                     </template>
                     <template v-else>
-                        <span class="badge badge-dark">EN ATTENTE CONFIRMATION COMBATTANTS</span>
+                        <span class="badge badge-dark">{{ $t('competition.status.waiting') | uppercase }}</span>
                     </template>
                 </empty-placeholder>
             </template>
 
             <div class="actions">
                 <transition name="fade" mode="out-in">
-                    <button v-if="current_step > 1" class="btn btn-dark" title="Tour précédent" @click.prevent="previousStep()">
+                    <button v-if="current_step > 1" class="btn btn-dark" :title="$t('common.action.step-previous')" @click.prevent="previousStep()">
                         <i class="zmdi zmdi-arrow-left"></i>
                     </button>
                 </transition>
 
-                <router-link to="/" title="Revenir à l'écran principal" class="btn btn-dark">
+                <router-link to="/" :title="$t('common.action.back-main')" class="btn btn-dark">
                     <i class="zmdi zmdi-home"></i>
                 </router-link>
             </div>
@@ -126,7 +130,7 @@ export default {
             <div class="card-body">
                 <transition name="fade" mode="out-in" appear>
                     <div v-if="is_competition_empty && !is_competition_loading" class="text-center">
-                        <h1>Aucune données de compétition... :'(</h1>
+                        <h1>{{ $t("competition.empty") }} :'(</h1>
                     </div>
 
                     <clip-loader v-else-if="is_competition_loading" :color="'#fff'"></clip-loader>
@@ -154,12 +158,12 @@ export default {
                             
                                 <template v-if="competition.locked" slot="confirmation-section">
                                     <span class="float-right btn">
-                                        La compétition est clôturée <i class="zmdi zmdi-lock"></i>
+                                        {{ $t("competition.closed") }} <i class="zmdi zmdi-lock"></i>
                                     </span>
                                 </template>
 
                                 <template v-if="is_last_step" slot="validate-button-content">
-                                    Clôre la compétition
+                                    {{ $t("competition.action.close") }}
                                     <transition name="fade" mode="out-in">
                                         <clip-loader v-if="is_competition_saving" color="#ffffff" size="14px"></clip-loader>
                                         <i v-else class="zmdi zmdi-check"></i>

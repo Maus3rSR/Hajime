@@ -1,0 +1,24 @@
+{
+    "gb": {
+        "pool": {
+            "configuration": {
+                "choose": "Choose a configuration",
+                "number": "Number of pools"
+            },
+            "empty": "No data of pools",
+            "label": "pool | pools",
+            "not-enough": "Number of @.lower:common.fighter insufficient to distribute pools."
+        }
+    },
+    "fr": {
+        "pool": {
+            "configuration": {
+                "choose": "Choisir une configuration",
+                "number": "Nombre de poules"
+            },
+            "empty": "Aucune données de poule",
+            "label": "poule | poules",
+            "not-enough": "Nombre de @.lower:common.fighter insuffisant pour procéder à la répartition des poules."
+        }
+    }
+}

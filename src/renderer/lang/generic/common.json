@@ -3,6 +3,7 @@
         "common": {
             "action": {
                 "add": "Add",
+                "back-main": "Back to the main screen",
                 "cancel": "Cancel",
                 "confirm": "I confirm",
                 "edit": "Edit",
@@ -15,6 +16,7 @@
                 "required": "* fields are required"
             },
             "of": {
+                "label": "of",
                 "list": "List of {item}",
                 "number": "{item} number",
                 "total": "Total of {item}"
@@ -23,11 +25,16 @@
                 "choose": "Choose",
                 "is": "Is"
             },
+            "and": "and",
             "club": "Club",
+            "competition": "Competition",
+            "competitions": "Competitions",
             "competition-formula": "Competition formula",
             "date": "Date",
             "date-birth": "Birthdate",
+            "draw-random": "Random draw",
             "fight": "Fight",
+            "fights": "Fights",
             "fighter": "Fighter",
             "fighters": "Fighters",
             "grade": "Grade",
@@ -35,10 +42,13 @@
             "name": "Name",
             "organizer": "Organizer",
             "place": "Place",
+            "pool": "Pool",
+            "pools": "Pools",
             "presence": "Présence",
             "readonly": "Readonly",
             "status": "Statuts",
             "team": "Team",
+            "teams": "Teams",
             "team-new": "New team",
             "type": "Type"
         }
@@ -47,6 +57,7 @@
         "common": {
             "action": {
                 "add": "Ajouter",
+                "back-main": "Revenir à l'écran principal",
                 "cancel": "Annuler",
                 "confirm": "Je confirme",
                 "edit": "Modifier",
@@ -59,6 +70,7 @@
                 "required": "Les champs * sont requis"
             },
             "of": {
+                "label": "de",
                 "list": "Liste des {item}",
                 "number": "N° de {item}",
                 "total": "Total de {item}"
@@ -67,11 +79,16 @@
                 "choose": "Choisir",
                 "is": "Est"
             },
+            "and": "et",
             "club": "Club",
+            "competition": "Compétition",
+            "competitions": "Compétitions",
             "competition-formula": "Formule de compétition",
             "date": "Date",
             "date-birth": "Date de naissance",
+            "draw-random": "Tirage au sort",
             "fight": "Combat",
+            "fights": "Combats",
             "fighter": "Combattant",
             "fighters": "Combattants",
             "grade": "Grade",
@@ -79,10 +96,13 @@
             "name": "Nom",
             "organizer": "Organisateur",
             "place": "Lieu",
+            "pool": "Poule",
+            "pools": "Poules",
             "presence": "Présence",
             "readonly": "Lecture seule",
             "status": "Statut",
             "team": "Équipe",
+            "teams": "Équipes",
             "team-new": "Nouvelle équipe",
             "type": "Type"
         }

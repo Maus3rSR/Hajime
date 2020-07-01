@@ -63,7 +63,7 @@ export default {
             return this.competition_type === this.constant_type_list.TEAM
         },
         entrant_label() {
-            return this.is_team ? "équipes" : "combattants"
+            return this.is_team ? this.$t("common.teams") : this.$t("common.fighters")
         },
         entriable() {
             return this.is_team ? "Team" : "Fighter"
@@ -122,17 +122,20 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/steps/pool.json"></i18n>
+
 <template>
     <div>
         <div class="form-group row">
-            <label for="pool_configuration" class="col-sm-3 col-xl-2 col-form-label card-body__title">Nombre de poules</label>
+            <label for="pool_configuration" class="col-sm-3 col-xl-2 col-form-label card-body__title">{{ $t("pool.configuration.number") }}</label>
             <div class="col-sm-9 col-xl-10">
                 <select id="pool_configuration" class="form-control" v-model="pool_option_list_choosen">
-                    <option value="null" selected>Choisir une configuration</option>
+                    <option value="null" selected>{{ $t("pool.configuration.choose") }}</option>
                     <option v-for="pool_config in number_of_pool_value_list" :key="pool_config.number_of_pool" :value="pool_config">
-                        {{ pool_config.number_of_pool }} poules de {{ pool_config.number_of_entry_per_pool }} {{ entrant_label }}
+                        {{ pool_config.number_of_pool }} {{ $tc("pool.label", pool_config.number_of_pool) }} {{ $t("common.of.label") }} {{ pool_config.number_of_entry_per_pool }} {{ entrant_label | lowercase }}
                         <template v-if="pool_config.number_of_entry_left">
-                            et 1 poule de {{ pool_config.number_of_entry_left }} {{ entrant_label }}
+                            {{ $t("common.and") }} 1 {{ $tc("pool.label", 1) }} {{ $t("common.of.label") }} {{ pool_config.number_of_entry_left }} {{ entrant_label | lowercase }}
                         </template>
                     </option>
                 </select>

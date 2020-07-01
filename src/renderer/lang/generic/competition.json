@@ -1,26 +1,32 @@
 {
     "gb": {
         "competition": {
-            "label": "Competition",
-            "plural": "Competitions",
-            "new": "New competition",
+            "action": {
+                "close": "Close the @.lower:common.competition"
+            },
             "status": {
-                "waiting": "Waiting for fighter's list validation",
+                "waiting": "Waiting for @.lower:common.fighters list validation",
                 "ongoing": "Ongoing",
                 "finished": "Finished"
-            }
+            },
+            "closed": "@:common.competition is closed",
+            "empty": "No data of @.lower:common.competition",
+            "new": "New @.lower:common.competition"
         }
     },
     "fr": {
         "competition": {
-            "label": "Compétition",
-            "plural": "Compétitions",
-            "new": "Nouvelle compétition",
+            "action": {
+                "close": "Clôre la @.lower:common.competition"
+            },
             "status": {
-                "waiting": "En attente confirmation des combattants",
+                "waiting": "En attente confirmation des @.lower:common.fighters",
                 "ongoing": "En cours",
                 "finished": "Terminée"
-            }
+            },
+            "closed": "La @.lower:common.competition est clôturée",
+            "empty": "Aucune données de @.lower:common.competition",
+            "new": "Nouvelle @.lower:common.competition"
         }
     }
 }

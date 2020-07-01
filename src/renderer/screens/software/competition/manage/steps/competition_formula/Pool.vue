@@ -34,7 +34,9 @@ export default {
             return this.is_locked && !this.is_saving
         },
         tab_title() {
-            return this.list_validated ? "Liste des poules" : "Tirage au sort"
+            return this.list_validated
+                ? this.$t("common.of.list", { item: this.$t("common.pools") })
+                : this.$t("common.draw-random")
         },
         fight_list_tab_style() {
             return {
@@ -73,11 +75,14 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/steps/pool.json"></i18n>
+
 <template>
     <div class="competition__manage__pool">
         <transition name="fade" mode="out-in" appear>
             <div v-if="is_configuration_empty" class="text-center">
-                <h1>Aucune données de poule... :'(</h1>
+                <h1>{{ $t("pool.empty") }} :'(</h1>
             </div>
 
             <clip-loader v-else-if="is_loading || is_list_loading" :color="'#fff'"></clip-loader>
@@ -107,7 +112,7 @@ export default {
                                                 <i v-if="is_completed" class="zmdi zmdi-check-circle"></i>
                                             </span>
 
-                                            Combats
+                                            {{ $t("common.fights") }}
                                         </template>
 
                                         <fight-list v-if="is_locked" />
@@ -121,7 +126,7 @@ export default {
                                 <slot name="confirmation-section">
                                     <button :disabled="!is_completed" :class="{'btn-outline-success tada': is_completed}" class="btn float-right animated" @click="$emit('onValidate')">
                                         <slot name="validate-button-content">
-                                            Tour suivant
+                                            {{ $t("common.action.step-next") }}
                                             <i class="zmdi zmdi-arrow-right"></i>
                                         </slot>
                                     </button>
@@ -129,7 +134,7 @@ export default {
 
                                 <button class="btn btn-link float-right mr-2" @click="$emit('onBack')">
                                     <i class="zmdi zmdi-arrow-left"></i>
-                                    Tour précédent
+                                    {{ $t("common.action.step-previous") }}
                                 </button>
                             </div>
                         </div>
@@ -138,7 +143,7 @@ export default {
 
                     <div class="h5 text-warning" v-else>
                         <i class="zmdi zmdi-alert-triangle"></i>
-                        Nombre de combattant insuffisant pour procéder à la répartition des poules.
+                        {{ $t("pool.not-enough") }}
                     </div>
                 </transition>
             </span>

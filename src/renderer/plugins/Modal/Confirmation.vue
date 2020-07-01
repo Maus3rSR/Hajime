@@ -3,7 +3,6 @@ export default {
     props: {
         title: {
             type: String,
-            default: "confirmation.title"
         },
         header: {
             type: Boolean,
@@ -11,7 +10,11 @@ export default {
         }
     },
     components: {},
-    computed: {},
+    computed: {
+        modal_title() {
+            return this.title || this.$t("confirmation.title")
+        }
+    },
     methods: {
         show() {
             this.showModal = true
@@ -39,7 +42,7 @@ export default {
 <i18n src="@lang/plugins/modal/confirmation.json"></i18n>
 
 <template>
-    <b-modal class="modal__confirmation" :title="$t(title)" v-model="showModal" size="lg" hide-header-close>
+    <b-modal class="modal__confirmation" :title="modal_title" v-model="showModal" size="lg" hide-header-close>
         <div class="h3" v-if="header">
             <slot name="label">
                 {{ $t("confirmation.subtitle") }}

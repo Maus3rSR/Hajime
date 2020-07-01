@@ -24,6 +24,8 @@
                 "preview": "Preview import of @.lower:common.fighters",
                 "submit": "Import {n} fighter | Import {n} fighters"
             },
+            "is-present": "@:common.verb.is @.lower:entry-list.present",
+            "is-missing": "@:common.verb.is @.lower:entry-list.missing",
             "present": "Present",
             "missing": "Missing",
             "present-all": "All present",
@@ -58,8 +60,8 @@
                 "preview": "Prévisualisation de l'import des @.lower:common.fighters",
                 "submit": "Importer {n} combattant | Importer {n} combattants"
             },
-            "is-present": "@:common.verb.is @:entry-list.present",
-            "is-missing": "@:common.verb.is @:entry-list.missing",
+            "is-present": "@:common.verb.is @.lower:entry-list.present",
+            "is-missing": "@:common.verb.is @.lower:entry-list.missing",
             "present": "Présent",
             "missing": "Absent",
             "present-all": "Tous présent",

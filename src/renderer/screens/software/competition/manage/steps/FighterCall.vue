@@ -55,6 +55,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/manage.json"></i18n>
+
 <template>
     <div>
         <div class="row">
@@ -83,13 +86,13 @@ export default {
                 <transition name="fade" type="out-in" appear>
                     <span class="text-warning" v-if="!step_is_valid">
                         <i class="zmdi zmdi-alert-triangle"></i>
-                        Nombre de combattant insuffisant pour procéder à la compétition
+                        {{ $t("competition-manage.not-enough") }}
                     </span>
                 </transition>
             </div>
             <div class="col">
                 <button :disabled="!step_is_valid" :class="{'btn-outline-success tada': step_is_valid}" class="btn float-right animated" @click="process">
-                    Tour suivant
+                    {{ $t("common.action.step-next") }}
                     <transition name="fade" mode="out-in">
                         <i v-if="!competition_saving" class="zmdi zmdi-arrow-right"></i>
                         <clip-loader v-else :size="'14px'"></clip-loader>
@@ -100,17 +103,16 @@ export default {
 
         <modal-confirmation
             ref="modalConfirmCall"
-            title="Confirmation de la liste d'appel"
+            :title="$t('competition-manage.confirm-call.title')"
 
             @on-confirm="save"
         >
             <template slot="label">
-                Confirmez vous cette liste d'appel ?
+                {{ $t("competition-manage.confirm-call.label") }}
             </template>
 
             <template slot="content">
-                Vous ne pourrez plus modifier cette liste d'appel après cette confirmation.
-                Elle sera toujours disponible en lecture seule.
+                {{ $t("competition-manage.confirm-call.content") }}
             </template>
         </modal-confirmation>
     </div>

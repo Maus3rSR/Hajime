@@ -157,6 +157,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/pool/listDraw.json"></i18n>
+
 <template>
     <div class="pool-list-draw">
         <div class="pool-front-actions card">
@@ -164,16 +167,16 @@ export default {
                 <transition name="fade">
                     <div class="card-title" v-if="!is_initial_state">
                         <template v-if="drawing_lot">
-                            Tirage au sort en cours...
+                            {{ $t("list-draw.status.ongoing") }}
                         </template>
                         <template v-else>
-                            Tirage au sort terminé !
+                            {{ $t("list-draw.status.finished") }}
                         </template>
                     </div>
                 </transition>
 
                 <button v-if="is_initial_state" class="btn btn__draw btn-outline-success animated infinite pulse" @click.prevent="doDrawingLot">
-                    Effectuer le tirage au sort
+                    {{ $t("list-draw.launch") }}
                 </button>
 
                 <div class="progress mb-4" v-else>

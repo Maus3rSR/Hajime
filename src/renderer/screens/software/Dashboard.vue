@@ -48,7 +48,7 @@ export default {
 
                     <div class="card-img-overlay">
                         <div class="card-body">
-                            <h4 class="card-title">{{ $t("competition.label") }}</h4>
+                            <h4 class="card-title">{{ $t("common.competition") }}</h4>
 
                             <router-link class="card-link btn btn-light btn--icon-text" :to="{ name: 'create-competition'}">
                                 <i class="zmdi zmdi-plus"></i>
@@ -61,7 +61,7 @@ export default {
             <div class="col-md-12 col-lg-6">
                 <data-list
                     name="competitionList"
-                    :title="$t('common.of.list', { item: this.$options.filters.lowercase($t('competition.plural')) })"
+                    :title="$t('common.of.list', { item: this.$options.filters.lowercase($t('common.competitions')) })"
 
                     @on-load="loadCompetitionList"
 
