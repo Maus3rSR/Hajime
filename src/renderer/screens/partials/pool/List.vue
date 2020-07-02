@@ -32,6 +32,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/list/pool.json"></i18n>
+
 <template>
     <div>
         <transition-group name="list" tag="div" class="row">
@@ -40,17 +43,17 @@ export default {
             </div>
         </transition-group>
 
-        <b-modal title="Détail du classement" v-model="showModal" size="lg">
+        <b-modal :title="$t('pool-list.ranking-detail')" v-model="showModal" size="lg">
             
             <table v-if="null !== this.modal_pool" class="table table-striped table-responsive">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Entrée</th>
-                        <th>Points</th>
-                        <th>Nombre de victoire</th>
-                        <th>Nombre de ippons marqués</th>
-                        <th>Nombre de ippons reçus</th>
+                        <th>{{ $t("common.entry") }}</th>
+                        <th>{{ $t("common.points") }}</th>
+                        <th>{{ $t("pool-list.number.victory") }}</th>
+                        <th>{{ $t("pool-list.number.score-given") }}</th>
+                        <th>{{ $t("pool-list.number.score-received") }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +69,7 @@ export default {
             </table>
 
             <template slot="modal-footer">
-                <button type="button" class="btn btn-primary" @click.prevent="showModal = false">Fermer</button>
+                <button type="button" class="btn btn-primary" @click.prevent="showModal = false">{{ $t("common.action.close") }}</button>
             </template>
         </b-modal>
     </div>

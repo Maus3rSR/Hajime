@@ -59,11 +59,14 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/steps/pool.json"></i18n>
+
 <template>
     <div class="competition__manage__pool__fight_list">
         <transition name="fade" mode="out-in">
             <div v-if="!has_fight_list" class="text-center">
-                <h1>Aucune données de match... :'(</h1>
+                <h1>{{ $t("pool.fight-list.empty") }} :'(</h1>
             </div>
 
             <div v-else>
@@ -77,14 +80,14 @@ export default {
                             >
                                 <i v-if="isPoolFinished(pool.id)" class="zmdi zmdi-check-circle"></i>
                             </span>
-                            
-                            Poule n°{{ pool.number }}
+
+                            {{ $t("common.of.number-inverse", { item: $t("common.pool"), n: pool.number }) }}
                         </template>
                         
                         <fight-list
                             :list="pool.fight_list"
                             :index="pool.number"
-                            :title="`Matchs de la poule N°${pool.number}`"
+                            :title="$t('common.of.number-inverse', { item: $t('pool.fight-list.title'), n: pool.number })"
                             :marking_board_reversed="pool.marking_board_reversed"
                             :is_team_mode="is_team_mode"
                             :team_place_number="team_place_number"
@@ -95,9 +98,9 @@ export default {
                             @on-fighter-order-add="args => onFighterOrderAdd({ pool_id: pool.id, ...args })"
                         >
 
-                            <template slot="not_valid_and_locked_fight_status">{{ "à valider" | uppercase }}</template>
+                            <template slot="not_valid_and_locked_fight_status">{{ $t("pool.fight-list.validation") | uppercase }}</template>
                             <template slot="not_valid_and_locked_fight_action" slot-scope="props">
-                                <button class="btn btn-sm btn-outline-success" title="Procéder à la validation de ce match pour attribuer les points" @click.prevent="validateNotValidFight(pool.id, props.row)">
+                                <button class="btn btn-sm btn-outline-success" :title="$t('pool.fight-list.validate')" @click.prevent="validateNotValidFight(pool.id, props.row)">
                                     <i class="zmdi zmdi-check"></i>
                                 </button>
                             </template>
@@ -105,7 +108,7 @@ export default {
                             <template slot="footer">
                                 <button v-if="!competition.locked" class="btn btn-link btn-lg btn__add-fight" @click.prevent="openNewFightModal(pool)">
                                     <i class="zmdi zmdi-plus"></i>
-                                    Ajouter un match supplémentaire
+                                    {{ $t("pool.fight-list.add") }}
                                 </button>
                             </template>
 
@@ -117,7 +120,7 @@ export default {
 
         <modal-confirmation
             ref="modalAddFight"
-            title="Ajout d'un combat supplémentaire"
+            :title="$t('pool.fight-list.adding')"
             :header="false"
 
             @on-confirm="addFight(new_fight)"
@@ -127,7 +130,7 @@ export default {
                 <div class="row">
                     <div class="col-md-6">
                         <label class="card-body__title">
-                            Entrée
+                            {{ $t("common.entry") }}
                             <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_left.color}`">{{ new_fight.marking_board_left.label }}</span>
                         </label>
                         <select class="form-control" v-model="new_fight.entry_left">
@@ -139,7 +142,7 @@ export default {
 
                     <div class="col-md-6">
                         <label class="card-body__title">
-                            Entrée
+                            {{ $t("common.entry") }}
                             <span :class="`marking_board__color marking_board__color--${new_fight.marking_board_right.color}`">{{ new_fight.marking_board_right.label }}</span>
                         </label>
                         <select class="form-control" v-model="new_fight.entry_right">
@@ -151,7 +154,7 @@ export default {
                 </div>
 
                 <div class="text-info mt-4">
-                    <i class="zmdi zmdi-info-outline"></i> Un match ajouté manuellement n'influera pas le nombre de point dans le classement
+                    <i class="zmdi zmdi-info-outline"></i> {{ $t("pool.fight-list.info") }}
                 </div>
 
             </template>

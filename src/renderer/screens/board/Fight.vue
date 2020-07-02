@@ -107,6 +107,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/board/fight.json"></i18n>
+
 <template>
     <main class="fight-versus" :class="{ 'reversed': marking_board_reversed }">
         <section class="card animated fadeIn">
@@ -147,16 +150,16 @@ export default {
                         <label class="ml-2 custom-control custom-checkbox">
                             <input class="custom-control-input" v-model="sudden_death" type="checkbox" :disabled="is_disabled" @change="updateSuddenDeath">
                             <span class="custom-control-indicator"></span>
-                            <span class="custom-control-description">Mort subite (Enshõ)</span>
+                            <span class="custom-control-description">{{ $t("fight-board.deathmatch") }} (Enshõ)</span>
                         </label>
                     </div>
 
                     <div class="col text-center">
                         <div v-if="is_saving" class="animated fadeInUp faster h4">
-                            <clip-loader color="#ffffff" :size="'14px'" /> Enregistrement en cours...
+                            <clip-loader color="#ffffff" :size="'14px'" /> {{ $t("fight-board.saving") }}
                         </div>
                         <div v-else-if="saved" class="text-success animated fadeOutDown delay-3s h4">
-                            <i class="zmdi zmdi-check animated flash"></i> Enregistré !
+                            <i class="zmdi zmdi-check animated flash"></i> {{ $t("fight-board.saved") }}
                         </div>
                     </div>
 
@@ -164,17 +167,17 @@ export default {
                         <transition name="fade" mode="out-in">
                             <span v-if="!is_disabled">
                                 <button class="btn btn-link" @click.prevent="showConfirm(true)">
-                                    Déclarer un forfait
+                                    {{ $t("fight-board.action.forfeit") }}
                                     <i class="zmdi zmdi-close"></i>
                                 </button>
                                 <button class="btn btn-outline-success" @click.prevent="showConfirm()">
-                                    Valider
+                                    {{ $t("common.action.validate") }}
                                     <i class="zmdi zmdi-check"></i>
                                 </button>
                             </span>
                             <span v-else>
                                 <i class="zmdi zmdi-lock"></i>
-                                Lecture seule
+                                {{ $t("common.form.required") }}
                             </span>
                         </transition>
 
@@ -194,7 +197,7 @@ export default {
 
                 <div class="row">
                     <div class="col-sm-12 mb-3" v-if="forfeit">
-                        <span class="card-body__title">Combattant</span>
+                        <span class="card-body__title">{{ $t("common.fighter") }}</span>
                         <div class="clearfix mt-3">
                             <label class="custom-control custom-radio" v-for="fighter in [fighter1, fighter2]" :key="fighter.id">
                                 <input type="radio" name="fighter__forfeit" class="custom-control-input" :value="fighter.id" v-model="forfeit_fighter_id">
@@ -206,7 +209,7 @@ export default {
                     </div>
                     
                     <div class="col-sm-12">
-                        <label for="fight__comment" class="card-body__title">Ajouter un commentaire à ce combat</label>
+                        <label for="fight__comment" class="card-body__title">{{ $t("fight-board.comment") }}</label>
                         <div class="form-group">
                             <textarea id="fight__comment" class="form-control" cols="30" rows="10" v-model="comment"></textarea>
                         </div>

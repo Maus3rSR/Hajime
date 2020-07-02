@@ -3,7 +3,7 @@
         "competition-create": {
             "action": {
                 "cancel-back": "Cancel and come back to main screen",
-                "choose-formula": "@:common.verb.choose a @.lower:common.competition-formula",
+                "choose-formula": "@:common.action.choose a @.lower:common.competition-formula",
                 "confirm": "Create the competition",
                     "step-back": "Back to previous step"
             },
@@ -22,7 +22,7 @@
             "placeholder": {
                 "name": "eg.: Regional invidual woman"
             },
-            "team-seat": "Fighters number per team (substitude excluded)",
+            "team-seat": "Fighters number per team (@.lower:common.substitute excluded)",
             "step1": "General information",
             "step2": "Fighters import",
             "step3": "Competition formula"
@@ -32,7 +32,7 @@
         "competition-create": {
             "action": {
                 "cancel-back": "Annuler et revenir à l'écran principal",
-                "choose-formula": "@:common.verb.choose une @.lower:common.competition-formula",
+                "choose-formula": "@:common.action.choose une @.lower:common.competition-formula",
                 "confirm": "Je confirme la création de la compétition",
                 "step-back": "Revenir à l'étape précédente"
             },
@@ -51,7 +51,7 @@
             "placeholder": {
                 "name": "ex. : Compétition inter-régionales individuelle femmes"
             },
-            "team-seat": "Nombre de @.lower:common.fighters par équipe (hors remplaçant)",
+            "team-seat": "Nombre de @.lower:common.fighters par équipe (hors @.lower:common.substitute)",
             "step1": "Informations générales",
             "step2": "Import des @.lower:common.fighters",
             "step3": "Formule de compétition"

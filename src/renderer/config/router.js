@@ -1,20 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import i18n from './i18n'
+import translations from '@lang/config/router'
+
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
 
 Vue.use(Router)
-
-i18n.mergeLocaleMessage("gb", {
-    "home": "Dashboard",
-    "new-competition": "New competition",
-    "manage-competition": "Manage competition"
-})
-
-i18n.mergeLocaleMessage("fr", {
-    "home": "Tableau de bord",
-    "new-competition": "Nouvelle compétition",
-    "manage-competition": "Gestion de la compétition"
-})
 
 export default new Router({
   routes: [
@@ -22,7 +14,7 @@ export default new Router({
             // Software contain the default layout
             path: '/',
             component: require('@screens/layouts/Software').default,
-            meta: { breadcrumb: 'home' },
+            meta: { breadcrumb: 'router.home' },
             children: [
                 {
                     name: 'dashboard',
@@ -34,7 +26,7 @@ export default new Router({
                     path: 'competition/new',
                     component: require('@screens/software/competition/Create').default,
                     meta: {
-                        breadcrumb: 'new-competition',
+                        breadcrumb: 'router.new-competition',
                         theme: 'competition'
                     }
                 },
@@ -44,7 +36,7 @@ export default new Router({
                     props: true,
                     component: require('@screens/software/competition/Manage').default,
                     meta: {
-                        breadcrumb: 'manage-competition',
+                        breadcrumb: 'router.manage-competition',
                         theme: 'competition'
                     }
                 }

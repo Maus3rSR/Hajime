@@ -31,7 +31,7 @@ export default {
             return this.is_last_pool_different_size ? this.pool_count - 1 : this.pool_count
         },
         entry_label() {
-            return this.competition_type === this.constant_type_list.TEAM ? "équipes" : "combattants"
+            return this.competition_type === this.constant_type_list.TEAM ? this.$t("common.teams") : this.$t("common.fighters")
         }
     },
     methods: {
@@ -45,13 +45,16 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/software/competition/steps/pool.json"></i18n>
+
 <template>
     <div>
         <div class="toolbar">
             <div class="toolbar__label">
-                {{ number_of_pool }} poules de {{ number_of_entry_per_pool }} {{ entry_label }}
+                {{ number_of_pool }} {{ $tc("pool.label", number_of_pool) }} {{ $t("common.of.label") }} {{ number_of_entry_per_pool }} {{ entry_label | lowercase }}
                 <template v-if="is_last_pool_different_size">
-                    et 1 poule de {{ number_of_entry_left }} {{ entry_label }}
+                    {{ $t("common.and") }} 1 {{ $tc("pool.label", 1) }} {{ $t("common.of.label") }} {{ number_of_entry_left }} {{ entry_label | lowercase }}
                 </template>
             </div>
 

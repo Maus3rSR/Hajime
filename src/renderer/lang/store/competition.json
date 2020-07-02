@@ -1,0 +1,18 @@
+{
+    "gb": {
+        "competition": { 
+            "type": {
+                "individual": "Individual",
+                "team": "Team"
+            }
+        }
+    },
+    "fr": {
+        "competition": { 
+            "type": {
+                "individual": "Individuelle",
+                "team": "Équipe"
+            }
+        }
+    }
+}

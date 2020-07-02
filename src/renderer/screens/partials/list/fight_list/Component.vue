@@ -169,6 +169,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/list/fight.json"></i18n>
+
 <template>
     <div>
         <data-list
@@ -182,7 +185,7 @@ export default {
             :sortColumn="false"
             :columns="[
                 { label: 'fighter', field: 'fighter', thClass: 'fighter-column'},
-                { label: 'Statut', field: 'status' },
+                { label: $t('common.status'), field: 'status' },
                 { label: '', field: 'action-cell' }
             ]"
             :groupedHeader="is_team_mode"
@@ -197,7 +200,7 @@ export default {
                             @click.prevent="$emit('on-reverse-board')"
 
                             class="btn btn-link marking_board__btn_reverse"
-                            title="Inverser les couleurs"
+                            :title="$t('fight-list.action.inverse-color')"
                         >
                             <i class="zmdi zmdi-swap"></i>
                         </a>
@@ -231,10 +234,10 @@ export default {
                         <span v-if="!!props.row.fighter1">
 
                             <span v-if="is_team_mode && canChangeOrder(props.row)" class="float-left">
-                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'up', 1)">
+                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" :title="$t('fight-list.action.fighter-up')" @click.prevent="onFighterOrder(props.row, 'up', 1)">
                                     <i class="zmdi zmdi-chevron-up zmdi-hc-lg"></i>
                                 </button>
-                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" title="Descendre le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'down', 1)">
+                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" :title="$t('fight-list.action.fighter-down')" @click.prevent="onFighterOrder(props.row, 'down', 1)">
                                     <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i>
                                 </button>
                             </span>
@@ -243,13 +246,13 @@ export default {
                         </span>
                         <span v-else-if="!isFightReserve(props.row)">
                             <span class="badge badge-warning">
-                                Aucun combattant
+                                {{ $t("fight-list.empty") }}
                             </span>
 
                             <span class="float-left" v-if="is_team_mode && !isFightLocked(props.row)">
                                 <button class="btn btn-sm btn-link" @click.prevent="openModalFightOrder(props.row, 1)">
                                     <i class="zmdi zmdi-account-add"></i>
-                                    Choisir un combattant
+                                    {{ $t("fight-list.action.choose") }}
                                 </button>
                             </span>
                         </span>
@@ -263,7 +266,7 @@ export default {
 
                             <template v-if="isFightLocked(props.row)">-</template>
                             <span v-else-if="isFightReserve(props.row)" class="badge badge-info">
-                                Remplaçant
+                                {{ $t("common.substitute") }}
                             </span>
                             <template v-else>VS</template>
                             
@@ -277,10 +280,10 @@ export default {
                         <span v-if="!!props.row.fighter2">
 
                             <span v-if="is_team_mode && canChangeOrder(props.row)" class="float-right">
-                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" title="Monter le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'up', 2)">
+                                <button v-if="!props.row.is_first" class="btn btn-sm btn-link" :title="$t('fight-list.action.fighter-up')" @click.prevent="onFighterOrder(props.row, 'up', 2)">
                                     <i class="zmdi zmdi-chevron-up zmdi-hc-lg"></i>
                                 </button>
-                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" title="Descendre le combattant d'un niveau" @click.prevent="onFighterOrder(props.row, 'down', 2)">
+                                <button v-if="!props.row.is_last" class="btn btn-sm btn-link" :title="$t('fight-list.action.fighter-down')" @click.prevent="onFighterOrder(props.row, 'down', 2)">
                                     <i class="zmdi zmdi-chevron-down zmdi-hc-lg"></i>
                                 </button>
                             </span>
@@ -289,13 +292,13 @@ export default {
                         </span>
                         <span v-else-if="!isFightReserve(props.row)">
                             <span class="badge badge-warning">
-                                Aucun combattant
+                                {{ $t("fight-list.empty") }}
                             </span>
 
                             <span class="float-right" v-if="is_team_mode && !isFightLocked(props.row)">
                                 <button class="btn btn-sm btn-link" @click.prevent="openModalFightOrder(props.row, 2)">
                                     <i class="zmdi zmdi-account-add"></i>
-                                    Choisir un combattant
+                                    {{ $t("fight-list.action.choose") }}
                                 </button>
                             </span>
                         </span>
@@ -310,8 +313,8 @@ export default {
                     <span v-else-if="!isFightValid(props.row) && !isFightLocked(props.row)" class="badge badge-warning">
                         <slot name="not_valid_and_locked_fight_status"></slot>
                     </span>
-                    <span v-else-if="!isFightLocked(props.row)" class="badge badge-warning">{{ "à faire" | uppercase }}</span>
-                    <span v-else class="badge badge-success">{{ "terminé" | uppercase }}</span>
+                    <span v-else-if="!isFightLocked(props.row)" class="badge badge-warning">{{ $t("fight-list.status.todo") | uppercase }}</span>
+                    <span v-else class="badge badge-success">{{ $t("fight-list.status.finished") | uppercase }}</span>
                 </transition>
             </template>
 
@@ -324,19 +327,19 @@ export default {
                         <slot name="not_valid_and_locked_fight_action" :row="props.row"></slot>
                     </template>
 
-                    <i class="zmdi zmdi-lock" v-else-if="isFightBoardLocked(props.row)" title="La fenêtre de gestion de combat est déjà ouverte par quelqu'un"></i>
+                    <i class="zmdi zmdi-lock" v-else-if="isFightBoardLocked(props.row)" :title="$t('fight-list.fight-screen-open')"></i>
 
-                    <button v-else-if="!isFightLocked(props.row)" @click.prevent="openFightBoard(props.row)" title="Ouvrir la fenêtre de gestion de combat" class="btn btn-sm btn-outline-primary">
+                    <button v-else-if="!isFightLocked(props.row)" @click.prevent="openFightBoard(props.row)" :title="$t('fight-list.action.open-fight-screen')" class="btn btn-sm btn-outline-primary">
                             <i class="zmdi zmdi-open-in-browser"></i>
                     </button>
 
-                    <button v-else @click.prevent="openFightBoard(props.row)" title="Voir le détail du combat" class="btn btn-sm btn-outline-secondary">
+                    <button v-else @click.prevent="openFightBoard(props.row)" :title="$t('fight-list.action.see-detail')" class="btn btn-sm btn-outline-secondary">
                             <i class="zmdi zmdi-eye"></i>
                     </button>
                 </transition>
 
                 <transition name="fade" mode="out-in">
-                    <button v-if="hasComment(props.row)" @click.prevent="openModalComment(props.row)" title="Voir les commentaires" class="btn btn-sm btn-outline-secondary">
+                    <button v-if="hasComment(props.row)" @click.prevent="openModalComment(props.row)" :title="$t('fight-list.action.see-comment')" class="btn btn-sm btn-outline-secondary">
                         <i class="zmdi zmdi-comment"></i>
                     </button>
                 </transition>
@@ -344,18 +347,18 @@ export default {
             </template>
         </data-list>
 
-        <b-modal title="Commentaires du combat" v-model="showModal" size="lg">
+        <b-modal :title="$t('fight-list.comment')" v-model="showModal" size="lg">
             
             <p v-if="!!comment">{{ comment.text }}</p>
 
             <template slot="modal-footer">
-                <button type="button" class="btn btn-primary" @click.prevent="showModal = false">Fermer</button>
+                <button type="button" class="btn btn-primary" @click.prevent="showModal = false">{{ $t("common.action.close") }}</button>
             </template>
         </b-modal>
 
         <modal-confirmation
             ref="modalAddFighterOrder"
-            title="Ajout d'un ordre de combat"
+            :title="$t('fight-list.modal.title')"
             :header="false"
 
             @on-confirm="confirmModalFighterOrder"
@@ -363,7 +366,7 @@ export default {
             <template slot="content" v-if="!!modalNewOrderFighter.fight_row">
 
                 <label class="card-body__title">
-                    Sélectionnez le combattant
+                    {{ $t("fight-list.modal.select") }}
                 </label>
                 <select class="form-control" v-model="modalNewOrderFighter.fighter_selected">
                     <option v-for="fighter in getFightListInModalFighterOrder()" :value="fighter" :key="fighter.id">

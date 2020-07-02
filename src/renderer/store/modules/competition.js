@@ -2,24 +2,10 @@ import { Sequelize } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
 import { COMPETITION_MODE, LOADER_STATUS } from '@root/constant'
 import i18n from '@config/i18n'
+import translations from '@lang/store/competition.json'
 
-i18n.mergeLocaleMessage("gb", {
-    "competition": { 
-        "type": {
-            "individual": "Individual",
-            "team": "Team"
-        }
-    }
-})
-
-i18n.mergeLocaleMessage("fr", {
-    "competition": { 
-        "type": {
-            "individual": "Individuelle",
-            "team": "Équipe"
-        }
-    }
-})
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,

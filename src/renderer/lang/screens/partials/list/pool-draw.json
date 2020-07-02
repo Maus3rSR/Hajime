@@ -1,6 +1,6 @@
 {
     "gb": {
-        "list-draw": {
+        "pool-list-draw": {
             "status": {
                 "finished": "@:common.draw-random finished!",
                 "ongoing": "@:common.draw-random in progress..."
@@ -9,7 +9,7 @@
         }
     },
     "fr": {
-        "list-draw": {
+        "pool-list-draw": {
             "status": {
                 "finished": "@:common.draw-random terminé !",
                 "ongoing": "@:common.draw-random en cours..."

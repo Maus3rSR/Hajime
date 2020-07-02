@@ -1,0 +1,24 @@
+{
+    "gb": {
+        "fight-board": {
+            "action": {
+                "forfeit": "Make forfeit"
+            },
+            "comment": "@:common.action.add a @.lower:common.comment at this @.lower.common.fight",
+            "deathmatch": "Deathmatch",
+            "saved": "Saved!",
+            "saving": "Saving..."
+        }
+    },
+    "fr": {
+        "fight-board": {
+            "action": {
+                "forfeit": "Déclarer un forfait"
+            },
+            "comment": "@:common.action.add un @.lower:common.comment à ce @.lower.common.fight",
+            "deathmatch": "Mort subite",
+            "saved": "Enregistré !",
+            "saving": "Enregistrement en cours..."
+        }
+    }
+}

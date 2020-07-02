@@ -158,7 +158,7 @@ export default {
 </script>
 
 <i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/partials/pool/listDraw.json"></i18n>
+<i18n src="@lang/screens/partials/list/pool-draw.json"></i18n>
 
 <template>
     <div class="pool-list-draw">
@@ -167,16 +167,16 @@ export default {
                 <transition name="fade">
                     <div class="card-title" v-if="!is_initial_state">
                         <template v-if="drawing_lot">
-                            {{ $t("list-draw.status.ongoing") }}
+                            {{ $t("pool-list-draw.status.ongoing") }}
                         </template>
                         <template v-else>
-                            {{ $t("list-draw.status.finished") }}
+                            {{ $t("pool-list-draw.status.finished") }}
                         </template>
                     </div>
                 </transition>
 
                 <button v-if="is_initial_state" class="btn btn__draw btn-outline-success animated infinite pulse" @click.prevent="doDrawingLot">
-                    {{ $t("list-draw.launch") }}
+                    {{ $t("pool-list-draw.launch") }}
                 </button>
 
                 <div class="progress mb-4" v-else>

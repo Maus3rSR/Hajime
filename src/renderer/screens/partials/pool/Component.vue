@@ -17,12 +17,15 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/partials/list/pool.json"></i18n>
+
 <template>
     <div class="card pool">
         <div class="card-body">
-            <h4 class="card-title">Poule N° {{ pool.number }}</h4>
+            <h4 class="card-title">{{ $t("common.of.number-inverse", { item: $t("common.pool"), n: pool.number }) }}</h4>
             <div v-if="canShowDetail" class="actions">
-                <a href="javascript:void(0);" class="actions__item zmdi zmdi-view-list-alt" title="Voir le détail du classement" @click.prevent="$emit('on-show-detail')"></a>
+                <a href="javascript:void(0);" class="actions__item zmdi zmdi-view-list-alt" :title="$t('pool-list.ranking-detail')" @click.prevent="$emit('on-show-detail')"></a>
             </div>
 
             <transition-group name="list" tag="ul">
