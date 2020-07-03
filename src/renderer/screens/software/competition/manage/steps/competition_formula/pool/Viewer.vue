@@ -59,7 +59,7 @@ export default {
             </div>
 
             <div class="actions">
-                <a href="javascript:void(0);" @click.prevent="GeneratePdf" title="Télécharger le PDF de la liste des poules" class="actions__item zmdi zmdi-collection-pdf"></a>
+                <a href="javascript:void(0);" @click.prevent="GeneratePdf" :title="$t('pool.action.pdf')" class="actions__item zmdi zmdi-collection-pdf"></a>
             </div>
         </div>
 

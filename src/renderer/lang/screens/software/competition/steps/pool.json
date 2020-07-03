@@ -1,6 +1,9 @@
 {
     "gb": {
         "pool": {
+            "action": {
+                "pdf": "@:common.action.download PDF of the list of @.lower:common.pools"
+            },
             "configuration": {
                 "choose": "Choose a configuration",
                 "number": "Number of @.lower:common.pools"
@@ -21,6 +24,9 @@
     },
     "fr": {
         "pool": {
+            "action": {
+                "pdf": "@:common.action.download le PDF de la liste des @.lower:common.pools"
+            },
             "configuration": {
                 "choose": "Choisir une configuration",
                 "number": "Nombre de @.lower:common.pool"

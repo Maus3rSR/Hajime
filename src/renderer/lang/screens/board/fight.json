@@ -4,7 +4,14 @@
             "action": {
                 "forfeit": "Make forfeit"
             },
-            "comment": "@:common.action.add a @.lower:common.comment at this @.lower.common.fight",
+            "modal": {
+                "title": {
+                    "forfeit": "Make forfeit",
+                    "validation": "@:common.fight validation"
+                },
+                "comment": "@:common.action.add a @.lower:common.comment at this @.lower:common.fight",
+                "warning": "Warning, this action will validate the @.lower:common.fight and it will no longer be editable! It will be still available in @.lower:common.readonly"
+            },
             "deathmatch": "Deathmatch",
             "saved": "Saved!",
             "saving": "Saving..."
@@ -15,7 +22,14 @@
             "action": {
                 "forfeit": "Déclarer un forfait"
             },
-            "comment": "@:common.action.add un @.lower:common.comment à ce @.lower.common.fight",
+            "modal": {
+                "title": {
+                    "forfeit": "Déclarer un forfait",
+                    "validation": "Validation du @.lower:common.fight"
+                },
+                "comment": "@:common.action.add un @.lower:common.comment à ce @.lower:common.fight",
+                "warning": "Attention, cette action va valider le @.lower:common.fight et ne sera plus modifiable ! Il sera toujours disponible en @.lower:common.readonly"
+            },
             "deathmatch": "Mort subite",
             "saved": "Enregistré !",
             "saving": "Enregistrement en cours..."

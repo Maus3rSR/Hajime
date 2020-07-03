@@ -22,7 +22,9 @@ export default {
             is_saving: "fight_board/saving",
         }),
         modal_title() {
-            return this.forfeit ? "Déclarer un forfait" : "Validation du combat"
+            return this.forfeit
+                ? this.$t("fight-board.modal.title.forfeit")
+                : this.$t("fight-board.modal.title.validation")
         },
         is_disabled() {
             return this.readonly || (!this.fight.id ? true : this.fightIsLocked(this.fight, this.fighter1, this.fighter2))
@@ -177,7 +179,7 @@ export default {
                             </span>
                             <span v-else>
                                 <i class="zmdi zmdi-lock"></i>
-                                {{ $t("common.form.required") }}
+                                {{ $t("common.readonly") }}
                             </span>
                         </transition>
 
@@ -209,7 +211,7 @@ export default {
                     </div>
                     
                     <div class="col-sm-12">
-                        <label for="fight__comment" class="card-body__title">{{ $t("fight-board.comment") }}</label>
+                        <label for="fight__comment" class="card-body__title">{{ $t("fight-board.modal.comment") }}</label>
                         <div class="form-group">
                             <textarea id="fight__comment" class="form-control" cols="30" rows="10" v-model="comment"></textarea>
                         </div>
@@ -218,8 +220,7 @@ export default {
 
                 <div class="row">
                     <div class="col-sm-12 text-warning h5">
-                        Attention, cette action va valider le combat et ne sera plus modifiable !
-                        Il sera toujours disponible en lecture seule.
+                        {{ $t("fight-board.modal.warning") }}
                     </div>
                 </div>
 
