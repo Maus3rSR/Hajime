@@ -3,13 +3,16 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/error/notFound.json"></i18n>
+
 <template>
     <section id="error__404">
-        <h1>Oops... :-(</h1>
-        <h2>La page que vous recherchez n'existe pas !</h2>
+        <h1>{{ $t("common.oops") }}... :-(</h1>
+        <h2>{{ $t("error-screen.not-found") }}</h2>
         <p>
-            <button title="Aller sur la page d'accueil" class="btn btn-primary" @click.prevent="$router.push('/')">
-                <i class="zmdi zmdi-arrow-home"></i> Aller sur la page d'accueil
+            <button class="btn btn-primary" @click.prevent="$router.push('/')">
+                <i class="zmdi zmdi-arrow-home"></i> {{ $t("common.action.back-main") }}
             </button>
         </p>
     </section>

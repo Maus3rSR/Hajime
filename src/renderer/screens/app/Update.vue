@@ -62,15 +62,18 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/app/update.json"></i18n>
+
 <template>
     <main id="app_update" class="main" data-sa-theme="1">
         <section class="app_update">
             <div class="app_update__inner">
                 <transition name="fade" mode="out-in" appear>
                     <span v-if="!migration_error">
-                        <h1 v-if="is_db_connecting">Connexion...</h1>
+                        <h1 v-if="is_db_connecting">{{ $t("app-update.connection") }}...</h1>
                         <h1 v-else>
-                            Application des mises à jour...
+                            {{ $t("app-update.updating") }}...
                             <span v-if="migration_pending">
                                 {{ applied_migration }} / {{ migration_pending }}
                             </span>
@@ -82,8 +85,8 @@ export default {
                         </div>
                     </span>
                     <span v-else>
-                        <h1>Oops... :-(</h1>
-                        <h2>Une erreur est survenue lors de la mise à jour du logiciel.</h2>
+                        <h1>{{ $t("common.oops") }}... :-(</h1>
+                        <h2>{{ $t("app-update.error") }}</h2>
                     </span>
                 </transition>
             </div>

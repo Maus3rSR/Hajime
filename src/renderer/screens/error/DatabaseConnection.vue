@@ -24,23 +24,21 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/screens/error/databaseConnection.json"></i18n>
+
 <template>
     <section id="error__db">
         <h1>
-            Oops...
+            {{ $t("common.oops") }}...
             <i class="zmdi zmdi-flash-off animated flash slower"></i>
         </h1>
-        <h2>Une erreur de connexion à la base de données est survenue !</h2>
+        <h2>{{ $t("error-screen.db") }}</h2>
 
-        <button title="Tenter une reconnexion" class="btn btn-warning" @click.prevent="connect">
+        <button class="btn btn-warning" @click.prevent="connect">
             <i v-if="!is_db_connecting" class="zmdi zmdi-flash"></i>
             <clip-loader v-else :size="'14px'" :color="'#000'"></clip-loader>
-            &nbsp;Tenter une reconnexion
-        </button>
-
-        <button title="En cours de développement" class="btn btn-danger disabled">
-            <i class="zmdi zmdi-bug"></i>&nbsp;
-            Reporter un problème
+            &nbsp;{{ $t("error-screen.reconnect") }}
         </button>
     </section>
 </template>

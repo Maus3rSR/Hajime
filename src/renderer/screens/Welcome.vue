@@ -52,6 +52,9 @@ export default {
     <main id="welcome" class="main" data-sa-theme="1">
         <section class="welcome">
             <div class="welcome__inner">
+                
+                <lang-switcher class="float-right" />
+
                 <h2>{{ $t("welcome.title", { app: APP_NAME }) }}</h2>
                 <p>{{ $t("welcome.message") }}</p>
                 <hr/>

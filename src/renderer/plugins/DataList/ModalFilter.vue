@@ -75,6 +75,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/plugins/datalist.json"></i18n>
+
 <template>
     <b-modal class="modal__filter" title="Filtrer" size="lg" hide-header-close ref="modalFilter">
         <div class="row">
@@ -142,9 +145,9 @@ export default {
         </div>
 
         <template slot="modal-footer">
-            <button type="button" class="btn btn-outline-primary" @click.prevent="apply">Filtrer</button>
-            <button type="button" class="btn btn-outline-secondary" @click.prevent="reset">Réinitialiser</button>
-            <button type="button" class="btn btn-dark" @click.prevent="closeModal">Annuler</button>
+            <button type="button" class="btn btn-outline-primary" @click.prevent="apply">{{ $t("common.action.filter") }}</button>
+            <button type="button" class="btn btn-outline-secondary" @click.prevent="reset">{{ $t("common.action.reset") }}</button>
+            <button type="button" class="btn btn-dark" @click.prevent="closeModal">{{ $t("common.action.cancel") }}</button>
         </template>
     </b-modal>
 </template>
