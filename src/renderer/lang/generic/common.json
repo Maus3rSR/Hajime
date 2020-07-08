@@ -19,6 +19,11 @@
                 "step-previous": "Previous step",
                 "validate": "Validate"
             },
+            "error": {
+                "forbidden": "You have no rights",
+                "impossible": "Impossible to",
+                "occured": "An error occured when"
+            },
             "form": {
                 "required": "* fields are required"
             },
@@ -83,6 +88,11 @@
                 "step-next": "Étape suivante",
                 "step-previous": "Étape précédente",
                 "validate": "Valider"
+            },
+            "error": {
+                "forbidden": "Vous n'avez pas le droit",
+                "impossible": "Impossible de",
+                "occured": "Un problème est survenu lors"
             },
             "form": {
                 "required": "Les champs * sont requis"
