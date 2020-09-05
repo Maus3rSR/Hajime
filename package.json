@@ -69,7 +69,7 @@
         "jspdf-autotable": "^3.2.4",
         "luxon": "^1.17.3",
         "material-design-iconic-font": "^2.2.0",
-        "node-sass": "^4.12.0",
+        "node-sass": "^4.13.1",
         "papaparse": "^4.6.2",
         "sass-loader": "^7.1.0",
         "upath": "^1.0.5",
