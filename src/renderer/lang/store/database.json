@@ -3,7 +3,7 @@
         "database": {
             "error": {
                 "configuration": {
-                    "empty": "@:common.error.impossible test connection to the database. @.common.configuration is empty",
+                    "empty": "@:common.error.impossible test connection to the database. @:common.configuration is empty",
                     "noone": "@:common.error.impossible connect to the database. No @.lower:common.configuration found"
                 },
                 "connection": "@:common.error.occured connecting to the database",
