@@ -9,10 +9,10 @@ i18n.mergeLocaleMessage("fr", translations.fr)
  */
 const color_list = [{
     color: "red",
-    label: i18n.t("marking-board.red").toUpperCase()
+    label: i18n.t("markingBoard.red").toUpperCase()
 },{
     color: "white",
-    label: i18n.t("marking-board.white").toUpperCase()
+    label: i18n.t("markingBoard.white").toUpperCase()
 }]
 
 const state = {}
