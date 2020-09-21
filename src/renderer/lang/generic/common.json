@@ -21,8 +21,10 @@
             },
             "error": {
                 "forbidden": "You have no rights",
+                "forbiddenAction": "@:common.forbidden to do this",
                 "impossible": "Impossible to",
-                "occured": "An error occured when"
+                "occured": "An error occured when",
+                "validated": "It's already validated"
             },
             "form": {
                 "required": "* fields are required"
@@ -92,8 +94,10 @@
             },
             "error": {
                 "forbidden": "Vous n'avez pas le droit",
+                "forbiddenAction": "@:common.forbidden d'effectuer cette action",
                 "impossible": "Impossible de",
-                "occured": "Un problème est survenu lors"
+                "occured": "Un problème est survenu lors",
+                "validated": "C'est déjà validé"
             },
             "form": {
                 "required": "Les champs * sont requis"
