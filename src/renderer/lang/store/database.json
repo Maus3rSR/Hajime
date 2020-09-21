@@ -1,0 +1,26 @@
+{
+    "gb": {
+        "database": {
+            "error": {
+                "configuration": {
+                    "empty": "@:common.error.impossible test connection to the database. @.common.configuration is empty",
+                    "noone": "@:common.error.impossible connect to the database. No @.lower:common.configuration found"
+                },
+                "connection": "@:common.error.occured connecting to the database",
+                "disconnection": "@:common.error.occured deconnecting from the database"
+            }
+        }
+    },
+    "fr": {
+        "database": {
+            "error": {
+                "configuration": {
+                    "empty": "@:common.error.impossible tester la connexion à la base de données. La @.lower:common.configuration est vide",
+                    "noone": "@:common.error.impossible se connecter à la base de données. Aucune @.lower:common.configuration trouvée"
+                },
+                "connection": "@:common.error.occured de la connexion à la base de données",
+                "disconnection": "@:common.error.occured de la déconnexion à la base de données"
+            }
+        }
+    }
+}
