@@ -3,38 +3,38 @@
         "pool": {
             "error": {
                 "configuration": {
-                    "updating": "@:common.error.occured de la mise à jour de la configuration des @.lower:common.pools",
-                    "get": "@:common.error.occured de la récupération des configurations des @.lower:common.pools"
+                    "updating": "@:common.error.occured updating @.lower:common.pools configuration",
+                    "get": "@:common.error.occured retrieving @.lower:common.pools configurations"
                 },
                 "entry": {
-                    "updating": "@:common.error.occured de la mise à jour de cette entrée de @.lower:common.pool",
-                    "get": "@:common.error.impossible récupérer l'entrée de @.lower:common.pool"
+                    "updating": "@:common.error.occured updating this @.lower:common.pool entry",
+                    "get": "@:common.error.impossible retrieve entry of the @.lower:common.pool"
                 },
                 "fight": {
-                    "add": "@:common.error.occured de l'ajout du nouveau @.lower:common.fight",
-                    "addNotExistPool": "@:common.error.impossible d'ajouter le @.lower:common.fight, @:pool.notExist",
-                    "addNotSamePool": "@:common.error.impossible d'ajouter le @.lower:common.fight, les entrées n'appartiennent pas à la même @.lower:common.pool",
-                    "get": "@:common.error.impossible de récupérer le @.lower:common.fight",
-                    "validate": "@:common.error.impossible valider ce @.lower:common.fight",
-                    "validateMissing": "@:common.error.impossible valider un @.lower:common.fight inexistant",
-                    "validateFighterMissing": "@:common.error.impossible mettre à jour les données de @.lower:common.pool car au moins un @.lower:common.fighter est manquant",
-                    "validateBothFighterMissing": "@:common.error.impossible valider ce @.lower:common.fight car les @.lower:common.fighters sont manquants",
-                    "validatePoolMissing": "@:common.error.impossible valider ce @.lower:common.fight car @:pool.notExist",
-                    "validateScoreMissing": "@:common.error.impossible mettre à jour les données de @.lower:common.pool car des scores sont manquants"
+                    "add": "@:common.error.occured adding the @.lower:common.fight",
+                    "addNotExistPool": "@:common.error.impossible add this @.lower:common.fight, @:pool.notExist",
+                    "addNotSamePool": "@:common.error.impossible add this @.lower:common.fight, entries does not belong to the @.lower:common.pool",
+                    "get": "@:common.error.impossible retrieve the @.lower:common.fight",
+                    "validate": "@:common.error.impossible validate this @.lower:common.fight",
+                    "validateMissing": "@:common.error.impossible validate a missing @.lower:common.fight",
+                    "validateFighterMissing": "@:common.error.impossible update datas of @.lower:common.pool because at least one @.lower:common.fighter is missing",
+                    "validateBothFighterMissing": "@:common.error.impossible validate this @.lower:common.fight because @.lower:common.fighters are missing",
+                    "validatePoolMissing": "@:common.error.impossible validate this @.lower:common.fight because @:pool.notExist",
+                    "validateScoreMissing": "@:common.error.impossible update datas of @.lower:common.pool because scores are missing"
                 },
                 "markingBoard": {
-                    "reversed": "@:common.error.occured de l'inversion du tableau de marque",
-                    "reversedNotExist": "@:common.error.impossible faire l'inversion, @:pool.notExist"
+                    "reversed": "@:common.error.occured inverting marking board",
+                    "reversedNotExist": "@:common.error.impossible inverse, @:pool.notExist"
                 },
-                "get": "@:common.error.occured de la récupération des @.lower:common.pools",
-                "getConfigurationEmpty": "@:common.error.impossible récupérer la liste des @.lower:common.pools car la configuration n'est pas chargée",
-                "saved": "@:common.error.occured de la sauvegarde des @.lower:common.pools",
-                "updateNotExist": "@:common.error.impossible mettre à jour les données de @.lower:common.pools, @:pool.notExist"
+                "get": "@:common.error.occured retrieving @.lower:common.pools",
+                "getConfigurationEmpty": "@:common.error.impossible retrieve list of @.lower:common.pools because configuration is not loaded",
+                "saved": "@:common.error.occured saving @.lower:common.pools",
+                "updateNotExist": "@:common.error.impossible update datas of @.lower:common.pools, @:pool.notExist"
             },
             "success": {
                 "fight": {
-                    "added": "Le @.lower:common.fight a bien été ajouté à la @.lower:common.pool",
-                    "validated": "Le @.lower:common.fight a bien été validé"
+                    "added": "Le @.lower:common.fight have been added to the @.lower:common.pool",
+                    "validated": "Le @.lower:common.fight have been validated"
                 },
                 "markingBoard": {
                     "reversed": "The marking board have been reversed"
