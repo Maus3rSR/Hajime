@@ -37,12 +37,12 @@
                     "validated": "Le @.lower:common.fight a bien été validé"
                 },
                 "markingBoard": {
-                    "reversed": "L'inversion du tableau de marque a bien été effectuée"
+                    "reversed": "The marking board have been reversed"
                 },
-                "saved": "Les @.lower:common.pools ont bien été sauvegardées"
+                "saved": "The @.lower:common.pools have been saved"
             },
-            "competitionFormula": "@:common.error.imposible créer les @.lower:common.pools, la formule de compétition n'existe pas",
-            "notExist": "la @.lower:common.pool n'existe pas"
+            "competitionFormula": "@:common.error.imposible create @.lower:common.pools, competition formula does not exist",
+            "notExist": "the @.lower:common.pool does not exist"
         }
     },
     "fr": {
