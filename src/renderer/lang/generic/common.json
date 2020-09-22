@@ -32,6 +32,7 @@
             "of": {
                 "label": "of",
                 "list": "List of {item}",
+                "list-count": "Liste of {item} ({n})",
                 "number": "{item} number",
                 "number-inverse": "{item} No{n}",
                 "total": "Total of {item}"
@@ -105,6 +106,7 @@
             "of": {
                 "label": "de",
                 "list": "Liste des {item}",
+                "list-count": "Liste des {item} ({n})",
                 "number": "N° de {item}",
                 "number-inverse": "{item} N°{n}",
                 "total": "Total de {item}"
