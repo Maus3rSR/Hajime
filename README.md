@@ -14,7 +14,7 @@ The project is currently slowed down due to lack of resources _(currently only t
 
 TODO: add more details, explanations, images
 
-* :white_check_mark: Create competition workflow
+* :white_check_mark: Competition creation workflow
   * :white_check_mark: General informations
   * :white_check_mark: Importing fighters or teams
   * :white_check_mark: Setup the competition formula _(rules)_
@@ -23,7 +23,7 @@ TODO: add more details, explanations, images
   * :white_check_mark: Pools _(Todo: more detail)_
   * :white_check_mark: Fight scoring
   * Tournament bracket in the same UX/UI than Pools _(Todo: more detail)_
-* i18n _(:fr:, :gb: for the begining)_
+* :white_check_mark: i18n _(:fr:, :gb: for the begining)_
 * Marking board
 * Live-scoring application
   * Slave application connected to a master application through [socket.io](https://socket.io/)
