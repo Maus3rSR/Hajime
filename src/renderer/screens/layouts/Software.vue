@@ -2,6 +2,15 @@
 import log from 'electron-log'
 import { DateTime } from 'luxon'
 
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/competition.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
+
 export default {
     beforeRouteUpdate(to, from, next) {
         const toDepth = to.path.split('/').length
@@ -34,44 +43,7 @@ export default {
             return `[FEEDBACK] On page ${this.$route.name}`
         },
         mail_body() {
-            return `Ceci est un mail qui sera envoyé au support de ce logiciel.
-Si votre demande concerne une suggestion/amélioration, vous pouvez ignorez tout le contenu de ce mail, l'effacer et faire votre demande.
-
-Veuillez vérifier avant de confirmer l'envoi que :
-    1. Vous êtes certain que le problème vous empêche d'utiliser convenablement le logiciel et que cela n'est pas dû à une mauvaise compréhension de son utilisation
-    2. Vous avez bien complété le sujet pré-remplis avec un résumé clair du problème
-    3. Vous avez bien remplis chaque étape demandée ci-dessous
-    4. Vous avez bien mis en pièces-jointe des captures d'écran permettant de rapidement identifier le problème
-    5. Vous avez bien mis en pièces-jointe le journal de santé du logiciel situé à cet emplacement :
-            
-            ${this.log_path}
-
-### SYSTEME D'EXPLOITATION ET VERSION DU LOGICIEL :
-
-OS \`${this.os}\`
-Logiciel version \`${this.$app.version}\`
-
-### COMPORTEMENT ATTENDU
-
-Complétez le contenu
-
-### COMPORTEMENT ACTUEL
-
-Complétez le contenu
-
-### ETAPES POUR REPRODUIRE LE SOUCIS
-
-Complétez le contenu
-
-### REMARQUES COMPLEMENTAIRES
-
-Complétez le contenu si nécéssaire
-
-### Indiquez votre adresse email juste après si vous souhaitez un suivi de ce ticket
-
-Indiquez votre adresse email si souhaité
-`
-            .replace(/\n/g, "%0D")
+            return i18n.t('mail.support', { log_path: this.log_path, os: this.os, app_version: this.$app.version }).replace(/\n/g, "%0D")
         }
     },
     methods: {
