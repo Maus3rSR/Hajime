@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 
 import i18n from '@config/i18n'
 import commonTranslations from '@lang/generic/common.json'
-import translations from '@lang/store/competition.json'
+import translations from '@lang/mail/support.json'
 
 i18n.mergeLocaleMessage("gb", commonTranslations.gb)
 i18n.mergeLocaleMessage("fr", commonTranslations.fr)
