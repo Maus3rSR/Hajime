@@ -623,7 +623,7 @@ const actions = {
 
             pool.entry_list.forEach(pool_entry => body.push([pool.number + "." + pool_entry.number, pool_entry.entry.name])) // Each entry of pool
 
-            config.head[0][0] = i18n.t("common.of.number-inverse", { item: $t("common.pool"), n: index + 1 })
+            config.head[0][0] = i18n.t("common.of.number-inverse", { item: i18n.t("common.pool"), n: index + 1 })
             config.body = body
             config.startY = startY
             config.margin.right = (is_pair ? margingLeftX : margingLeftSecondTable)
@@ -642,7 +642,7 @@ const actions = {
         for (let i = 0; i < pageCount; i++) {
             doc.setPage(i)
             const page_info = doc.internal.getCurrentPageInfo()
-            doc.text(i18n.t("common.of.list-count", { item: this.$options.filters.lowercase("common.pools"), n: getters.count }), margingLeftX, margingY)
+            doc.text(i18n.t("common.of.list-count", { item: i18n.t("common.pools"), n: getters.count }), margingLeftX, margingY)
             doc.setFontSize(10)
             doc.text(margingRightX, margingY, page_info.pageNumber + "/" + pageCount)
             doc.setFontSize(14)
