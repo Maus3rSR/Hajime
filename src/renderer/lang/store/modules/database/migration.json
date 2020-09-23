@@ -1,0 +1,16 @@
+{
+    "gb": {
+        "migration": {
+            "error": {
+                "data": "@:common.error.occured migrating data"
+            }
+        }
+    },
+    "fr": {
+        "migration": {
+            "error": {
+                "data": "@:common.error.occured de la migration des données"
+            }
+        }
+    }
+}
