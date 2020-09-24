@@ -2,17 +2,17 @@
 
 # Hajime
 
-Hajime is an Electron application for managing Kendo's competition
+Hajime is an Electron application for managing Kendo competition
 
 # Project status
 
 The project is currently slowed down due to lack of resources _(currently only the main author is working on **Hajime**)_:
 - Developers that want to contribute to the project
-- Donations that can help actively growing the project and finish the MVP that every Kendo's dojo can use it in a Kendo's competition event
+- Donations that can help actively growing the project and finish the MVP that every Kendo's dojo can use it in a Kendo competition event
 
 # Roadmap (MVP)
 
-TODO: add more details, explanations, images
+TODO: add details, explanations, images
 
 * :white_check_mark: Competition creation workflow
   * :white_check_mark: General informations
@@ -29,7 +29,7 @@ TODO: add more details, explanations, images
   * Slave application connected to a master application through [socket.io](https://socket.io/)
   * Must work without internet (local network)
   * Reflexion about making an mobile / tablet app (using Flutter, React Native, etc.) or keep using Electron as it can be installed on a windows tablet (can be enough)
-  * It should shared a part of the components as we already handle list of fights, fight scoring, etc...
+  * It should share a part of the components as we already handle list of fights, fight scoring, etc...
 
 ## Scoring application
 
@@ -37,7 +37,7 @@ TODO: add more details, explanations, images
 
 ## Dependancies
 
-You need to install these dependancies to launch the project
+These dependancies are required to launch the project :
 
 * [NodeJS](https://nodejs.org/en/)
 * [Yarn](https://yarnpkg.com/lang/en/) (More reliable than `npm` to manage packages)
