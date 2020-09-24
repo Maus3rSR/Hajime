@@ -1,0 +1,42 @@
+{
+    "gb": {
+        "fight": {
+            "error": {
+                "order": {
+                    "add": "@:common.error.occured creating @:fight.order",
+                    "addAlreadyExist": "@:common.error.impossible create @:fight.order, it already exist",
+                    "update": "@:common.error.impossible update @:fight.order of @.lower:common.fighter",
+                    "updateReplace": "@:common.error.occured updating the @:fight.order of @.lower:common.fighter to replace",
+                    "updateSame": "@:common.error.impossible update two @.lower:common.fight orders for the same @.lower:common.fighter",
+                    "verifyBeforeCreate": "@:common.error.occured verifying @:fight.order creation"
+                }
+            },
+            "success": {
+                "order": {
+                    "update": "@:common.fighter order have been updated"
+                }
+            },
+            "order": "@.lower:common.fight order"
+        }
+    },
+    "fr": {
+        "fight": {
+            "error": {
+                "order": {
+                    "add": "@:common.error.occured de la création de @:fight.order",
+                    "addAlreadyExist": "@:common.error.impossible de créer @:fight.order, il existe déjà",
+                    "update": "@:common.error.impossible mettre à jour @:fight.order du @.lower:common.fighter",
+                    "updateReplace": "@:common.error.occured de la mise à jour de @:fight.order du @.lower:common.fighter à remplacer",
+                    "updateSame": "@:common.error.impossible mettre à jour deux ordres de @.lower:common.fight pour un même @.lower:common.fighter",
+                    "verifyBeforeCreate": "@:common.error.occured de la vérification de @:fight.order à créer"
+                }
+            },
+            "success": {
+                "order": {
+                    "update": "L'ordre du @.lower:common.fighter a bien été mis à jour"
+                }
+            },
+            "order": "l'ordre de @.lower:common.fight"
+        }
+    }
+}

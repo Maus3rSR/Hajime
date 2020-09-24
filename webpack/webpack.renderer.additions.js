@@ -6,8 +6,10 @@ module.exports = {
             '@src': path.join(__dirname, '../src'),
             '@root': path.join(__dirname, '../src/renderer'),
             '@database': path.join(__dirname, '../src/renderer/database'),
-            '@components': path.join(__dirname, '../src/renderer/components'),
-            '@partials': path.join(__dirname, '../src/renderer/components/partials'),
+            '@config': path.join(__dirname, '../src/renderer/config'),
+            '@lang': path.join(__dirname, '../src/renderer/lang'),
+            '@screens': path.join(__dirname, '../src/renderer/screens'),
+            '@partials': path.join(__dirname, '../src/renderer/screens/partials'),
             '@themes': path.join(__dirname, '../src/renderer/themes'),
             '@assets': path.join(__dirname, '../src/renderer/assets'),
             '@images': path.join(__dirname, '../src/renderer/assets/img'),
@@ -19,6 +21,11 @@ module.exports = {
             {
                 test: /\.svg$/,
                 loader: 'file-loader'
+            },
+            {
+                resourceQuery: /blockType=i18n/,
+                type: 'javascript/auto',
+                loader: '@kazupon/vue-i18n-loader'
             }
         ]
     },

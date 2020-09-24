@@ -1,0 +1,48 @@
+{
+    "gb": {
+        "pool": {
+            "action": {
+                "pdf": "@:common.action.download PDF of the list of @.lower:common.pools"
+            },
+            "configuration": {
+                "choose": "Choose a configuration",
+                "number": "Number of @.lower:common.pools"
+            },
+            "fight-list": {
+                "add": "@:common.action.add one more @.lower:common.fight",
+                "adding": "Adding one more @.lower:common.fight",
+                "empty": "No data of @.lower.common.fight",
+                "info": "A @.lower:common.fight added manually will not change the number of ranking @.lower:common.points",
+                "title": "@:common.fights of @.lower:common.pool",
+                "validation": "Validation needed",
+                "validate": "Validate this @.lower:common.fight to distribute @.lower:common.points"
+            },
+            "empty": "No data of @.lower:common.pools",
+            "label": "@.lower:common.pool | @.lower:common.pools",
+            "not-enough": "Number of @.lower:common.fighter insufficient to distribute @.lower:common.pools."
+        }
+    },
+    "fr": {
+        "pool": {
+            "action": {
+                "pdf": "@:common.action.download le PDF de la liste des @.lower:common.pools"
+            },
+            "configuration": {
+                "choose": "Choisir une configuration",
+                "number": "Nombre de @.lower:common.pool"
+            },
+            "fight-list": {
+                "add": "@:common.action.add un @.lower:common.fight supplémentaire",
+                "adding": "Ajout d'un @.lower:common.fight supplémentaire",
+                "empty": "Aucune données de @.lower.common.fight",
+                "info": "Un @.lower:common.fight ajouté manuellement n'influera pas le nombre de @.lower:common.points dans le classement",
+                "title": "@:common.fights de la @.lower:common.pool",
+                "validation": "À valider",
+                "validate": "Procéder à la validation de ce @.lower:common.fight pour attribuer les @.lower:common.points"
+            },
+            "empty": "Aucune données de @.lower:common.pool",
+            "label": "@.lower:common.pool | @.lower:common.pools",
+            "not-enough": "Nombre de @.lower:common.fighter insuffisant pour procéder à la répartition des @.lower:common.pool."
+        }
+    }
+}

@@ -14,15 +14,16 @@ The project is currently slowed down due to lack of resources _(currently only t
 
 TODO: add details, explanations, images
 
-* :white_check_mark: Create competition workflow
+* :white_check_mark: Competition creation workflow
   * :white_check_mark: General informations
   * :white_check_mark: Importing fighters or teams
   * :white_check_mark: Setup the competition formula _(rules)_
 * Competition **'D-Day'** workflow
   * :white_check_mark: Fighters/Teams list review and lock
   * :white_check_mark: Pools _(Todo: more detail)_
+  * :white_check_mark: Fight scoring
   * Tournament bracket in the same UX/UI than Pools _(Todo: more detail)_
-* i18n _(:fr:, :gb: for the begining)_
+* :white_check_mark: i18n _(:fr:, :gb: for the begining)_
 * Marking board
 * Live-scoring application
   * Slave application connected to a master application through [socket.io](https://socket.io/)
@@ -77,7 +78,7 @@ Defined in  `package.json` :
     * `/src/renderer/index.js` : Entry point
     * `/src/renderer/App.vue` : Vue JS entry point
     * `/src/renderer/assets` : Images, fonts, etc...
-    * `/src/renderer/components` : VueJS screens. (TODO: should rename this folder to `screens`)
+    * `/src/renderer/screens` : VueJS components which are screens of the app
     * `/src/renderer/database` : Contain all files related to the database. models definition, sequelize, migrations
     * `/src/renderer/plugins` : Custom Vue JS components loaded as a plugin
     * `/src/renderer/router` : Vue-router configuration files
@@ -91,5 +92,5 @@ Defined in  `package.json` :
 You can contribute to **Hajime** by following [CONTRIBUTING.MD][contributing]
 
 [//]: # (List of reference)
-[contributing]: https://github.com/Maus3rSR/Hajime/blob/master/CONTRIBUTING.md
+[contributing]: .github/CONTRIBUTING.md
 [badge-license]: https://img.shields.io/github/license/Maus3rSR/hajime?style=flat-square

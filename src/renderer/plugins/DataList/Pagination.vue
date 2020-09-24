@@ -74,11 +74,14 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/plugins/datalist.json"></i18n>
+
 <template>
     <infinite-loading @infinite="loadMore" :distance="infiniteScrollDistance"  ref="infiniteLoading">
 
         <template slot="no-more">
-            Toutes les données sont chargées :-)
+            {{ $t("datalist.loaded") }} :-)
         </template>
 
     </infinite-loading>

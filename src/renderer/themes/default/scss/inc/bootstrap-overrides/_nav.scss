@@ -36,6 +36,12 @@ $color-highlight: darken($color-base, 5%);
     z-index: -1;
     overflow: hidden;
 
+    &.nav-link__progress-finished {
+        &:after {
+            display: none;
+        }
+    }
+
     &:after {
         content: '';
         position: absolute;
@@ -45,6 +51,10 @@ $color-highlight: darken($color-base, 5%);
         height: 100%;
         background: linear-gradient(90deg, $color-base, $color-highlight, $color-base);
         animation: progress 4s cubic-bezier(0.680, -0.550, 0.265, 1.550) infinite;
+    }
+
+    i {
+        padding: 1.1rem 0.3rem;
     }
   }
 }
