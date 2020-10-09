@@ -4,10 +4,13 @@ import { format as formatUrl, resolve as resolveUrl } from 'url'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 
+require('update-electron-app')({
+    updateInterval: '1 hour',
+    logger: log
+})
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
-const appUpdateUrl = process.env.ELECTRON_WEBPACK_APP_UPDATE_URL // ONLY IN DEBUG BUILD
-const appUpdateToken = process.env.ELECTRON_WEBPACK_APP_UPDATE_TOKEN // PRODUCTION TOKEN
 const baseUrl = isDevelopment ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}` : formatUrl({ pathname: path.join(__dirname, 'index.html'), protocol: 'file', slashes: true })
 const windowSharedParam = {
     webPreferences: {nodeIntegration: true},
@@ -48,11 +51,6 @@ function createMainWindow() {
 
     window.on('closed', () => mainWindow = null)
     window.webContents.on('devtools-opened', () => setFocus(window))
-
-    if (undefined !== appUpdateUrl || undefined !== appUpdateToken)
-        autoUpdater.checkForUpdates()
-    else
-        log.warn("App update URL or TOKEN is missing... impossible to check for updates")
 
     return window
 }
@@ -139,11 +137,6 @@ autoUpdater.autoDownload = true
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = "info"
 autoUpdater.logger.catchErrors()
-
-if (isDebugBuild)
-    autoUpdater.setFeedURL({ provider: "generic", url: appUpdateUrl })
-else
-    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": appUpdateToken }
 
 autoUpdater.on('update-available', () => {
     mainWindow.webContents.send('update-available')

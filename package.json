@@ -13,10 +13,11 @@
         "url": "https://github.com/Maus3rSR/Hajime.git"
     },
     "build": {
-        "appId": "com.hajime.app",
+        "appId": "software.hajime.app",
         "publish": {
-            "provider": "generic",
-            "url": "BUILD_PUBLISH_URL_AUTO_GENERATED"
+            "provider": "github",
+            "owner": "Kevin UNFRICHT",
+            "vPrefixedTagName": false
         },
         "mac": {
             "category": "public.app-category.sports"
@@ -100,12 +101,12 @@
         "upath": "^1.0.5"
     },
     "dependencies": {
-        "electron-updater": "^4.2.0",
         "mariadb": "^2.1.1",
         "mysql": "^2.17.1",
         "sequelize": "^5.19.6",
         "source-map-support": "^0.5.9",
         "sqlite3": "^4.1.0",
-        "umzug": "^2.2.0"
+        "umzug": "^2.2.0",
+        "update-electron-app": "^2.0.1"
     }
 }
