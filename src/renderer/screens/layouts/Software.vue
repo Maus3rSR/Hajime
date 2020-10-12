@@ -69,6 +69,30 @@ export default {
         openLicensePage() {
             this.$shell.openExternal(process.env.ELECTRON_WEBPACK_LICENSE_PAGE)
         },
+        askDownloadUpdate() {
+            this.$notify.show(this.$t("common.update.available"), {
+                ...this.$notify.getOption("info"),
+                action: [{
+                    text: this.$t("common.yes"),
+                    onClick: (e, toastObject) => this.$ipc.send('download-update')
+                }, {
+                    text: this.$t("common.later"),
+                    onClick: (e, toastObject) => toastObject.goAway(0)
+                }],
+            })
+        },
+        askInstallUpdate() {
+            this.$notify.show(this.$t("common.update.install"), {
+                ...this.$notify.getOption("info"),
+                action: [{
+                    text: this.$t("common.yes"),
+                    onClick: (e, toastObject) => this.$ipc.send('install-update')
+                }, {
+                    text: this.$t("common.later"),
+                    onClick: (e, toastObject) => toastObject.goAway(0)
+                }],
+            })
+        }
     },
     data() {
         return {
@@ -76,13 +100,14 @@ export default {
             displayFooter: true,
             transitionName: 'fade',
             theme: '',
-            showUpdateButton: false
         }
     },
     mounted() {
         this.checkDisplay(this.$route)
         this.setTheme(this.$route)
-        this.$ipc.on('update-downloaded', () => this.showUpdateButton = true)
+
+        this.$ipc.on('update-available', () => askDownloadUpdate)
+        this.$ipc.on('update-downloaded', () => askInstallUpdate)
     }
 }
 </script>

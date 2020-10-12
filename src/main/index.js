@@ -4,11 +4,6 @@ import { format as formatUrl, resolve as resolveUrl } from 'url'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 
-require('update-electron-app')({
-    updateInterval: '1 hour',
-    logger: log
-})
-
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
 const baseUrl = isDevelopment ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}` : formatUrl({ pathname: path.join(__dirname, 'index.html'), protocol: 'file', slashes: true })
@@ -72,6 +67,7 @@ function setFocus(window) {
 /**
  * IPC EVENTS
  */
+// Software
 ipcMain.on('closed', () => {
     appCloseCalled = true
     mainWindow = null
@@ -80,8 +76,6 @@ ipcMain.on('closed', () => {
     if (process.platform !== 'darwin')
         app.quit()
 })
-
-ipcMain.on('install-update', autoUpdater.quitAndInstall)
 
 ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
     const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true }) // modal is mandatory, we can't let the user use the mainWindow when he is managing a fight or some data will be lost
@@ -105,6 +99,10 @@ ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
 ipcMain.on('fight-board-validated', (e, fight, fighter1, fighter2) => mainWindow.webContents.send('fight-board-validated', fight, fighter1, fighter2))
 ipcMain.on('fight-board-score-updated', (e, fight, fighter_up, fighter_down, score_number) => mainWindow.webContents.send('fight-board-score-updated', fight, fighter_up, fighter_down, score_number))
 ipcMain.on('check-fight-board-already-opened', () => Object.keys(fightBoardWindowList).forEach(board_id => mainWindow.webContents.send('fight-board-opened', board_id)))
+
+// Autoupdate
+ipcMain.on('install-update', autoUpdater.quitAndInstall)
+ipcMain.on('download-update', autoUpdater.downloadUpdate)
 
 /**
  * APP EVENTS
@@ -130,13 +128,17 @@ app.on('ready', () => {
     })
 })
 
+
 /**
- * AUTO UPDATE SECTION
- */
-autoUpdater.autoDownload = true
+* AUTO UPDATE SECTION
+*/
+autoUpdater.autoDownload = false
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = "info"
 autoUpdater.logger.catchErrors()
+
+if (!isDevelopment) // TODO setInterval?
+    autoUpdater.checkForUpdates()
 
 autoUpdater.on('update-available', () => {
     mainWindow.webContents.send('update-available')

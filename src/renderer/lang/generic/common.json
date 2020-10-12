@@ -37,6 +37,10 @@
                 "number-inverse": "{item} No{n}",
                 "total": "Total of {item}"
             },
+            "update": {
+                "available": "An update is available. Do you want to download it?",
+                "install": "Update was downloaded. Do you want to relaunch application to install the update?"
+            },
             "and": "and",
             "club": "Club",
             "comment": "Comment",
@@ -54,8 +58,10 @@
             "fighter": "Fighter",
             "fighters": "Fighters",
             "grade": "Grade",
+            "later": "Later",
             "license": "License",
             "name": "Name",
+            "no": "No",
             "oops": "Oops",
             "organizer": "Organizer",
             "place": "Place",
@@ -70,7 +76,8 @@
             "team": "Team",
             "teams": "Teams",
             "team-new": "New team",
-            "type": "Type"
+            "type": "Type",
+            "yes": "Yes"
         }
     },
     "fr": {
@@ -111,6 +118,10 @@
                 "number-inverse": "{item} N°{n}",
                 "total": "Total de {item}"
             },
+            "update": {
+                "available": "Mise à jour disponible. Voulez-vous la télécharger ?",
+                "install": "Mise à jour téléchargée. Voulez-vous relancer l'application pour l'installer ?"
+            },
             "and": "et",
             "club": "Club",
             "comment": "Commentaire",
@@ -128,8 +139,10 @@
             "fighter": "Combattant",
             "fighters": "Combattants",
             "grade": "Grade",
+            "later": "Plus tard",
             "license": "Licence",
             "name": "Nom",
+            "no": "Non",
             "oops": "Oops",
             "organizer": "Organisateur",
             "place": "Lieu",
@@ -144,7 +157,8 @@
             "team": "Équipe",
             "teams": "Équipes",
             "team-new": "Nouvelle équipe",
-            "type": "Type"
+            "type": "Type",
+            "yes": "Oui"
         }
     }
 }
