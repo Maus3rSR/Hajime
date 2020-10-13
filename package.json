@@ -47,7 +47,7 @@
         "dev": "electron-webpack dev",
         "env": "copy .env.example .env",
         "compile": "electron-webpack",
-        "prebuild": "yarn env && compile",
+        "prebuild": "yarn env && yarn compile",
         "build": "yarn compile && electron-builder",
         "build:fast": "yarn build --dir -c.compression=store -c.mac.identity=null",
         "build:win": "yarn build -w",
