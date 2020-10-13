@@ -24,7 +24,7 @@ jobs:
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
-          # Launch yarn compile before launching electron-builder
-          build_script_name: "env && compile"
+          # Launch yarn env && compile before launching electron-builder
+          build_script_name: "prebuild"
           github_token: ${{ secrets.github_token }}
           release: ${{ startsWith(github.ref, 'refs/tags/') }}
