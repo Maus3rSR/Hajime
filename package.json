@@ -45,14 +45,16 @@
     },
     "scripts": {
         "dev": "electron-webpack dev",
+        "env": "yarn copy .env.example .env",
         "compile": "electron-webpack",
         "build": "yarn compile && electron-builder",
         "build:fast": "yarn build --dir -c.compression=store -c.mac.identity=null",
         "build:win": "yarn build -w",
         "build:linux": "yarn build -l",
         "build:all": "yarn build -wl",
+        "release": "electron-builder --mac --windows --linux --publish always",
         "postinstall": "electron-builder install-app-deps",
-        "release": "electron-builder --mac --windows --linux --publish always"
+        "copy": "node scripts/copy.js"
     },
     "devDependencies": {
         "@growthbunker/vueflags": "^0.1.2",
