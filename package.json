@@ -45,7 +45,7 @@
     },
     "scripts": {
         "dev": "electron-webpack dev",
-        "env": "copy .env.example .env",
+        "env": "yarn copy .env.example .env",
         "compile": "electron-webpack",
         "prebuild": "yarn env && yarn compile",
         "build": "yarn compile && electron-builder",
