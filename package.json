@@ -16,7 +16,7 @@
         "appId": "software.hajime.app",
         "publish": {
             "provider": "github",
-            "owner": "Kevin UNFRICHT",
+            "owner": "Maus3rSR",
             "vPrefixedTagName": false
         },
         "mac": {
