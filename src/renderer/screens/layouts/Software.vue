@@ -112,8 +112,8 @@ export default {
         this.checkDisplay(this.$route)
         this.setTheme(this.$route)
 
-        this.$ipc.on('update-available', () => askDownloadUpdate)
-        this.$ipc.on('update-downloaded', () => askInstallUpdate)
+        this.$ipc.on('update-available', this.askDownloadUpdate)
+        this.$ipc.on('update-downloaded', this.askInstallUpdate)
     }
 }
 </script>
