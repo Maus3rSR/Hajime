@@ -2,8 +2,8 @@ name: Build/release
 
 on:
   push:
-    branches:
-      - develop
+    tags:
+      - '*'
 
 jobs:
   release:
@@ -28,4 +28,4 @@ jobs:
           # Launch yarn env && compile before launching electron-builder
           build_script_name: "prebuild"
           github_token: ${{ secrets.github_token }}
-          release: ${{ startsWith(github.ref, 'refs/tags/') }}
+          release: true
