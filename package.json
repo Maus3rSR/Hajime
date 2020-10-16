@@ -108,7 +108,7 @@
         "upath": "^1.0.5"
     },
     "dependencies": {
-        "electron-log": "^3.0.8",
+        "electron-log": "^4.2.4",
         "electron-updater": "^4.3.5",
         "mariadb": "^2.1.1",
         "mysql": "^2.17.1",
