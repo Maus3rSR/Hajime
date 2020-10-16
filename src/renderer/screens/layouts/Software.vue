@@ -66,6 +66,12 @@ export default {
         openGithubPage() {
             this.$shell.openExternal(process.env.ELECTRON_WEBPACK_GITHUB_PAGE)
         },
+        openPaypalPage() {
+            this.$shell.openExternal(process.env.ELECTRON_WEBPACK_PAYPAL_PAGE)
+        },
+        openPatreonPage() {
+            this.$shell.openExternal(process.env.ELECTRON_WEBPACK_PATREON_PAGE)
+        },
         openLicensePage() {
             this.$shell.openExternal(process.env.ELECTRON_WEBPACK_LICENSE_PAGE)
         },
@@ -162,12 +168,19 @@ export default {
                         <i class="zmdi zmdi-bug"></i>
                         Bug / Suggestion
                     </button>
+                    <button href="javascript:void(0)" @click.prevent="openLicensePage" class="btn btn-sm btn-dark btn--icon-text">
+                        MIT License
+                    </button>
                     <button class="btn btn-sm btn-dark btn--icon-text" @click="openGithubPage">
                         <i class="zmdi zmdi-github"></i>
                         Github
                     </button>
-                    <button href="javascript:void(0)" @click.prevent="openLicensePage" class="btn btn-sm btn-dark btn--icon-text">
-                        MIT License
+                    <button class="btn btn-sm btn-dark btn--icon-text" @click="openPaypalPage">
+                        <i class="zmdi zmdi-paypal-alt"></i>
+                        Paypal
+                    </button>
+                    <button class="btn btn-sm btn-dark btn--icon-text" @click="openPatreonPage">
+                        Patreon
                     </button>
                 </div>
                 <div class="col-sm-5 text-right">
