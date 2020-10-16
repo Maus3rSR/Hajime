@@ -72,7 +72,6 @@
         "bootstrap-vue": "^2.15.0",
         "electron": "5.0.6",
         "electron-builder": "^22.8.1",
-        "electron-log": "^3.0.8",
         "electron-store": "^5.0.0",
         "electron-webpack": "^2.6.1",
         "electron-webpack-vue": "^2.2.2",
@@ -109,6 +108,7 @@
         "upath": "^1.0.5"
     },
     "dependencies": {
+        "electron-log": "^3.0.8",
         "electron-updater": "^4.3.5",
         "mariadb": "^2.1.1",
         "mysql": "^2.17.1",
