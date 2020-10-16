@@ -138,7 +138,7 @@ autoUpdater.logger.transports.file.level = "info"
 autoUpdater.logger.catchErrors()
 
 if (!isDevelopment)
-    setTimeout(autoUpdater.checkForUpdates, 5000);
+    setTimeout(() => autoUpdater.checkForUpdates(), 5000);
 
 autoUpdater.on('update-available', () => mainWindow.webContents.send('update-available'))
 autoUpdater.on('update-downloaded', () => mainWindow.webContents.send('update-downloaded'))
