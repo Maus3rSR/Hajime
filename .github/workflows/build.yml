@@ -14,15 +14,15 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
-      - name: Check out Git repository
+      - name: Check out project 🛎️
         uses: actions/checkout@v1
 
-      - name: Install Node.js, NPM and Yarn
+      - name: Install dependancies 🔧
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
 
-      - name: Build/release Electron app
+      - name: Build & release app 🚀
         uses: samuelmeuli/action-electron-builder@v1
         with:
           # Launch yarn env && compile before launching electron-builder
