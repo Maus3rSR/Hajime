@@ -137,8 +137,8 @@ autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = "info"
 autoUpdater.logger.catchErrors()
 
-if (!isDevelopment) // TODO setInterval?
-    autoUpdater.checkForUpdates()
+if (!isDevelopment)
+    autoUpdater.checkForUpdates() // TODO setInterval?
 
 autoUpdater.on('update-available', () => {
     mainWindow.webContents.send('update-available')
