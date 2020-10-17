@@ -13,15 +13,12 @@ module.exports = {
             '@themes': path.join(__dirname, '../src/renderer/themes'),
             '@assets': path.join(__dirname, '../src/renderer/assets'),
             '@images': path.join(__dirname, '../src/renderer/assets/img'),
-            '@styles': path.join(__dirname, '../src/renderer/assets/scss'),
+            '@css': path.join(__dirname, '../src/renderer/assets/css'),
+            '@scss': path.join(__dirname, '../src/renderer/assets/scss'),
         }
     },
     module: {
         rules: [
-            {
-                test: /\.svg$/,
-                loader: 'file-loader'
-            },
             {
                 resourceQuery: /blockType=i18n/,
                 type: 'javascript/auto',

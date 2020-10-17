@@ -67,7 +67,7 @@ export default {
 
 <style lang="scss">
     @import "~@themes/default/scss/app.scss";
-    @import "~@styles/transitions.scss";
+    @import "~@scss/transitions.scss";
     @import '~bootstrap-vue/src/index.scss';
 </style>
 

@@ -63,7 +63,6 @@
         "copy": "node scripts/copy.js"
     },
     "devDependencies": {
-        "@growthbunker/vueflags": "^0.1.2",
         "@kazupon/vue-i18n-loader": "^0.5.0",
         "@tweenjs/tween.js": "^17.2.0",
         "animate.css": "^3.7.0",
@@ -76,6 +75,7 @@
         "electron-webpack": "^2.6.1",
         "electron-webpack-vue": "^2.2.2",
         "faker": "^4.1.0",
+        "flag-icon-css": "^3.5.0",
         "jspdf": "^1.5.3",
         "jspdf-autotable": "^3.2.4",
         "luxon": "^1.17.3",

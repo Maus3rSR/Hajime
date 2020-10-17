@@ -596,10 +596,6 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-"@growthbunker/vueflags@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@growthbunker/vueflags/-/vueflags-0.1.2.tgz#6bc81cd4eb304f5998c9aa14dec8b6fcec39ab5e"
-
 "@kazupon/vue-i18n-loader@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@kazupon/vue-i18n-loader/-/vue-i18n-loader-0.5.0.tgz#64819fc9dbe21bac523e3436b7e15c32bcd33b92"
@@ -3151,6 +3147,10 @@ findup-sync@3.0.0:
     is-glob "^4.0.0"
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
+
+flag-icon-css@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/flag-icon-css/-/flag-icon-css-3.5.0.tgz#430747d5cb91e60babf85494de99173c16dc7cf2"
 
 flatten@^1.0.2:
   version "1.0.3"
