@@ -101,8 +101,8 @@ ipcMain.on('fight-board-score-updated', (e, fight, fighter_up, fighter_down, sco
 ipcMain.on('check-fight-board-already-opened', () => Object.keys(fightBoardWindowList).forEach(board_id => mainWindow.webContents.send('fight-board-opened', board_id)))
 
 // Autoupdate
-ipcMain.on('install-update', autoUpdater.quitAndInstall)
-ipcMain.on('download-update', autoUpdater.downloadUpdate)
+ipcMain.on('install-update', () => autoUpdater.quitAndInstall())
+ipcMain.on('download-update', () => autoUpdater.downloadUpdate())
 
 /**
  * APP EVENTS
