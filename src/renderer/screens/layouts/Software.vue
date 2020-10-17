@@ -80,7 +80,10 @@ export default {
                 ...this.$notify.getOption("info"),
                 action: [{
                     text: this.$t("common.yes"),
-                    onClick: (e, toastObject) => this.$ipc.send('download-update')
+                    onClick: (e, toastObject) => {
+                        toastObject.goAway(0)
+                        this.$ipc.send('download-update')
+                    }
                 }, {
                     text: this.$t("common.later"),
                     onClick: (e, toastObject) => toastObject.goAway(0)
