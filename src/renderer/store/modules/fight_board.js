@@ -1,6 +1,15 @@
 import { getField, updateField } from 'vuex-map-fields'
 import fight from './fight'
 
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/fight_board.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
+
 const modules = { fight }
 
 const defaultState = () =>  ({
@@ -134,39 +143,39 @@ const actions = {
         promise
             .then(([fight, fighter1, fighter2]) => {
                 if (null === fight)
-                    return this.$notify.error("Impossible de trouver les informations de combat")
+                    return this.$notify.error(i18n.t("fightBoard.error.fight.find"))
                 else if (null === fighter1 || null === fighter2)
-                    return this.$notify.error("Impossible de trouver les informations de tous les combattants")
+                    return this.$notify.error(i18n.t("fightBoard.error.fighter.find"))
 
                 switch (fight.entriable) {
                     case "Team":
                         if (parseInt(fight.entriable1_id, 10) === parseInt(fighter1.team_id, 10) && parseInt(fight.entriable2_id, 10) === parseInt(fighter2.team_id, 10))
                             break;
-                        return this.$notify.error("Un des combattants (ou les deux) est eronné et ne fait pas partie d'une des équipes de ce combat")
+                        return this.$notify.error(i18n.t("fightBoard.error.fighter.notBelongTeam"))
                     default:
                         if (parseInt(fight.entriable1_id, 10) === parseInt(fighter1.id, 10) && parseInt(fight.entriable2_id, 10) === parseInt(fighter2.id, 10))
                             break;
-                        return this.$notify.error("Un des combattants (ou les deux) est eronné et ne fait pas partie de ce combat")
+                        return this.$notify.error(i18n.t("fightBoard.error.fighter.notBelong"))
                 }
 
                 commit("updateField", { path: 'fight', value: fight.get({ plain: true }) })
                 commit("updateField", { path: 'fighter1', value: fighter1.get({ plain: true }) })
                 commit("updateField", { path: 'fighter2', value: fighter2.get({ plain: true }) })
             })
-            .catch(() => this.$notify.error("Erreur lors de la récupération des informations du combat"))
+            .catch(() => this.$notify.error(i18n.t("fightBoard.error.fight.retrieve")))
             .finally(() => commit('STOP_LOADING'))
 
         return promise
     },
     ADD_SCORE({ dispatch, commit, state, getters, rootGetters }, { from_fighter_id, on_fighter_id, score_type }) {
         if (state.fight.locked)
-            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+            return this.$notify.error(i18n.t("common.error.forbiddenAction"))
 
         if (!getters.isOneOfFighter(from_fighter_id) || !getters.isOneOfFighter(on_fighter_id))
-            return this.$notify.error("Impossible d'attributer le score. Le combattant n'est pas valide")
+            return this.$notify.error(i18n.t("fightBoard.error.score.attributeValidFighter"))
 
         if (getters.getFighterScoreGivenCount(from_fighter_id) >= rootGetters["configuration/FIGHT_LIMIT_SCORE"])
-            return this.$notify.error("La limite d'attribution de score a déjà été atteinte")
+            return this.$notify.error(i18n.t("fightBoard.error.score.limit"))
 
         from_fighter_id = parseInt(from_fighter_id, 10)
         on_fighter_id = parseInt(on_fighter_id, 10)
@@ -176,7 +185,7 @@ const actions = {
         const promise = dispatch("fight/ADD_SCORE", { fight_id: parseInt(state.fight.id, 10), from_fighter_id, on_fighter_id, score_type_id: parseInt(score_type.id, 10) })
 
         promise
-            .catch(() => this.$notify.error("Un problème est survenu lors de l'attribution du score"))
+            .catch(() => this.$notify.error(i18n.t("fightBoard.error.score.attribute")))
             .then(score => {
                 score = score.get({ plain: true })
                 score.score_type = score_type
@@ -192,10 +201,10 @@ const actions = {
     },
     REMOVE_SCORE({ dispatch, commit, state, getters }, { fighter_id, score_id }) {
         if (state.fight.locked)
-            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+            return this.$notify.error(i18n.t("common.error.forbiddenAction"))
 
         if (!getters.isOneOfFighter(fighter_id))
-            return this.$notify.error("Impossible de supprimer le score. Le combattant n'est pas valide")
+            return this.$notify.error(i18n.t("fightBoard.error.score.deleteValidFighter"))
 
         fighter_id = parseInt(fighter_id, 10)
 
@@ -208,23 +217,23 @@ const actions = {
                 fighter_number: getters.getFighterNumber(fighter_id),
                 score_id 
             }))
-            .catch(() => this.$notify.error('Un problème est survenu lors de suppression du score'))
+            .catch(() => this.$notify.error(i18n.t("fightBoard.error.score.delete")))
             .finally(() => commit("STOP_SAVING"))
 
         return promise
     },
     UPDATE_FOOL_COUNT({ commit, state, getters, rootGetters }, { fighter_id, fool_count }) {
         if (state.fight.locked)
-            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+            return this.$notify.error(i18n.t("common.error.forbiddenAction"))
 
         if (!getters.isOneOfFighter(fighter_id))
-            return this.$notify.error("Impossible de mettre à jour le nombre de pénalités. Le combattant n'est pas valide")
+            return this.$notify.error(i18n.t("fightBoard.error.penalty.updateValidFighter"))
 
         fighter_id = parseInt(fighter_id, 10)
         fool_count = parseInt(fool_count, 10)
 
         if (fool_count > rootGetters["configuration/FIGHT_LIMIT_SCORE"] * rootGetters["configuration/FIGHT_NB_FOOL_GIVE_IPPON"])
-            return this.$notify.error("La limite d'attribution de pénalité a déjà été atteinte")
+            return this.$notify.error(i18n.t("fightBoard.error.penalty.limit"))
 
         const fight_id = parseInt(state.fight.id, 10)
         const fighter_number = getters.getFighterNumber(fighter_id)
@@ -243,17 +252,17 @@ const actions = {
                 const count = create ? f_fool.get({ plain: true }) : fighter_fool
                 commit("UPDATE_FOOL", { fighter_number, count })
             })
-            .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour des pénalités'))
+            .catch(() => this.$notify.error(i18n.t("fightBoard.error.penalty.update")))
             .finally(() => commit("STOP_SAVING_FOOL"))
 
         return promise
     },
     UPDATE_SUDDEN_DEATH({ commit, state, rootGetters }) { // Property is already updated through v-model
         if (state.fight.locked)
-            return this.$notify.error("Vous n'avez pas le droit d'effectuer cette action")
+            return this.$notify.error(i18n.t("common.error.forbiddenAction"))
 
         if (undefined === state.fight.id)
-            return this.$notify.error('Impossible de mettre à jour la mort subite. Le combat est inexistant')
+            return this.$notify.error(i18n.t("fightBoard.error.penalty.updateValidFighter"))
 
         commit("START_SAVING")
 
@@ -261,17 +270,17 @@ const actions = {
 
         promise
             .then(() => commit("updateField", { path: 'saved', value: true }))
-            .catch(() => this.$notify.error("Un problème est survenu lors de la mise à jour de la mort subite"))
+            .catch(() => this.$notify.error(i18n.t("fightBoard.error.penalty.update")))
             .finally(() => commit("STOP_SAVING"))
 
         return promise
     },
     VALIDATE({ dispatch, commit, state }, comment) {
         if (state.fight.locked)
-            return this.$notify.error("C'est déjà validé ;-)")
+            return this.$notify.error(i18n.t("common.error.validated") + " ;-)")
 
         if (undefined === state.fight.id)
-            return this.$notify.error('Impossible de valider le combat. Il est inexistant')
+            return this.$notify.error(i18n.t("fightBoard.error.fight.exist"))
 
         const fight_id = parseInt(state.fight.id, 10)
         const fighter1_id = parseInt(state.fighter1.id, 10)
@@ -283,7 +292,7 @@ const actions = {
 
         promise
             .then(fighter_fight_meta => commit("VALIDATED", fighter_fight_meta.get({ plain: true })))
-            .catch(() => this.$notify.error("Un problème est survenu lors de la validation du combat"))
+            .catch(() => this.$notify.error(i18n.t("fightBoard.error.fight.validate")))
             .finally(() => commit("STOP_SAVING"))
 
         return promise

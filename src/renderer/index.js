@@ -5,7 +5,8 @@ import VeeValidate from 'vee-validate'
 import VueMask from 'v-mask'
 
 import App from './App'
-import router from './router'
+import router from './config/router'
+import i18n from './config/i18n'
 import store from './store'
 import plugins from './plugins'
 
@@ -25,14 +26,13 @@ Vue.app = Vue.prototype.$app = {
 }
 Vue.http = Vue.prototype.$http = axios
 
-Object.keys(plugins).forEach(key => {
-    Vue.use(plugins[key])
-})
+Object.keys(plugins).forEach(key => Vue.use(plugins[key]))
 Vue.use(VeeValidate) // @TODO Problem when loaded as a plugin
 Vue.use(VueMask) // @TODO Problem when loaded as a plugin
 
 new Vue({
   render: h => h(App),
   router,
+  i18n,
   store,
 }).$mount('#app')

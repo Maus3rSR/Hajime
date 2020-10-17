@@ -1,0 +1,12 @@
+{
+    "gb": {
+        "error-screen": {
+            "not-found": "Screen cannot be found!"
+        }
+    },
+    "fr": {
+        "error-screen": {
+            "not-found": "L'écran recherché n'existe pas !"
+        }
+    }
+}

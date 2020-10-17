@@ -37,14 +37,17 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/plugins/datalist.json"></i18n>
+
 <template>
     <span class="record-display-component">
-        <a :id="id_component" href="javascript:void(0)" class="badge badge-pill">Affichage / {{ current }}</a>
+        <a :id="id_component" href="javascript:void(0)" class="badge badge-pill">{{ $t("datalist.display") }} / {{ current }}</a>
         <b-popover 
             placement="auto"
             triggers="click"
-            title="Nombre de lignes affichées"
             
+            :title="$t('datalist.line')"
             :target="id_component"
             :show.sync="popoverShow"
         >

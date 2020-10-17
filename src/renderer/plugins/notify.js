@@ -3,9 +3,9 @@ import Toasted from 'vue-toasted'
 const getIconClass = icon => 'mr-2 zmdi zmdi-'+icon
 
 const infoToastOption = {
-    type : 'info',
-    duration : 8000,
-    icon : getIconClass('info-outline'),
+    type: 'info',
+    duration: 8000,
+    icon: getIconClass('info-outline'),
     closeOnSwipe: true,
 }
 
@@ -18,26 +18,26 @@ const NotifyPlugin = {
         })
 
         Vue.toasted.register('error', payload => payload, {
-            type : 'error',
-            duration : 8000,
+            type: 'error',
+            duration: 8000,
             closeOnSwipe: true,
-            icon : getIconClass('alert-circle-o'),
-            action : {
-                icon : getIconClass('close-circle-o'),
-                onClick : (e, toastObject) => toastObject.goAway(0)
+            icon: getIconClass('alert-circle-o'),
+            action: {
+                icon: getIconClass('close-circle-o'),
+                onClick: (e, toastObject) => toastObject.goAway(0)
             },
         })
 
         Vue.toasted.register('success', payload => payload, {
-            type : 'success',
-            icon : getIconClass('check')
+            type: 'success',
+            icon: getIconClass('check')
         })
 
         Vue.toasted.register('info', payload => payload, {
             ...infoToastOption,
-            action : [{
+            action: [{
                 text: 'OK',
-                onClick : (e, toastObject) => toastObject.goAway(0)
+                onClick: (e, toastObject) => toastObject.goAway(0)
             }]
         })
 
