@@ -20,6 +20,15 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                use: {
+                    loader: "url-loader",
+                    options: {
+                        esModule: false
+                    }
+                }
+            },
+            {
                 resourceQuery: /blockType=i18n/,
                 type: 'javascript/auto',
                 loader: '@kazupon/vue-i18n-loader'
