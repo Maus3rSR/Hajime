@@ -92,6 +92,7 @@
         "vue-i18n": "^8.18.2",
         "vue-infinite-loading": "^2.4.3",
         "vue-luxon": "^0.7.0",
+        "vue-meta": "^2.4.0",
         "vue-router": "^3.3.4",
         "vue-spinner": "^1.0.3",
         "vue-toasted": "^1.1.25",

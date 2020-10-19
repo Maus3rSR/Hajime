@@ -2,7 +2,16 @@
 import { mapState, mapActions } from 'vuex'
 import { setLanguage } from '@config/i18n.js'
 
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
 export default {
+    name: "App",
+    metaInfo: {
+        meta: [{
+            "http-equiv": "Content-Security-Policy",
+            content: `default-src 'self' ${isDevelopment ? '\'unsafe-eval\'': ''}; style-src 'self' 'unsafe-inline'; connect-src 'self' ws:;`
+        }]
+    },
     computed: {
         ...mapState('database', {
             is_db_connected: "connected"
