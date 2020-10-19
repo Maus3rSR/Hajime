@@ -19,7 +19,6 @@ const mutations = {
         
         if (!fighter)
             fighter = fight.entry2.fighter_list.find(f => parseInt(f.id, 10) === fighter_id)
-        
 
         if (!fighter) return
 

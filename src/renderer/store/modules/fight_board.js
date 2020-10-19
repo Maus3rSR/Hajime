@@ -1,5 +1,5 @@
 import { getField, updateField } from 'vuex-map-fields'
-import fight from './fight'
+import fightModule from './fight'
 
 import i18n from '@config/i18n'
 import commonTranslations from '@lang/generic/common.json'
@@ -10,7 +10,7 @@ i18n.mergeLocaleMessage("fr", commonTranslations.fr)
 i18n.mergeLocaleMessage("gb", translations.gb)
 i18n.mergeLocaleMessage("fr", translations.fr)
 
-const modules = { fight }
+const modules = { fightModule }
 
 const defaultState = () =>  ({
     loading: false,
@@ -182,7 +182,7 @@ const actions = {
 
         commit("START_SAVING")
 
-        const promise = dispatch("fight/ADD_SCORE", { fight_id: parseInt(state.fight.id, 10), from_fighter_id, on_fighter_id, score_type_id: parseInt(score_type.id, 10) })
+        const promise = dispatch("fightModule/ADD_SCORE", { fight_id: parseInt(state.fight.id, 10), from_fighter_id, on_fighter_id, score_type_id: parseInt(score_type.id, 10) })
 
         promise
             .catch(() => this.$notify.error(i18n.t("fightBoard.error.score.attribute")))
@@ -210,7 +210,7 @@ const actions = {
 
         commit("START_SAVING")
 
-        const promise = dispatch("fight/REMOVE_SCORE", score_id)
+        const promise = dispatch("fightModule/REMOVE_SCORE", score_id)
 
         promise
             .then(() => commit("REMOVE_SCORE", { 
@@ -288,7 +288,7 @@ const actions = {
 
         commit("START_SAVING")
 
-        const promise = dispatch("fight/LOCK", { fight_id, fighter1_id, fighter2_id, comment })
+        const promise = dispatch("fightModule/LOCK", { fight_id, fighter1_id, fighter2_id, comment })
 
         promise
             .then(fighter_fight_meta => commit("VALIDATED", fighter_fight_meta.get({ plain: true })))

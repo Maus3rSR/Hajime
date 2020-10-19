@@ -3,7 +3,7 @@ import { getField, updateField } from 'vuex-map-fields'
 import { COMPETITION_MODE, LOADER_STATUS, POOL_SCORING, SCORE_DATABASE_FIELD_LIST } from '@root/constant'
 import { getEntryListAssociation, getFightListAssociationList, getFightAssociationList } from './pool/association_helper'
 import FightLib from '@root/lib/fight'
-import fight from './fight'
+import fightModule from './fight'
 
 import i18n from '@config/i18n'
 import commonTranslations from '@lang/generic/common.json'
@@ -14,7 +14,7 @@ i18n.mergeLocaleMessage("fr", commonTranslations.fr)
 i18n.mergeLocaleMessage("gb", translations.gb)
 i18n.mergeLocaleMessage("fr", translations.fr)
 
-const modules = { fight }
+const modules = { fightModule }
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,
@@ -538,18 +538,18 @@ const actions = {
 
         const fight = state.list[pool_index].fight_list[fight_index]
 
-        commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order })
+        commit("fightModule/UPDATE_FIGHTER_ORDER", { fight, fighter_order })
         if (!!fighter_order_replaced)
-            commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order: fighter_order_replaced })
+            commit("fightModule/UPDATE_FIGHTER_ORDER", { fight, fighter_order: fighter_order_replaced })
     },
     ON_FIGHTER_ORDER_ADD({ dispatch }, { pool_id, fight_id, fighter, order }) {
-        return dispatch("fight/FIGHTER_ORDER_ADD", { fight_id, fighter, order }).then(fighter_order => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, fighter_order }))
+        return dispatch("fightModule/FIGHTER_ORDER_ADD", { fight_id, fighter, order }).then(fighter_order => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, fighter_order }))
     },
     ON_FIGHTER_ORDER_UP({ dispatch }, { pool_id, fight_id, fighter, order }) {
-        return dispatch("fight/FIGHTER_ORDER_UP", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+        return dispatch("fightModule/FIGHTER_ORDER_UP", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
     },
     ON_FIGHTER_ORDER_DOWN({ dispatch }, { pool_id, fight_id, fighter, order }) {
-        return dispatch("fight/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+        return dispatch("fightModule/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
     },
     VALIDATE_FIGHT_WITH_ONE_FIGHTER({ dispatch, getters, state, rootState }, { pool_id, fight_id, fighter1, fighter2 }) {
         const pool_index = getters.findPoolIndex(pool_id)
@@ -582,9 +582,9 @@ const actions = {
                 const on_score_fight_updated_parameter_list = { fight, fighter_up, score_number: 1 }
 
                 return Promise.all([
-                    dispatch("fight/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
-                    dispatch("fight/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
-                    dispatch("fight/LOCK", { fight_id, fighter1_id, fighter2_id }).then(() => dispatch("ON_FIGHT_VALIDATED", { fight, fighter1, fighter2 }))
+                    dispatch("fightModule/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
+                    dispatch("fightModule/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
+                    dispatch("fightModule/LOCK", { fight_id, fighter1_id, fighter2_id }).then(() => dispatch("ON_FIGHT_VALIDATED", { fight, fighter1, fighter2 }))
                 ])
             })
             .then(() => this.$notify.success(i18n.t("pool.success.fight.validated")))
