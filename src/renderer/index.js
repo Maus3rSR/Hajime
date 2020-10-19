@@ -15,15 +15,12 @@ const { app } = remote
 
 Vue.config.productionTip = process.env.NODE_ENV === 'production'
 if (process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD)
-Vue.config.devtools = true
+    Vue.config.devtools = true
 
 Vue.os = Vue.prototype.$os = os
 Vue.shell = Vue.prototype.$shell = shell
 Vue.ipc = Vue.prototype.$ipc = ipcRenderer
-Vue.app = Vue.prototype.$app = {
-    version: app.getVersion(),
-    name: app.getName()
-}
+Vue.app = Vue.prototype.$app = { version: app.version, name: app.name }
 Vue.http = Vue.prototype.$http = axios
 
 Object.keys(plugins).forEach(key => Vue.use(plugins[key]))
