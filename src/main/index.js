@@ -22,9 +22,7 @@ let fightBoardWindowList = {}
 let appCloseCalled = false
 
 function createMainWindow() {
-    const window = new BrowserWindow({
-        ...windowSharedParam
-    })
+    const window = new BrowserWindow({ ...windowSharedParam })
 
     globalShortcut.register('f5', reloadWindow)
     globalShortcut.register('CommandOrControl+R', reloadWindow)
@@ -78,7 +76,15 @@ ipcMain.on('closed', () => {
 })
 
 ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
-    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true }) // modal is mandatory, we can't let the user use the mainWindow when he is managing a fight or some data will be lost
+    /**
+     * @option modal is mandatory and value has to be "true",
+     * we can't let the user use the mainWindow when he is managing a fight or some data will be lost
+     * because data is shared between fightWindow and mainWindow current context (fight list)
+     * 
+     * @option fullscreenable to false if macOS
+     * @see https://github.com/electron/electron/issues/20228
+     */
+    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true, fullscreenable: process.platform !== 'darwin' })
 
     if (isDevelopment || isDebugBuild)
         fight_board_window.webContents.openDevTools()
@@ -108,9 +114,8 @@ ipcMain.on('download-update', () => autoUpdater.downloadUpdate())
 // quit application when all windows are closed
 app.on('window-all-closed', () => {
     // on macOS it is common for applications to stay open until the user explicitly quits
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin')
         app.quit()
-    }
 })
 
 app.on('activate', () => {
