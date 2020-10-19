@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain, globalShortcut } from 'electron'
 import * as path from 'path'
 import { format as formatUrl, resolve as resolveUrl } from 'url'
 import log from 'electron-log'
@@ -32,7 +32,7 @@ function createMainWindow() {
     if (isDevelopment || isDebugBuild)
         window.webContents.openDevTools()
     else
-        window.removeMenu()
+        Menu.setApplicationMenu(null)
 
     window.loadURL(baseUrl)
 
@@ -82,8 +82,6 @@ ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
 
     if (isDevelopment || isDebugBuild)
         fight_board_window.webContents.openDevTools()
-    else
-        fight_board_window.removeMenu()
 
     fightBoardWindowList[window_id] = fight_board_window
 
@@ -127,7 +125,6 @@ app.on('ready', () => {
         ...windowSharedParam
     })
 })
-
 
 /**
 * AUTO UPDATE SECTION
