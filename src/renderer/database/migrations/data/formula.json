@@ -1,12 +1,15 @@
 {
     "list" : [{
-        "name": "Poule",
+        "code": "pool",
+        "name": "Pool",
         "component_list": "[\"Pool\"]"
     }, {
-        "name": "Arbre éliminatoire",
+        "code": "tree",
+        "name": "Elimination Tree",
         "component_list": "[\"Tree\"]"
     }, {
-        "name": "Poule & Arbre éliminatoire",
+        "code": "pool_tree",
+        "name": "Pool & Elimination Tree",
         "component_list": "[\"Pool\", \"Tree\"]"
     }]
 }
