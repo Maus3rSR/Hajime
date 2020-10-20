@@ -115,7 +115,11 @@ export default {
                     if (undefined === row[field_name])
                         continue
 
-                    const row_value = row[field_name].value
+                    let row_value = row[field_name].value
+
+                    if (typeof row_value !== "string")
+                        row_value = row_value.toString()
+
                     const column_index = parseInt(row[field_name].csv_index, 10)
 
                     if (undefined === row_value || null === row_value)
