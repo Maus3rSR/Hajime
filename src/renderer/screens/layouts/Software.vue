@@ -63,6 +63,9 @@ export default {
         openMailClientForFeedback() {
             this.$shell.openExternal(`mailto:${this.mail_to}?subject=${this.mail_subject}&body=${this.mail_body}`)
         },
+        openReleasePage() {
+            this.$shell.openExternal(`${process.env.ELECTRON_WEBPACK_GITHUB_PAGE}/releases`)
+        },
         openAuthorPage() {
             this.$shell.openExternal(process.env.ELECTRON_WEBPACK_AUTHOR_PAGE)
         },
@@ -167,7 +170,7 @@ export default {
         <footer id="software__footer" class="footer" v-if="displayFooter">
             <div class="row">
                 <div class="col-sm-7">
-                    <button title="Voir la note de version" class="btn btn-sm btn-dark btn--icon-text">
+                    <button title="Voir la note de version" class="btn btn-sm btn-dark btn--icon-text" @click="openReleasePage">
                         {{ $app.version }}
                     </button>
                     <button class="btn btn-sm btn-dark btn--icon-text" @click="openMailClientForFeedback">
