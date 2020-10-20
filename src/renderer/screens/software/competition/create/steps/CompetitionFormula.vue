@@ -29,17 +29,23 @@ export default {
         save() {
             if (this.competition_saving) return
             this.createCompetition().then(() => this.$emit('onValidate'))
+        },
+        onFormulaConfigUpdate(config) {
+            this.canReset = false
+            this.saveFormulaConfig(config)
+                .then(() => this.canReset = true)
         }
     },
     watch: {
         choosen_formula_id: {
             handler: function () {
-                this.formula_config_list = []
+                if (this.canReset)
+                    this.formula_config_list = []
             }
         },
         formula_list: {
             handler: function (new_list) {
-                if (null == this.choosen_formula_id && new_list.length)
+                if (null === this.choosen_formula_id && new_list.length)
                     this.choosen_formula_id = this.formula_list[0].id
             },
             immediate: true
@@ -48,6 +54,11 @@ export default {
     created() {
         if (this.formula_list.length === 0)
             this.loadFormulaList()
+    },
+    data() {
+        return {
+            canReset: true // Prevent an issue when watching choosen_formula_id is triggered after this.saveFormulaConfig() and reset this.formula_config_list
+        }
     }
 }
 </script>
@@ -74,9 +85,9 @@ export default {
             </div>
         </div>
 
-        <transition-group v-if="null != choosen_formula_id" name="list" tag="div" class="row">
+        <transition-group v-if="null !== choosen_formula_id" name="list" tag="div" class="row">
             <div class="col-lg-6 col-md-12 list-item" v-for="(formula_component, index) in getFormula(choosen_formula_id).component_list" :key="formula_component+index+'formula_'+choosen_formula_id">
-                <component :value="formula_config_list[index]" @input="saveFormulaConfig" :is="formula_component"></component>
+                <component :value="formula_config_list[index]" @input="onFormulaConfigUpdate" :is="formula_component"></component>
             </div>
         </transition-group>
 
