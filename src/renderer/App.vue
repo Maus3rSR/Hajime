@@ -9,7 +9,7 @@ export default {
     metaInfo: {
         meta: [{
             "http-equiv": "Content-Security-Policy",
-            content: `default-src 'self' ${isDevelopment ? '\'unsafe-eval\'': ''}; style-src 'self' 'unsafe-inline'; connect-src 'self' ws:;`
+            content: `default-src 'self' ${isDevelopment ? '\'unsafe-eval\'': ''}; img-src 'self' data:;  style-src 'self' 'unsafe-inline'; connect-src 'self' ws:;`
         }]
     },
     computed: {
