@@ -1,4 +1,4 @@
-import { remote, ipcRenderer, shell } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import log from 'electron-log'
 import Vue from 'vue'
 import axios from 'axios'
@@ -21,9 +21,9 @@ if (process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD)
     Vue.config.devtools = true
 
 Vue.os = Vue.prototype.$os = os
-Vue.shell = Vue.prototype.$shell = shell
+Vue.shell = Vue.prototype.$shell = remote.shell
 Vue.ipc = Vue.prototype.$ipc = ipcRenderer
-Vue.app = Vue.prototype.$app = { version: app.getVersion(), name: app.name }
+Vue.app = Vue.prototype.$app = { version: app.getVersion(), name: app.name, getPath: app.getPath }
 Vue.http = Vue.prototype.$http = axios
 
 Object.keys(plugins).forEach(key => Vue.use(plugins[key]))

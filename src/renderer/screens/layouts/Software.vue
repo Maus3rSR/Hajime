@@ -43,7 +43,7 @@ export default {
             return `[FEEDBACK] On page ${this.$route.name}`
         },
         mail_body() {
-            return i18n.t('mail.support', { log_path: this.log_path, os: this.os, app_version: this.$app.version }).replace(/\n/g, "%0D")
+            return i18n.t('mail.support', { os: this.os, app_version: this.$app.version }).replace(/\n/g, "%0D")
         }
     },
     methods: {
@@ -56,6 +56,9 @@ export default {
         },
         installUpdates() {
             this.$ipc.send('install-update')
+        },
+        openDataFolder() {
+            this.$shell.openItem(this.$app.getPath('userData'))
         },
         openMailClientForFeedback() {
             this.$shell.openExternal(`mailto:${this.mail_to}?subject=${this.mail_subject}&body=${this.mail_body}`)
@@ -170,6 +173,10 @@ export default {
                     <button class="btn btn-sm btn-dark btn--icon-text" @click="openMailClientForFeedback">
                         <i class="zmdi zmdi-bug"></i>
                         Bug / Suggestion
+                    </button>
+                    <button class="btn btn-sm btn-dark btn--icon-text" @click="openDataFolder">
+                        <i class="zmdi zmdi-folder-outline"></i>
+                        Datas
                     </button>
                     <button href="javascript:void(0)" @click.prevent="openLicensePage" class="btn btn-sm btn-dark btn--icon-text">
                         MIT License
