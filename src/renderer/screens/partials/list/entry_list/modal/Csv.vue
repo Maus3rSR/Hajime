@@ -198,9 +198,6 @@ export default {
 
             return this.cell_error_matrix[row_index].includes(column_index)
         },
-        generateKey() {
-            return (new Date().getTime() + Math.floor((Math.random()*10000)+1)).toString(16)
-        },
         show(data_list) {
             if (Array.isArray(data_list))
                 this.list = data_list
