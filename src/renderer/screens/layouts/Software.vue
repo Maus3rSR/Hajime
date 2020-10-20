@@ -187,7 +187,7 @@ export default {
                     </button>
                 </div>
                 <div class="col-sm-5 text-right">
-                    2020 - Made with <span class="text-red">&#10084;</span>
+                    Since 2018 - Made with <span class="text-red">&#10084;</span>
                     <a id="k_logo" href="javascript:void(0)" @click.prevent="openAuthorPage">
                         <img src="@images/k.png" alt="Kevin UNFRICHT">
                     </a>
