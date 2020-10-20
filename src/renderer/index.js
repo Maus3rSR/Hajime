@@ -1,4 +1,5 @@
 import { remote, ipcRenderer, shell } from 'electron'
+import log from 'electron-log'
 import Vue from 'vue'
 import axios from 'axios'
 import VeeValidate from 'vee-validate'
@@ -9,6 +10,8 @@ import router from './config/router'
 import i18n from './config/i18n'
 import store from './store'
 import plugins from './plugins'
+
+Object.assign(console, log.functions)
 
 const os = require('os')
 const { app } = remote
