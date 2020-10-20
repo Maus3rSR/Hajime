@@ -47,7 +47,7 @@ export default { // TODO shared parent component
         <div class="card-header">{{ $t("competition-create.formula.tree.card-title") }}</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.repulse_favorite">
                         <span class="custom-control-indicator"></span>
@@ -55,7 +55,7 @@ export default { // TODO shared parent component
                     </label>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.repulse_club">
                         <span class="custom-control-indicator"></span>
@@ -63,7 +63,7 @@ export default { // TODO shared parent component
                     </label>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="ml-2 custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox" v-model="config.third_place">
                         <span class="custom-control-indicator"></span>
