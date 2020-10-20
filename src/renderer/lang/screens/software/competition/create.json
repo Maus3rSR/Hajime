@@ -8,6 +8,7 @@
                     "step-back": "Back to previous step"
             },
             "formula": {
+                "empty": "Competition formula list is empty",
                 "pool": {
                     "card-title": "Pools configuration",
                     "qualified-number": "Number of qualified @.lower:common.fighters per pool"
@@ -30,6 +31,7 @@
     },
     "fr": {
         "competition-create": {
+            "empty": "La liste des formules de compétition est vide",
             "action": {
                 "cancel-back": "Annuler et revenir à l'écran principal",
                 "choose-formula": "@:common.action.choose une @.lower:common.competition-formula",
