@@ -2,9 +2,10 @@
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import * as FormulaSettingsFormList from './competition_formula'
+import CompetitionFormulaOption from '@partials/competition_formula/Option'
 
 export default {
-    components: { ...FormulaSettingsFormList },
+    components: { ...FormulaSettingsFormList, CompetitionFormulaOption },
     computed: {
         ...mapState('formula', {
             formula_list_loading: state => state.loading,
@@ -69,18 +70,23 @@ export default {
 <template>
     <div>
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label card-body__title" for="competition_formula">{{ $t("competition-create.action.choose-formula") }}</label>
-            <div class="col-sm-9">
+            <label class="col-md-12 col-lg-3 col-form-label card-body__title" for="competition_formula">{{ $t("competition-create.action.choose-formula") }}</label>
+            <div class="col-md-12 col-lg-9">
                 <div v-if="formula_count == 0 && !formula_list_loading" class="h4 alert alert-warning">
                     <i class="zmdi zmdi-alert-triangle"></i>
                     {{ $t("competition-create.formula.empty") }} :-(
                 </div>
-                <empty-placeholder v-else :loaded="!formula_list_loading" :tag="'div'" :width="'100%'" :height="'30px'">
-                    <select class="form-control" id="competition_formula" v-model="choosen_formula_id">
-                        <option v-for="formula in formula_list" :value="formula.id" :key="formula.id">
-                            {{ formula.name }}
-                        </option>
-                    </select>
+                <empty-placeholder v-else :loaded="!formula_list_loading" :tag="'div'" :width="'100%'" :height="'30px'" class="row">
+                    <competition-formula-option
+                        class="col-md-4 col-lg-3"
+
+                        v-for="formula in formula_list"
+
+                        :formula="formula"
+                        :key="formula.id"
+
+                        v-model="choosen_formula_id"
+                    />
                 </empty-placeholder>
             </div>
         </div>
