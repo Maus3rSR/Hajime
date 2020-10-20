@@ -137,11 +137,9 @@ export default {
             </div> -->
 
             <div class="logo hidden-sm-down">
-                <h1>
-                    <router-link to="/">
-                        {{ $app.name || uppercase }}
-                    </router-link>
-                </h1>
+                <router-link to="/">
+                    <img class="img img-responsive" src="~@images/logo.png">
+                </router-link>
             </div>
 
             <breadcrumb />
@@ -197,7 +195,7 @@ export default {
                     </button>
                 </div>
                 <div class="col-sm-5 text-right">
-                    Since 2018 - Made with <span class="text-red">&#10084;</span>
+                    Since 2018 - For the community <span class="text-red">&#10084;</span>
                     <a id="k_logo" href="javascript:void(0)" @click.prevent="openAuthorPage">
                         <img src="@images/k.png" alt="Kevin UNFRICHT">
                     </a>

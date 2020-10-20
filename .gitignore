@@ -69,7 +69,7 @@ Temporary Items
 .DS_Store
 dist/
 build/*
-!build/icons
+!build/icon.*
 coverage
 node_modules/
 npm-debug.log
