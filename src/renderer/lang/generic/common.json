@@ -19,6 +19,9 @@
                 "step-previous": "Previous step",
                 "validate": "Validate"
             },
+            "alert": {
+                "in-development": "In development"
+            },
             "error": {
                 "forbidden": "You have no rights",
                 "forbiddenAction": "@:common.forbidden to do this",
@@ -99,6 +102,9 @@
                 "step-next": "Étape suivante",
                 "step-previous": "Étape précédente",
                 "validate": "Valider"
+            },
+            "alert": {
+                "in-development": "En développement"
             },
             "error": {
                 "forbidden": "Vous n'avez pas le droit",
