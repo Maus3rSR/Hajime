@@ -8,7 +8,7 @@
 }
 
 .modal-footer {
-  padding-top: 0.8rem;
+  padding: 1em 2em; // FIX bug with bootstrap sass modal-footer padding value
 
   & > .btn-link {
     color: $white;
