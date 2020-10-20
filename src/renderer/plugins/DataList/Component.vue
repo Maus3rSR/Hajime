@@ -76,7 +76,7 @@ export default {
             return "datalist__"+this.name
         },
         style_class() {
-            let style_class = "table table-hover table-sm table-responsive-sm"
+            let style_class = "table table-hover table-sm"
 
             if (!this.groupedHeader)
                 style_class += " table-striped"
@@ -269,7 +269,6 @@ export default {
             </div>
 
             <div class="card-body">
-
                 <vue-good-table
                     :id="id_table"
                     :styleClass=style_class
@@ -362,6 +361,10 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+    .table-responsive {
+        overflow-x: auto;
+    }
+
     .datalist {
         position: relative;
 
@@ -389,6 +392,9 @@ export default {
     $sorting-color: rgba(255, 255, 255, 0.85);
 
     .datalist{
+        .vgt-responsive {
+            overflow-x: auto;
+        }
 
         table {
             &.vgt-fixed-header {
