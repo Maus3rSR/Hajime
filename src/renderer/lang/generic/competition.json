@@ -5,7 +5,7 @@
                 "close": "Close the @.lower:common.competition"
             },
             "status": {
-                "waiting": "Waiting for @.lower:common.fighters list validation",
+                "waiting": "@.lower:common.fighters validation",
                 "ongoing": "Ongoing",
                 "finished": "Finished"
             },
@@ -20,7 +20,7 @@
                 "close": "Clôre la @.lower:common.competition"
             },
             "status": {
-                "waiting": "En attente confirmation des @.lower:common.fighters",
+                "waiting": "Validation @.lower:common.fighters",
                 "ongoing": "En cours",
                 "finished": "Terminée"
             },
