@@ -1,8 +1,25 @@
+<p align="center">
+
+![logo]
+
+</p>
+
+<p align="center">
+
 ![MIT License][badge-license]
+
+</p>
 
 # Hajime
 
 Hajime is an Electron application for managing Kendo competition
+
+# Supporting Hajime
+
+Hajime is an MIT-licensed open source projet with its development made possible entirely by the support of these backers. If you'd like to join them, please consider:
+
+* [Become a backer or sponsor on Patreon][patreon-link]
+* [One-time donation via PayPal][paypal-link]
 
 # Project status
 
@@ -92,5 +109,8 @@ Defined in  `package.json` :
 You can contribute to **Hajime** by following [CONTRIBUTING.MD][contributing]
 
 [//]: # (List of reference)
+[logo]: .github/logo_black.png
 [contributing]: .github/CONTRIBUTING.md
 [badge-license]: https://img.shields.io/github/license/Maus3rSR/hajime?style=flat-square
+[paypal-link]: https://www.paypal.com/paypalme/mausersr
+[patreon-link]: https://www.patreon.com/hajime_software
