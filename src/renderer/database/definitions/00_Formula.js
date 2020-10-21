@@ -26,6 +26,10 @@ export default {
                 primaryKey: true,
                 autoIncrement: true
             },
+            code: {
+                type: Sequelize.STRING(15),
+                allowNull: false
+            },
             name: {
                 type: Sequelize.STRING(45),
                 allowNull: false

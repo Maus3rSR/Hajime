@@ -1,0 +1,14 @@
+{
+    "gb": {
+        "confirmation": {
+            "subtitle": "Do you confirm this action?",
+            "title": "Confirm action"
+        }
+    },
+    "fr": {
+        "confirmation": {
+            "subtitle": "Confirmez-vous cette action ?",
+            "title": "Confirmation d'une action"
+        }
+    }
+}

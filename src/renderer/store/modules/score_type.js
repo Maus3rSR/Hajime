@@ -1,3 +1,12 @@
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/score_type.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
+
 const state = {
     loading: false,
     list: []
@@ -30,7 +39,7 @@ const actions = {
 
         promise
             .then(score_type_list => commit("SET_LIST", score_type_list))
-            .catch(() => this.$notify.error('Impossible de récupérer la liste des types de score'))
+            .catch(() => this.$notify.error(i18n.t("scoreType.error.get")))
             .finally(() => commit("STOP_LOADING"))
 
         return promise

@@ -1,7 +1,17 @@
 <script>
 import { mapState, mapActions } from 'vuex'
+import { setLanguage } from '@config/i18n.js'
+
+const isDevelopment = process.env.NODE_ENV !== 'production'
 
 export default {
+    name: "App",
+    metaInfo: {
+        meta: [{
+            "http-equiv": "Content-Security-Policy",
+            content: `default-src 'self' ${isDevelopment ? '\'unsafe-eval\'': ''}; img-src 'self' data:;  style-src 'self' 'unsafe-inline'; connect-src 'self' ws:;`
+        }]
+    },
     computed: {
         ...mapState('database', {
             is_db_connected: "connected"
@@ -42,6 +52,8 @@ export default {
         },
     },
     created() {
+        setLanguage(this.$configuration.get("app_lang"))
+
         this.$ipc.on('app-close', () => this.disconnectDb().then(() => this.$ipc.send('closed')))
 
         if (this.isAppFirstEntry() && !this.on_welcome_page)
@@ -49,7 +61,7 @@ export default {
     
         if (!this.on_app_update_page && this.isAppUpdateNeeded())
             this.$router.push('/app/update')
-        
+
         this.checkDbConnection()
     },
     updated() {
@@ -63,11 +75,9 @@ export default {
 </template>
 
 <style lang="scss">
-    /**
-     * @todo Le thème pourrait être variable
-     */
     @import "~@themes/default/scss/app.scss";
-    @import "~@styles/transitions.scss";
+    @import "~@scss/transitions.scss";
+    @import '~bootstrap-vue/src/index.scss';
 </style>
 
 <style>

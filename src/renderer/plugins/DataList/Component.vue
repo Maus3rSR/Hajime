@@ -76,7 +76,7 @@ export default {
             return "datalist__"+this.name
         },
         style_class() {
-            let style_class = "table table-hover table-sm table-responsive-sm"
+            let style_class = "table table-hover table-sm"
 
             if (!this.groupedHeader)
                 style_class += " table-striped"
@@ -226,6 +226,9 @@ export default {
 }
 </script>
 
+<i18n src="@lang/generic/common.json"></i18n>
+<i18n src="@lang/plugins/datalist.json"></i18n>
+
 <template>
     <div :id="id_datalist" class="datalist">
 
@@ -266,7 +269,6 @@ export default {
             </div>
 
             <div class="card-body">
-
                 <vue-good-table
                     :id="id_table"
                     :styleClass=style_class
@@ -287,7 +289,7 @@ export default {
 
                     <span class="datalist__emptystate" slot="emptystate">
                         <transition name="fade" mode="out-in" appear>
-                            <span v-if="!loading">Aucune donnée :-(</span>
+                            <span v-if="!loading">{{ $t("datalist.empty") }} :-(</span>
                         </transition>
                     </span>
                     
@@ -359,6 +361,10 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+    .table-responsive {
+        overflow-x: auto;
+    }
+
     .datalist {
         position: relative;
 
@@ -386,6 +392,9 @@ export default {
     $sorting-color: rgba(255, 255, 255, 0.85);
 
     .datalist{
+        .vgt-responsive {
+            overflow-x: auto;
+        }
 
         table {
             &.vgt-fixed-header {

@@ -1,0 +1,14 @@
+{
+    "gb": {
+        "markingBoard": {
+            "red": "Red",
+            "white": "White"
+        }
+    },
+    "fr": {
+        "markingBoard": {
+            "red": "Rouge",
+            "white": "Blanc"
+        }
+    }
+}

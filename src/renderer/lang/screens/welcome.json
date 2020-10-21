@@ -1,0 +1,52 @@
+{
+    "gb": {
+        "welcome": {
+            "action": {
+                "save": "Save parameters and start",
+                "test": "Test connection"
+            },
+            "database": {
+                "connected": "Connection to database could be etablished",
+                "dbname": "Database name",
+                "language": "Language",
+                "password": "Password",
+                "port": "Port",
+                "server": "Server",
+                "user": "Username"
+            },
+            "instance": {
+                "mono": "Mono-instance",
+                "multi": "Multi-instance"
+            },
+            "for-user": "for advanced users",
+            "message": "It is the first time that you use this software, you must tell us how the software will work",
+            "title": "Welcome on the software {app}, Kenshi",
+            "where-data": "With @.lower:welcome.instance.multi use, you must indicate where datas is stored"
+        }
+    },
+    "fr": {
+        "welcome": {
+            "action": {
+                "save": "Sauvegarder les paramètres et commencer",
+                "test": "Tester la connexion"
+            },
+            "database": {
+                "connected": "La connexion à la base de données a pu être établie",
+                "dbname": "Nom de la base de données",
+                "language": "Langage",
+                "password": "Mot de passe",
+                "port": "Port",
+                "server": "Serveur",
+                "user": "Nom d'utilisateur"
+            },
+            "instance": {
+                "mono": "Mono-instance",
+                "multi": "Multi-instance"
+            },
+            "for-user": "pour utilisateurs avancés",
+            "message": "C'est la première fois que tu utilises ce logiciel, il faut que tu nous indiques comment fonctionnera le logiciel",
+            "title": "Bienvenue sur le logiciel {app}, Kenshi",
+            "where-data": "Dans le cas d'une utilisation @.lower:welcome.instance.multi, tu dois nous indiquer où aller chercher les données"
+        }
+    }
+}

@@ -1,6 +1,15 @@
 import { CreateSequelizeInstance } from '@root/database'
 import migration from './database/migration'
 
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/database.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
+
 let sequelize_instance = null // We must not set it in the state because the object make internal updates when used and we can't handle these changes
 
 const modules = { migration }
@@ -63,7 +72,7 @@ const actions = {
         const promise = sequelize_instance.authenticate()
         
         promise
-            .catch(() => this.$notify.error("Un problème est survenu lors de la connexion à la base de donnée"))
+            .catch(() => this.$notify.error(i18n.t("database.error.connection")))
             .finally(() => commit("STOP_CONNECTION"))
         
         return promise
@@ -71,7 +80,7 @@ const actions = {
     TEST_CONNECTION({ dispatch, commit }, conf) {
         if (undefined === conf)
         {
-            this.$notify.error("Impossible de tester la connexion à la base de données. La configuration est vide.")
+            this.$notify.error(i18n.t("database.error.configuration.empty"))
             return Promise.reject()
         }
         commit("INIT", conf)
@@ -86,7 +95,7 @@ const actions = {
             
             if (undefined === conf)
             {
-                this.$notify.error("Impossible de se connecter à la base de données. Aucune configuration trouvée.")
+                this.$notify.error(i18n.t("database.error.configuration.noone"))
                 commit("CONNECTION_ERROR")
                 return Promise.reject()
             }
@@ -110,7 +119,7 @@ const actions = {
 
         return sequelize_instance.close()
             .then(() => commit("DISCONNECT_SUCCESS"))
-            .catch(() => this.$notify.error("Un problème est survenu lors de la déconnexion à la base de donnée"))
+            .catch(() => this.$notify.error(i18n.t("database.error.disconnection")))
     }
 }
 

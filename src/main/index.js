@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
+import { app, BrowserWindow, Menu, ipcMain, globalShortcut } from 'electron'
 import * as path from 'path'
 import { format as formatUrl, resolve as resolveUrl } from 'url'
 import log from 'electron-log'
@@ -6,8 +6,6 @@ import { autoUpdater } from 'electron-updater'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
-const appUpdateUrl = process.env.ELECTRON_WEBPACK_APP_UPDATE_URL // ONLY IN DEBUG BUILD
-const appUpdateToken = process.env.ELECTRON_WEBPACK_APP_UPDATE_TOKEN // PRODUCTION TOKEN
 const baseUrl = isDevelopment ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}` : formatUrl({ pathname: path.join(__dirname, 'index.html'), protocol: 'file', slashes: true })
 const windowSharedParam = {
     webPreferences: {nodeIntegration: true},
@@ -24,9 +22,7 @@ let fightBoardWindowList = {}
 let appCloseCalled = false
 
 function createMainWindow() {
-    const window = new BrowserWindow({
-        ...windowSharedParam
-    })
+    const window = new BrowserWindow({ ...windowSharedParam })
 
     globalShortcut.register('f5', reloadWindow)
     globalShortcut.register('CommandOrControl+R', reloadWindow)
@@ -34,7 +30,7 @@ function createMainWindow() {
     if (isDevelopment || isDebugBuild)
         window.webContents.openDevTools()
     else
-        window.removeMenu()
+        Menu.setApplicationMenu(null)
 
     window.loadURL(baseUrl)
 
@@ -48,11 +44,6 @@ function createMainWindow() {
 
     window.on('closed', () => mainWindow = null)
     window.webContents.on('devtools-opened', () => setFocus(window))
-
-    if (undefined !== appUpdateUrl || undefined !== appUpdateToken)
-        autoUpdater.checkForUpdates()
-    else
-        log.warn("App update URL or TOKEN is missing... impossible to check for updates")
 
     return window
 }
@@ -74,6 +65,7 @@ function setFocus(window) {
 /**
  * IPC EVENTS
  */
+// Software
 ipcMain.on('closed', () => {
     appCloseCalled = true
     mainWindow = null
@@ -83,15 +75,19 @@ ipcMain.on('closed', () => {
         app.quit()
 })
 
-ipcMain.on('install-update', autoUpdater.quitAndInstall)
-
 ipcMain.on('open-fight-board', (e, vue_router_url, window_id) => {
-    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true }) // modal is mandatory, we can't let the user use the mainWindow when he is managing a fight or some data will be lost
+    /**
+     * @option modal is mandatory and value has to be "true",
+     * we can't let the user use the mainWindow when he is managing a fight or some data will be lost
+     * because data is shared between fightWindow and mainWindow current context (fight list)
+     * 
+     * @option fullscreenable to false if macOS
+     * @see https://github.com/electron/electron/issues/20228
+     */
+    const fight_board_window = new BrowserWindow({ ...windowSharedParam, parent: mainWindow, modal: true, fullscreenable: process.platform !== 'darwin' })
 
     if (isDevelopment || isDebugBuild)
         fight_board_window.webContents.openDevTools()
-    else
-        fight_board_window.removeMenu()
 
     fightBoardWindowList[window_id] = fight_board_window
 
@@ -108,15 +104,18 @@ ipcMain.on('fight-board-validated', (e, fight, fighter1, fighter2) => mainWindow
 ipcMain.on('fight-board-score-updated', (e, fight, fighter_up, fighter_down, score_number) => mainWindow.webContents.send('fight-board-score-updated', fight, fighter_up, fighter_down, score_number))
 ipcMain.on('check-fight-board-already-opened', () => Object.keys(fightBoardWindowList).forEach(board_id => mainWindow.webContents.send('fight-board-opened', board_id)))
 
+// Autoupdate
+ipcMain.on('install-update', () => autoUpdater.quitAndInstall())
+ipcMain.on('download-update', () => autoUpdater.downloadUpdate())
+
 /**
  * APP EVENTS
  */
 // quit application when all windows are closed
 app.on('window-all-closed', () => {
     // on macOS it is common for applications to stay open until the user explicitly quits
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin')
         app.quit()
-    }
 })
 
 app.on('activate', () => {
@@ -133,22 +132,15 @@ app.on('ready', () => {
 })
 
 /**
- * AUTO UPDATE SECTION
- */
-autoUpdater.autoDownload = true
+* AUTO UPDATE SECTION
+*/
+autoUpdater.autoDownload = false
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = "info"
 autoUpdater.logger.catchErrors()
 
-if (isDebugBuild)
-    autoUpdater.setFeedURL({ provider: "generic", url: appUpdateUrl })
-else
-    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": appUpdateToken }
+if (!isDevelopment)
+    setTimeout(() => autoUpdater.checkForUpdates(), 5000);
 
-autoUpdater.on('update-available', () => {
-    mainWindow.webContents.send('update-available')
-})
-
-autoUpdater.on('update-downloaded', () => {
-    mainWindow.webContents.send('update-downloaded')
-})
+autoUpdater.on('update-available', () => mainWindow.webContents.send('update-available'))
+autoUpdater.on('update-downloaded', () => mainWindow.webContents.send('update-downloaded'))

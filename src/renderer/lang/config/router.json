@@ -1,0 +1,16 @@
+{
+    "gb": {
+        "router": {
+            "home": "Dashboard",
+            "new-competition": "New competition",
+            "manage-competition": "Manage competition"
+        }
+    },
+    "fr": {
+        "router": {
+            "home": "Tableau de bord",
+            "new-competition": "Nouvelle compétition",
+            "manage-competition": "Gestion de la compétition"
+        }
+    }
+}

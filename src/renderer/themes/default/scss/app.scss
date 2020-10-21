@@ -1,18 +1,15 @@
 // Variables
 @import "inc/variables";
 
-
 // Mixins
 @import "inc/mixins"; // This also includes Bootstrap Mixins
 
-
 // Material-design-iconic-font
 @import "~material-design-iconic-font/scss/material-design-iconic-font";
-
-
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
-
+// Flag icon
+@import "~flag-icon-css/sass/flag-icon.scss";
 
 // Bootstrap overrides
 @import "inc/bootstrap-overrides/dropdown";

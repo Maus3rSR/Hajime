@@ -2,7 +2,6 @@
 $enable-transitions: true;
 $enable-shadows: false;
 
-
 // Colors
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
@@ -70,7 +69,6 @@ $border-light: rgba($white, 0.125);
 $border-lightest: rgba($white, 0.04);
 $color-inverse: #131313;
 
-
 // Buttons
 $btn-box-shadow: 0 2px 2px 0 rgba($black, 0.12);
 $btn-focus-box-shadow: none;
@@ -80,6 +78,9 @@ $input-btn-padding-x: 1rem;
 $input-btn-padding-y-sm: 0.25rem;
 $input-btn-padding-x-sm: 0.55rem;
 
+// Flag icon
+$flag-icon-css-path: "~flag-icon-css/flags";
+$include: gb, fr;
 
 // Typography
 $zmdi-font-path: "~material-design-iconic-font/dist/fonts";
@@ -92,7 +93,6 @@ $font-weight-bold: 600;
 $headings-font-weight: $font-weight-bold;
 $blockquote-small-color: $text-muted;
 
-
 // Links
 $link-hover-decoration: none;
 $link-color: #a4d0ff;
@@ -100,7 +100,6 @@ $link-color: #a4d0ff;
 // Body
 $body-bg: $white;
 $body-color: rgba($white, 0.85);
-
 
 // Form
 $input-bg: transparent;
@@ -115,7 +114,6 @@ $input-placeholder-color: rgba($white, 0.5);
 $input-border-radius: 0;
 $input-border-radius-lg: 0;
 $input-border-radius-sm: 0;
-
 
 // Custom Forms
 $custom-control-indicator-focus-box-shadow: none;
@@ -135,12 +133,11 @@ $custom-control-description-disabled-color: $text-muted;
 // Layout
 $content-title-heading-color: $white;
 
-
 // Header
 $header-height: 45px;
 $header-shadow: 0 0 13px rgba($black, 0.22);
 $header-z-index: 100;
-$header-bg: rgba($black, 0.3);
+$header-bg: rgba($black, 0.6);
 $header-bg-scrolled: $bg-highlighted-darkest;
 
 // Footer
@@ -163,12 +160,10 @@ $dropdown-spacer: 0;
 $dropdown-divider-bg: rgba($white, 0.055);
 $dropdown-header-color: $white;
 
-
 // Border Radius
 $border-radius: 2px;
 $border-radius-lg: 2px;
 $border-radius-sm: 2px;
-
 
 // List Group
 $list-group-bg: transparent;
@@ -177,15 +172,13 @@ $list-group-hover-bg: $bg-hover;
 $list-group-item-padding-x: 2rem;
 $list-group-item-padding-y: 1rem;
 
-
 // Pregress Bar
 $progress-bg: rgba($white, 0.1);
 $progress-height: 3px;
 $progress-bar-bg: $white;
 
-
 // Card
-$card-bg: rgba($black, 0.5);
+$card-bg: rgba($black, 0.7);
 $card-inner-border-radius: $border-radius;
 $card-border-color: transparent;
 $card-border-radius: $border-radius;
@@ -195,7 +188,6 @@ $card-cap-bg: rgba($black, 0.075);
 $card-img-overlay-padding: 0;
 $card-shadow: 0 1px 5px rgba($black, 0.1);
 $card-columns-margin: 2.3rem;
-
 
 // Sidebars
 $sidebar-bg: rgba($black, 0.125);
@@ -207,10 +199,8 @@ $navigation-link-active-color: $white;
 $navigation-link-hover-bg: rgba($white, 0.04);
 $navigation-link-active-bg: rgba($white, 0.06);
 
-
 // Logo
 $logo-bg: rgba($black, 0.18);
-
 
 // Tables
 $table-border-color: $border-light;
@@ -236,11 +226,9 @@ $pagination-disabled-color: $pagination-color;
 $pagination-active-bg: $white;
 $pagination-active-color: $black;
 
-
 // Input Group
 $input-group-addon-border-color: $input-border-color;
 $input-group-addon-bg: transparent;
-
 
 // Code
 $pre-color: $color-inverse;
@@ -255,11 +243,9 @@ $alert-padding-x: 1.5rem;
 $alert-link-font-weight: normal;
 $alert-border-width: 0;
 
-
 // Close
 $close-font-weight: normal;
 $close-text-shadow: none;
-
 
 // Badges
 $badge-padding-y: 0.4rem;
@@ -267,12 +253,10 @@ $badge-padding-x: 0.55rem;
 $badge-font-size: 85%;
 $badge-font-weight: 500;
 
-
 // Breadcrumbs
 $breadcrumb-divider: '\f30f';
 $breadcrumb-bg: transparent;
 $breadcrumb-padding-x: 0.25rem;
-
 
 // Carousel
 $carousel-control-prev-icon-bg: none;
@@ -280,7 +264,6 @@ $carousel-control-next-icon-bg: none;
 $carousel-control-icon-width: 40px;
 $carousel-control-opacity: 0.8;
 $carousel-caption-color: rgba($white, 0.9);
-
 
 // Modal
 $modal-content-bg: $bg-highlighted-darkest;
@@ -294,7 +277,6 @@ $modal-footer-border-width: 0;
 $modal-header-padding: 25px 30px 0;
 $modal-inner-padding: 25px 30px;
 
-
 // Popovers
 $popover-border-width: 0;
 $popover-box-shadow: 0 2px 30px rgba($black, 0.1);
@@ -302,7 +284,6 @@ $popover-arrow-outer-color: transparent;
 $popover-inner-padding: 15px 10px;
 $popover-header-bg: transparent;
 $popover-bg: $bg-highlighted-darkest;
-
 
 // Nav
 $nav-link-disabled-color: $text-muted;
@@ -324,10 +305,8 @@ $tooltip-bg: $bg-highlighted-darkest;
 $tooltip-arrow-color: $tooltip-bg;
 $tooltip-opacity: 1;
 
-
 // Backdrop
 $backdrop-z-index: 100;
-
 
 // Listview
 $listview-item-active-bg: rgba($black, 0.035);
@@ -335,10 +314,8 @@ $listview-item-hover-bg: $bg-hover;
 $listview-item-striped-bg: rgba($white, 0.03);
 $listview-border-color: rgba($white, 0.05);
 
-
 // HR
 $hr-border-color: $border-light;
-
 
 // Breadcrumbs
 $breadcrumb-active-color: $white;

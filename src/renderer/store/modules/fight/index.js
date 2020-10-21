@@ -1,3 +1,12 @@
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/modules/fight.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
+
 const defaultState = () => ({})
 const state = defaultState()
 const getters = {}
@@ -10,7 +19,6 @@ const mutations = {
         
         if (!fighter)
             fighter = fight.entry2.fighter_list.find(f => parseInt(f.id, 10) === fighter_id)
-        
 
         if (!fighter) return
 
@@ -59,7 +67,7 @@ const actions = {
         const fightFighterModel = rootGetters["database/getModel"]("FightFighterOrder")
 
         if (!current_fighter_order) {
-            this.$notify.error("Impossible de mettre à jour l'ordre de combat du combattant")
+            this.$notify.error(i18n.t("fight.error.order.update"))
             return Promise.reject()
         }
 
@@ -86,23 +94,23 @@ const actions = {
                             return fightFighterModel
                                 .update({ order: new_order }, { where: { id: parseInt(current_fighter_order.id, 10) } })
                                 .then(() => {
-                                    this.$notify.success("La mise à jour de l'ordre de combat a bien été effectuée")
+                                    this.$notify.success(i18n.t("fight.success.order.update"))
                                     resolve({
                                         fighter_order: current_fighter_order,
                                         fighter_order_replaced: !!fighter_order_to_replace ? fighter_order_to_replace.get({ plain: true }) : undefined
                                     })
                                 })
                                 .catch(() => {
-                                    this.$notify.error("Une erreur est survenue lors de la mise à jour de l'ordre de combat du combattant à replacer")
+                                    this.$notify.error(i18n.t("fight.error.order.updateReplace"))
                                     reject()
                                 })
                         })
                         .catch(Sequelize.UniqueConstraintError, () => {
-                            this.$notify.error("Impossible de mettr à jour deux ordres de combat pour un même combattant")
+                            this.$notify.error(i18n.t("fight.error.order.updateSame"))
                             reject()
                         })
                         .catch(() => {
-                            this.$notify.error("Une erreur est survenue lors de la mise à jour de l'ordre de combat du combattant qui est remplacé")
+                            this.$notify.error(i18n.t("fight.error.order.updateReplace"))
                             reject()
                         })
                 })
@@ -121,19 +129,19 @@ const actions = {
             })
                 .then(count => {
                     if (count > 0) {
-                        this.$notify.error("Impossible d'ajouter l'ordre de combat, il en existe déjà un")
+                        this.$notify.error(i18n.t("fight.error.order.addAlreadyExist"))
                         return reject()
                     }
 
                     return fightFighterModel.create({ fight_id, fighter_id: fighter.id, order })
                         .then(fighter_order => resolve(fighter_order.get({ plain: true })))
                         .catch(() => {
-                            this.$notify.error("Une erreur est survenue lors de la création de l'ordre de combat")
+                            this.$notify.error(i18n.t("fight.error.order.add"))
                             reject()
                         })
                 })
                 .catch(() => {
-                    this.$notify.error("Une erreur est survenue lors de la vérification de l'ordre de combat à ajouter")
+                    this.$notify.error(i18n.t("fight.error.order.verifyBeforeCreate"))
                     reject()
                 })
         })

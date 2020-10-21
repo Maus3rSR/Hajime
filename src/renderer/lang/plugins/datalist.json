@@ -1,0 +1,18 @@
+{
+    "gb": {
+        "datalist": {
+            "empty": "No data",
+            "display": "Display",
+            "loaded": "All data was loaded",
+            "line": "Number of lines displayed"
+        }
+    },
+    "fr": {
+        "datalist": {
+            "empty": "Aucune données",
+            "display": "Affichage",
+            "loaded": "Toutes les données sont chargées",
+            "line": "Nombre de lignes affichées"
+        }
+    }
+}

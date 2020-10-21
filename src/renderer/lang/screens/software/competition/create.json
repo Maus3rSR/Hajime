@@ -1,0 +1,62 @@
+{
+    "gb": {
+        "competition-create": {
+            "action": {
+                "cancel-back": "Cancel and come back to main screen",
+                "choose-formula": "@:common.action.choose a @.lower:common.competition-formula",
+                "confirm": "Create the competition",
+                    "step-back": "Back to previous step"
+            },
+            "formula": {
+                "empty": "Competition formula list is empty",
+                "pool": {
+                    "card-title": "Pools configuration",
+                    "qualified-number": "Number of qualified @.lower:common.fighters per pool"
+                },
+                "tree": {
+                    "card-title": "Elimination tree configuration",
+                    "third-place": "3rd place @.lower:common.fight"
+                },
+                "repulse-favorite": "Repulse head of series",
+                "repulse-club": "Repulse @.lower:common.fighters of same club"
+            },
+            "placeholder": {
+                "name": "eg.: Regional invidual woman"
+            },
+            "team-seat": "Fighters number per team (@.lower:common.substitute excluded)",
+            "step1": "General information",
+            "step2": "Fighters import",
+            "step3": "Competition formula"
+        }
+    },
+    "fr": {
+        "competition-create": {
+            "empty": "La liste des formules de compétition est vide",
+            "action": {
+                "cancel-back": "Annuler et revenir à l'écran principal",
+                "choose-formula": "@:common.action.choose une @.lower:common.competition-formula",
+                "confirm": "Je confirme la création de la compétition",
+                "step-back": "Revenir à l'étape précédente"
+            },
+            "formula": {
+                "pool": {
+                    "card-title": "Configuration des poules",
+                    "qualified-number": "Nombre de @.lower:common.fighters qualifiés par poule"
+                },
+                "tree": {
+                    "card-title": "Configuration de l'arbre éliminatoire",
+                    "third-place": "@:common.fight pour déterminer la 3ème place"
+                },
+                "repulse-favorite": "Écarter les têtes de séries",
+                "repulse-club": "Écarter les @.lower:common.fighters d'un même club"
+            },
+            "placeholder": {
+                "name": "ex. : Compétition inter-régionales individuelle femmes"
+            },
+            "team-seat": "Nombre de @.lower:common.fighters par équipe (hors @.lower:common.substitute)",
+            "step1": "Informations générales",
+            "step2": "Import des @.lower:common.fighters",
+            "step3": "Formule de compétition"
+        }
+    }
+}

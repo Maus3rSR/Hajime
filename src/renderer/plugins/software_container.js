@@ -1,5 +1,5 @@
 import SoftwareContainer from './SoftwareContainer/Component'
-import Vue from 'Vue'
+import Vue from 'vue'
 
 const bus = new Vue();
 

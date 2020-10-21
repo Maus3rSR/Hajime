@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import { getField, updateField } from 'vuex-map-fields'
 import { LOADER_STATUS } from '@root/constant'
-import fight from './fight'
+import fightModule from './fight'
 
-const modules = { fight }
+const modules = { fightModule }
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,

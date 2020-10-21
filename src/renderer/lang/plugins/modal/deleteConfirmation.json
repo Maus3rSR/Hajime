@@ -1,0 +1,18 @@
+{
+    "gb": {
+        "confirmation-delete": {
+            "confirm": "@:common.action.confirm deletion",
+            "element": "this element",
+            "subtitle": "Are you sure you want to delete {label}?",
+            "title": "Confirm deletion"
+        }
+    },
+    "fr": {
+        "confirmation-delete": {
+            "confirm": "@:common.action.confirm la suppression",
+            "element": "cet élément",
+            "subtitle": "Êtes-vous sûr de vouloir supprimer {label} ?",
+            "title": "Confirmation de suppression"
+        }
+    }
+}

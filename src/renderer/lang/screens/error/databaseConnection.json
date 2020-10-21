@@ -1,0 +1,16 @@
+{
+    "gb": {
+        "error-screen": {
+            "db": "An error occurend while connecting to database!",
+            "reconnect": "Try to reconnect",
+            "report": "Report a bug"
+        }
+    },
+    "fr": {
+        "error-screen": {
+            "db": "Une erreur de connexion à la base de données est survenue !",
+            "reconnect": "Tenter une reconnexion",
+            "report": "Reporter un problème"
+        }
+    }
+}

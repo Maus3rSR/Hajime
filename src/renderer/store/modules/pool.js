@@ -3,9 +3,18 @@ import { getField, updateField } from 'vuex-map-fields'
 import { COMPETITION_MODE, LOADER_STATUS, POOL_SCORING, SCORE_DATABASE_FIELD_LIST } from '@root/constant'
 import { getEntryListAssociation, getFightListAssociationList, getFightAssociationList } from './pool/association_helper'
 import FightLib from '@root/lib/fight'
-import fight from './fight'
+import fightModule from './fight'
 
-const modules = { fight }
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/pool.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
+
+const modules = { fightModule }
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,
@@ -56,6 +65,8 @@ const getters = {
     finished_percentage: (state, getters) => {
         const total_finished = state.list.reduce((total, pool) => total + getters.getTotalFightListFinishedOfPool(pool.id), 0)
         const total = state.list.reduce((total, pool) => total + getters.getTotalFightList(pool.id), 0)
+
+        if (total === 0) return 0
 
         return Math.round(total_finished / total * 100 * 10) / 10
     },
@@ -124,7 +135,7 @@ const actions = {
             return
 
         if (!state.configuration.competition_formula_id) {
-            this.$notify.error("Impossible de créer les poules, l'identifiant de la formule de compétition n'est pas disponible dans la configuration des poules")
+            this.$notify.error(i18n.t("pool.error.competitionFormula"))
             return Promise.reject()
         }
 
@@ -174,7 +185,7 @@ const actions = {
 
         promise
             .then(() => {
-                this.$notify.success('Les poules ont bien été sauvegardées')
+                this.$notify.success(i18n.t("pool.success.saved"))
                 return dispatch("LOAD_LIST")
                     .then(() => {
                         commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING })
@@ -188,7 +199,7 @@ const actions = {
                         throw new Error()
                     })
             })
-            .catch(() => this.$notify.error('Un problème est survenu lors de la sauvegarde des poules'))
+            .catch(() => this.$notify.error(i18n.t("pool.error.saved")))
             .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
@@ -197,12 +208,12 @@ const actions = {
         // if (getters.saving)
         //     return
 
-        // commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING }) // TODO We encounter btab component reset when we update status....
+        // commit("updateField", { path: 'status', value: LOADER_STATUS.SAVING }) // TODO : An issue occured with btab component reset when we update status....
 
         const pool_index = getters.findPoolIndex(parseInt(pool_id, 10))
 
         if (pool_index === -1) {
-            this.$notify.error("La poule n'existe pas, impossible de procéder à l'inversion")
+            this.$notify.error(i18n.t("pool.error.markingBoard.reversedNotExist"))
             return Promise.reject()
         }
 
@@ -212,14 +223,14 @@ const actions = {
 
         promise
             .then(() => {
-                this.$notify.success("L'inversion du tableau de marque a bien été effectuée")
+                this.$notify.success(i18n.t("pool.success.markingBoard.reversed"))
 
                 commit("updateField", {
                     path: `list[${pool_index}].marking_board_reversed`,
                     value: fields.marking_board_reversed
                 })
             })
-            .catch(() => this.$notify.error("Un problème est survenu lors de l'inversion du tableau de marque"))
+            .catch(() => this.$notify.error(i18n.t("pool.error.markingBoard.reversed")))
             // .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
@@ -235,7 +246,7 @@ const actions = {
 
         promise
             .then()
-            .catch(() => this.$notify.error('Un problème est survenu lors de la mise à jour de la configuration des poules'))
+            .catch(() => this.$notify.error(i18n.t("pool.error.configuration.updating")))
             .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
@@ -261,7 +272,7 @@ const actions = {
 
         promise
             .then(config => commit('SET_CONFIGURATION', config.get({ plain: true })))
-            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération de informations de configuration des poules'))
+            .catch(() => this.$notify.error(i18n.t("pool.error.configuration.get")))
             .finally(() => commit("updateField", { path: 'status', value: LOADER_STATUS.NOTHING }))
 
         return promise
@@ -271,7 +282,7 @@ const actions = {
             return
 
         if (getters.is_configuration_empty) {
-            this.$notify.error("Impossible de récupérer la liste des poules car la configuration liée à ces poules n'est pas chargée")
+            this.$notify.error(i18n.t("pool.error.getConfigurationEmpty"))
             return Promise.reject()
         }
 
@@ -304,14 +315,14 @@ const actions = {
 
         promise
             .then(list => commit("updateField", { path: 'list', value: list.map(row => row.get({ plain: true })) }))
-            .catch(() => this.$notify.error('Un problème est survenu lors de la récupération des poules'))
+            .catch(() => this.$notify.error(i18n.t("pool.error.get")))
             .finally(() => commit("updateField", { path: 'status_list', value: LOADER_STATUS.NOTHING }))
 
         return promise
     },
     LOAD_POOL_ENTRY({ commit, state, rootGetters }, { pool_id, fighter }) {
         if (!getters.existPool(pool_id)) {
-            this.$notify.error("Impossible de récupérer l'entrée de poule")
+            this.$notify.error(i18n.t("pool.error.entry.get"))
             return Promise.reject()
         }
 
@@ -329,7 +340,7 @@ const actions = {
                 if (null === pool_entry) return Promise.reject()
                 commit("UPDATE_POOL_ENTRY", pool_entry.get({ plain: true }))
             })
-            .catch(() => this.$notify.error("Impossible de récupérer l'entrée de poule"))
+            .catch(() => this.$notify.error(i18n.t("pool.error.entry.get")))
 
         return promise
     },
@@ -349,18 +360,18 @@ const actions = {
                 if (!fight) return Promise.reject()
                 commit("MERGE_FIGHT", fight.get({ plain: true }))
             })
-            .catch(() => this.$notify.error("Impossible de récupérer le combat"))
+            .catch(() => this.$notify.error(i18n.t("pool.error.fight.get")))
 
         return promise
     },
-    ADD_FIGHT({ dispatch, getters, state, rootGetters }, { entry_left, entry_right }) {
+    ADD_FIGHT({ dispatch, getters, rootGetters }, { entry_left, entry_right }) {
         if (undefined === entry_left.pool_id || !getters.existPool(entry_left.pool_id) || undefined === entry_right.pool_id || !getters.existPool(entry_right.pool_id)) {
-            this.$notify.error("Impossible de procéder à l'ajout du combat, la poule n'existe pas")
+            this.$notify.error(i18n.t("pool.error.fight.addNotExistPool"))
             return Promise.reject()
         }
         
         if (entry_left.pool_id !== entry_right.pool_id) {
-            this.$notify.error("Impossible de procéder à l'ajout du combat, les entrées n'appartiennent pas à la même poule")
+            this.$notify.error(i18n.t("pool.error.fight.addNotSamePool"))
             return Promise.reject()
         }
 
@@ -396,10 +407,10 @@ const actions = {
 
         promise
             .then(fight => {
-                this.$notify.success("Le combat a bien été ajouté à la poule")
+                this.$notify.success(i18n.t("pool.success.fight.added"))
                 return dispatch("LOAD_FIGHT", parseInt(fight.id))
             })
-            .catch(() => this.$notify.error("Une erreur est survenue lors de l'ajout du nouveau combat"))
+            .catch(() => this.$notify.error(i18n.t("pool.error.fight.add")))
 
         return promise
     },
@@ -407,7 +418,7 @@ const actions = {
         const pool_id = parseInt(fight.fightable_id, 10)
 
         if (fight.fightable !== "Pool" || !getters.existPool(pool_id) || !SCORE_DATABASE_FIELD_LIST.includes(field)) {
-            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            this.$notify.error(i18n.t("pool.error.updateNotExist"))
             return Promise.reject()
         }
 
@@ -422,7 +433,7 @@ const actions = {
 
         promise
             .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
-            .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
+            .catch(() => this.$notify.error(i18n.t("pool.error.entry.updating")))
 
         return promise
     },
@@ -430,7 +441,7 @@ const actions = {
         const pool_id = fight.fightable_id
 
         if (!getters.existPool(pool_id)) {
-            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            this.$notify.error(i18n.t("pool.error.updateNotExist"))
             return Promise.reject()
         }
 
@@ -449,25 +460,25 @@ const actions = {
 
         promise
             .then(() => dispatch("LOAD_POOL_ENTRY", { pool_id, fighter }))
-            .catch(() => this.$notify.error("Impossible de mettre à jour l'entrée de la poule avec les données du combattant"))
+            .catch(() => this.$notify.error(i18n.t("pool.error.entry.updating")))
 
         return promise
     },
     ON_FIGHT_VALIDATED({ dispatch, getters }, { fight, fighter1, fighter2 }) {
         if (!fighter1 && !fighter2) {
-            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel avec aucun combattant")
+            this.$notify.error(i18n.t("pool.error.fight.validateFighterMissing"))
             return Promise.reject()
         }
 
         if ((!!fighter1 && !fighter1.score_given_list) || (!!fighter2 && !fighter2.score_given_list)) {
-            this.$notify.error("Impossible de mettre à jour les données de poules en temps réel, il manque les informations des scores")
+            this.$notify.error(i18n.t("pool.error.fight.validateScoreMissing"))
             return Promise.reject()
         }
 
         const pool_id = parseInt(fight.fightable_id, 10)
 
         if (!getters.existPool(pool_id)) {
-            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            this.$notify.error(i18n.t("pool.error.updateNotExist"))
             return Promise.reject()
         }
 
@@ -500,7 +511,7 @@ const actions = {
         const pool_id = parseInt(fight.fightable_id, 10)
 
         if (!getters.existPool(pool_id)) {
-            this.$notify.error("Impossible de procéder à la mise à jour des données de poules, la poule n'existe pas")
+            this.$notify.error(i18n.t("pool.error.updateNotExist"))
             return Promise.reject()
         }
 
@@ -527,31 +538,31 @@ const actions = {
 
         const fight = state.list[pool_index].fight_list[fight_index]
 
-        commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order })
+        commit("fightModule/UPDATE_FIGHTER_ORDER", { fight, fighter_order })
         if (!!fighter_order_replaced)
-            commit("fight/UPDATE_FIGHTER_ORDER", { fight, fighter_order: fighter_order_replaced })
+            commit("fightModule/UPDATE_FIGHTER_ORDER", { fight, fighter_order: fighter_order_replaced })
     },
     ON_FIGHTER_ORDER_ADD({ dispatch }, { pool_id, fight_id, fighter, order }) {
-        return dispatch("fight/FIGHTER_ORDER_ADD", { fight_id, fighter, order }).then(fighter_order => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, fighter_order }))
+        return dispatch("fightModule/FIGHTER_ORDER_ADD", { fight_id, fighter, order }).then(fighter_order => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, fighter_order }))
     },
     ON_FIGHTER_ORDER_UP({ dispatch }, { pool_id, fight_id, fighter, order }) {
-        return dispatch("fight/FIGHTER_ORDER_UP", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+        return dispatch("fightModule/FIGHTER_ORDER_UP", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
     },
     ON_FIGHTER_ORDER_DOWN({ dispatch }, { pool_id, fight_id, fighter, order }) {
-        return dispatch("fight/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
+        return dispatch("fightModule/FIGHTER_ORDER_DOWN", { fight_id, fighter, current_order: order }).then(result => dispatch("ON_FIGHTER_ORDER_UPDATED", { pool_id, ...result }))
     },
     VALIDATE_FIGHT_WITH_ONE_FIGHTER({ dispatch, getters, state, rootState }, { pool_id, fight_id, fighter1, fighter2 }) {
         const pool_index = getters.findPoolIndex(pool_id)
 
         if (-1 === pool_index) {
-            this.$notify.error("Impossible de valider ce combat, la poule n'existe pas")
+            this.$notify.error(i18n.t("pool.error.fight.validatePoolMissing"))
             return Promise.reject()
         }
 
         const fight_index = getters.findFightIndex(pool_index, fight_id)
 
         if (-1 === fight_index) {
-            this.$notify.error("Impossible de valider ce combat, le combat n'existe pas")
+            this.$notify.error(i18n.t("pool.error.fight.validateMissing"))
             return Promise.reject()
         }
 
@@ -561,7 +572,7 @@ const actions = {
         const fighter_up = fighter1 || fighter2
         
         if (!!fighter1_id && !!fighter2_id) {
-            this.$notify.error("Impossible de valider ce combat car les combattants sont tous les deux existants")
+            this.$notify.error(i18n.t("pool.error.fight.validateBothFighterMissing"))
             return Promise.reject()
         }
 
@@ -571,15 +582,15 @@ const actions = {
                 const on_score_fight_updated_parameter_list = { fight, fighter_up, score_number: 1 }
 
                 return Promise.all([
-                    dispatch("fight/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
-                    dispatch("fight/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
-                    dispatch("fight/LOCK", { fight_id, fighter1_id, fighter2_id }).then(() => dispatch("ON_FIGHT_VALIDATED", { fight, fighter1, fighter2 }))
+                    dispatch("fightModule/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
+                    dispatch("fightModule/ADD_SCORE", add_score_parameter_list).then(() => dispatch("ON_SCORE_FIGHT_UPDATED", on_score_fight_updated_parameter_list)),
+                    dispatch("fightModule/LOCK", { fight_id, fighter1_id, fighter2_id }).then(() => dispatch("ON_FIGHT_VALIDATED", { fight, fighter1, fighter2 }))
                 ])
             })
-            .then(() => this.$notify.success("Le combat a bien été validé"))
-            .catch(() => this.$notify.error("Impossible de valider ce combat"))
+            .then(() => this.$notify.success(i18n.t("pool.success.fight.validated")))
+            .catch(() => this.$notify.error(i18n.t("pool.error.fight.validate")))
     },
-    GENERATE_PDF({ getters }) { // @todo Exporter dans une lib javascript
+    GENERATE_PDF({ getters }) { // @todo Exporter dans une lib
         let doc = this.$pdf.getNewDocument()
 
         const margingLeftX = 15
@@ -599,7 +610,7 @@ const actions = {
             tableWidth: tableWidth,
             startY: startY,
             margin: { right: margingLeftX, left: margingLeftX, top: margingY + autoTableYCompensation, bottom: margingY + autoTableYCompensation },
-            head: [[null, "Nom"]],
+            head: [[null, i18n.t("common.name")]],
             body: []
         }
 
@@ -612,7 +623,7 @@ const actions = {
 
             pool.entry_list.forEach(pool_entry => body.push([pool.number + "." + pool_entry.number, pool_entry.entry.name])) // Each entry of pool
 
-            config.head[0][0] = "Poule n°" + (index + 1)
+            config.head[0][0] = i18n.t("common.of.number-inverse", { item: i18n.t("common.pool"), n: index + 1 })
             config.body = body
             config.startY = startY
             config.margin.right = (is_pair ? margingLeftX : margingLeftSecondTable)
@@ -631,7 +642,7 @@ const actions = {
         for (let i = 0; i < pageCount; i++) {
             doc.setPage(i)
             const page_info = doc.internal.getCurrentPageInfo()
-            doc.text('Liste des poules (' + getters.count + ')', margingLeftX, margingY)
+            doc.text(i18n.t("common.of.list-count", { item: i18n.t("common.pools"), n: getters.count }), margingLeftX, margingY)
             doc.setFontSize(10)
             doc.text(margingRightX, margingY, page_info.pageNumber + "/" + pageCount)
             doc.setFontSize(14)

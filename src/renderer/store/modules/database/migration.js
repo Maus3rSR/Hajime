@@ -1,4 +1,12 @@
 import { CreateUmzugInstance } from '@root/database/umzug'
+import i18n from '@config/i18n'
+import commonTranslations from '@lang/generic/common.json'
+import translations from '@lang/store/modules/database/migration.json'
+
+i18n.mergeLocaleMessage("gb", commonTranslations.gb)
+i18n.mergeLocaleMessage("fr", commonTranslations.fr)
+i18n.mergeLocaleMessage("gb", translations.gb)
+i18n.mergeLocaleMessage("fr", translations.fr)
 
 let umzug_instance = null // We must not set it in the state because the object make internal updates when used and we can't handle these changes
 let umzug_status = null
@@ -51,10 +59,9 @@ const actions = {
 
         status()
             .then(res => commit("SET_STATUS", res))
-            .catch(error => {
-                console.log(error)
+            .catch(() => {
                 commit("ERROR")
-                this.$notify.error("Une erreur est survenue sur le système de migration")
+                this.$notify.error(i18n.t("migration.error.data"))
             })
     },
     MIGRATE({ commit }, migration_option) {
@@ -65,15 +72,14 @@ const actions = {
 
         promise
             .then(() => commit("DONE"))
-            .catch(error => {
-                console.log(error)
+            .catch(() => {
                 commit("ERROR")
-                this.$notify.error("Une erreur est survenue sur le système de migration")
+                this.$notify.error(i18n.t("migration.error.data"))
             })
     
         return promise
     },
-    IGNORE_MIGRATION({ dispatch, getters, state }) {
+    IGNORE_MIGRATION({ dispatch, getters }) {
         if (getters.pending === 0)
             return Promise.resolve()
 
