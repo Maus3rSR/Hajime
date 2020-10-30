@@ -42,7 +42,7 @@ const actions = {
                 fighter2_id,
                 locked: true,
                 ...!!comment && {comment: {
-                    commentable_id: parseInt(state.fight.id, 10),
+                    commentable_id: parseInt(fight_id, 10),
                     commentable: "FighterFightMeta",
                     text: comment
                 }}
