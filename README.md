@@ -1,14 +1,6 @@
-<p align="center">
-
 ![logo]
 
-</p>
-
-<p align="center">
-
 ![MIT License][badge-license]
-
-</p>
 
 # Hajime
 
