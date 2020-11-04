@@ -1,7 +1,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
+import { createVueI18nInstance } from '@config/i18n'
+import competitionTranslations from '@lang/generic/competition/messages'
+import dashboardTranslations from  '@lang/screens/software/dashboard/messages'
+
 export default {
+    i18n: createVueI18nInstance(competitionTranslations, dashboardTranslations),
     computed: {
         ...mapState('competition', {
             competition_list: 'list',
@@ -33,10 +38,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/generic/competition.json"></i18n>
-<i18n src="@lang/screens/software/dashboard.json"></i18n>
 
 <template>
     <div id="dashboard">

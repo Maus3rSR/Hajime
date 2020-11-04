@@ -1,9 +1,14 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+
 import { DateTime } from 'luxon'
 
+import { createVueI18nInstance } from '@config/i18n'
+import createTranslations from '@lang/screens/software/competition/create/messages'
+
 export default {
+    i18n: createVueI18nInstance(createTranslations),
     computed: {
         ...mapState('configuration', ["TEAM_PLACE_NUMBER_MIN","TEAM_PLACE_NUMBER_MAX"]),
         ...mapState('competition', { competition: state => state.model }),
@@ -33,9 +38,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/software/competition/create.json"></i18n>
 
 <template>
     <div>

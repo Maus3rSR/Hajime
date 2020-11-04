@@ -1,9 +1,14 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+
+import { createVueI18nInstance } from '@config/i18n'
+import manageTranslations from '@lang/screens/software/competition/manage/messages'
+
 import EntryList from '@partials/list/entry_list/Component'
 
 export default {
+    i18n: createVueI18nInstance(manageTranslations),
     components: { EntryList },
     computed: {
         ...mapState('competition', {
@@ -54,9 +59,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/software/competition/manage.json"></i18n>
 
 <template>
     <div>

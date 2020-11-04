@@ -1,0 +1,84 @@
+{
+    "common": {
+        "action": {
+            "add": "Ajouter",
+            "back-main": "Revenir à l'écran principal",
+            "cancel": "Annuler",
+            "choose": "Choisir",
+            "close": "Fermer",
+            "confirm": "Je confirme",
+            "download": "Télécharger",
+            "edit": "Modifier",
+            "filter": "Filter",
+            "reset": "Réinitialiser",
+            "select": "Sélectionner",
+            "set": "Rendre {adjective}",
+            "step-back": "Revenir à l'étape précédente",
+            "step-next": "Étape suivante",
+            "step-previous": "Étape précédente",
+            "validate": "Valider"
+        },
+        "alert": {
+            "in-development": "En développement"
+        },
+        "error": {
+            "forbidden": "Vous n'avez pas le droit",
+            "forbiddenAction": "@:common.forbidden d'effectuer cette action",
+            "impossible": "Impossible de",
+            "occured": "Un problème est survenu lors",
+            "validated": "C'est déjà validé"
+        },
+        "form": {
+            "required": "Les champs * sont requis"
+        },
+        "of": {
+            "label": "de",
+            "list": "Liste des {item}",
+            "list-count": "Liste des {item} ({n})",
+            "number": "N° de {item}",
+            "number-inverse": "{item} N°{n}",
+            "total": "Total de {item}"
+        },
+        "update": {
+            "available": "Mise à jour disponible. Voulez-vous la télécharger ?",
+            "install": "Mise à jour téléchargée. Voulez-vous relancer l'application pour l'installer ?"
+        },
+        "and": "et",
+        "club": "Club",
+        "comment": "Commentaire",
+        "comments": "Commentaires",
+        "competition": "Compétition",
+        "competitions": "Compétitions",
+        "competition-formula": "Formule de compétition",
+        "configuration": "Configuration",
+        "date": "Date",
+        "date-birth": "Date de naissance",
+        "draw-random": "Tirage au sort",
+        "entry": "Entrée",
+        "fight": "Combat",
+        "fights": "Combats",
+        "fighter": "Combattant",
+        "fighters": "Combattants",
+        "grade": "Grade",
+        "later": "Plus tard",
+        "license": "Licence",
+        "name": "Nom",
+        "no": "Non",
+        "oops": "Oops",
+        "organizer": "Organisateur",
+        "place": "Lieu",
+        "point": "Point",
+        "points": "Points",
+        "pool": "Poule",
+        "pools": "Poules",
+        "presence": "Présence",
+        "readonly": "Lecture seule",
+        "status": "Statut",
+        "substitute": "Remplaçant",
+        "team": "Équipe",
+        "teams": "Équipes",
+        "team-new": "Nouvelle équipe",
+        "type": "Type",
+        "yes": "Oui"
+    }
+}

@@ -1,5 +1,9 @@
 <script>
+import { createVueI18nInstance } from '@config/i18n'
+import createTranslations from '@lang/screens/software/competition/create/messages'
+
 export default { // TODO shared parent component
+    i18n: createVueI18nInstance(createTranslations),
     props: {
         value: Object
     },
@@ -38,9 +42,6 @@ export default { // TODO shared parent component
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/software/competition/create.json"></i18n>
 
 <template>
     <div class="card">

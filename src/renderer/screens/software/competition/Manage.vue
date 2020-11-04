@@ -1,10 +1,16 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+
+import { createVueI18nInstance } from '@config/i18n'
+import competitionTranslations from '@lang/generic/competition/messages'
+import manageTranslations from '@lang/screens/software/competition/manage/messages'
+
 import * as FormulaTabsManagementList from './manage/steps/competition_formula'
 import FighterCall from './manage/steps/FighterCall'
 
 export default {
+    i18n: createVueI18nInstance(competitionTranslations, manageTranslations),
     props: {
         id: {
             required: true
@@ -85,10 +91,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/generic/competition.json"></i18n>
-<i18n src="@lang/screens/software/competition/manage.json"></i18n>
 
 <template>
     <section id="competition__manage">
