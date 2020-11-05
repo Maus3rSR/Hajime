@@ -1,15 +1,12 @@
-import { Sequelize } from '@root/database'
 import { getField, updateField } from 'vuex-map-fields'
+
+import { Sequelize } from '@root/database'
 import { COMPETITION_MODE, LOADER_STATUS } from '@root/constant'
 
-import i18n from '@config/i18n'
-import commonTranslations from '@lang/generic/common.json'
-import translations from '@lang/store/competition.json'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/store/competition/messages'
 
-i18n.mergeLocaleMessage("gb", commonTranslations.gb)
-i18n.mergeLocaleMessage("fr", commonTranslations.fr)
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+const i18n = setupVueI18nMessages(translations)
 
 const defaultState = () => ({
     status: LOADER_STATUS.NOTHING,

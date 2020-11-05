@@ -1,0 +1,33 @@
+{
+    "fightBoard": {
+        "error": {
+            "fight": {
+                "exist": "@:common.error.impossible validate the @.lower:common.fight because it is not exist",
+                "find": "@:common.error.impossible find the @.lower:common.fight informations",
+                "retrieve": "@:common.error.occured retrieving the @.lower:common.fight informations",
+                "validate": "@:common.error.occured validating the fight @.lower:common.fight"
+            },
+            "fighter": {
+                "find": "@:common.error.impossible find all the @.lower:common.fighters information",
+                "notBelong": "One of the @.lower:common.fighters (or both) is wrong and is not include in this @.lower:common.fight",
+                "notBelongTeam": "One of the @.lower:common.fighters (or both) is wrong and is not include in one of the @.lower:common.teams of this @.lower:common.fight"
+            },
+            "penalty": { 
+                "update": "@:common.error.occured updating penalties",
+                "updateValidFighter": "@:common.error.impossible update penalties. The @.lower:common.fighter is not valid",
+                "limit": "Penalties attribution's limit was reached"
+            },
+            "score": {
+                "attribute": "@:common.error.occured attributing the score",
+                "attributeValidFighter": "@:common.error.impossible attribute the score. The @.lower:common.fighter is not valid",
+                "delete": "@:common.error.occured deleting score",
+                "deleteValidFighter": "@:common.error.impossible delete the score. The @.lower:common.fighter is not valid",
+                "limit": "Score attribution's limit was reached"
+            },
+            "suddenDeath": {
+                "update": "@:common.error.occured updating sudden death",
+                "updateValidFighter": "@:common.error.impossible update sudden death. The @.lower:common.fighter is not valid"
+            }
+        }
+    }
+}

@@ -1,5 +1,7 @@
 <script>
-import { setTimeout } from 'timers';
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/partials/list/poolDraw/messages'
+
 import ListDrawLib from '@root/lib/list_draw'
 import PoolList from './List'
 
@@ -7,6 +9,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 const isDebugBuild = process.env.ELECTRON_WEBPACK_IS_DEBUG_BUILD
 
 export default {
+    i18n: setupVueI18nMessages(translations),
     props: {
         option_list: {
             type: Object,
@@ -156,9 +159,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/partials/list/pool-draw.json"></i18n>
 
 <template>
     <div class="pool-list-draw">

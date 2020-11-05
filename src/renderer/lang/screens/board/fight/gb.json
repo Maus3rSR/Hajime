@@ -1,0 +1,18 @@
+{
+    "fight-board": {
+        "action": {
+            "forfeit": "Make forfeit"
+        },
+        "modal": {
+            "title": {
+                "forfeit": "Make forfeit",
+                "validation": "@:common.fight validation"
+            },
+            "comment": "@:common.action.add a @.lower:common.comment at this @.lower:common.fight",
+            "warning": "Warning, this action will validate the @.lower:common.fight and it will no longer be editable! It will be still available in @.lower:common.readonly"
+        },
+        "deathmatch": "Deathmatch",
+        "saved": "Saved!",
+        "saving": "Saving..."
+    }
+}

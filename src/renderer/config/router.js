@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import i18n from './i18n'
-import translations from '@lang/config/router'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/config/router/messages'
 
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+setupVueI18nMessages(translations)
 
 Vue.use(Router)
 

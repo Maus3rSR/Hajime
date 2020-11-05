@@ -1,0 +1,84 @@
+{
+    "common": {
+        "action": {
+            "add": "Add",
+            "back-main": "Back to the main screen",
+            "cancel": "Cancel",
+            "choose": "Choose",
+            "close": "Close",
+            "confirm": "I confirm",
+            "download": "Download",
+            "edit": "Edit",
+            "filter": "Filter",
+            "reset": "Reset",
+            "select": "Select",
+            "set": "Set {adjective}",
+            "step-back": "Back to previous step",
+            "step-next": "Next step",
+            "step-previous": "Previous step",
+            "validate": "Validate"
+        },
+        "alert": {
+            "in-development": "In development"
+        },
+        "error": {
+            "forbidden": "You have no rights",
+            "forbiddenAction": "@:common.forbidden to do this",
+            "impossible": "Impossible to",
+            "occured": "An error occured when",
+            "validated": "It's already validated"
+        },
+        "form": {
+            "required": "* fields are required"
+        },
+        "of": {
+            "label": "of",
+            "list": "List of {item}",
+            "list-count": "Liste of {item} ({n})",
+            "number": "{item} number",
+            "number-inverse": "{item} No{n}",
+            "total": "Total of {item}"
+        },
+        "update": {
+            "available": "An update is available. Do you want to download it?",
+            "install": "Update was downloaded. Do you want to relaunch application to install the update?"
+        },
+        "and": "and",
+        "club": "Club",
+        "comment": "Comment",
+        "comments": "Comments",
+        "competition": "Competition",
+        "competitions": "Competitions",
+        "competition-formula": "Competition formula",
+        "configuration": "Configuration",
+        "date": "Date",
+        "date-birth": "Birthdate",
+        "draw-random": "Random draw",
+        "entry": "Entry",
+        "fight": "Fight",
+        "fights": "Fights",
+        "fighter": "Fighter",
+        "fighters": "Fighters",
+        "grade": "Grade",
+        "later": "Later",
+        "license": "License",
+        "name": "Name",
+        "no": "No",
+        "oops": "Oops",
+        "organizer": "Organizer",
+        "place": "Place",
+        "point": "Point",
+        "points": "Points",
+        "pool": "Pool",
+        "pools": "Pools",
+        "presence": "Présence",
+        "readonly": "Readonly",
+        "status": "Status",
+        "substitute": "Substitute",
+        "team": "Team",
+        "teams": "Teams",
+        "team-new": "New team",
+        "type": "Type",
+        "yes": "Yes"
+    }
+}

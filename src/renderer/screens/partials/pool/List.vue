@@ -1,7 +1,11 @@
 <script>
 import Pool from './Component'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/partials/list/pool/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     props: {
         list: {
             type: Array,
@@ -31,9 +35,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/partials/list/pool.json"></i18n>
 
 <template>
     <div>

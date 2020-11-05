@@ -1,10 +1,11 @@
 <script>
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/error/notFound/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/error/notFound.json"></i18n>
 
 <template>
     <section id="error__404">

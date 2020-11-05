@@ -1,0 +1,37 @@
+{
+    "entry-list": {
+        "action": {
+            "add": "Add a @.lower:common.fighter",
+            "add-enter": "Add and enter a new @.lower:common.fighter",
+            "adding": "Adding a @.lower:common.fighter",
+            "delete": "Delete this @.lower:common.fighter",
+            "edit": "Edit this @.lower:common.fighter",
+            "editing": "Editing a @.lower:common.fighter",
+            "upload": "Upload an entry list (.CSV file)",
+            "download": "Download a sample (.CSV file)"
+        },
+        "import": {
+            "error": {
+                "heading": "{n} line / {total} contain errors and will be not imported | {n} lines / {total} contains errors and will be not imported",
+                "message": "Please check your CSV file that the format of each cell is correct"
+            },
+            "info": {
+                "required": "Required columns",
+                "message": "Please fill the required fields per column using the drop-down lists"
+            },
+            "first-line": "Import 1st line",
+            "preview": "Preview import of @.lower:common.fighters",
+            "submit": "Import {n} fighter | Import {n} fighters"
+        },
+        "is-present": "Is @.lower:entry-list.present",
+        "is-missing": "Is @.lower:entry-list.missing",
+        "present": "Present",
+        "missing": "Missing",
+        "present-all": "All present",
+        "missing-all": "All missing",
+        "unfavorite-team": "Not favorite",
+        "favorite-team": "Favorite",
+        "unfavorite-fighter": "Not favorite",
+        "favorite-fighter": "Favorite"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "datalist": {
+        "empty": "Aucune données",
+        "display": "Affichage",
+        "loaded": "Toutes les données sont chargées",
+        "line": "Nombre de lignes affichées"
+    }
+}

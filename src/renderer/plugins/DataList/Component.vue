@@ -1,10 +1,15 @@
 <script>
 import Loader from 'vue-spinner/src/ClipLoader.vue'
+
 import Counter from '../Counter/Component'
 import SoftwareContainer from '../SoftwareContainer/Component'
+
 import Pagination from './Pagination'
 import RecordDisplay from './RecordDisplay'
 import ModalFilter from './ModalFilter'
+
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/plugins/datalist/messages'
 
 const 
     PER_PAGE = 20,
@@ -14,6 +19,7 @@ const
     }
 
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: { Loader, Pagination, RecordDisplay, ModalFilter, Counter, SoftwareContainer },
     props: {
         name: {
@@ -225,9 +231,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/plugins/datalist.json"></i18n>
 
 <template>
     <div :id="id_datalist" class="datalist">

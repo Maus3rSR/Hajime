@@ -1,8 +1,7 @@
-import i18n from '@config/i18n'
-import translations from '@lang/store/marking_board.json'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/store/board/marking/messages'
 
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+const i18n = setupVueI18nMessages(translations)
 
 const state = {}
 
