@@ -13,10 +13,17 @@ const i18n = new VueI18n({
 
 export default i18n
 
-export const langList = { "gb": "English", "fr": "Français" } // TODO: .env
+export const ISO_LOCALE_LIST = process.env.ELECTRON_WEBPACK_APP_LOCALE_LIST
+    .split(",")
+    .reduce((list, value) => {
+        let iso, name
+        [iso, name] = value.split(":")
+
+        return { ...list, [iso]: name }
+    }, {})
 
 export function setupVueI18nMessages(...args) {
-    args.forEach(localeObject => Object.keys(langList).forEach(iso => i18n.mergeLocaleMessage(iso, localeObject[iso])))
+    args.forEach(localeObject => Object.keys(ISO_LOCALE_LIST).forEach(iso => i18n.mergeLocaleMessage(iso, localeObject[iso])))
     return i18n
 }
 
