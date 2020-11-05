@@ -2,7 +2,11 @@
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/partials/list/entry/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: {},
     props: {
         id: {
@@ -249,9 +253,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/partials/list/entry.json"></i18n>
 
 <template>
     <b-modal scrollable class="modal__import_csv" :title="modal_title" size="xl" hide-header-close ref="previewCsvModal">

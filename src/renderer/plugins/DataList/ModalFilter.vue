@@ -1,8 +1,13 @@
 <script>
 import { mapGetters } from 'vuex'
+
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/plugins/datalist/messages'
+
 import DatePicker from 'vue2-datepicker'
 
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: { DatePicker },
     props: {
         id: {
@@ -74,9 +79,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/plugins/datalist.json"></i18n>
 
 <template>
     <b-modal class="modal__filter" title="Filtrer" size="lg" hide-header-close ref="modalFilter">

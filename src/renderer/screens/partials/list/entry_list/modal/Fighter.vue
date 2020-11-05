@@ -2,17 +2,14 @@
 import { mapGetters } from 'vuex'
 import { DateTime } from 'luxon'
 
-const MODE_TYPE = {
-    ADD: 'ADD',
-    EDIT: 'EDIT'
-}
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/partials/list/entry/messages'
 
-const getFighterModel = () => ({
-    is_present: false,
-    is_favorite: false
-})
+const MODE_TYPE = { ADD: 'ADD', EDIT: 'EDIT' }
+const getFighterModel = () => ({ is_present: false, is_favorite: false })
 
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: {},
     props: {
         id: {
@@ -129,9 +126,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/partials/list/entry.json"></i18n>
 
 <template>
     <b-modal class="modal__fighter" :title="modal_title" size="lg" hide-header-close ref="modalFighter" @hide="handleHide">

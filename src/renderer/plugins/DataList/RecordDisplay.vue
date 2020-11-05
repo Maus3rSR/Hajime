@@ -1,5 +1,9 @@
 <script>
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/plugins/datalist/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: {},
     props: {
         name: {
@@ -36,9 +40,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/plugins/datalist.json"></i18n>
 
 <template>
     <span class="record-display-component">

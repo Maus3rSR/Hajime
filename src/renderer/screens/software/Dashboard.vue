@@ -1,12 +1,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
-import { createVueI18nInstance } from '@config/i18n'
+import { setupVueI18nMessages } from '@config/i18n'
 import competitionTranslations from '@lang/generic/competition/messages'
 import dashboardTranslations from  '@lang/screens/software/dashboard/messages'
 
 export default {
-    i18n: createVueI18nInstance(competitionTranslations, dashboardTranslations),
+    i18n: setupVueI18nMessages(competitionTranslations, dashboardTranslations),
     computed: {
         ...mapState('competition', {
             competition_list: 'list',

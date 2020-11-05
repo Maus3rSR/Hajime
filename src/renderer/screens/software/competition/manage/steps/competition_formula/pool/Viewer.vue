@@ -1,8 +1,13 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+
 import PoolList from '@partials/pool/List'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/software/competition/steps/pool/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: { PoolList },
     computed: {
         ...mapState('pool', {
@@ -44,9 +49,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/software/competition/steps/pool.json"></i18n>
 
 <template>
     <div>

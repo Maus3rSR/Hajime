@@ -1,11 +1,7 @@
-import i18n from '@config/i18n'
-import commonTranslations from '@lang/generic/common.json'
-import translations from '@lang/store/modules/fight.json'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/store/modules/fight/messages'
 
-i18n.mergeLocaleMessage("gb", commonTranslations.gb)
-i18n.mergeLocaleMessage("fr", commonTranslations.fr)
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+const i18n = setupVueI18nMessages(translations)
 
 const defaultState = () => ({})
 const state = defaultState()

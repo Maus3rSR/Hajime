@@ -2,13 +2,13 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import { createVueI18nInstance } from '@config/i18n'
+import { setupVueI18nMessages } from '@config/i18n'
 import manageTranslations from '@lang/screens/software/competition/manage/messages'
 
 import EntryList from '@partials/list/entry_list/Component'
 
 export default {
-    i18n: createVueI18nInstance(manageTranslations),
+    i18n: setupVueI18nMessages(manageTranslations),
     components: { EntryList },
     computed: {
         ...mapState('competition', {

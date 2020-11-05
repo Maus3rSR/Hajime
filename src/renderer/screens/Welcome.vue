@@ -1,7 +1,11 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/welcome/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     computed: {
         ...mapState('configuration', ["APP_NAME"]),
         ...mapState("database", {
@@ -44,9 +48,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/welcome.json"></i18n>
 
 <template>
     <main id="welcome" class="main" data-sa-theme="1">

@@ -1,0 +1,42 @@
+{
+    "competition": {
+        "error": {
+            "fighter": {
+                "delete": "@:common.error.occured de la suppression du @.lower:common.fighter",
+                "delete-impossible": "@:common.error.impossible procéder à la suppression de ce @.lower:common.fighter. Aucune @.lower:common.competition n'est chargée",
+                "delete-forbidden": "@:common.error.forbidden de supprimer les @.lower:common.fighters",
+                "delete-nonexistent": "@:common.error.impossible procéder à la suppression d'un @.lower:common.fighter inexistant",
+                "save": "@:common.error.occured de la sauvegarde du @.lower:common.fighter",
+                "save-impossible": "@:common.error.impossible procéder à la sauvegarde de ce @.lower:common.fighter. Aucune @.lower:common.competition n'est chargée",
+                "update-forbidden": "@:common.error.forbidden de mettre à jour les @.lower:common.fighters",
+                "update-nonexistent": "@:common.error.impossible procéder à l'édition d'un @.lower:common.fighter inexistant"
+            },
+            "create": "@:common.error.occured de la création de la @.lower:common.competition",
+            "duplicate-fighter": "@:common.error.impossible sauvegarder, il y a des combattants en double",
+            "duplicate-team": "@:competition.error.duplicate-fighter ou des équipes en double",
+            "get": "@:common.error.occured de la récupération des @.lower:common.competitions",
+            "lock": "@:common.error.occured du vérouillage de la @.lower:common.competition",
+            "update": "@:common.error.occured de la mise à jour de la @.lower:common.competition",
+            "update-forbidden": "@:common.error.forbidden de mettre à jour la @.lower:common.competition",
+            "update-mass": "@:common.error.occured de la mise à jour en masse des {label}",
+            "update-mass-forbidden": "@:common.error.forbidden de mettre à jour les {label}",
+            "update-mass-impossible": "@:common.error.impossible faire la mise à jour en masse de ces {label}. Aucun @.lower:common.competition n'est chargée",
+            "update-mass-not-valid": "Les données ne sont pas valides pour cette mise à jour en masse des {label}"
+        },
+        "success": {
+            "fighter": {
+                "saved": "@:competition.success.fighter.was sauvegardé",
+                "deleted": "@:competition.success.fighter.was supprimé",
+                "was": "Le @.lower:common.fighter a bien été"
+            },
+            "saved": "@:competition.success.was sauvegardée",
+            "updated": "@:competition.success.was mise à jour",
+            "updated-mass": "La mise à jour a bien été effectuée",
+            "was": "La @.lower:common.competition a bien été"
+        },
+        "type": {
+            "individual": "Individuelle",
+            "team": "Équipe"
+        }
+    }
+}

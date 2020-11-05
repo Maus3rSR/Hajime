@@ -1,7 +1,11 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/error/databaseConnection/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     computed: {
         ...mapState('database', {
             is_db_connected: state => state.connected,
@@ -23,9 +27,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/error/databaseConnection.json"></i18n>
 
 <template>
     <section id="error__db">

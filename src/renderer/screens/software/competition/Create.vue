@@ -1,7 +1,7 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 
-import { createVueI18nInstance } from '@config/i18n'
+import { setupVueI18nMessages } from '@config/i18n'
 import competitionTranslations from '@lang/generic/competition/messages'
 import createTranslations from '@lang/screens/software/competition/create/messages'
 
@@ -10,7 +10,7 @@ import Step2 from './create/steps/FighterImport'
 import Step3 from './create/steps/CompetitionFormula'
 
 export default {
-    i18n: createVueI18nInstance(competitionTranslations, createTranslations),
+    i18n: setupVueI18nMessages(competitionTranslations, createTranslations),
     components: { Step1, Step2, Step3 },
     computed: {
         ...mapState('competition', {

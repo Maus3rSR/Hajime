@@ -1,7 +1,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/app/update/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     computed: {
         ...mapState("database", {
             is_db_connected: "connected",
@@ -61,9 +65,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/app/update.json"></i18n>
 
 <template>
     <main id="app_update" class="main" data-sa-theme="1">

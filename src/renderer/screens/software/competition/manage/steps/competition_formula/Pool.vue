@@ -1,11 +1,16 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+
 import Configuration from './pool/Configuration'
 import Viewer from './pool/Viewer'
 import FightList from './pool/FightList'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/software/competition/steps/pool/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: { Configuration, Viewer, FightList },
     props: {
         formula_id: {
@@ -74,9 +79,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/software/competition/steps/pool.json"></i18n>
 
 <template>
     <div class="competition__manage__pool">

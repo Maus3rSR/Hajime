@@ -1,9 +1,9 @@
 <script>
-import { createVueI18nInstance } from '@config/i18n'
+import { setupVueI18nMessages } from '@config/i18n'
 import createTranslations from '@lang/screens/software/competition/create/messages'
 
 export default { // TODO shared parent component
-    i18n: createVueI18nInstance(createTranslations),
+    i18n: setupVueI18nMessages(createTranslations),
     props: {
         value: Object
     },

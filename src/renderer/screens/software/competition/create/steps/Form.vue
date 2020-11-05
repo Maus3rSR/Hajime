@@ -4,11 +4,11 @@ import { mapFields } from 'vuex-map-fields'
 
 import { DateTime } from 'luxon'
 
-import { createVueI18nInstance } from '@config/i18n'
+import { setupVueI18nMessages } from '@config/i18n'
 import createTranslations from '@lang/screens/software/competition/create/messages'
 
 export default {
-    i18n: createVueI18nInstance(createTranslations),
+    i18n: setupVueI18nMessages(createTranslations),
     computed: {
         ...mapState('configuration', ["TEAM_PLACE_NUMBER_MIN","TEAM_PLACE_NUMBER_MAX"]),
         ...mapState('competition', { competition: state => state.model }),

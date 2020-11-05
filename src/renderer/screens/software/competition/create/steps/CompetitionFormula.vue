@@ -2,14 +2,14 @@
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import { createVueI18nInstance } from '@config/i18n'
+import { setupVueI18nMessages } from '@config/i18n'
 import createTranslations from '@lang/screens/software/competition/create/messages'
 
 import * as FormulaSettingsFormList from './competition_formula'
 import CompetitionFormulaOption from '@partials/competition_formula/Option'
 
 export default {
-    i18n: createVueI18nInstance(createTranslations),
+    i18n: setupVueI18nMessages(createTranslations),
     components: { ...FormulaSettingsFormList, CompetitionFormulaOption },
     computed: {
         ...mapState('formula', {

@@ -1,5 +1,9 @@
 <script>
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/plugins/modal/confirmation/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     props: {
         title: {
             type: String,
@@ -37,9 +41,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/plugins/modal/confirmation.json"></i18n>
 
 <template>
     <b-modal class="modal__confirmation" :title="modal_title" v-model="showModal" size="lg" hide-header-close>
