@@ -1,6 +1,5 @@
 {
     "competition-create": {
-        "empty": "La liste des formules de compétition est vide",
         "action": {
             "cancel-back": "Annuler et revenir à l'écran principal",
             "choose-formula": "@:common.action.choose une @.lower:common.competition-formula",
@@ -8,6 +7,7 @@
             "step-back": "Revenir à l'étape précédente"
         },
         "formula": {
+            "empty": "La liste des formules de compétition est vide",
             "pool": {
                 "card-title": "Configuration des poules",
                 "qualified-number": "Nombre de @.lower:common.fighters qualifiés par poule"
