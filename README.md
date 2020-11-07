@@ -2,6 +2,10 @@
 
 ![MIT License][badge-license]
 
+**Special Sponsors**
+
+[![lokalise_logo]][lokalise_link]
+
 # Hajime
 
 Hajime is an Electron application for managing Kendo competition
@@ -106,3 +110,7 @@ You can contribute to **Hajime** by following [CONTRIBUTING.MD][contributing]
 [badge-license]: https://img.shields.io/github/license/Maus3rSR/hajime?style=flat-square
 [paypal-link]: https://www.paypal.com/paypalme/mausersr
 [patreon-link]: https://www.patreon.com/hajime_software
+
+[//]: # (Sponsors references)
+[lokalise_logo]: https://lokalise.com/build/images/logo.6c425399.svg
+[lokalise_link]: https://lokalise.com
