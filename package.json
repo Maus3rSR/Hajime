@@ -76,7 +76,7 @@
         "electron-webpack-vue": "^2.4.0",
         "faker": "^4.1.0",
         "flag-icon-css": "^3.5.0",
-        "jspdf": "^1.5.3",
+        "jspdf": "^2.3.1",
         "jspdf-autotable": "^3.2.4",
         "luxon": "^1.17.3",
         "material-design-iconic-font": "^2.2.0",
