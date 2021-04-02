@@ -1,0 +1,8 @@
+{
+    "confirmation-delete": {
+        "confirm": "@:common.action.confirm cancellazione",
+        "element": "questo elemento",
+        "subtitle": "Sei sicuro di voler eliminare {label} ?",
+        "title": "Conferma la cancellazione"
+    }
+}

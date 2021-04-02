@@ -13,11 +13,11 @@
             "server": "Serveur",
             "user": "Nom d'utilisateur"
         },
+        "for-user": "pour utilisateurs avancés",
         "instance": {
             "mono": "Mono-instance",
             "multi": "Multi-instance"
         },
-        "for-user": "pour utilisateurs avancés",
         "message": "C'est la première fois que tu utilises ce logiciel, il faut que tu nous indiques comment fonctionnera le logiciel",
         "title": "Bienvenue sur le logiciel {app}, Kenshi",
         "where-data": "Dans le cas d'une utilisation @.lower:welcome.instance.multi, tu dois nous indiquer où aller chercher les données"

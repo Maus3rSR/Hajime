@@ -12,19 +12,19 @@
                 "card-title": "Configuration des poules",
                 "qualified-number": "Nombre de @.lower:common.fighters qualifiés par poule"
             },
+            "repulse-club": "Écarter les @.lower:common.fighters d'un même club",
+            "repulse-favorite": "Écarter les têtes de séries",
             "tree": {
                 "card-title": "Configuration de l'arbre éliminatoire",
                 "third-place": "@:common.fight pour déterminer la 3ème place"
-            },
-            "repulse-favorite": "Écarter les têtes de séries",
-            "repulse-club": "Écarter les @.lower:common.fighters d'un même club"
+            }
         },
         "placeholder": {
             "name": "ex. : Compétition inter-régionales individuelle femmes"
         },
-        "team-seat": "Nombre de @.lower:common.fighters par équipe (hors @.lower:common.substitute)",
         "step1": "Informations générales",
         "step2": "Import des @.lower:common.fighters",
-        "step3": "Formule de compétition"
+        "step3": "Formule de compétition",
+        "team-seat": "Nombre de @.lower:common.fighters par équipe (hors @.lower:common.substitute)"
     }
 }

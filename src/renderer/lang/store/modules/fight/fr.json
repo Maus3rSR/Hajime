@@ -10,11 +10,11 @@
                 "verifyBeforeCreate": "@:common.error.occured de la vérification de @:fight.order à créer"
             }
         },
+        "order": "l'ordre de @.lower:common.fight",
         "success": {
             "order": {
                 "update": "L'ordre du @.lower:common.fighter a bien été mis à jour"
             }
-        },
-        "order": "l'ordre de @.lower:common.fight"
+        }
     }
 }

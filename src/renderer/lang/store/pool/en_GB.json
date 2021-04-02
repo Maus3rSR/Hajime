@@ -1,13 +1,14 @@
 {
     "pool": {
+        "competitionFormula": "@:common.error.impossible create @.lower:common.pools, competition formula does not exist",
         "error": {
             "configuration": {
-                "updating": "@:common.error.occured updating @.lower:common.pools configuration",
-                "get": "@:common.error.occured retrieving @.lower:common.pools configurations"
+                "get": "@:common.error.occured retrieving @.lower:common.pools configurations",
+                "updating": "@:common.error.occured updating @.lower:common.pools configuration"
             },
             "entry": {
-                "updating": "@:common.error.occured updating this @.lower:common.pool entry",
-                "get": "@:common.error.impossible retrieve entry of the @.lower:common.pool"
+                "get": "@:common.error.impossible retrieve entry of the @.lower:common.pool",
+                "updating": "@:common.error.occured updating this @.lower:common.pool entry"
             },
             "fight": {
                 "add": "@:common.error.occured adding the @.lower:common.fight",
@@ -15,32 +16,31 @@
                 "addNotSamePool": "@:common.error.impossible add this @.lower:common.fight, entries does not belong to the @.lower:common.pool",
                 "get": "@:common.error.impossible retrieve the @.lower:common.fight",
                 "validate": "@:common.error.impossible validate this @.lower:common.fight",
-                "validateMissing": "@:common.error.impossible validate a missing @.lower:common.fight",
-                "validateFighterMissing": "@:common.error.impossible update datas of @.lower:common.pool because at least one @.lower:common.fighter is missing",
                 "validateBothFighterMissing": "@:common.error.impossible validate this @.lower:common.fight because @.lower:common.fighters are missing",
+                "validateFighterMissing": "@:common.error.impossible update datas of @.lower:common.pool because at least one @.lower:common.fighter is missing",
+                "validateMissing": "@:common.error.impossible validate a missing @.lower:common.fight",
                 "validatePoolMissing": "@:common.error.impossible validate this @.lower:common.fight because @:pool.notExist",
                 "validateScoreMissing": "@:common.error.impossible update datas of @.lower:common.pool because scores are missing"
             },
+            "get": "@:common.error.occured retrieving @.lower:common.pools",
+            "getConfigurationEmpty": "@:common.error.impossible retrieve list of @.lower:common.pools because configuration is not loaded",
             "markingBoard": {
                 "reversed": "@:common.error.occured inverting marking board",
                 "reversedNotExist": "@:common.error.impossible inverse, @:pool.notExist"
             },
-            "get": "@:common.error.occured retrieving @.lower:common.pools",
-            "getConfigurationEmpty": "@:common.error.impossible retrieve list of @.lower:common.pools because configuration is not loaded",
             "saved": "@:common.error.occured saving @.lower:common.pools",
             "updateNotExist": "@:common.error.impossible update datas of @.lower:common.pools, @:pool.notExist"
         },
+        "notExist": "the @.lower:common.pool does not exist",
         "success": {
             "fight": {
-                "added": "Le @.lower:common.fight have been added to the @.lower:common.pool",
-                "validated": "Le @.lower:common.fight have been validated"
+                "added": "The @.lower:common.fight have been added to the @.lower:common.pool",
+                "validated": "The @.lower:common.fight have been validated"
             },
             "markingBoard": {
                 "reversed": "The marking board have been reversed"
             },
             "saved": "The @.lower:common.pools have been saved"
-        },
-        "competitionFormula": "@:common.error.imposible create @.lower:common.pools, competition formula does not exist",
-        "notExist": "the @.lower:common.pool does not exist"
+        }
     }
 }

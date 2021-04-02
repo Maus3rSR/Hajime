@@ -12,10 +12,10 @@
                 "notBelong": "Un des @.lower:common.fighters (ou les deux) est erroné et ne fait pas partie de ce @.lower:common.fight",
                 "notBelongTeam": "Un des @.lower:common.fighters (ou les deux) est erroné et ne fait pas partie d'une des @.lower:common.teams de ce @.lower:common.fight"
             },
-            "penalty": { 
+            "penalty": {
+                "limit": "La limite d'attribution de pénalité a déjà été atteinte",
                 "update": "@:common.error.occured de la mise à jour des pénalités",
-                "updateValidFighter": "@:common.error.impossible mettre à jour les pénalités. Le @.lower:common.fighter n'est pas valide",
-                "limit": "La limite d'attribution de pénalité a déjà été atteinte"
+                "updateValidFighter": "@:common.error.impossible mettre à jour les pénalités. Le @.lower:common.fighter n'est pas valide"
             },
             "score": {
                 "attribute": "@:common.error.occured de l'attribution du score",

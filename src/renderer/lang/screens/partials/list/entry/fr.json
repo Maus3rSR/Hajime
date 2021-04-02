@@ -5,32 +5,33 @@
             "add-enter": "Ajouter et saisir un nouveau @.lower:common.fighter",
             "adding": "Ajout d'un @.lower:common.fighter",
             "delete": "Supprimer ce @.lower:common.fighter",
+            "download": "Télécharger un fichier example (fichier .CSV)",
             "edit": "Modifier ce @.lower:common.fighter",
-            "upload": "Importer une liste d'entrées (fichier .CSV)",
-            "download": "Télécharger un fichier example (fichier .CSV)"
+            "editing": "Modification d'un @.lower:common.fighter",
+            "upload": "Importer une liste d'entrées (fichier .CSV)"
         },
+        "favorite-fighter": "Favori",
+        "favorite-team": "Favorie",
         "import": {
             "error": {
-                "heading": "{n} ligne / {total} comporte des erreurs et ne sera pas importée | {n} lignes / {total} comportent des erreurs et ne seront pas importées",
+                "heading": "{n} ligne \/ {total} comporte des erreurs et ne sera pas importée | {n} lignes \/ {total} comportent des erreurs et ne seront pas importées",
                 "message": "Veuillez vérifier votre fichier CSV que le format de chaque cellule est correct"
             },
-            "info": {
-                "required": "Colonnes requises",
-                "message": "Veuillez renseignez tous les champs requis par colonne en utilisant les listes déroulante"
-            },
             "first-line": "Importer la 1ère ligne",
+            "info": {
+                "message": "Veuillez renseignez tous les champs requis par colonne en utilisant les listes déroulante",
+                "required": "Colonnes requises"
+            },
             "preview": "Prévisualisation de l'import des @.lower:common.fighters",
             "submit": "Importer {n} combattant | Importer {n} combattants"
         },
-        "is-present": "Est @.lower:entry-list.present",
         "is-missing": "Est @.lower:entry-list.missing",
-        "present": "Présent",
+        "is-present": "Est @.lower:entry-list.present",
         "missing": "Absent",
-        "present-all": "Tous présent",
         "missing-all": "Tous absent",
-        "unfavorite-team": "Non favorie",
-        "favorite-team": "Favorie",
+        "present": "Présent",
+        "present-all": "Tous présent",
         "unfavorite-fighter": "Non favori",
-        "favorite-fighter": "Favori"
+        "unfavorite-team": "Non favorie"
     }
 }

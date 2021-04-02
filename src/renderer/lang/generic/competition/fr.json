@@ -3,13 +3,13 @@
         "action": {
             "close": "Clôre la @.lower:common.competition"
         },
-        "status": {
-            "waiting": "Validation @.lower:common.fighters",
-            "ongoing": "En cours",
-            "finished": "Terminée"
-        },
         "closed": "La @.lower:common.competition est clôturée",
         "empty": "Aucune données de @.lower:common.competition",
-        "new": "Nouvelle @.lower:common.competition"
+        "new": "Nouvelle @.lower:common.competition",
+        "status": {
+            "finished": "Terminée",
+            "ongoing": "En cours",
+            "waiting": "Validation @.lower:common.fighters"
+        }
     }
 }

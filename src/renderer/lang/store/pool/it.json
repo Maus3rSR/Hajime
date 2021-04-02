@@ -1,0 +1,46 @@
+{
+    "pool": {
+        "competitionFormula": "@:common.error.impossible creare @.lower:common.pools, la formula della competizione non esiste",
+        "error": {
+            "configuration": {
+                "get": "@:common.error.occured nel recupero delle configurazioni dei @.lower:common.pools",
+                "updating": "@:common.error.occured aggiornando @.lower:common.pools configurazione"
+            },
+            "entry": {
+                "get": "@:common.error.impossibile recuperare l'ingresso del @.lower:common.pool",
+                "updating": "@:common.error.occured aggiornando questa iscrizione al @.lower:common.pool"
+            },
+            "fight": {
+                "add": "@:common.error.occured aggiungendo il @.lower:common.fight",
+                "addNotExistPool": "@:common.error.impossible aggiungere questo @.lower:common.fight, @:pool.notExist",
+                "addNotSamePool": "@:common.error.impossible aggiungere questo @.lower:common.fight, le voci non appartengono al @.lower:common.pool",
+                "get": "@:common.error.impossible recuperare il @.lower:common.fight",
+                "validate": "@:common.error.impossible convalidare questo @.lower:common.fight",
+                "validateBothFighterMissing": "@:common.error.impossible convalidare questo @.lower:common.fight perché mancano @.lower:common.fighters",
+                "validateFighterMissing": "@:common.error.impossibile aggiornare i dati di @.lower:common.pool perché manca almeno un @.lower:common.fighter",
+                "validateMissing": "@:common.error.impossible convalidare un @.lower:common.fight mancante",
+                "validatePoolMissing": "@:common.error.impossible convalidare questo @.lower:common.fight perché @:pool.notExist",
+                "validateScoreMissing": "@:common.error.impossibile aggiornare i dati di @.lower:common.pool perché mancano i punteggi"
+            },
+            "get": "@:common.error.occured recuperando i @.lower:common.pools",
+            "getConfigurationEmpty": "@:common.error.impossible recuperare l'elenco dei @.lower:common.pools perché la configurazione non è caricata",
+            "markingBoard": {
+                "reversed": "@:common.error.occured invertendo la scheda di marcatura",
+                "reversedNotExist": "@:common.error.impossible inverso, @:p ool.notExist"
+            },
+            "saved": "@:common.error.occured salvando @.lower:common.pools",
+            "updateNotExist": "@:common.error.impossibile aggiornare i dati di @.lower:common.pools, @:pool.notExist"
+        },
+        "notExist": "il @.lower:common.pool non esiste",
+        "success": {
+            "fight": {
+                "added": "I @.lower:common.fight sono stati aggiunti a @.lower:common.pool",
+                "validated": "I @.lower:common.fight sono stati convalidati"
+            },
+            "markingBoard": {
+                "reversed": "Il tabellone è stato invertito"
+            },
+            "saved": "I @.lower:common.pools sono state salvati"
+        }
+    }
+}

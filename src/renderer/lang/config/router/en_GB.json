@@ -1,7 +1,7 @@
 {
     "router": {
         "home": "Dashboard",
-        "new-competition": "New competition",
-        "manage-competition": "Manage competition"
+        "manage-competition": "Manage competition",
+        "new-competition": "New competition"
     }
 }

@@ -21,6 +21,18 @@
         "alert": {
             "in-development": "In development"
         },
+        "and": "and",
+        "club": "Club",
+        "comment": "Comment",
+        "comments": "Comments",
+        "competition": "Competition",
+        "competition-formula": "Competition formula",
+        "competitions": "Competitions",
+        "configuration": "Configuration",
+        "date": "Date",
+        "date-birth": "Birthdate",
+        "draw-random": "Random draw",
+        "entry": "Entry",
         "error": {
             "forbidden": "You have no rights",
             "forbiddenAction": "@:common.forbidden to do this",
@@ -28,9 +40,18 @@
             "occured": "An error occured when",
             "validated": "It's already validated"
         },
+        "fight": "Fight",
+        "fighter": "Fighter",
+        "fighters": "Fighters",
+        "fights": "Fights",
         "form": {
             "required": "* fields are required"
         },
+        "grade": "Grade",
+        "later": "Later",
+        "license": "License",
+        "name": "Name",
+        "no": "No",
         "of": {
             "label": "of",
             "list": "List of {item}",
@@ -39,31 +60,6 @@
             "number-inverse": "{item} No{n}",
             "total": "Total of {item}"
         },
-        "update": {
-            "available": "An update is available. Do you want to download it?",
-            "install": "Update was downloaded. Do you want to relaunch application to install the update?"
-        },
-        "and": "and",
-        "club": "Club",
-        "comment": "Comment",
-        "comments": "Comments",
-        "competition": "Competition",
-        "competitions": "Competitions",
-        "competition-formula": "Competition formula",
-        "configuration": "Configuration",
-        "date": "Date",
-        "date-birth": "Birthdate",
-        "draw-random": "Random draw",
-        "entry": "Entry",
-        "fight": "Fight",
-        "fights": "Fights",
-        "fighter": "Fighter",
-        "fighters": "Fighters",
-        "grade": "Grade",
-        "later": "Later",
-        "license": "License",
-        "name": "Name",
-        "no": "No",
         "oops": "Oops",
         "organizer": "Organizer",
         "place": "Place",
@@ -76,9 +72,13 @@
         "status": "Status",
         "substitute": "Substitute",
         "team": "Team",
-        "teams": "Teams",
         "team-new": "New team",
+        "teams": "Teams",
         "type": "Type",
+        "update": {
+            "available": "An update is available. Do you want to download it?",
+            "install": "Update was downloaded. Do you want to relaunch application to install the update?"
+        },
         "yes": "Yes"
     }
 }

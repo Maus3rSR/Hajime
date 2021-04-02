@@ -1,0 +1,20 @@
+{
+    "fight": {
+        "error": {
+            "order": {
+                "add": "@:common.error.occured creando @:fight.order",
+                "addAlreadyExist": "@:common.error.impossible creare @:fight.order, esiste già",
+                "update": "@:common.error.impossible aggiornare @:fight.order di @.lower:common.fighter",
+                "updateReplace": "@:common.error.occured aggiornando l'@:fight.order di @.lower:common.fighter da sostituire",
+                "updateSame": "@:common.error.impossible aggiornare due ordini @.lower:common.fight per lo stesso @.lower:common.fighter",
+                "verifyBeforeCreate": "@:common.error.occured verificando @:fight.order creation"
+            }
+        },
+        "order": "@.lower:common.fight ordine",
+        "success": {
+            "order": {
+                "update": "@:common.fighter ordine è stato aggiornato"
+            }
+        }
+    }
+}
