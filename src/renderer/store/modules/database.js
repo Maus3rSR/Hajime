@@ -1,14 +1,10 @@
 import { CreateSequelizeInstance } from '@root/database'
 import migration from './database/migration'
 
-import i18n from '@config/i18n'
-import commonTranslations from '@lang/generic/common.json'
-import translations from '@lang/store/database.json'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/store/database/messages'
 
-i18n.mergeLocaleMessage("gb", commonTranslations.gb)
-i18n.mergeLocaleMessage("fr", commonTranslations.fr)
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+const i18n = setupVueI18nMessages(translations)
 
 let sequelize_instance = null // We must not set it in the state because the object make internal updates when used and we can't handle these changes
 

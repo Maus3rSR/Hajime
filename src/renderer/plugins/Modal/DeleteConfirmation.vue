@@ -1,5 +1,9 @@
 <script>
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/plugins/modal/delete/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: {},
     props: {
         labelField: {
@@ -35,9 +39,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/plugins/modal/deleteConfirmation.json"></i18n>
 
 <template>
     <b-modal class="modal__delete" :title="$t('confirmation-delete.title')" size="lg" hide-header-close ref="deleteConfirmationModal">

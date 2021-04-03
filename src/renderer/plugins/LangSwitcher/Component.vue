@@ -1,13 +1,10 @@
 <script>
-import { setLanguage } from '@config/i18n.js'
+import { ISO_LOCALE_LIST, setLanguage } from '@config/i18n.js'
 
 export default {
     computed: {
         supported_locale_list() {
-            return {
-                "gb": "English",
-                "fr": "Français",
-            }
+            return ISO_LOCALE_LIST
         },
         current_locale() {
             return this.$i18n.locale
@@ -18,8 +15,10 @@ export default {
             setLanguage(locale)
             this.$configuration.set("app_lang", locale)
         },
-        getClass(locale) {
-            return `flag-icon-${locale}`
+        getClass(iso) {
+            const isoParts = iso.split("_")
+            const flagLocale = isoParts.length > 1 ? isoParts[1].toLowerCase() : isoParts[0]
+            return `flag-icon-${flagLocale}`
         }
     }
 }

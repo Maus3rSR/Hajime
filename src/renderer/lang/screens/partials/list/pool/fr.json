@@ -1,0 +1,10 @@
+{
+    "pool-list": {
+        "number": {
+            "score-given": "Nombre de ippons marqués",
+            "score-received": "Nombre de ippons reçus",
+            "victory": "Nombre de victoires"
+        },
+        "ranking-detail": "Détail du classement"
+    }
+}

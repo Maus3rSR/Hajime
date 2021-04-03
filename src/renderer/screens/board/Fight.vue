@@ -1,10 +1,15 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+
 import ScoreDragger from '@partials/fight/ScoreDragger'
 import FightLib from '@root/lib/fight'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/board/fight/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     components: { ScoreDragger },
     props: {
         fight_id: { required: true },
@@ -108,9 +113,6 @@ export default {
     }
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/board/fight.json"></i18n>
 
 <template>
     <main class="fight-versus" :class="{ 'reversed': marking_board_reversed }">

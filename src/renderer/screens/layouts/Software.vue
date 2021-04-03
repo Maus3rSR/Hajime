@@ -1,15 +1,12 @@
 <script>
 import log from 'electron-log'
+
 import { DateTime } from 'luxon'
 
-import i18n from '@config/i18n'
-import commonTranslations from '@lang/generic/common.json'
-import translations from '@lang/mail/support.json'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/mail/support/messages'
 
-i18n.mergeLocaleMessage("gb", commonTranslations.gb)
-i18n.mergeLocaleMessage("fr", commonTranslations.fr)
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+const i18n = setupVueI18nMessages(translations)
 
 export default {
     beforeRouteUpdate(to, from, next) {
@@ -17,9 +14,7 @@ export default {
         const fromDepth = from.path.split('/').length
         this.transitionName = 'fade'
 
-        if (toDepth !== fromDepth) {
-            this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-        }
+        if (toDepth !== fromDepth) this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
         
         this.checkDisplay(to)
         this.setTheme(to)

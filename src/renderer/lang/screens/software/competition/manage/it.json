@@ -1,0 +1,11 @@
+{
+    "competition-manage": {
+        "confirm-call": {
+            "content": "Dopo questa conferma non sarà più possibile modificare questa lista di chiamate. Sarà sempre disponibile in sola lettura.",
+            "label": "Conferma questa lista di chiamate?",
+            "title": "Conferma della lista delle chiamate"
+        },
+        "list-call": "Elenco chiamate",
+        "not-enough": "Non abbastanza @.lower:common.fighters per lanciare la competizione"
+    }
+}

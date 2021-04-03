@@ -1,0 +1,23 @@
+{
+    "pool": {
+        "action": {
+            "pdf": "@:common.action.download PDF of the list of @.lower:common.pools"
+        },
+        "configuration": {
+            "choose": "Choose a configuration",
+            "number": "Number of @.lower:common.pools"
+        },
+        "empty": "No data of @.lower:common.pools",
+        "fight-list": {
+            "add": "@:common.action.add one more @.lower:common.fight",
+            "adding": "Adding one more @.lower:common.fight",
+            "empty": "No data of @.lower.common.fight",
+            "info": "A @.lower:common.fight added manually will not change the number of ranking @.lower:common.points",
+            "title": "@:common.fights of @.lower:common.pool",
+            "validate": "Validate this @.lower:common.fight to distribute @.lower:common.points",
+            "validation": "Validation needed"
+        },
+        "label": "@.lower:common.pool | @.lower:common.pools",
+        "not-enough": "Number of @.lower:common.fighter insufficient to distribute @.lower:common.pools."
+    }
+}

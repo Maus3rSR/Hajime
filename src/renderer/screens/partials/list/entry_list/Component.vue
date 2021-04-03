@@ -2,10 +2,15 @@
 import { mapGetters } from 'vuex'
 import path from 'path'
 import Papa from 'papaparse'
+
 import ModalFighter from './modal/Fighter'
 import ModalPreviewCsv from './modal/Csv'
 
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/screens/partials/list/entry/messages'
+
 export default {
+    i18n: setupVueI18nMessages(translations),
     props: {
         value: Array,
         competition_type: {
@@ -385,9 +390,6 @@ export default {
     },
 }
 </script>
-
-<i18n src="@lang/generic/common.json"></i18n>
-<i18n src="@lang/screens/partials/list/entry.json"></i18n>
 
 <template>
     <div>

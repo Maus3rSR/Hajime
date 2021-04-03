@@ -1,0 +1,15 @@
+{
+    "competition": {
+        "action": {
+            "close": "Chiudi la @.lower:common.competition"
+        },
+        "closed": "@:common.competition è chiusa",
+        "empty": "Nessun dato della @.lower:common.competition",
+        "new": "Nuova @.lower:common.competition",
+        "status": {
+            "finished": "Finito",
+            "ongoing": "In corso",
+            "waiting": "@.lower:common.fighters validazione"
+        }
+    }
+}

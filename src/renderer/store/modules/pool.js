@@ -1,18 +1,16 @@
 import Vue from 'vue'
 import { getField, updateField } from 'vuex-map-fields'
+
 import { COMPETITION_MODE, LOADER_STATUS, POOL_SCORING, SCORE_DATABASE_FIELD_LIST } from '@root/constant'
-import { getEntryListAssociation, getFightListAssociationList, getFightAssociationList } from './pool/association_helper'
 import FightLib from '@root/lib/fight'
+
+import { getEntryListAssociation, getFightListAssociationList, getFightAssociationList } from './pool/association_helper'
 import fightModule from './fight'
 
-import i18n from '@config/i18n'
-import commonTranslations from '@lang/generic/common.json'
-import translations from '@lang/store/pool.json'
+import { setupVueI18nMessages } from '@config/i18n'
+import translations from '@lang/store/pool/messages'
 
-i18n.mergeLocaleMessage("gb", commonTranslations.gb)
-i18n.mergeLocaleMessage("fr", commonTranslations.fr)
-i18n.mergeLocaleMessage("gb", translations.gb)
-i18n.mergeLocaleMessage("fr", translations.fr)
+const i18n = setupVueI18nMessages(translations)
 
 const modules = { fightModule }
 

@@ -1,0 +1,15 @@
+{
+    "competition": {
+        "action": {
+            "close": "Close the @.lower:common.competition"
+        },
+        "closed": "@:common.competition is closed",
+        "empty": "No data of @.lower:common.competition",
+        "new": "New @.lower:common.competition",
+        "status": {
+            "finished": "Finished",
+            "ongoing": "Ongoing",
+            "waiting": "@.lower:common.fighters validation"
+        }
+    }
+}

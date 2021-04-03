@@ -1,0 +1,33 @@
+{
+    "fightBoard": {
+        "error": {
+            "fight": {
+                "exist": "@:common.error.impossible valider le @.lower:common.fight car il est inexistant",
+                "find": "@:common.error.impossible trouver les informations de @.lower:common.fight",
+                "retrieve": "@:common.error.occured de la récupération des informations de @.lower:common.fight",
+                "validate": "@:common.error.occured de la validation du @.lower:common.fight"
+            },
+            "fighter": {
+                "find": "@:common.error.impossible trouver les informations de tous les @.lower:common.fighters",
+                "notBelong": "Un des @.lower:common.fighters (ou les deux) est erroné et ne fait pas partie de ce @.lower:common.fight",
+                "notBelongTeam": "Un des @.lower:common.fighters (ou les deux) est erroné et ne fait pas partie d'une des @.lower:common.teams de ce @.lower:common.fight"
+            },
+            "penalty": {
+                "limit": "La limite d'attribution de pénalité a déjà été atteinte",
+                "update": "@:common.error.occured de la mise à jour des pénalités",
+                "updateValidFighter": "@:common.error.impossible mettre à jour les pénalités. Le @.lower:common.fighter n'est pas valide"
+            },
+            "score": {
+                "attribute": "@:common.error.occured de l'attribution du score",
+                "attributeValidFighter": "@:common.error.impossible faire l'attribution du score. Le @.lower:common.fighter n'est pas valide",
+                "delete": "@:common.error.occured de la suppression du score",
+                "deleteValidFighter": "@:common.error.impossible supprimer le score. Le @.lower:common.fighter n'est pas valide",
+                "limit": "La limite d'attribution de score a déjà été atteinte"
+            },
+            "suddenDeath": {
+                "update": "@:common.error.occured de la mise à jour de la mort subite",
+                "updateValidFighter": "@:common.error.impossible mettre à jour la mort subite. Le @.lower:common.fighter n'est pas valide"
+            }
+        }
+    }
+}

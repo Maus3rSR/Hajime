@@ -1,0 +1,24 @@
+{
+    "fight-list": {
+        "action": {
+            "choose": "@:common.action.choose a @.lower:common.fighter",
+            "fighter-down": "Step up the @.lower:common.fighter",
+            "fighter-up": "Step down the @.lower:common.fighter",
+            "inverse-color": "Inverse colors",
+            "open-fight-screen": "Open the @.lower:common.fight screen",
+            "see-comment": "See the @.lower:common.comments",
+            "see-detail": "See details of the @.lower:common.fight"
+        },
+        "comment": "@:common.comments of the @.lower:common.fight",
+        "empty": "No @.lower:common.fighter",
+        "fight-screen-open": "The @.lower:common.fight screen is already open by someone",
+        "modal": {
+            "select": "@:common.action.select a @.lower:common.fighter",
+            "title": "Adding a @.lower:common.fight order"
+        },
+        "status": {
+            "finished": "Finished",
+            "todo": "Todo"
+        }
+    }
+}

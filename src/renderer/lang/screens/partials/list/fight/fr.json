@@ -1,0 +1,24 @@
+{
+    "fight-list": {
+        "action": {
+            "choose": "@:common.action.choose un @.lower:common.fighter",
+            "fighter-down": "Monter le @.lower:common.fighter d'un niveau",
+            "fighter-up": "Descendre le @.lower:common.fighter d'un niveau",
+            "inverse-color": "Inverser les couleurs",
+            "open-fight-screen": "Ouvrir la fenêtre de @.lower:common.fight",
+            "see-comment": "Voir les @.lower:common.comments",
+            "see-detail": "Voir le détail du @.lower:common.fight"
+        },
+        "comment": "@:common.comments du @.lower:common.fight",
+        "empty": "Aucun @.lower:common.fighter",
+        "fight-screen-open": "La fenêtre de gestion de @.lower:common.fight est déjà ouverte par quelqu'un",
+        "modal": {
+            "select": "@:common.action.select un @.lower:common.fighter",
+            "title": "Ajout d'un ordre de @.lower:common.fight"
+        },
+        "status": {
+            "finished": "Terminé",
+            "todo": "À faire"
+        }
+    }
+}
