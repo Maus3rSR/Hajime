@@ -9,16 +9,16 @@
             "see-comment": "Voir les @.lower:common.comments",
             "see-detail": "Voir le détail du @.lower:common.fight"
         },
+        "comment": "@:common.comments du @.lower:common.fight",
+        "empty": "Aucun @.lower:common.fighter",
+        "fight-screen-open": "La fenêtre de gestion de @.lower:common.fight est déjà ouverte par quelqu'un",
         "modal": {
-            "title": "Ajout d'un ordre de @.lower:common.fight",
-            "select": "@:common.action.select un @.lower:common.fighter"
+            "select": "@:common.action.select un @.lower:common.fighter",
+            "title": "Ajout d'un ordre de @.lower:common.fight"
         },
         "status": {
             "finished": "Terminé",
             "todo": "À faire"
-        },
-        "comment": "@:common.comments du @.lower:common.fight",
-        "empty": "Aucun @.lower:common.fighter",
-        "fight-screen-open": "La fenêtre de gestion de @.lower:common.fight est déjà ouverte par quelqu'un"
+        }
     }
 }

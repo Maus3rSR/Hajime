@@ -1,9 +1,9 @@
 {
     "pool-list": {
         "number": {
-            "victory": "Victory number",
             "score-given": "Ippon given number",
-            "score-received": "Ippon received number"
+            "score-received": "Ippon received number",
+            "victory": "Victory number"
         },
         "ranking-detail": "Ranking detail"
     }

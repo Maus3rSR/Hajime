@@ -21,6 +21,18 @@
         "alert": {
             "in-development": "En développement"
         },
+        "and": "et",
+        "club": "Club",
+        "comment": "Commentaire",
+        "comments": "Commentaires",
+        "competition": "Compétition",
+        "competition-formula": "Formule de compétition",
+        "competitions": "Compétitions",
+        "configuration": "Configuration",
+        "date": "Date",
+        "date-birth": "Date de naissance",
+        "draw-random": "Tirage au sort",
+        "entry": "Entrée",
         "error": {
             "forbidden": "Vous n'avez pas le droit",
             "forbiddenAction": "@:common.forbidden d'effectuer cette action",
@@ -28,9 +40,18 @@
             "occured": "Un problème est survenu lors",
             "validated": "C'est déjà validé"
         },
+        "fight": "Combat",
+        "fighter": "Combattant",
+        "fighters": "Combattants",
+        "fights": "Combats",
         "form": {
             "required": "Les champs * sont requis"
         },
+        "grade": "Grade",
+        "later": "Plus tard",
+        "license": "Licence",
+        "name": "Nom",
+        "no": "Non",
         "of": {
             "label": "de",
             "list": "Liste des {item}",
@@ -39,31 +60,6 @@
             "number-inverse": "{item} N°{n}",
             "total": "Total de {item}"
         },
-        "update": {
-            "available": "Mise à jour disponible. Voulez-vous la télécharger ?",
-            "install": "Mise à jour téléchargée. Voulez-vous relancer l'application pour l'installer ?"
-        },
-        "and": "et",
-        "club": "Club",
-        "comment": "Commentaire",
-        "comments": "Commentaires",
-        "competition": "Compétition",
-        "competitions": "Compétitions",
-        "competition-formula": "Formule de compétition",
-        "configuration": "Configuration",
-        "date": "Date",
-        "date-birth": "Date de naissance",
-        "draw-random": "Tirage au sort",
-        "entry": "Entrée",
-        "fight": "Combat",
-        "fights": "Combats",
-        "fighter": "Combattant",
-        "fighters": "Combattants",
-        "grade": "Grade",
-        "later": "Plus tard",
-        "license": "Licence",
-        "name": "Nom",
-        "no": "Non",
         "oops": "Oops",
         "organizer": "Organisateur",
         "place": "Lieu",
@@ -76,9 +72,13 @@
         "status": "Statut",
         "substitute": "Remplaçant",
         "team": "Équipe",
-        "teams": "Équipes",
         "team-new": "Nouvelle équipe",
+        "teams": "Équipes",
         "type": "Type",
+        "update": {
+            "available": "Mise à jour disponible. Voulez-vous la télécharger ?",
+            "install": "Mise à jour téléchargée. Voulez-vous relancer l'application pour l'installer ?"
+        },
         "yes": "Oui"
     }
 }

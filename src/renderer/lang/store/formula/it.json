@@ -1,0 +1,7 @@
+{
+    "formula": {
+        "error": {
+            "get": "@:common.error.impossible recuperare l'elenco delle formule della competizione"
+        }
+    }
+}
