@@ -1,7 +1,0 @@
-{
-    "scoreType": {
-        "error": {
-            "get": "@:common.error.impossible retrieve score's types list"
-        }
-    }
-}

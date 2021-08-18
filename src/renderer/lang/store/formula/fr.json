@@ -1,7 +1,0 @@
-{
-    "formula": {
-        "error": {
-            "get": "@:common.error.impossible récupérer la liste des formules de compétition"
-        }
-    }
-}

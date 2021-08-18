@@ -1,7 +1,0 @@
-{
-    "error-screen": {
-        "db": "An error occurend while connecting to database!",
-        "reconnect": "Try to reconnect",
-        "report": "Report a bug"
-    }
-}

@@ -1,9 +1,0 @@
-{
-    "pool-list-draw": {
-        "launch": "Launch the @.lower:common.draw-random",
-        "status": {
-            "finished": "@:common.draw-random finished!",
-            "ongoing": "@:common.draw-random in progress..."
-        }
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "error-screen": {
-        "db": "Si è verificato un errore durante la connessione al database!",
-        "reconnect": "Prova a ricollegarti",
-        "report": "Segnala un bug"
-    }
-}

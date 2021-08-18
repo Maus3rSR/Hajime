@@ -1,7 +1,0 @@
-{
-    "formula": {
-        "error": {
-            "get": "@:common.error.impossible retrieve competition's formulas list"
-        }
-    }
-}

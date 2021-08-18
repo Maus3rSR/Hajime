@@ -1,7 +1,0 @@
-{
-    "app-update": {
-        "connection": "Connessione",
-        "error": "Si è verificato un errore durante l'aggiornamento del software.",
-        "updating": "Applicando gli aggiornamenti"
-    }
-}

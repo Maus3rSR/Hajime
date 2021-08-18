@@ -1,8 +1,0 @@
-{
-    "dashboard": {
-        "competition": {
-            "create": "Create a new @.lower:common.competition",
-            "goto": "Go to the @.lower:common.competition"
-        }
-    }
-}

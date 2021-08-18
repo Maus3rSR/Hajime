@@ -1,7 +1,0 @@
-{
-    "router": {
-        "home": "Tableau de bord",
-        "manage-competition": "Gestion de la compétition",
-        "new-competition": "Nouvelle compétition"
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "migration": {
-        "error": {
-            "data": "@:common.error.occured migrando i dati"
-        }
-    }
-}
