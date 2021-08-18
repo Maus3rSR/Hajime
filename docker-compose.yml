@@ -1,22 +1,16 @@
 version: '3'
 services:
-  mariadb:
-    image: 'mariadb:latest'
-    ports:
-      - 3310:3306
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_DATABASE: askc
-      MYSQL_USER: askc
-      MYSQL_PASSWORD: askc
-    volumes:
-      - mysqldata:/var/lib/mysql
-  web:
-    image: php:7.2-apache
-    ports:
-      - 8083:80
-    volumes:
-      - ./dist:/var/www/html
+    mariadb:
+        image: 'mariadb:latest'
+        ports:
+            - 3310:3306
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+            MYSQL_DATABASE: askc
+            MYSQL_USER: askc
+            MYSQL_PASSWORD: askc
+        volumes:
+            - mysqldata:/var/lib/mysql
 volumes:
-  mysqldata:
-    driver: local
+    mysqldata:
+        driver: local
