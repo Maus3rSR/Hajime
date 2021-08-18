@@ -1,6 +1,7 @@
 # ############
 # Project
 # ############
+*.code-workspace
 .vscode
 *.bak
 *.hot*
