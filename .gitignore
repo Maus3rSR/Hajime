@@ -6,6 +6,8 @@
 *.bak
 *.hot*
 .env*.local
+.yarn
+node_modules
 # ############
 # Windows
 # ############
@@ -64,17 +66,3 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-# ############
-# Electron
-# ############
-.DS_Store
-dist/
-build/*
-!build/icon.*
-coverage
-node_modules/
-npm-debug.log
-npm-debug.log.*
-thumbs.db
-!.gitkeep
-.env
