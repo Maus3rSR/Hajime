@@ -1,6 +1,17 @@
 {
     "name": "hajime",
-    "version": "0.0.0",
+    "version": "0.1.2-prealpha",
+    "description": "Hajime - Weapon Martial Art Software Management (only for Kendo from now)",
+    "author": {
+        "name": "Kevin UNFRICHT",
+        "email": "unfricht.kevin@hotmail.fr"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/Maus3rSR/Hajime.git",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Maus3rSR/Hajime.git"
+    },
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc --noEmit && vite build",
@@ -14,12 +25,18 @@
         "@tauri-apps/cli": "^1.0.0-beta.9",
         "@vitejs/plugin-vue": "^1.3.0",
         "@vue/compiler-sfc": "^3.0.5",
+        "animate.css": "^4.1.1",
+        "autoprefixer": "latest",
+        "daisyui": "^1.12.0",
         "eslint": "^7.32.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-vue": "^7.16.0",
+        "postcss": "latest",
         "prettier": "^2.3.2",
+        "tailwindcss": "latest",
         "typescript": "^4.3.2",
         "vite": "^2.4.4",
+        "vue-router": "4",
         "vue-tsc": "^0.2.2"
     }
 }
