@@ -1,0 +1,73 @@
+/**
+ * FADE
+ */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+.fade-enter,
+.fade-leave-active {
+    opacity: 0;
+}
+/**
+ * SLIDE LEFT/RIGHT
+ */
+.slide-left-enter,
+.slide-right-leave-active {
+    opacity: 0;
+    -webkit-transform: translate(30px, 0);
+    transform: translate(30px, 0);
+}
+.slide-left-leave-active,
+.slide-right-enter {
+    opacity: 0;
+    -webkit-transform: translate(-30px, 0);
+    transform: translate(-30px, 0);
+}
+/**
+ * SLIDE DOWN LIST
+ */
+.list-item {
+    transition: all 0.5s;
+}
+.list-enter,
+.list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+}
+.list-leave-active {
+    position: absolute;
+}
+
+/**
+ * RIPPLE OUT EFFECT
+ */
+@keyframes ripple-out {
+    100% {
+        top: -12px;
+        right: -12px;
+        bottom: -12px;
+        left: -12px;
+        border-width: 0;
+        opacity: 0;
+    }
+}
+
+.ripple-out {
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+}
+.ripple-out:before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border: rgba(#e1e1e1, 0.6) solid 4px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    animation-duration: 1.5s;
+    animation-name: ripple-out;
+    animation-iteration-count: infinite;
+}
