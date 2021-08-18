@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-    name: 'Main'
+    name: 'Main',
 })
 </script>
 
@@ -11,6 +11,6 @@ export default defineComponent({
 </template>
 
 <style>
-    @import 'animate.css/animate.css';
-    @import '/assets/css/index.css';
+@import 'animate.css/animate.css';
+@import '/assets/css/index.css';
 </style>

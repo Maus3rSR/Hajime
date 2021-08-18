@@ -15,6 +15,7 @@ Also be sure to take note of our [code of conduct][code-of-conduct].
 If this something you can contribute, then [fork Hajime][repo-fork] and create a branch with a descriptive name.
 
 A good branch name would be (where issue #123 is the ticket you're working on):
+
 ```
 git chekout -b 123-add-japanese-translations
 ```
@@ -58,15 +59,15 @@ git push --force-with-lease 123-add-japanese-translations
 
 > :warning: **Main author note**: The project is very young and still need a lot of preparation, development and documentation improvements which will allow the project to be pleasant for any developer wanting to contribute to it. I am sorry if it is not.
 
-* Get the MVP done (see the roadmap in [README.md][readme])
-* Changelog maintenance
-* Semver convention
-* Contribution informations for maintainers about **Merging a PR** and **Shipping a version**
-* Conventions & code quality check
-* Unit testing and code coverage
-* CI/CD
+-   Get the MVP done (see the roadmap in [README.md][readme])
+-   Changelog maintenance
+-   Semver convention
+-   Contribution informations for maintainers about **Merging a PR** and **Shipping a version**
+-   Conventions & code quality check
+-   Unit testing and code coverage
+-   CI/CD
 
-[//]: # (List of reference)
+[//]: # 'List of reference'
 [code-of-conduct]: .github/CODE_OF_CONDUCT.md
 [readme]: ../README.md
 [repo-fork]: https://help.github.com/en/github/getting-started-with-github/fork-a-repo
