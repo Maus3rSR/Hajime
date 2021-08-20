@@ -14,7 +14,7 @@ await (async () => {
     }
 })()
 
-export const install = function (app: App) {
+const install =(app: App): App => {
     plugins.forEach((plugin: Object) => app.use(plugin))
     return app
 }

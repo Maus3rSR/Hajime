@@ -1,0 +1,37 @@
+{
+    "entry-list": {
+        "action": {
+            "add": "Ajouter un @.lower:common.fighter",
+            "add-enter": "Ajouter et saisir un nouveau @.lower:common.fighter",
+            "adding": "Ajout d'un @.lower:common.fighter",
+            "delete": "Supprimer ce @.lower:common.fighter",
+            "download": "Télécharger un fichier example (fichier .CSV)",
+            "edit": "Modifier ce @.lower:common.fighter",
+            "editing": "Modification d'un @.lower:common.fighter",
+            "upload": "Importer une liste d'entrées (fichier .CSV)"
+        },
+        "favorite-fighter": "Favori",
+        "favorite-team": "Favorie",
+        "import": {
+            "error": {
+                "heading": "{n} ligne \/ {total} comporte des erreurs et ne sera pas importée | {n} lignes \/ {total} comportent des erreurs et ne seront pas importées",
+                "message": "Veuillez vérifier votre fichier CSV que le format de chaque cellule est correct"
+            },
+            "first-line": "Importer la 1ère ligne",
+            "info": {
+                "message": "Veuillez renseignez tous les champs requis par colonne en utilisant les listes déroulante",
+                "required": "Colonnes requises"
+            },
+            "preview": "Prévisualisation de l'import des @.lower:common.fighters",
+            "submit": "Importer {n} combattant | Importer {n} combattants"
+        },
+        "is-missing": "Est @.lower:entry-list.missing",
+        "is-present": "Est @.lower:entry-list.present",
+        "missing": "Absent",
+        "missing-all": "Tous absent",
+        "present": "Présent",
+        "present-all": "Tous présent",
+        "unfavorite-fighter": "Non favori",
+        "unfavorite-team": "Non favorie"
+    }
+}

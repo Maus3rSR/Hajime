@@ -1,0 +1,42 @@
+{
+    "competition": {
+        "error": {
+            "create": "@:common.error.occured creando @.lower:common.competition",
+            "duplicate-fighter": "@:common.error.impossible salvare, ci sono combattenti duplicati",
+            "duplicate-team": "@:competition.error.duplicate-fighter o squadre duplicate",
+            "fighter": {
+                "delete": "@:common.error.occured cancellando @.lower:common.fighter",
+                "delete-forbidden": "@:common.error.forbidden eliminare questi @.lower:common.fighters",
+                "delete-impossible": "@:common.error.impossible cancellare questo @.lower:common.fighter. Nessuna @.lower:common.competition è stato caricato",
+                "delete-nonexistent": "@:common.error.impossible cancellare un inesistente @.lower:common.fighter",
+                "save": "@:common.error.occured salvando il @.lower:common.fighter",
+                "save-impossible": "@:common.error.impossible salvare questo @.lower:common.fighter. Nessun @.lower:common.competition è stato caricato",
+                "update-forbidden": "@:common.error.forbidden aggiornare questi @.lower:common.fighters",
+                "update-nonexistent": "@:common.error.impossible aggiornare un inesistente @.lower:common.fighter"
+            },
+            "get": "@:common.error.occured recuperando @.lower:common.competitions",
+            "lock": "@:common.error.occured bloccando la @.lower:common.competition",
+            "update": "@:common.error.occured aggiornando la @.lower:common.competition",
+            "update-forbidden": "@:common.error.forbidden per aggiornare @.lower:common.competition",
+            "update-mass": "@:common.error.occured aggiornamento di massa {label}",
+            "update-mass-forbidden": "@:common.error.forbidden per l'aggiornamento {label}",
+            "update-mass-impossible": "@:common.error.impossible aggiornamento di massa {label}. Nessun @.lower:common.competition caricato",
+            "update-mass-not-valid": "I dati non sono validi per questo aggiornamento di massa di {label}."
+        },
+        "success": {
+            "fighter": {
+                "deleted": "@:competition.success.fighter.è stato eliminato",
+                "saved": "@:competition.success.fighter.è stato salvato",
+                "was": "Il @.lower:common.fighter era ben"
+            },
+            "saved": "@:competition.success.è stato salvato",
+            "updated": "@:competition.success.è stato aggiornato",
+            "updated-mass": "L'aggiornamento è stato completato",
+            "was": "Il @.lower:common.competition era ben"
+        },
+        "type": {
+            "individual": "Individuale",
+            "team": "Squadra"
+        }
+    }
+}

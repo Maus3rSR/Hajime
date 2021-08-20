@@ -1,8 +1,15 @@
 <script lang="ts">
+import { useI18n } from 'vue-i18n'
 import { defineComponent } from 'vue'
+import messages from '/lang/generic/competition/messages.ts'
 
 export default defineComponent({
     name: 'Software',
+    setup() {
+        const { t, mergeLocaleMessage } = useI18n()
+        // console.log(mergeLocaleMessage)
+        return { t }
+    }
 })
 </script>
 
@@ -34,6 +41,8 @@ export default defineComponent({
             </nav>
         </header>
 
+        {{ t('common.name') }}.....
+        <!-- {{ t('competition.action.close') }} -->
         <RouterView />
     </div>
 </template>

@@ -1,0 +1,30 @@
+{
+    "competition-create": {
+        "action": {
+            "cancel-back": "Cancel and come back to main screen",
+            "choose-formula": "@:common.action.choose a @.lower:common.competition-formula",
+            "confirm": "Create the competition",
+            "step-back": "Back to previous step"
+        },
+        "formula": {
+            "empty": "Competition formula list is empty",
+            "pool": {
+                "card-title": "Pools configuration",
+                "qualified-number": "Number of qualified @.lower:common.fighters per pool"
+            },
+            "repulse-club": "Repulse @.lower:common.fighters of same club",
+            "repulse-favorite": "Repulse head of series",
+            "tree": {
+                "card-title": "Elimination tree configuration",
+                "third-place": "3rd place @.lower:common.fight"
+            }
+        },
+        "placeholder": {
+            "name": "eg.: Regional invidual woman"
+        },
+        "step1": "General information",
+        "step2": "Fighters import",
+        "step3": "Competition formula",
+        "team-seat": "Fighters number per team (@.lower:common.substitute excluded)"
+    }
+}

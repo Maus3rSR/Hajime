@@ -1,0 +1,7 @@
+{
+    "scoreType": {
+        "error": {
+            "get": "@:common.error.impossible recuperare la lista dei tipi di punteggio"
+        }
+    }
+}
