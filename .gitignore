@@ -2,9 +2,10 @@
 # Project
 # ############
 *.code-workspace
-.vscode
 *.bak
 *.hot*
+.vscode
+.env
 .env*.local
 .yarn
 node_modules
