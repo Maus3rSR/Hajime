@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * Breadcrumbs
+ */
+.breadcrumbs li {
+    @apply font-bold;
+}
+
+.breadcrumbs li > a {
+    @apply font-normal;
+}
+/**
+ * /Breadcrumbs
+ */

@@ -7,16 +7,34 @@ export default defineComponent({
 </script>
 
 <template>
-    <div id="software" data-theme="luxury" class="block overflow-x-hidden bg-gradient-to-br from-primary to-secondary">
+    <div
+        id="software"
+        class="
+            block
+            overflow-x-hidden
+            bg-gradient-to-br
+            from-primary
+            to-secondary
+        "
+    >
         <header>
             <nav class="navbar mb-2 bg-opacity-75">
-                <div class="logo flex-1 px-2 mx-2">
-                    <router-link to="/">
-                        <img class="img img-responsive" src="/assets/img/logo.png" alt="logo" />
-                    </router-link>
+                <!-- LOGO -->
+                <div class="logo flex-2 px-2 mx-2">
+                    <RouterLink to="/">
+                        <img
+                            class="img img-responsive"
+                            src="/assets/img/logo.png"
+                            alt="logo"
+                        />
+                    </RouterLink>
                 </div>
+                <!-- BREADCRUMB -->
+                <BreadcrumbRouter class="flex-1 px-2 mx-2" />
             </nav>
         </header>
+
+        <RouterView />
     </div>
 </template>
 

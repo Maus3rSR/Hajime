@@ -7,7 +7,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <router-view />
+    <RouterView />
 </template>
 
 <style>
