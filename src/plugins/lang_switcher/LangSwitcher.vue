@@ -9,9 +9,9 @@ import { SUPPORT_LOCALES, getIso31661Alpha2Code } from '/config/i18n.ts'
 export default defineComponent({
     name: 'LangSwitcher',
     setup() {
-        const { locale } = useI18n({ useScope: 'global' })
-            , getClass = (l: Locale) => `flag-icon-${getIso31661Alpha2Code(l)}`
-            , changeLocale = (l: Locale) => {
+        const { locale } = useI18n({ useScope: 'global' }),
+            getClass = (l: Locale) => `flag-icon-${getIso31661Alpha2Code(l)}`,
+            changeLocale = (l: Locale) => {
                 if (l === locale) return
                 locale.value = l
             }
@@ -28,7 +28,15 @@ export default defineComponent({
         </div>
         <ul
             tabindex="0"
-            class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+            class="
+                p-2
+                shadow
+                menu
+                dropdown-content
+                bg-base-100
+                rounded-box
+                w-52
+            "
         >
             <li
                 v-for="(name, _locale) in SUPPORT_LOCALES"

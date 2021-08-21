@@ -14,7 +14,7 @@ await (async () => {
     }
 })()
 
-const install =(app: App): App => {
+const install = (app: App): App => {
     plugins.forEach((plugin: Object) => app.use(plugin))
     return app
 }

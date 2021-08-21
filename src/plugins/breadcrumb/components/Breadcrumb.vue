@@ -13,8 +13,8 @@ export default defineComponent({
     methods: {
         isLastItem(index: Number): boolean {
             return index === this.items.length - 1
-        }
-    }
+        },
+    },
 })
 </script>
 

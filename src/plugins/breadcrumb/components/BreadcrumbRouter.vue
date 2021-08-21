@@ -7,7 +7,6 @@ import { BreadcrumbItemList } from '../types'
 export default defineComponent({
     name: 'BreadcrumbRouter', // vue-router compliant
     setup() {
-
         const { t } = useI18n(),
             route = useRoute(),
             list: BreadcrumbItemList = ref([]),
@@ -29,7 +28,7 @@ export default defineComponent({
         watch(route, updateBreadcrumbItems)
 
         return { list }
-    }
+    },
 })
 </script>
 

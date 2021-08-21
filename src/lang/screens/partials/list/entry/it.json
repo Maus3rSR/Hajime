@@ -14,7 +14,7 @@
         "favorite-team": "Preferito",
         "import": {
             "error": {
-                "heading": "{n} riga \/ {total} contiene errori e non verrà importata | {n} righe \/ {total} contiene errori e non verranno importati",
+                "heading": "{n} riga / {total} contiene errori e non verrà importata | {n} righe / {total} contiene errori e non verranno importati",
                 "message": "Verificare che il formato di ogni cella sia corretto nel file CSV"
             },
             "first-line": "Importa 1a linea",

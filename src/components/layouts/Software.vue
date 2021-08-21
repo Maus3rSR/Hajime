@@ -7,7 +7,7 @@ export default defineComponent({
     setup() {
         const { t } = useI18n()
         return { t }
-    }
+    },
 })
 </script>
 
