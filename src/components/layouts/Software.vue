@@ -1,13 +1,11 @@
 <script lang="ts">
-import { useI18n } from 'vue-i18n'
 import { defineComponent } from 'vue'
-import messages from '/lang/generic/competition/messages.ts'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
     name: 'Software',
     setup() {
-        const { t, mergeLocaleMessage } = useI18n()
-        // console.log(mergeLocaleMessage)
+        const { t } = useI18n()
         return { t }
     }
 })
@@ -38,6 +36,10 @@ export default defineComponent({
                 </div>
                 <!-- BREADCRUMB -->
                 <BreadcrumbRouter class="flex-1 px-2 mx-2" />
+                <!-- LANG SWITCHER -->
+                <div>
+                    <LangSwitcher class="flex-2" />
+                </div>
             </nav>
         </header>
 

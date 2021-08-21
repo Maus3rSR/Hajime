@@ -46,6 +46,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:7.32.0"],
             ["eslint-config-prettier", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:8.3.0"],
             ["eslint-plugin-vue", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:7.16.0"],
+            ["flag-icon-css", "npm:3.5.0"],
             ["postcss", "npm:8.3.6"],
             ["prettier", "npm:2.3.2"],
             ["tailwindcss", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:2.2.7"],
@@ -3182,6 +3183,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["flag-icon-css", [
+        ["npm:3.5.0", {
+          "packageLocation": "./.yarn/cache/flag-icon-css-npm-3.5.0-4bc7f95c33-316ef0f785.zip/node_modules/flag-icon-css/",
+          "packageDependencies": [
+            ["flag-icon-css", "npm:3.5.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["flat-cache", [
         ["npm:3.0.4", {
           "packageLocation": "./.yarn/cache/flat-cache-npm-3.0.4-ee77e5911e-4fdd10ecbc.zip/node_modules/flat-cache/",
@@ -3584,6 +3594,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:7.32.0"],
             ["eslint-config-prettier", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:8.3.0"],
             ["eslint-plugin-vue", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:7.16.0"],
+            ["flag-icon-css", "npm:3.5.0"],
             ["postcss", "npm:8.3.6"],
             ["prettier", "npm:2.3.2"],
             ["tailwindcss", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:2.2.7"],

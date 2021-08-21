@@ -2563,6 +2563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flag-icon-css@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "flag-icon-css@npm:3.5.0"
+  checksum: 316ef0f78511ebcb4ef8b0def075a2b6a569649238573605ac56f60b8fb63cf626cfbb6184689ed2016561612e6d1e3f92f049350b50c3bdfe732d9dd3d51414
+  languageName: node
+  linkType: hard
+
 "flat-cache@npm:^3.0.4":
   version: 3.0.4
   resolution: "flat-cache@npm:3.0.4"
@@ -2940,6 +2947,7 @@ fsevents@~2.3.2:
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-vue: ^7.16.0
+    flag-icon-css: ^3.5.0
     postcss: latest
     prettier: ^2.3.2
     tailwindcss: latest
