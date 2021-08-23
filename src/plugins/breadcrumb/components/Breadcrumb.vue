@@ -28,7 +28,10 @@ export default defineComponent({
                 <BreadcrumbItem
                     :item="item"
                     :is-last-item="isLastItem(index)"
-                />
+                    #default="{ item }"
+                >
+                    <slot name="item" :item="item">{{ item.text }}</slot>
+                </BreadcrumbItem>
             </li>
         </ul>
     </div>

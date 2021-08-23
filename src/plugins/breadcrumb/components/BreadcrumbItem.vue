@@ -34,6 +34,8 @@ export default defineComponent({
 
 <template>
     <component :is="wrapperComponent" v-bind="componentProps">
-        {{ item.text }}
+        <slot :item="item">
+            {{ item.text }}
+        </slot>
     </component>
 </template>
