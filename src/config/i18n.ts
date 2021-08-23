@@ -11,7 +11,7 @@ import {
  * @see https://vue-i18n.intlify.dev/guide/advanced/lazy.html
  */
 const allMessages = import.meta.glob('/lang/**/*.json'),
-    messages: { [key: string]: Object } = {}
+    messages: Record<string, object> = {}
 
 await (async () => {
     for (const path in allMessages) {
