@@ -24,10 +24,15 @@ export default defineComponent({
 
 <template>
     <div class="dropdown dropdown-left">
-        <div tabindex="0" class="btn btn-xs">
+        <button
+            tabindex="0"
+            aria-haspopup="listbox"
+            class="btn btn-xs btn-square btn-flag"
+        >
             <LangSwitcherFlag :iso="getIso31661Alpha2Code(locale)" />
-        </div>
+        </button>
         <ul
+            role="listbox"
             tabindex="0"
             class="
                 p-2
@@ -40,11 +45,15 @@ export default defineComponent({
             "
         >
             <li
+                role="option"
                 v-for="(name, _locale) in SUPPORT_LOCALES"
                 :key="_locale"
                 :class="{ disabled: _locale === locale }"
             >
-                <a @click="changeLocale(_locale)">
+                <a
+                    href="javascript:void(0)"
+                    @click.prevent="changeLocale(_locale)"
+                >
                     <LangSwitcherFlag :iso="getIso31661Alpha2Code(_locale)" />
                     &nbsp;
                     {{ name }}
@@ -53,6 +62,20 @@ export default defineComponent({
         </ul>
     </div>
 </template>
+
+<style>
+.btn-flag {
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.btn-flag .flag-icon {
+    position: absolute;
+    width: 2.6em;
+    line-height: 3em;
+}
+</style>
 
 <style scoped>
 .dropdown:focus {
