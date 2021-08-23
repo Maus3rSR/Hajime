@@ -1,6 +1,8 @@
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, toRefs, computed } from 'vue'
 import { BreadcrumbItem } from '../types'
+
+type Props = Record<string, any>
 
 export default defineComponent({
     name: 'BreadcrumbItem',
@@ -14,20 +16,25 @@ export default defineComponent({
             required: true,
         },
     },
-    computed: {
-        wrapperComponent(): string {
-            if (!this.isLastItem && !!this.item.to) return 'router-link' // vue-router compliant
-            if (!this.isLastItem && !!this.item.href) return 'a'
+    setup(props: Props) {
+        const { item, isLastItem } = toRefs(props)
+
+        const wrapperComponent = computed((): string => {
+            if (!isLastItem && !!item.to) return 'router-link' // vue-router compliant
+            if (!isLastItem && !!item.href) return 'a'
             return 'span'
-        },
-        componentProps(): Object | undefined {
-            switch (this.wrapperComponent) {
+        })
+
+        const componentProps = computed((): Object | undefined => {
+            switch (wrapperComponent) {
                 case 'router-link':
-                    return { to: this.item.to }
+                    return { to: item.to }
                 case 'a':
-                    return { href: this.item.href }
+                    return { href: item.href }
             }
-        },
+        })
+
+        return { wrapperComponent, componentProps }
     },
 })
 </script>
