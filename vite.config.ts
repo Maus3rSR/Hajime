@@ -5,4 +5,7 @@ export default defineConfig({
     root: 'src',
     envDir: '../env',
     plugins: [vue()],
+    define: {
+        '__APP_VERSION__': JSON.stringify(process.env.npm_package_version)
+    }
 })

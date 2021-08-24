@@ -1,9 +1,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
+import * as LayoutComponents from '/components/partials/layout'
 
 export default defineComponent({
     name: 'Software',
+    components: { ...LayoutComponents },
     setup() {
         const { t } = useI18n()
         return { t }
@@ -22,47 +24,29 @@ export default defineComponent({
             to-secondary
         "
     >
-        <header>
-            <nav class="navbar mb-2 bg-opacity-75">
-                <!-- LOGO -->
-                <div class="logo flex-2 px-2 mx-2">
-                    <RouterLink to="/">
-                        <img
-                            class="img img-responsive"
-                            src="/assets/img/logo.png"
-                            alt="logo"
-                        />
-                    </RouterLink>
-                </div>
-                <!-- BREADCRUMB -->
-                <BreadcrumbRouter class="flex-1 px-2 mx-2" />
-                <!-- LANG SWITCHER -->
-                <div>
-                    <LangSwitcher class="flex-2" />
-                </div>
-            </nav>
-        </header>
+        <Header />
 
-        {{ t('common.name') }}.....
-        <!-- {{ t('competition.action.close') }} -->
-        <RouterView />
+        <main>
+            <RouterView />
+        </main>
+
+        <Footer />
     </div>
 </template>
 
 <style>
 @import 'animate.css/animate.css';
+
+#software {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    gap: 0px 0px;
+}
 </style>
 
 <style scoped>
 #software {
     height: 100vh;
-}
-
-.navbar {
-    min-height: 0;
-}
-
-.logo img {
-    width: 80px;
 }
 </style>
