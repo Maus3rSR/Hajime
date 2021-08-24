@@ -35,6 +35,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
+            ["@fortawesome/fontawesome-svg-core", "npm:1.2.36"],
+            ["@fortawesome/free-brands-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/free-regular-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/free-solid-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/vue-fontawesome", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:3.0.0-4"],
             ["@tauri-apps/api", "npm:1.0.0-beta-rc.3"],
             ["@tauri-apps/cli", "npm:1.0.0-beta-rc.4"],
             ["@tauri-apps/tauri-forage", "npm:1.0.0-beta.2"],
@@ -163,6 +168,81 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["js-yaml", "npm:3.14.1"],
             ["minimatch", "npm:3.0.4"],
             ["strip-json-comments", "npm:3.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@fortawesome/fontawesome-common-types", [
+        ["npm:0.2.36", {
+          "packageLocation": "./.yarn/unplugged/@fortawesome-fontawesome-common-types-npm-0.2.36-4ead73741a/node_modules/@fortawesome/fontawesome-common-types/",
+          "packageDependencies": [
+            ["@fortawesome/fontawesome-common-types", "npm:0.2.36"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@fortawesome/fontawesome-svg-core", [
+        ["npm:1.2.36", {
+          "packageLocation": "./.yarn/unplugged/@fortawesome-fontawesome-svg-core-npm-1.2.36-a7e9aa4045/node_modules/@fortawesome/fontawesome-svg-core/",
+          "packageDependencies": [
+            ["@fortawesome/fontawesome-svg-core", "npm:1.2.36"],
+            ["@fortawesome/fontawesome-common-types", "npm:0.2.36"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@fortawesome/free-brands-svg-icons", [
+        ["npm:5.15.4", {
+          "packageLocation": "./.yarn/unplugged/@fortawesome-free-brands-svg-icons-npm-5.15.4-59d1d43e20/node_modules/@fortawesome/free-brands-svg-icons/",
+          "packageDependencies": [
+            ["@fortawesome/free-brands-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/fontawesome-common-types", "npm:0.2.36"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@fortawesome/free-regular-svg-icons", [
+        ["npm:5.15.4", {
+          "packageLocation": "./.yarn/unplugged/@fortawesome-free-regular-svg-icons-npm-5.15.4-04f383e3ab/node_modules/@fortawesome/free-regular-svg-icons/",
+          "packageDependencies": [
+            ["@fortawesome/free-regular-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/fontawesome-common-types", "npm:0.2.36"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@fortawesome/free-solid-svg-icons", [
+        ["npm:5.15.4", {
+          "packageLocation": "./.yarn/unplugged/@fortawesome-free-solid-svg-icons-npm-5.15.4-6d9ac1e440/node_modules/@fortawesome/free-solid-svg-icons/",
+          "packageDependencies": [
+            ["@fortawesome/free-solid-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/fontawesome-common-types", "npm:0.2.36"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@fortawesome/vue-fontawesome", [
+        ["npm:3.0.0-4", {
+          "packageLocation": "./.yarn/cache/@fortawesome-vue-fontawesome-npm-3.0.0-4-8a2a6e0e60-ea8b7b3e83.zip/node_modules/@fortawesome/vue-fontawesome/",
+          "packageDependencies": [
+            ["@fortawesome/vue-fontawesome", "npm:3.0.0-4"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:3.0.0-4", {
+          "packageLocation": "./.yarn/__virtual__/@fortawesome-vue-fontawesome-virtual-7e3351543f/0/cache/@fortawesome-vue-fontawesome-npm-3.0.0-4-8a2a6e0e60-ea8b7b3e83.zip/node_modules/@fortawesome/vue-fontawesome/",
+          "packageDependencies": [
+            ["@fortawesome/vue-fontawesome", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:3.0.0-4"],
+            ["@fortawesome/fontawesome-svg-core", "npm:1.2.36"],
+            ["@types/fortawesome__fontawesome-svg-core", null],
+            ["@types/vue", null],
+            ["vue", "npm:3.2.3"]
+          ],
+          "packagePeers": [
+            "@fortawesome/fontawesome-svg-core",
+            "@types/fortawesome__fontawesome-svg-core",
+            "@types/vue",
+            "vue"
           ],
           "linkType": "HARD",
         }]
@@ -3583,6 +3663,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["hajime", "workspace:."],
+            ["@fortawesome/fontawesome-svg-core", "npm:1.2.36"],
+            ["@fortawesome/free-brands-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/free-regular-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/free-solid-svg-icons", "npm:5.15.4"],
+            ["@fortawesome/vue-fontawesome", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:3.0.0-4"],
             ["@tauri-apps/api", "npm:1.0.0-beta-rc.3"],
             ["@tauri-apps/cli", "npm:1.0.0-beta-rc.4"],
             ["@tauri-apps/tauri-forage", "npm:1.0.0-beta.2"],
