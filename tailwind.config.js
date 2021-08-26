@@ -4,10 +4,10 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     plugins: [require('daisyui')],
     theme: {
-        extend: {},
+        extend: { },
     },
     variants: {
-        extend: {},
+        extend: { },
     },
     daisyui: {
         themes: [
@@ -16,12 +16,12 @@ module.exports = {
                     'primary': '#a83844',
                     'primary-focus': '#af4c5e',
                     'primary-content': '#f7f7f7',
-                    'secondary': '#200c25',
-                    'secondary-focus': '#32133a',
-                    'secondary-content': '#af4c5e',
-                    'accent': '#31d47d',
-                    'accent-focus': '#27ba6d',
-                    'accent-content': '#ffffff',
+                    'secondary': '#25263a',
+                    'secondary-focus': '#363856',
+                    'secondary-content': '#f7f7f7',
+                    'accent': '#200c25',
+                    'accent-focus': '#af4c5e',
+                    'accent-content': '#af4c5e',
                     'neutral': '#25263a',
                     'neutral-focus': '#363856',
                     'neutral-content': '#f7f7f7',

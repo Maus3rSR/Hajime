@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import {
     APP_NAME,
     //AUTHOR_PAGE,
@@ -14,6 +14,7 @@ export default defineComponent({
     name: 'Footer',
     setup() {
         const currentYear = new Date().getFullYear()
+        const showModal = ref(false)
         return {
             APP_VERSION: __APP_VERSION__,
             APP_NAME,
@@ -23,6 +24,7 @@ export default defineComponent({
             PAYPAL_PAGE,
             PATREON_PAGE,
             currentYear,
+            showModal,
         }
     },
 })
@@ -70,6 +72,11 @@ export default defineComponent({
                 ></font-awesome-icon>
                 Patreon
             </a>
+        </div>
+
+        <div class="flex items-center">
+            <button class="btn" @click="showModal = true">Coucou</button>
+            <Modal v-model="showModal"></Modal>
         </div>
 
         <div class="flex items-center">
