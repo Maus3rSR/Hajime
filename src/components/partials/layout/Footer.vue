@@ -1,4 +1,5 @@
 <script lang="ts">
+import type { ChildComponent } from 'vue'
 import { defineComponent, ref } from 'vue'
 import {
     APP_NAME,
@@ -13,8 +14,9 @@ import {
 export default defineComponent({
     name: 'Footer',
     setup() {
-        const currentYear = new Date().getFullYear()
-        const showModal = ref(false)
+        const currentYear = new Date().getFullYear(),
+            modalConfirmation = ref<ChildComponent>()
+
         return {
             APP_VERSION: __APP_VERSION__,
             APP_NAME,
@@ -24,7 +26,7 @@ export default defineComponent({
             PAYPAL_PAGE,
             PATREON_PAGE,
             currentYear,
-            showModal,
+            modalConfirmation,
         }
     },
 })
@@ -75,8 +77,20 @@ export default defineComponent({
         </div>
 
         <div class="flex items-center">
-            <button class="btn" @click="showModal = true">Coucou</button>
-            <Modal v-model="showModal"></Modal>
+            <button
+                class="btn btn-xs btn-primary"
+                @click="modalConfirmation.show()"
+            >
+                <FontAwesomeIcon
+                    :icon="['far', 'handshake']"
+                    class="mr-1"
+                ></FontAwesomeIcon>
+                Feedback
+            </button>
+            <ModalConfirmation
+                danger
+                ref="modalConfirmation"
+            ></ModalConfirmation>
         </div>
 
         <div class="flex items-center">
@@ -105,9 +119,7 @@ export default defineComponent({
                 title="Github"
                 target="_blank"
             >
-                <font-awesome-icon
-                    :icon="['fab', 'github']"
-                ></font-awesome-icon>
+                <FontAwesomeIcon :icon="['fab', 'github']"></FontAwesomeIcon>
             </a>
         </div>
     </footer>

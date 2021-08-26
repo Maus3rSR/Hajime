@@ -1,6 +1,7 @@
 {
-    "confirmation": {
-        "subtitle": "Do you confirm this action?",
-        "title": "Confirm action"
+    "modal": {
+        "confirmation": {
+            "title": "Do you confirm this action?"
+        }
     }
 }
