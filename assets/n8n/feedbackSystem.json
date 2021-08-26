@@ -1,0 +1,204 @@
+{
+  "name": "Hajime Feedback",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -390,
+        360
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hajime-feedback",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -390,
+        150
+      ],
+      "webhookId": "a6a07d78-780f-443b-a538-ebf1aebdef93",
+      "notesInFlow": true,
+      "notes": "Feedback submission"
+    },
+    {
+      "parameters": {
+        "functionCode": "const { email, version, os, screen, message } = items[0].json.body\n    , errors = {}\n    , emailRegex = /[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+/gm\n\nif (!!email && email.length > 0 && !emailRegex.test(email)) errors.email = \"Please provide a valid email\"\nelse if (!email || email.length === 0) email = \"Anonymous\"\nif (!message || message.length === 0) errors.message = \"Please provide at least a feedback message\"\n\nreturn [{\n    json: {\n        email,\n        version,\n        os,\n        screen,\n        message,\n        success: Object.keys(errors).length === 0,\n        errors,\n    }\n}]"
+      },
+      "name": "Extraction & Validation",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -230,
+        150
+      ],
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$node[\"Extraction & Validation\"].json[\"success\"]}}",
+              "value2": true
+            }
+          ],
+          "number": []
+        }
+      },
+      "name": "If data is valid",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -70,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "errors",
+              "value": "={{$node[\"Extraction & Validation\"].json[\"errors\"]}}"
+            }
+          ],
+          "boolean": [
+            {
+              "name": "success"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "name": "Error Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        80,
+        240
+      ],
+      "color": "#D3000B"
+    },
+    {
+      "parameters": {
+        "owner": "Maus3rSR",
+        "repository": "Hajime",
+        "title": "=Software Feedback - On screen {{$node[\"Extraction & Validation\"].json[\"screen\"]}}",
+        "body": "=## General informations\n**User email:** {{$json[\"email\"]}}\t\n\n## Context\n**OS version:** {{$node[\"Extraction & Validation\"].json[\"os\"]}}\n**Software version:** {{$node[\"Extraction & Validation\"].json[\"version\"]}} \n\n## Feedback\n{{$node[\"Extraction & Validation\"].json[\"message\"]}}\n\n_ℹ️ This issue was automatically created from the feedback system_",
+        "labels": [
+          {
+            "label": "Software feedback"
+          }
+        ],
+        "assignees": []
+      },
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        80,
+        90
+      ],
+      "credentials": {
+        "githubApi": "Maus3rSR's Github (public_repo)"
+      }
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "issue_url",
+              "value": "={{$node[\"GitHub\"].json[\"html_url\"]}}"
+            }
+          ],
+          "boolean": [
+            {
+              "name": "success",
+              "value": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Success Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        240,
+        90
+      ],
+      "color": "#34F200"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extraction & Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction & Validation": {
+      "main": [
+        [
+          {
+            "node": "If data is valid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If data is valid": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": 1
+}
