@@ -12,10 +12,12 @@
             "filter": "Filter",
             "reset": "Reset",
             "select": "Select",
+            "send": "Send",
             "set": "Set {adjective}",
             "step-back": "Back to previous step",
             "step-next": "Next step",
             "step-previous": "Previous step",
+            "submit": "Submit",
             "validate": "Validate"
         },
         "alert": {

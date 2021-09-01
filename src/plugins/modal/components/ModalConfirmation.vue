@@ -61,7 +61,7 @@ defineExpose({ show, close, onConfirm })
         :class="[modalType]"
         v-model="showModal"
     >
-        <slot>&nbsp;</slot>
+        <slot></slot>
 
         <template #title>
             <FontAwesomeIcon :icon="icon" class="mr-2"></FontAwesomeIcon>
@@ -70,7 +70,7 @@ defineExpose({ show, close, onConfirm })
 
         <template #footer>
             <button class="btn btn-sm btn-ghost" @click="close">
-                {{ t('common.action.close') }}
+                {{ t('common.action.cancel') }}
             </button>
             <button class="btn btn-sm btn-secondary" @click="confirm">
                 {{ t('common.action.confirm') }}

@@ -54,7 +54,7 @@ const // Initialization
                 <slot name="title">Title</slot>
             </div>
 
-            <slot>Modal body</slot>
+            <slot></slot>
 
             <div class="modal-action">
                 <slot name="footer" :close="close">

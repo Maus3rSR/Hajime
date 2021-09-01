@@ -2,6 +2,9 @@
     "modal": {
         "confirmation": {
             "title": "Do you confirm this action?"
+        },
+        "form": {
+            "title": "Form"
         }
     }
 }

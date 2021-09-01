@@ -12,10 +12,12 @@
             "filter": "Filter",
             "reset": "Réinitialiser",
             "select": "Sélectionner",
+            "send": "Envoyer",
             "set": "Rendre {adjective}",
             "step-back": "Revenir à l'étape précédente",
             "step-next": "Étape suivante",
             "step-previous": "Étape précédente",
+            "submit": "Soumettre",
             "validate": "Valider"
         },
         "alert": {
