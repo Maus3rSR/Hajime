@@ -26,7 +26,7 @@ defineExpose({ show })
 <template>
     <Modal hide-header-close class="modal-form" v-model="showModal">
         <form @submit.prevent="submit">
-            <slot />
+            <slot></slot>
         </form>
 
         <template #title>

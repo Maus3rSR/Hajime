@@ -27,7 +27,7 @@ export default defineComponent({
 </script>
 
 <template>
-    <span class="flag-icon" :class="flagClass" />
+    <span class="flag-icon" :class="flagClass"></span>
 </template>
 
 <style>

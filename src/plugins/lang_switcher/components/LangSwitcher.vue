@@ -29,7 +29,9 @@ export default defineComponent({
             aria-haspopup="listbox"
             class="btn btn-xs btn-square btn-flag"
         >
-            <LangSwitcherFlag :iso="getIso31661Alpha2Code(locale)" />
+            <LangSwitcherFlag
+                :iso="getIso31661Alpha2Code(locale)"
+            ></LangSwitcherFlag>
         </button>
         <ul
             role="listbox"
@@ -54,7 +56,9 @@ export default defineComponent({
                     href="javascript:void(0)"
                     @click.prevent="changeLocale(_locale)"
                 >
-                    <LangSwitcherFlag :iso="getIso31661Alpha2Code(_locale)" />
+                    <LangSwitcherFlag
+                        :iso="getIso31661Alpha2Code(_locale)"
+                    ></LangSwitcherFlag>
                     &nbsp;
                     {{ name }}
                 </a>

@@ -24,13 +24,13 @@ export default defineComponent({
             to-secondary
         "
     >
-        <Header />
+        <Header></Header>
 
         <main>
-            <RouterView />
+            <RouterView></RouterView>
         </main>
 
-        <Footer />
+        <Footer></Footer>
     </div>
 </template>
 

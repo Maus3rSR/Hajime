@@ -21,10 +21,10 @@ export default defineComponent({
                 </RouterLink>
             </div>
             <!-- BREADCRUMB -->
-            <BreadcrumbRouter class="flex-1 px-2 mx-2" />
+            <BreadcrumbRouter class="flex-1 px-2 mx-2"></BreadcrumbRouter>
             <!-- LANG SWITCHER -->
             <div>
-                <LangSwitcher class="flex-2" />
+                <LangSwitcher class="flex-2"></LangSwitcher>
             </div>
         </nav>
     </header>
