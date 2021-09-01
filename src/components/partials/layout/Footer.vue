@@ -1,35 +1,23 @@
-<script lang="ts">
+<script setup lang="ts">
 import type { ChildComponent } from 'vue'
-import { defineComponent, ref } from 'vue'
-import {
-    APP_NAME,
-    //AUTHOR_PAGE,
-    WEBSITE_PAGE,
-    GITHUB_PAGE,
-    LICENSE_PAGE,
-    PAYPAL_PAGE,
-    PATREON_PAGE,
-} from '/config/env.ts'
+import { ref } from 'vue'
+import * as __ENV__ from '/config/env.ts'
 
-export default defineComponent({
-    name: 'Footer',
-    setup() {
-        const currentYear = new Date().getFullYear(),
-            modalConfirmation = ref<ChildComponent>()
-
-        return {
-            APP_VERSION: __APP_VERSION__,
-            APP_NAME,
-            WEBSITE_PAGE,
-            LICENSE_PAGE,
-            GITHUB_PAGE,
-            PAYPAL_PAGE,
-            PATREON_PAGE,
-            currentYear,
-            modalConfirmation,
-        }
-    },
-})
+const // Initialization
+    currentYear = new Date().getFullYear(),
+    modal = ref<ChildComponent>(),
+    // Env
+    APP_VERSION: string = __APP_VERSION__,
+    {
+        APP_NAME,
+        WEBSITE_PAGE,
+        LICENSE_PAGE,
+        GITHUB_PAGE,
+        PAYPAL_PAGE,
+        PATREON_PAGE,
+    } = __ENV__,
+    // Refs
+    username = ref(null)
 </script>
 
 <template>
@@ -77,20 +65,27 @@ export default defineComponent({
         </div>
 
         <div class="flex items-center">
-            <button
-                class="btn btn-xs btn-primary"
-                @click="modalConfirmation.show()"
-            >
+            <button class="btn btn-xs btn-primary" @click="modal.show()">
                 <FontAwesomeIcon
                     :icon="['far', 'handshake']"
                     class="mr-1"
                 ></FontAwesomeIcon>
                 Feedback
             </button>
-            <ModalConfirmation
-                danger
-                ref="modalConfirmation"
-            ></ModalConfirmation>
+
+            <ModalForm ref="modal" @cancel="username = null">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Username</span>
+                    </label>
+                    <input
+                        v-model="username"
+                        type="text"
+                        placeholder="username"
+                        class="input input-bordered input-sm"
+                    />
+                </div>
+            </ModalForm>
         </div>
 
         <div class="flex items-center">
