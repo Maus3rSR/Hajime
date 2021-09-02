@@ -1,25 +1,14 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useI18n, Locale } from 'vue-i18n'
-import { SUPPORT_LOCALES, getIso31661Alpha2Code } from '/config/i18n.ts'
+import { SUPPORTED_LOCALES, getIso31661Alpha2Code } from '/config/i18n'
 
-export default defineComponent({
-    name: 'LangSwitcher',
-    setup() {
-        const { locale } = useI18n({ useScope: 'global' }),
-            changeLocale = (l: Locale) => {
-                if (l === locale) return
-                locale.value = l
-            }
-
-        return {
-            SUPPORT_LOCALES,
-            getIso31661Alpha2Code,
-            changeLocale,
-            locale,
-        }
-    },
-})
+const // composables
+    { locale } = useI18n({ useScope: 'global' }),
+    // methods
+    changeLocale = (l: Locale) => {
+        if (l === locale) return
+        locale.value = l
+    }
 </script>
 
 <template>
@@ -48,7 +37,7 @@ export default defineComponent({
         >
             <li
                 role="option"
-                v-for="(name, _locale) in SUPPORT_LOCALES"
+                v-for="(name, _locale) in SUPPORTED_LOCALES"
                 :key="_locale"
                 :class="{ disabled: _locale === locale }"
             >

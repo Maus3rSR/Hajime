@@ -3,8 +3,8 @@ import LangSwitcher from './components/LangSwitcher.vue'
 import LangSwitcherFlag from './components/LangSwitcherFlag.vue'
 
 const install = (app: App) => {
-    app.component(LangSwitcher.name, LangSwitcher)
-    app.component(LangSwitcherFlag.name, LangSwitcherFlag)
+    app.component('LangSwitcher', LangSwitcher)
+    app.component('LangSwitcherFlag', LangSwitcherFlag)
     return app
 }
 

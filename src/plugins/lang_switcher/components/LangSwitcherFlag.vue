@@ -1,29 +1,19 @@
-<script lang="ts">
+<script setup lang="ts">
 import type { Ref } from 'vue'
-import { defineComponent, PropType, toRefs, ref, watch } from 'vue'
+import { ref, watchEffect } from 'vue'
 
 type Iso = string
 type Props = Record<string, any>
 type ReactiveString = Ref<string>
 
-export default defineComponent({
-    name: 'LangSwitcherFlag',
-    props: {
-        iso: {
-            type: String as PropType<Iso>,
-            required: true,
-        },
-    },
-    setup(props: Props) {
-        const { iso } = toRefs(props),
-            getClass = (iso: Iso): string => `flag-icon-${iso}`,
-            flagClass: ReactiveString = ref(getClass(iso.value))
+const // Props
+    props = defineProps<{ iso: Iso }>(),
+    // Methods
+    getClass = (iso: Iso): string => `flag-icon-${iso}`,
+    // Refs
+    flagClass: ReactiveString = ref('')
 
-        watch(iso, (iso: Iso) => (flagClass.value = getClass(iso)))
-
-        return { flagClass }
-    },
-})
+watchEffect(() => flagClass.value = getClass(props.iso))
 </script>
 
 <template>
