@@ -3,7 +3,6 @@ import type { Ref } from 'vue'
 import { ref, watchEffect } from 'vue'
 
 type Iso = string
-type Props = Record<string, any>
 type ReactiveString = Ref<string>
 
 const // Props

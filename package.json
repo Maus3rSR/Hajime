@@ -23,9 +23,12 @@
         "@fortawesome/free-regular-svg-icons": "^5.15.4",
         "@fortawesome/free-solid-svg-icons": "^5.15.4",
         "@fortawesome/vue-fontawesome": "prerelease",
+        "@vee-validate/i18n": "^4.4.7",
+        "@vee-validate/rules": "^4.4.7",
         "animate.css": "^4.1.1",
         "daisyui": "1.14.0",
         "flag-icon-css": "^3.5.0",
+        "vee-validate": "next",
         "vue": "3.2.6",
         "vue-i18n": "next",
         "vue-router": "4"

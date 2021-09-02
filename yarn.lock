@@ -453,6 +453,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vee-validate/i18n@npm:^4.4.7":
+  version: 4.4.10
+  resolution: "@vee-validate/i18n@npm:4.4.10"
+  checksum: 203515e709e41feddeab72c37e72b350d5d528072b49d9ba604507996e345cf0bd4ce0a09f146833fee57775ec58c801382e916c65eab67802414bdbd09199ce
+  languageName: node
+  linkType: hard
+
+"@vee-validate/rules@npm:^4.4.7":
+  version: 4.4.10
+  resolution: "@vee-validate/rules@npm:4.4.10"
+  checksum: 54a97dee6ef1e2f718862af822a335cfde12ce362d1b21bb2c44745693f1e415347c2352d5e5129e648acdd8967531993e447cb70b0ee5e7c94dda917fe60a81
+  languageName: node
+  linkType: hard
+
 "@vitejs/plugin-vue@npm:^1.3.0":
   version: 1.4.0
   resolution: "@vitejs/plugin-vue@npm:1.4.0"
@@ -3036,6 +3050,8 @@ fsevents@~2.3.2:
     "@tauri-apps/api": ^1.0.0-beta.6
     "@tauri-apps/cli": ^1.0.0-beta.9
     "@tauri-apps/tauri-forage": ^1.0.0-beta.2
+    "@vee-validate/i18n": ^4.4.7
+    "@vee-validate/rules": ^4.4.7
     "@vitejs/plugin-vue": ^1.3.0
     "@vue/compiler-sfc": ^3.0.5
     animate.css: ^4.1.1
@@ -3049,6 +3065,7 @@ fsevents@~2.3.2:
     prettier: ^2.3.2
     tailwindcss: latest
     typescript: ^4.3.2
+    vee-validate: next
     vite: ^2.4.4
     vue: 3.2.6
     vue-i18n: next
@@ -6700,6 +6717,15 @@ typescript@^4.3.2:
     spdx-correct: ^3.0.0
     spdx-expression-parse: ^3.0.0
   checksum: 35703ac889d419cf2aceef63daeadbe4e77227c39ab6287eeb6c1b36a746b364f50ba22e88591f5d017bc54685d8137bc2d328d0a896e4d3fd22093c0f32a9ad
+  languageName: node
+  linkType: hard
+
+"vee-validate@npm:next":
+  version: 4.4.10
+  resolution: "vee-validate@npm:4.4.10"
+  peerDependencies:
+    vue: ^3.0.0
+  checksum: b8ba7e4de698bb4219b3c917f535b4927b4930dd559f550ba93b28eb73b5b10def242f0a87ee0fe07b5b9fe50063855faf1b17c886a9f58f8d1415a52a8a7c9b
   languageName: node
   linkType: hard
 

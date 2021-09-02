@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import type { ChildComponent } from 'vue'
 import { ref } from 'vue'
-import * as __ENV__ from '/config/env.ts'
+import FeedbackButton from '/components/partials/feedback/FeedbackButton.vue'
+import * as __ENV__ from '/config/env'
 
 const // Initialization
     currentYear = new Date().getFullYear(),
-    modal = ref<ChildComponent>(),
     // Env
     APP_VERSION: string = __APP_VERSION__,
     {
@@ -15,9 +14,7 @@ const // Initialization
         GITHUB_PAGE,
         PAYPAL_PAGE,
         PATREON_PAGE,
-    } = __ENV__,
-    // Refs
-    username = ref(null)
+    } = __ENV__
 </script>
 
 <template>
@@ -65,27 +62,7 @@ const // Initialization
         </div>
 
         <div class="flex items-center">
-            <button class="btn btn-xs btn-primary" @click="modal.show()">
-                <FontAwesomeIcon
-                    :icon="['far', 'handshake']"
-                    class="mr-1"
-                ></FontAwesomeIcon>
-                Feedback
-            </button>
-
-            <ModalForm ref="modal" @cancel="username = null">
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Username</span>
-                    </label>
-                    <input
-                        v-model="username"
-                        type="text"
-                        placeholder="username"
-                        class="input input-bordered input-sm"
-                    />
-                </div>
-            </ModalForm>
+            <FeedbackButton></FeedbackButton>
         </div>
 
         <div class="flex items-center">

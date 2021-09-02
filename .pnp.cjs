@@ -43,6 +43,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tauri-apps/api", "npm:1.0.0-beta-rc.3"],
             ["@tauri-apps/cli", "npm:1.0.0-beta-rc.4"],
             ["@tauri-apps/tauri-forage", "npm:1.0.0-beta.2"],
+            ["@vee-validate/i18n", "npm:4.4.10"],
+            ["@vee-validate/rules", "npm:4.4.10"],
             ["@vitejs/plugin-vue", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:1.4.0"],
             ["@vue/compiler-sfc", "npm:3.2.3"],
             ["animate.css", "npm:4.1.1"],
@@ -56,6 +58,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:2.3.2"],
             ["tailwindcss", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:2.2.7"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"],
+            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10"],
             ["vite", "npm:2.5.0"],
             ["vue", "npm:3.2.6"],
             ["vue-i18n", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:9.1.7"],
@@ -579,6 +582,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/responselike", "npm:1.0.0"],
             ["@types/node", "npm:16.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@vee-validate/i18n", [
+        ["npm:4.4.10", {
+          "packageLocation": "./.yarn/cache/@vee-validate-i18n-npm-4.4.10-44515275db-203515e709.zip/node_modules/@vee-validate/i18n/",
+          "packageDependencies": [
+            ["@vee-validate/i18n", "npm:4.4.10"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@vee-validate/rules", [
+        ["npm:4.4.10", {
+          "packageLocation": "./.yarn/cache/@vee-validate-rules-npm-4.4.10-bbf1dcab5b-54a97dee6e.zip/node_modules/@vee-validate/rules/",
+          "packageDependencies": [
+            ["@vee-validate/rules", "npm:4.4.10"]
           ],
           "linkType": "HARD",
         }]
@@ -3707,6 +3728,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tauri-apps/api", "npm:1.0.0-beta-rc.3"],
             ["@tauri-apps/cli", "npm:1.0.0-beta-rc.4"],
             ["@tauri-apps/tauri-forage", "npm:1.0.0-beta.2"],
+            ["@vee-validate/i18n", "npm:4.4.10"],
+            ["@vee-validate/rules", "npm:4.4.10"],
             ["@vitejs/plugin-vue", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:1.4.0"],
             ["@vue/compiler-sfc", "npm:3.2.3"],
             ["animate.css", "npm:4.1.1"],
@@ -3720,6 +3743,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:2.3.2"],
             ["tailwindcss", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:2.2.7"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"],
+            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10"],
             ["vite", "npm:2.5.0"],
             ["vue", "npm:3.2.6"],
             ["vue-i18n", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:9.1.7"],
@@ -7877,6 +7901,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["validate-npm-package-license", "npm:3.0.4"],
             ["spdx-correct", "npm:3.1.1"],
             ["spdx-expression-parse", "npm:3.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vee-validate", [
+        ["npm:4.4.10", {
+          "packageLocation": "./.yarn/cache/vee-validate-npm-4.4.10-5698fb8535-b8ba7e4de6.zip/node_modules/vee-validate/",
+          "packageDependencies": [
+            ["vee-validate", "npm:4.4.10"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10", {
+          "packageLocation": "./.yarn/__virtual__/vee-validate-virtual-4d2a991799/0/cache/vee-validate-npm-4.4.10-5698fb8535-b8ba7e4de6.zip/node_modules/vee-validate/",
+          "packageDependencies": [
+            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10"],
+            ["@types/vue", null],
+            ["vue", "npm:3.2.6"]
+          ],
+          "packagePeers": [
+            "@types/vue",
+            "vue"
           ],
           "linkType": "HARD",
         }]
