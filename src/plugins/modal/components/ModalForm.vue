@@ -33,14 +33,20 @@ defineExpose({ show })
             <slot name="title">{{ t('modal.form.title') }}</slot>
         </template>
 
-        <template #footer>
+        <template #footer-info>
+            <i18n-t keypath="common.form.required">
+                <span class="text-error">{{ t('common.form.fields') }}</span>
+            </i18n-t>
+        </template>
+
+        <template #footer-action>
             <button class="btn btn-sm btn-ghost" @click="cancel">
                 <slot name="cancel-btn-content">
                     {{ t('common.action.cancel') }}
                 </slot>
             </button>
 
-            <button class="btn btn-sm btn-secondary" @click="submit">
+            <button class="btn btn-sm btn-primary" @click="submit">
                 <slot name="submit-btn-content">
                     {{ t('common.action.submit') }}
                 </slot>

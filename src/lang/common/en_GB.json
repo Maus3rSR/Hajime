@@ -47,7 +47,8 @@
         "fighters": "Fighters",
         "fights": "Fights",
         "form": {
-            "required": "* fields are required"
+            "fields": "*",
+            "required": "{0} fields are required"
         },
         "grade": "Grade",
         "later": "Later",

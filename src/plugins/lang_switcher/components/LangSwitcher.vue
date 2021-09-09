@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n, Locale } from 'vue-i18n'
+import { setLocale } from '@vee-validate/i18n';
 import { SUPPORTED_LOCALES, getIso31661Alpha2Code } from '/config/i18n'
 
 const // composables
@@ -8,6 +9,7 @@ const // composables
     changeLocale = (l: Locale) => {
         if (l === locale) return
         locale.value = l
+        setLocale(l)
     }
 </script>
 

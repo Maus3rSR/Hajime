@@ -45,7 +45,8 @@
         "fighters": "Combattenti",
         "fights": "Combattimenti",
         "form": {
-            "required": "Campi obbligatori"
+            "fields": "*",
+            "required": "Campi {0} obbligatori"
         },
         "grade": "Grado",
         "later": "Più tardi",

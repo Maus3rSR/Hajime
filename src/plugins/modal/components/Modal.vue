@@ -58,9 +58,15 @@ const // Initialization
 
             <div class="modal-action">
                 <slot name="footer" :close="close">
-                    <button class="btn btn-sm btn-ghost" @click="close">
-                        <slot name="close-btn-content">Close</slot>
-                    </button>
+                    <span class="flex-grow">
+                        <slot name="footer-info"></slot>
+                    </span>
+
+                    <slot name="footer-action" :close="close">
+                        <button class="btn btn-sm btn-ghost" @click="close">
+                            <slot name="close-btn-content">Close</slot>
+                        </button>
+                    </slot>
                 </slot>
             </div>
         </div>

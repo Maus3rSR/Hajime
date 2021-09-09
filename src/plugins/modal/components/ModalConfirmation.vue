@@ -68,7 +68,7 @@ defineExpose({ show, close, onConfirm })
             <slot name="title">{{ t('modal.confirmation.title') }}</slot>
         </template>
 
-        <template #footer>
+        <template #footer-action>
             <button class="btn btn-sm btn-ghost" @click="close">
                 {{ t('common.action.cancel') }}
             </button>
