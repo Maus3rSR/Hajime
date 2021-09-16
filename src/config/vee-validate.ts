@@ -22,6 +22,9 @@ const // methods
     defineRules = () => Object.keys(rules).forEach(rule => defineRule(rule, rules[rule])),
     setup = async () => {
         defineRules()
+        
+        await loadMessages()
+        
         configure({ generateMessage: localize(messages) })
         setLocale(APP_LOCALE_DEFAULT)
     }

@@ -14,7 +14,7 @@ const // Initialization
     close = () => {
         showModal.value = false
     },
-    submit = () => emit('submit'),
+    submit = (e: Event) => emit('submit', e),
     cancel = () => {
         emit('cancel')
         close()
