@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { useAttrs, computed } from 'vue'
+import { Tab as VTab } from 'vue3-tabs-component'
+
+interface Props {
+    title: string
+}
 
 const // Initialization
-    attrs = useAttrs(),
-    emit = defineEmits(['click']),
-    // Computed
-    tabClass = computed(() => ({ 'tab-active': Object.keys(attrs).includes('active') }))
+    props = defineProps<Props>()
 </script>
 
 <template>
-    <a @click="event => emit('click', event)" class="tab" :class="tabClass">
+    <VTab :name="title">
         <slot></slot>
-    </a>
+    </VTab>
 </template>

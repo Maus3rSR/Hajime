@@ -3071,6 +3071,7 @@ fsevents@~2.3.2:
     vue-i18n: next
     vue-router: 4
     vue-tsc: ^0.2.2
+    vue3-tabs-component: ^1.0.3
   languageName: unknown
   linkType: soft
 
@@ -6967,6 +6968,15 @@ typescript@^4.3.2:
   bin:
     vue-tsc: bin/vue-tsc.js
   checksum: 493ae110b52147d26816cabe1cae45574e69dfd119a8723e0c3e76328412d351bd09659ad0b9461e7e70d2593b00eaf97a0161a850a70b19a6f817b5cd07b03f
+  languageName: node
+  linkType: hard
+
+"vue3-tabs-component@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "vue3-tabs-component@npm:1.0.3"
+  peerDependencies:
+    vue: ^3.0.0
+  checksum: 73b7e2e053a3a29e899d2f7eb2f66acc83bc843e68e1a23e99921e5f7c009027c73eb77a3f780df19494ffeb052d00242e4fe3629e61f92eba62af03c8f62041
   languageName: node
   linkType: hard
 

@@ -31,7 +31,8 @@
         "vee-validate": "next",
         "vue": "3.2.6",
         "vue-i18n": "next",
-        "vue-router": "4"
+        "vue-router": "4",
+        "vue3-tabs-component": "^1.0.3"
     },
     "devDependencies": {
         "@tauri-apps/api": "^1.0.0-beta.6",

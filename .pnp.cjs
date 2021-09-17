@@ -63,7 +63,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["vue", "npm:3.2.6"],
             ["vue-i18n", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:9.1.7"],
             ["vue-router", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.0.11"],
-            ["vue-tsc", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:0.2.3"]
+            ["vue-tsc", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:0.2.3"],
+            ["vue3-tabs-component", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:1.0.3"]
           ],
           "linkType": "SOFT",
         }]
@@ -3748,7 +3749,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["vue", "npm:3.2.6"],
             ["vue-i18n", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:9.1.7"],
             ["vue-router", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.0.11"],
-            ["vue-tsc", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:0.2.3"]
+            ["vue-tsc", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:0.2.3"],
+            ["vue3-tabs-component", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:1.0.3"]
           ],
           "linkType": "SOFT",
         }]
@@ -8236,6 +8238,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [
             "@types/typescript",
             "typescript"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vue3-tabs-component", [
+        ["npm:1.0.3", {
+          "packageLocation": "./.yarn/cache/vue3-tabs-component-npm-1.0.3-efd9bdaedb-73b7e2e053.zip/node_modules/vue3-tabs-component/",
+          "packageDependencies": [
+            ["vue3-tabs-component", "npm:1.0.3"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:1.0.3", {
+          "packageLocation": "./.yarn/__virtual__/vue3-tabs-component-virtual-aed3b9d736/0/cache/vue3-tabs-component-npm-1.0.3-efd9bdaedb-73b7e2e053.zip/node_modules/vue3-tabs-component/",
+          "packageDependencies": [
+            ["vue3-tabs-component", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:1.0.3"],
+            ["@types/vue", null],
+            ["vue", "npm:3.2.6"]
+          ],
+          "packagePeers": [
+            "@types/vue",
+            "vue"
           ],
           "linkType": "HARD",
         }]

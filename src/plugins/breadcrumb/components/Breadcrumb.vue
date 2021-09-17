@@ -36,3 +36,13 @@ export default defineComponent({
         </ul>
     </div>
 </template>
+
+<style scoped>
+.breadcrumbs li {
+    @apply font-bold;
+}
+
+.breadcrumbs li > :deep(a) {
+    @apply font-normal;
+}
+</style>

@@ -74,6 +74,19 @@ const // Initialization
 </template>
 
 <style scoped>
+.modal-box {
+    max-height: 95vh;
+    overflow-y: auto;
+}
+
+.modal-xxl .modal-box {
+    max-width: 95vw;
+}
+
+.modal-action {
+    @apply items-center;
+}
+
 .indicator {
     display: block;
 }
