@@ -1,14 +1,26 @@
 # ############
 # Project
 # ############
-*.code-workspace
 *.bak
 *.hot*
-.vscode
 .env
 .env*.local
-.yarn
+# ############
+# Package Manager
+# ############
 node_modules
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+# ############
+# Editors
+# ############
+.vscode
+*.code-workspace
 # ############
 # Windows
 # ############
