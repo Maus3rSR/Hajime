@@ -12,10 +12,11 @@ const getForm = (type: FeedbackType) => {
     }
 }
 
-export type { Feedback }
+export type { Feedback, FeedbackType }
 export function useFeedback() {
 
     let data = reactive({ form: {} })
+    // TODO : create utility function to get fields updated
     let fields: Record<string, any> = {}
 
     const // Refs
@@ -25,13 +26,13 @@ export function useFeedback() {
         // Composables
         { errors, handleSubmit, isSubmitting, resetForm } = useForm({ validationSchema: schema }),
         // Methods
-        switchFeedbackType = (type: FeedbackType) => currentFeedbackType.value = type,
         updateFields = () => {
             fields = {}
             Object.keys(data.form.schema).forEach(fieldName => {
                 const { value } = useField(fieldName)
                 fields[fieldName] = value
             })
+            console.log(fields)
         },
         onSubmit = handleSubmit((feedback: Feedback) => {
             data.form.feedback = feedback
@@ -44,11 +45,11 @@ export function useFeedback() {
 
     return {
         FeedbackType,
+        currentFeedbackType,
         onSubmit,
         isSubmitting,
         resetForm,
         fields,
         errors,
-        switchFeedbackType,
     }
 }

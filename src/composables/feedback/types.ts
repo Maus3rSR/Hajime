@@ -1,6 +1,6 @@
-enum FeedbackType { CLASSIC, BUG }
 type Schema = Record<string, string>
 type Feedback = FeedbackClassic | FeedbackBug
+enum FeedbackType { CLASSIC, BUG }
 
 const schema: Schema = { email: 'email' }
 

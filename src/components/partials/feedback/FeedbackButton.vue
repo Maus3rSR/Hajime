@@ -1,20 +1,63 @@
 <script setup lang="ts">
 import type { ChildComponent } from 'vue'
-import { ref } from 'vue'
+import type { FeedbackType as FeedbackTypeEnum } from '/composables/feedback'
+import { ref, computed, provide } from 'vue'
 import { useFeedback } from '/composables/feedback'
+import * as formComponents from './form'
+
+type FeedbackFormArray = Array<FeedbackFormComponent>
+interface FeedbackFormComponent {
+    name: string
+    type: FeedbackTypeEnum
+    component: ChildComponent
+}
 
 const // Initialization
     {
         FeedbackType,
+        currentFeedbackType,
         onSubmit,
         isSubmitting,
         resetForm,
         fields,
         errors,
-        switchFeedbackType,
     } = useFeedback(),
+    feedbackForms: FeedbackFormArray = [
+        {
+            name: 'Bug',
+            type: FeedbackType.BUG,
+            component: formComponents.BugForm,
+        },
+        {
+            name: 'Suggestion',
+            type: FeedbackType.CLASSIC,
+            component: formComponents.ClassicForm,
+        },
+    ],
     // Refs
-    modal = ref<ChildComponent>()
+    modal = ref<ChildComponent>(),
+    // Computed
+    feedbackForm = computed(() =>
+        feedbackForms.find(form => form.type === currentFeedbackType.value)
+    ),
+    // Methods
+    changeForm = (form: FeedbackFormComponent) => {
+        resetForm()
+        currentFeedbackType.value = form.type
+    },
+    tabChanged = (selectedTab: Record<string, any>) => {
+        const { hash } = selectedTab.tab,
+            form = feedbackForms.find(
+                form => `#${form.name.toLowerCase()}` === hash
+            )
+
+        if (!form) return
+
+        changeForm(form)
+    }
+
+provide('fields', fields)
+provide('errors', errors)
 </script>
 
 
@@ -37,98 +80,22 @@ const // Initialization
         @submit="onSubmit"
         @cancel="resetForm"
     >
+        {{ fields }}
         <div class="flex items-center flex-col">
-            <Tabs>
-                <Tab title="Test"></Tab>
-                <Tab title="Test long texte bordel"></Tab>
-                <Tab title="Test moyen"></Tab>
+            <Tabs @changed="tabChanged">
+                <Tab
+                    v-for="form in feedbackForms"
+                    :key="form.type"
+                    :title="form.name"
+                ></Tab>
             </Tabs>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <div class="form-control col-span-2">
-                <label class="label">
-                    <span class="label-text"
-                        >Describe the bug
-                        <span class="text-error">*</span></span
-                    >
-                </label>
-                <textarea
-                    type="text"
-                    class="textarea textarea-bordered textarea-sm"
-                    name="description"
-                    v-model="fields.description.value"
-                ></textarea>
-                <span
-                    v-if="errors.description"
-                    class="alert alert-error mt-2"
-                    >{{ errors.description }}</span
-                >
-            </div>
-
-            <div class="form-control col-span-2 sm:col-auto">
-                <label class="label">
-                    <span class="label-text"
-                        >Steps to reproduce the behavior
-                        <span class="text-error">*</span></span
-                    >
-                </label>
-                <textarea
-                    type="text"
-                    class="textarea textarea-bordered textarea-sm"
-                    name="reproduce"
-                    v-model="fields.reproduce.value"
-                ></textarea>
-                <span v-if="errors.reproduce" class="alert alert-error mt-2">{{
-                    errors.reproduce
-                }}</span>
-            </div>
-
-            <div class="form-control col-span-2 sm:col-auto">
-                <label class="label">
-                    <span class="label-text"
-                        >Expected behavior
-                        <span class="text-error">*</span></span
-                    >
-                </label>
-                <textarea
-                    type="text"
-                    class="textarea textarea-bordered textarea-sm"
-                    name="expected"
-                    v-model="fields.expected.value"
-                ></textarea>
-                <span v-if="errors.expected" class="alert alert-error mt-2">{{
-                    errors.expected
-                }}</span>
-            </div>
-
-            <div class="form-control col-span-2">
-                <label class="label">
-                    <span class="label-text"
-                        >Email <i>(if you want to be notified)</i></span
-                    >
-                </label>
-                <input
-                    type="email"
-                    class="input input-bordered input-sm"
-                    name="email"
-                    v-model="fields.email.value"
-                />
-                <span v-if="errors.email" class="alert alert-error mt-2">{{
-                    errors.email
-                }}</span>
-            </div>
-
-            <div class="form-control col-span-2">
-                <label class="label">
-                    <span class="label-text">Screenshot</span>
-                </label>
-                <input
-                    type="file"
-                    name="screenshot"
-                    class="input input-bordered input-sm"
-                />
-            </div>
+            <component
+                :is="feedbackForm.component"
+                v-if="!!feedbackForm"
+            ></component>
         </div>
 
         <template #title>Feedback</template>
