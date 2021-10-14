@@ -13,15 +13,10 @@ interface FeedbackFormComponent {
 }
 
 const // Initialization
-    {
-        FeedbackType,
-        currentFeedbackType,
-        onSubmit,
-        isSubmitting,
-        resetForm,
-        fields,
-        errors,
-    } = useFeedback(),
+    { FeedbackType, currentFeedbackType, onSubmit, schema } = useFeedback(),
+    /**
+     * @TODO handle default tab
+     */
     feedbackForms: FeedbackFormArray = [
         {
             name: 'Bug',
@@ -42,7 +37,6 @@ const // Initialization
     ),
     // Methods
     changeForm = (form: FeedbackFormComponent) => {
-        resetForm()
         currentFeedbackType.value = form.type
     },
     tabChanged = (selectedTab: Record<string, any>) => {
@@ -56,8 +50,8 @@ const // Initialization
         changeForm(form)
     }
 
-provide('fields', fields)
-provide('errors', errors)
+provide('schema', schema)
+provide('onSubmit', onSubmit)
 </script>
 
 
@@ -77,10 +71,9 @@ provide('errors', errors)
     <ModalForm
         class="modal-xxl"
         ref="modal"
-        @submit="onSubmit"
-        @cancel="resetForm"
+        @submit="() => {}"
+        @cancel="() => {}"
     >
-        {{ fields }}
         <div class="flex items-center flex-col">
             <Tabs @changed="tabChanged">
                 <Tab
@@ -91,12 +84,7 @@ provide('errors', errors)
             </Tabs>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <component
-                :is="feedbackForm.component"
-                v-if="!!feedbackForm"
-            ></component>
-        </div>
+        <component :is="feedbackForm.component"></component>
 
         <template #title>Feedback</template>
     </ModalForm>

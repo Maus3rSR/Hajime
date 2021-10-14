@@ -2,7 +2,7 @@ type Schema = Record<string, string>
 type Feedback = FeedbackClassic | FeedbackBug
 enum FeedbackType { CLASSIC, BUG }
 
-const schema: Schema = { email: 'email' }
+const baseSchema: Schema = { email: 'email' }
 
 interface FeedbackBase {
     email?: string,
@@ -35,7 +35,7 @@ class FeedbackFormClassic extends FeedbackForm<FeedbackClassic> {
         super()
         
         this.schema = {
-            ...schema,
+            ...baseSchema,
             message: 'required'
         }
     }
@@ -47,7 +47,7 @@ class FeedbackFormBug extends FeedbackForm<FeedbackBug> {
     constructor() {
         super()
         this.schema = {
-            ...schema,
+            ...baseSchema,
             description: 'required',
             reproduce: 'required',
             expected: 'required'

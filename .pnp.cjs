@@ -58,7 +58,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:2.3.2"],
             ["tailwindcss", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:2.2.7"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"],
-            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10"],
+            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.5.2"],
             ["vite", "npm:2.5.0"],
             ["vue", "npm:3.2.6"],
             ["vue-i18n", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:9.1.7"],
@@ -786,6 +786,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@vue-devtools-api-npm-6.0.0-beta.15-5b4f541918-7769e72bd4.zip/node_modules/@vue/devtools-api/",
           "packageDependencies": [
             ["@vue/devtools-api", "npm:6.0.0-beta.15"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:6.0.0-beta.19", {
+          "packageLocation": "./.yarn/cache/@vue-devtools-api-npm-6.0.0-beta.19-c8d7abb885-2eecb70965.zip/node_modules/@vue/devtools-api/",
+          "packageDependencies": [
+            ["@vue/devtools-api", "npm:6.0.0-beta.19"]
           ],
           "linkType": "HARD",
         }]
@@ -3744,7 +3751,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:2.3.2"],
             ["tailwindcss", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:2.2.7"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"],
-            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10"],
+            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.5.2"],
             ["vite", "npm:2.5.0"],
             ["vue", "npm:3.2.6"],
             ["vue-i18n", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:9.1.7"],
@@ -7908,18 +7915,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["vee-validate", [
-        ["npm:4.4.10", {
-          "packageLocation": "./.yarn/cache/vee-validate-npm-4.4.10-5698fb8535-b8ba7e4de6.zip/node_modules/vee-validate/",
+        ["npm:4.5.2", {
+          "packageLocation": "./.yarn/cache/vee-validate-npm-4.5.2-21ed560e54-ec4cbae5f5.zip/node_modules/vee-validate/",
           "packageDependencies": [
-            ["vee-validate", "npm:4.4.10"]
+            ["vee-validate", "npm:4.5.2"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10", {
-          "packageLocation": "./.yarn/__virtual__/vee-validate-virtual-4d2a991799/0/cache/vee-validate-npm-4.4.10-5698fb8535-b8ba7e4de6.zip/node_modules/vee-validate/",
+        ["virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.5.2", {
+          "packageLocation": "./.yarn/__virtual__/vee-validate-virtual-37473f4fb5/0/cache/vee-validate-npm-4.5.2-21ed560e54-ec4cbae5f5.zip/node_modules/vee-validate/",
           "packageDependencies": [
-            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.4.10"],
+            ["vee-validate", "virtual:2266b1bb7c6d3df06e64ff1129e9427fbfe57953254e465682707876ece517c5eaf4dd6924d1189b4ccb3e28a703fbe853a02b9cc5df0c3e19db1d1f8bef4802#npm:4.5.2"],
             ["@types/vue", null],
+            ["@vue/devtools-api", "npm:6.0.0-beta.19"],
             ["vue", "npm:3.2.6"]
           ],
           "packagePeers": [

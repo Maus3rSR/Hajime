@@ -25,9 +25,7 @@ defineExpose({ show })
 
 <template>
     <Modal hide-header-close class="modal-form" v-model="showModal">
-        <form @submit.prevent="submit">
-            <slot></slot>
-        </form>
+        <slot></slot>
 
         <template #title>
             <slot name="title">{{ t('modal.form.title') }}</slot>

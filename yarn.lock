@@ -629,6 +629,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/devtools-api@npm:^6.0.0-beta.15":
+  version: 6.0.0-beta.19
+  resolution: "@vue/devtools-api@npm:6.0.0-beta.19"
+  checksum: 2eecb7096540ed2777d16e9be21f81429cc8eeed8fcef14dc0481db3f213dad8e3534e099cf268bc91ffbc5a721b3e5252a3ae38a5cc9f67ab59ee24204e974c
+  languageName: node
+  linkType: hard
+
 "@vue/reactivity@npm:3.2.6":
   version: 3.2.6
   resolution: "@vue/reactivity@npm:3.2.6"
@@ -3065,7 +3072,7 @@ fsevents@~2.3.2:
     prettier: ^2.3.2
     tailwindcss: latest
     typescript: ^4.3.2
-    vee-validate: next
+    vee-validate: 4.5
     vite: ^2.4.4
     vue: 3.2.6
     vue-i18n: next
@@ -6721,12 +6728,14 @@ typescript@^4.3.2:
   languageName: node
   linkType: hard
 
-"vee-validate@npm:next":
-  version: 4.4.10
-  resolution: "vee-validate@npm:4.4.10"
+"vee-validate@npm:4.5":
+  version: 4.5.2
+  resolution: "vee-validate@npm:4.5.2"
+  dependencies:
+    "@vue/devtools-api": ^6.0.0-beta.15
   peerDependencies:
     vue: ^3.0.0
-  checksum: b8ba7e4de698bb4219b3c917f535b4927b4930dd559f550ba93b28eb73b5b10def242f0a87ee0fe07b5b9fe50063855faf1b17c886a9f58f8d1415a52a8a7c9b
+  checksum: ec4cbae5f5fec14a61e8f5042d0e67e73b8f9c26b4ad3d056be224b86a9c01132fc0769c88dc9240aa5b1e93680a06d0e3308d02c8a247b0c323a719ccf5e19b
   languageName: node
   linkType: hard
 

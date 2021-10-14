@@ -1,5 +1,5 @@
-import { ref, reactive, computed, watchEffect } from 'vue'
-import { useForm, useField } from 'vee-validate'
+import { ref, shallowReactive, computed, watch } from 'vue'
+import type { FormActions } from 'vee-validate'
 import type { Feedback } from './types'
 import { FeedbackType, FeedbackFormClassic, FeedbackFormBug } from './types'
 
@@ -15,41 +15,27 @@ const getForm = (type: FeedbackType) => {
 export type { Feedback, FeedbackType }
 export function useFeedback() {
 
-    let data = reactive({ form: {} })
-    // TODO : create utility function to get fields updated
-    let fields: Record<string, any> = {}
+    let data = shallowReactive({ form: {} })
 
     const // Refs
         currentFeedbackType = ref<FeedbackType>(FeedbackType.BUG),
         // Computed
         schema = computed(() => data.form.schema),
         // Composables
-        { errors, handleSubmit, isSubmitting, resetForm } = useForm({ validationSchema: schema }),
-        // Methods
-        updateFields = () => {
-            fields = {}
-            Object.keys(data.form.schema).forEach(fieldName => {
-                const { value } = useField(fieldName)
-                fields[fieldName] = value
-            })
-            console.log(fields)
-        },
-        onSubmit = handleSubmit((feedback: Feedback) => {
+        onSubmit = (feedback: Feedback, formActions: FormActions) => {
+            const { resetForm } = formActions
             data.form.feedback = feedback
-        })
+            resetForm()
+        }
 
-    watchEffect(() => {
-        data.form = getForm(currentFeedbackType.value)
-        updateFields()
-    })
+    watch(currentFeedbackType, (type: FeedbackType) => {
+        data.form = getForm(type)
+    }, { immediate: true })
 
     return {
         FeedbackType,
         currentFeedbackType,
+        schema,
         onSubmit,
-        isSubmitting,
-        resetForm,
-        fields,
-        errors,
     }
 }
