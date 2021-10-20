@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-import * as LayoutComponents from '/components/partials/layout'
+import * as LayoutComponents from '@/components/partials/layout'
 
 export default defineComponent({
     name: 'Software',

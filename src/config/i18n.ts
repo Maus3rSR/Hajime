@@ -4,7 +4,7 @@ import {
     APP_LOCALE_DEFAULT,
     APP_LOCALE_FALLBACK,
     APP_LOCALE_LIST,
-} from '/config/env'
+} from '@/config/env'
 
 /**
  * @todo find a way to load them when a locale is needed or at least lazy load all the files

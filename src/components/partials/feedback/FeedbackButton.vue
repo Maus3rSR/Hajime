@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { ChildComponent } from 'vue'
+import type { Component } from 'vue'
 import { ref, shallowRef } from 'vue'
-import type { FeedbackType as FeedbackTypeDefinition } from '/composables/feedback'
-import { FeedbackType, submit, reset } from '/composables/feedback'
+import type { FeedbackType as FeedbackTypeDefinition } from '@/composables/feedback'
+import { FeedbackType, submit, reset } from '@/composables/feedback'
 import * as formComponents from './form'
 
 type FeedbackFormArray = Array<FeedbackFormComponent>
 interface FeedbackFormComponent {
     name: string
     type: FeedbackTypeDefinition
-    component: ChildComponent
+    component: Component
 }
 
 const // Initialization
@@ -29,7 +29,7 @@ const // Initialization
         },
     ],
     // Refs
-    modal = ref<ChildComponent>(),
+    modal = ref<Component>(),
     feedbackForm = shallowRef<FeedbackFormComponent>(feedbackForms[0]),
     // Methods
     tabChanged = (selectedTab: Record<string, any>) => {

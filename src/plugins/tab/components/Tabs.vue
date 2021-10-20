@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { ChildComponent } from 'vue'
+import type { Component } from 'vue'
 import { ref, reactive, computed } from 'vue'
 import { Tabs as VTabs } from 'vue3-tabs-component'
 
 const // Initialization
     emit = defineEmits(['changed']),
     // Refs
-    tabs = ref<ChildComponent>(),
+    tabs = ref<Component>(),
     selectedIndex = ref<number>(),
     options = reactive({ useUrlFragment: false }),
     // Computed

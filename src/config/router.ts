@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Software from '/components/layouts/Software.vue'
+import Software from '@/components/layouts/Software.vue'
 
 const routes: Array<Object> = [
         {

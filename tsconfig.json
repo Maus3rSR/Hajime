@@ -1,14 +1,20 @@
 {
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
     "compilerOptions": {
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "node",
-        "strict": true,
         "jsx": "preserve",
+        "strict": true,
+        "allowJs": true,
+        "checkJs": true,
         "sourceMap": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "lib": ["esnext", "dom"]
-    },
-    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+        "lib": ["esnext", "dom"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
+    }
 }

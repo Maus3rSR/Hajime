@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n, Locale } from 'vue-i18n'
 import { setLocale } from '@vee-validate/i18n';
-import { SUPPORTED_LOCALES, getIso31661Alpha2Code } from '/config/i18n'
+import { SUPPORTED_LOCALES, getIso31661Alpha2Code } from '@/config/i18n'
 
 const // composables
     { locale } = useI18n({ useScope: 'global' }),

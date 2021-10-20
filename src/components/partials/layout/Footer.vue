@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import FeedbackButton from '/components/partials/feedback/FeedbackButton.vue'
-import * as __ENV__ from '/config/env'
+import FeedbackButton from '@/components/partials/feedback/FeedbackButton.vue'
+import * as __ENV__ from '@/config/env'
 
 const // Initialization
     currentYear = new Date().getFullYear(),

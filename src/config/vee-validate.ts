@@ -2,7 +2,7 @@ import type { Locale } from 'vue-i18n'
 import { defineRule, configure } from 'vee-validate'
 import { localize, setLocale } from '@vee-validate/i18n';
 import rules from '@vee-validate/rules'
-import { APP_LOCALE_DEFAULT, APP_LOCALE_LIST } from '/config/env'
+import { APP_LOCALE_DEFAULT, APP_LOCALE_LIST } from '@/config/env'
 
 const files = import.meta.glob('/lang/form-validation/*.json'),
     messages: Record<string, object> = {}

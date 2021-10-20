@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FeedbackType, useFeedback } from '/composables/feedback'
+import { FeedbackType, useFeedback } from '@/composables/feedback'
 const { fields, errors, submit } = useFeedback(FeedbackType.BUG)
 </script>
 

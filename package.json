@@ -49,6 +49,7 @@
         "tailwindcss": "latest",
         "typescript": "^4.3.2",
         "vite": "^2.4.4",
+        "vite-tsconfig-paths": "^3.3.17",
         "vue-tsc": "^0.2.2"
     }
 }
