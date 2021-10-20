@@ -1,54 +1,47 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-import { Form as VeeFormClassic, Field, ErrorMessage } from 'vee-validate'
-
-const // Inject
-    schema = inject('schema'),
-    onSubmit = inject('onSubmit')
+import { FeedbackType, useFeedback } from '/composables/feedback'
+const { fields, errors, submit } = useFeedback(FeedbackType.CLASSIC)
 </script>
 
 <template>
-    <VeeFormClassic
-        v-slot="{ handleSubmit }"
-        :validation-schema="schema"
-        as="div"
-    >
-        <form @submit="handleSubmit($event, onSubmit)">
-            <div class="grid grid-cols-2 gap-4">
-                <div class="form-control col-span-2">
-                    <label class="label">
-                        <span class="label-text">
-                            Message
-                            <span class="text-error">*</span>
-                        </span>
-                    </label>
+    <form @submit="submit">
+        <div class="form-control col-span-2">
+            <label class="label">
+                <span class="label-text">
+                    Message
+                    <span class="text-error">*</span>
+                </span>
+            </label>
 
-                    <Field
-                        class="textarea textarea-bordered textarea-sm"
-                        name="message"
-                        as="textarea"
-                    ></Field>
-                    <ErrorMessage
-                        class="alert alert-error mt-2"
-                        name="message"
-                    />
-                </div>
+            <textarea
+                type="text"
+                class="textarea textarea-bordered textarea-sm"
+                name="description"
+                v-model="fields.message.value"
+            ></textarea>
 
-                <div class="form-control col-span-2">
-                    <label class="label">
-                        <span class="label-text">
-                            Email <i>(if you want to be notified)</i>
-                        </span>
-                    </label>
+            <span v-if="errors.message" class="alert alert-error mt-2">
+                {{ errors.message }}
+            </span>
+        </div>
+    
+        <div class="form-control col-span-2">
+            <label class="label">
+                <span class="label-text">
+                    Email <i>(if you want to be notified)</i>
+                </span>
+            </label>
 
-                    <Field
-                        class="input input-bordered input-sm"
-                        name="email"
-                        type="email"
-                    ></Field>
-                    <ErrorMessage class="alert alert-error mt-2" name="email" />
-                </div>
-            </div>
-        </form>
-    </VeeFormClassic>
+            <input
+                type="email"
+                class="input input-bordered input-sm"
+                name="email"
+                v-model="fields.email.value"
+            >
+
+            <span v-if="errors.email" class="alert alert-error mt-2">
+                {{ errors.email }}
+            </span>
+        </div>
+    </form>
 </template>

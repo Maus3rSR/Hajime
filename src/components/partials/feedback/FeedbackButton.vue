@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import type { ChildComponent } from 'vue'
-import type { FeedbackType as FeedbackTypeEnum } from '/composables/feedback'
-import { ref, computed, provide } from 'vue'
-import { useFeedback } from '/composables/feedback'
+import { ref, shallowRef } from 'vue'
+import type { FeedbackType as FeedbackTypeDefinition } from '/composables/feedback'
+import { FeedbackType, submit, reset } from '/composables/feedback'
 import * as formComponents from './form'
 
 type FeedbackFormArray = Array<FeedbackFormComponent>
 interface FeedbackFormComponent {
     name: string
-    type: FeedbackTypeEnum
+    type: FeedbackTypeDefinition
     component: ChildComponent
 }
 
 const // Initialization
-    { FeedbackType, currentFeedbackType, onSubmit, schema } = useFeedback(),
     /**
      * @TODO handle default tab
      */
@@ -31,14 +30,8 @@ const // Initialization
     ],
     // Refs
     modal = ref<ChildComponent>(),
-    // Computed
-    feedbackForm = computed(() =>
-        feedbackForms.find(form => form.type === currentFeedbackType.value)
-    ),
+    feedbackForm = shallowRef<FeedbackFormComponent>(feedbackForms[0]),
     // Methods
-    changeForm = (form: FeedbackFormComponent) => {
-        currentFeedbackType.value = form.type
-    },
     tabChanged = (selectedTab: Record<string, any>) => {
         const { hash } = selectedTab.tab,
             form = feedbackForms.find(
@@ -47,11 +40,10 @@ const // Initialization
 
         if (!form) return
 
-        changeForm(form)
-    }
-
-provide('schema', schema)
-provide('onSubmit', onSubmit)
+        feedbackForm.value = form
+    },
+    submitForm = () => submit(), // Do not use directly onto event, it won't work
+    cancelForm = () => reset() // Do not use directly onto event, it won't work
 </script>
 
 
@@ -71,8 +63,8 @@ provide('onSubmit', onSubmit)
     <ModalForm
         class="modal-xxl"
         ref="modal"
-        @submit="() => {}"
-        @cancel="() => {}"
+        @submit="submitForm"
+        @cancel="cancelForm"
     >
         <div class="flex items-center flex-col">
             <Tabs @changed="tabChanged">

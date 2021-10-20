@@ -1,7 +1,12 @@
-import { ref, shallowReactive, computed, watch } from 'vue'
-import type { FormActions } from 'vee-validate'
-import type { Feedback } from './types'
+import { ref, reactive, computed, watch } from 'vue'
+import { useForm, useField } from 'vee-validate'
+import type { Feedback, Schema } from './types'
 import { FeedbackType, FeedbackFormClassic, FeedbackFormBug } from './types'
+
+type Fields = Record<string, any>
+
+let submit = () => {},
+    reset = () => {}
 
 const getForm = (type: FeedbackType) => {
     switch (type) {
@@ -12,30 +17,35 @@ const getForm = (type: FeedbackType) => {
     }
 }
 
-export type { Feedback, FeedbackType }
-export function useFeedback() {
+function useFeedback(type: FeedbackType) {
 
-    let data = shallowReactive({ form: {} })
-
-    const // Refs
-        currentFeedbackType = ref<FeedbackType>(FeedbackType.BUG),
+    const // Initialization
+        form = getForm(type),
+        fields: Fields = {},
         // Computed
-        schema = computed(() => data.form.schema),
+        schema = computed(() => form.schema),
         // Composables
-        onSubmit = (feedback: Feedback, formActions: FormActions) => {
-            const { resetForm } = formActions
-            data.form.feedback = feedback
-            resetForm()
-        }
+        { handleSubmit, resetForm, errors } = useForm({ validationSchema: schema })
 
-    watch(currentFeedbackType, (type: FeedbackType) => {
-        data.form = getForm(type)
-    }, { immediate: true })
+    submit = handleSubmit((feedback: Feedback) => {
+        form.feedback = feedback
+    })
+
+    reset = resetForm
+
+    Object.keys(schema.value).forEach(fieldName => {
+        const { value } = useField(fieldName)
+        fields[fieldName] = value
+    })
 
     return {
-        FeedbackType,
-        currentFeedbackType,
         schema,
-        onSubmit,
+        fields,
+        errors,
+        submit,
+        reset
     }
 }
+
+export type { Schema, Fields, Feedback, FeedbackType as FeedbackTypeDefinition }
+export { FeedbackType, useFeedback, submit, reset }

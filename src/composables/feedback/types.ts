@@ -22,8 +22,12 @@ interface FeedbackBug extends FeedbackBase {
 }
 
 abstract class FeedbackForm<T extends Feedback> {
-    schema?: Schema
+    schema: Schema
     feedback?: T
+
+    constructor() {
+        this.schema = baseSchema
+    }
 
     abstract getMessage(): string
 }
@@ -35,7 +39,7 @@ class FeedbackFormClassic extends FeedbackForm<FeedbackClassic> {
         super()
         
         this.schema = {
-            ...baseSchema,
+            ...this.schema,
             message: 'required'
         }
     }
@@ -46,8 +50,9 @@ class FeedbackFormClassic extends FeedbackForm<FeedbackClassic> {
 class FeedbackFormBug extends FeedbackForm<FeedbackBug> {
     constructor() {
         super()
+
         this.schema = {
-            ...baseSchema,
+            ...this.schema,
             description: 'required',
             reproduce: 'required',
             expected: 'required'
