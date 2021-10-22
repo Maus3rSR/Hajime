@@ -1,20 +1,32 @@
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import type { Feedback, Schema } from './types'
 import { FeedbackType, FeedbackFormClassic, FeedbackFormBug } from './types'
 
 type Fields = Record<string, any>
 
-let submit = () => {},
-    reset = () => {}
+let globalSubmit = () => {},
+    globalReset = () => {}
 
-const getForm = (type: FeedbackType) => {
-    switch (type) {
-        case FeedbackType.BUG:
-            return new FeedbackFormBug()
-        default:
-            return new FeedbackFormClassic()
+const // Refs
+    submitting = ref<boolean>(false),
+    validated = ref<boolean>(false),
+    // Methods
+    getForm = (type: FeedbackType) => {
+        switch (type) {
+            case FeedbackType.BUG:
+                return new FeedbackFormBug()
+            default:
+                return new FeedbackFormClassic()
+        }
     }
+
+function useGlobalFeedback() {
+
+    const submit = () => globalSubmit()
+    const reset = () => globalReset()
+
+    return { submitting, validated, submit, reset }
 }
 
 function useFeedback(type: FeedbackType) {
@@ -25,27 +37,35 @@ function useFeedback(type: FeedbackType) {
         // Computed
         schema = computed(() => form.schema),
         // Composables
-        { handleSubmit, resetForm, errors } = useForm({ validationSchema: schema })
+        { isSubmitting, errors, meta, handleSubmit, resetForm } = useForm({ validationSchema: schema })
 
-    submit = handleSubmit((feedback: Feedback) => {
-        form.feedback = feedback
+    globalReset = resetForm
+    globalSubmit = handleSubmit(values => {
+        form.feedback = values as Feedback
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true)
+            }, 1000)
+        })
     })
-
-    reset = resetForm
 
     Object.keys(schema.value).forEach(fieldName => {
         const { value } = useField(fieldName)
         fields[fieldName] = value
     })
 
+    watch(() => meta.value.valid, value => validated.value = value)
+    watch(isSubmitting, value => submitting.value = value)
+
     return {
         schema,
         fields,
         errors,
-        submit,
-        reset
+        submitting: isSubmitting,
+        submit: globalSubmit,
+        reset: globalReset
     }
 }
 
 export type { Schema, Fields, Feedback, FeedbackType as FeedbackTypeDefinition }
-export { FeedbackType, useFeedback, submit, reset }
+export { FeedbackType, useFeedback, useGlobalFeedback }

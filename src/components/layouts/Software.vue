@@ -35,8 +35,6 @@ export default defineComponent({
 </template>
 
 <style>
-@import 'animate.css/animate.css';
-
 #software {
     display: grid;
     grid-auto-columns: 1fr;

@@ -2,7 +2,7 @@
 import type { Component } from 'vue'
 import { ref, shallowRef } from 'vue'
 import type { FeedbackType as FeedbackTypeDefinition } from '@/composables/feedback'
-import { FeedbackType, submit, reset } from '@/composables/feedback'
+import { FeedbackType, useGlobalFeedback } from '@/composables/feedback'
 import * as formComponents from './form'
 
 type FeedbackFormArray = Array<FeedbackFormComponent>
@@ -31,6 +31,8 @@ const // Initialization
     // Refs
     modal = ref<Component>(),
     feedbackForm = shallowRef<FeedbackFormComponent>(feedbackForms[0]),
+    // Composables
+    { submitting, validated, submit, reset } = useGlobalFeedback(),
     // Methods
     tabChanged = (selectedTab: Record<string, any>) => {
         const { hash } = selectedTab.tab,
@@ -65,6 +67,8 @@ const // Initialization
         ref="modal"
         @submit="submitForm"
         @cancel="cancelForm"
+        :submitting="submitting"
+        :disabled="!validated"
     >
         <div class="flex items-center flex-col">
             <Tabs @changed="tabChanged">

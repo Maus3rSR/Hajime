@@ -9,4 +9,4 @@ const install = (app: App) => {
 }
 
 export { LangSwitcher, LangSwitcherFlag }
-export default { install } as typeof Plugin
+export default { install } as Plugin

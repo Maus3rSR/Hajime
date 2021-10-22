@@ -11,4 +11,4 @@ const install = (app: App) => {
 }
 
 export { Modal, ModalConfirmation, ModalForm }
-export default { install } as typeof Plugin
+export default { install } as Plugin
