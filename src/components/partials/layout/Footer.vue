@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import FeedbackButton from '@/components/partials/feedback/FeedbackButton.vue'
 import * as __ENV__ from '@/config/env'
 
 const // Initialization
     currentYear = new Date().getFullYear(),
     // Env
-    APP_VERSION: string = __APP_VERSION__,
+    APP_VERSION = __APP_VERSION__,
     {
         APP_NAME,
         WEBSITE_PAGE,
