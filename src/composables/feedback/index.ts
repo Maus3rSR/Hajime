@@ -1,5 +1,6 @@
 import { ref, computed, watch } from 'vue'
 import { useForm, useField } from 'vee-validate'
+import { useNotify } from '@/plugins/notify'
 import type { Feedback, Schema } from './types'
 import { FeedbackType, FeedbackFormClassic, FeedbackFormBug } from './types'
 
@@ -37,6 +38,7 @@ function useFeedback(type: FeedbackType) {
         // Computed
         schema = computed(() => form.schema),
         // Composables
+        { success, error } = useNotify(),
         { isSubmitting, errors, meta, handleSubmit, resetForm } = useForm({ validationSchema: schema })
 
     globalReset = resetForm
@@ -45,6 +47,14 @@ function useFeedback(type: FeedbackType) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(true)
+                success({
+                    title: "Super !",
+                    description: "Le feedback a bien été envoyé, bisous",
+                })
+                error({
+                    title: "Super !",
+                    description: "Le feedback a bien été envoyé, bisous",
+                })
             }, 1000)
         })
     })

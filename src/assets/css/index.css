@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/**
+ * Toast style modifier
+ * @TODO à redéfinir dans un fichier css à import ici
+ */
+body .mosha__toast.info {
+    @apply bg-info;
+}
+
+body .mosha__toast.success {
+    @apply bg-success;
+}
+
+body .mosha__toast.warning {
+    @apply bg-warning;
+}
+
+body .mosha__toast.danger {
+    @apply bg-error;
+}
+/**
+ * /Toast style modifier
+ */
