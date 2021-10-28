@@ -2,7 +2,12 @@ type Schema = Record<string, string>
 type Feedback = FeedbackClassic | FeedbackBug
 enum FeedbackType { CLASSIC, BUG }
 
-const baseSchema: Schema = { email: 'email' }
+/**
+ * @todo Migrate to lib
+ */
+interface Jsonable {
+    toJson(): string
+}
 
 interface FeedbackBase {
     email?: string,
@@ -21,15 +26,31 @@ interface FeedbackBug extends FeedbackBase {
     expected: string
 }
 
-abstract class FeedbackForm<T extends Feedback> {
+const baseSchema: Schema = { email: 'email' }
+
+abstract class FeedbackForm<T extends Feedback> implements Jsonable {
     schema: Schema
     feedback?: T
+
+    get values(): Record<string, string | undefined> {
+        return {
+            email: this.feedback?.email,
+            version: this.feedback?.version,
+            os: this.feedback?.os,
+            screen: this.feedback?.screen,
+            message: this.getMessage()
+        }
+    }
 
     constructor() {
         this.schema = baseSchema
     }
 
     abstract getMessage(): string
+
+    toJson() {
+        return JSON.stringify(this.values)
+    }
 }
 
 class FeedbackFormClassic extends FeedbackForm<FeedbackClassic> {
@@ -44,7 +65,7 @@ class FeedbackFormClassic extends FeedbackForm<FeedbackClassic> {
         }
     }
 
-    getMessage(): string { return '' }
+    getMessage(): string { return this.feedback?.message || '' }
 }
 
 class FeedbackFormBug extends FeedbackForm<FeedbackBug> {
@@ -59,7 +80,7 @@ class FeedbackFormBug extends FeedbackForm<FeedbackBug> {
         }
     }
 
-    getMessage(): string { return '' }
+    getMessage(): string { return 'to implement' }
 }
 
 export type { Schema, Feedback, FeedbackForm }

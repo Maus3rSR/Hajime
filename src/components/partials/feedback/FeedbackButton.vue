@@ -6,6 +6,7 @@ import { FeedbackType, useGlobalFeedback } from '@/composables/feedback'
 import * as formComponents from './form'
 
 type FeedbackFormArray = Array<FeedbackFormComponent>
+
 interface FeedbackFormComponent {
     name: string
     type: FeedbackTypeDefinition

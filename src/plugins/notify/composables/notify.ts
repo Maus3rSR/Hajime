@@ -26,7 +26,7 @@ const defaultOptions: ToastOptions = {
     showIcon: true
 }
 
-export function createNotify() {
+export function createNotify(): Notifier {
     const // Api
         info = (content: ContentObject) => {
             createToast(content, {
@@ -55,8 +55,7 @@ export function createNotify() {
         },
         danger = error // alias
 
-    const notifier: Notifier = { info, success, warning, error, danger }
-    return notifier
+    return { info, success, warning, error, danger }
 }
 
 export function useNotify(): Notifier {

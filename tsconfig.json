@@ -14,7 +14,8 @@
         "lib": ["esnext", "dom"],
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": ["src/*"],
+            "@api/*": ["src/lib/api/*"]
         }
     }
 }
