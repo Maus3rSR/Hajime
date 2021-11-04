@@ -1,8 +1,8 @@
 import { ref, computed, watch } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import { useNotify } from '@/plugins/notify'
-import { useApi } from '@api/index'
 import { N8N_URL, N8N_FEEDBACK_PATH } from '@/config/env'
+import { useApi } from '@api/index'
 import type { Feedback, Schema } from './types'
 import { FeedbackType, FeedbackFormClassic, FeedbackFormBug } from './types'
 
@@ -54,6 +54,8 @@ function useFeedback(type: FeedbackType) {
 
         try {
             post(N8N_FEEDBACK_PATH, form.toJson())
+                .then(() => console.log('OK !'))
+                .catch(() => "NOT OK !")
 
             console.log(result.value)
             console.log(error.value)
