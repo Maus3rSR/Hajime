@@ -1,10 +1,4 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-    name: 'Main',
-})
-</script>
+<script lang="ts" setup></script>
 
 <template>
     <RouterView></RouterView>
