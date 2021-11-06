@@ -1,4 +1,4 @@
-import type { VueI18n, Locale } from 'vue-i18n'
+import type { I18nOptions, Locale } from 'vue-i18n'
 import { createI18n } from 'vue-i18n'
 import {
     APP_LOCALE_DEFAULT,
@@ -11,13 +11,13 @@ import {
  * @see https://vue-i18n.intlify.dev/guide/advanced/lazy.html
  */
 const files = import.meta.glob('/lang/**/*.json'),
-    messages: Record<string, object> = {}
+    messages: I18nOptions['messages'] = {}
 
 await (async () => {
     for (const path in files) {
         const module = await files[path](),
             msgs = module.default,
-            locale: Locale = Object.keys(APP_LOCALE_LIST).find(
+            locale: Locale | undefined = Object.keys(APP_LOCALE_LIST).find(
                 (locale: Locale) => path.includes(locale)
             )
 
@@ -27,12 +27,12 @@ await (async () => {
     }
 })()
 
-const i18n: VueI18n = createI18n({
+const i18n = createI18n({
     legacy: false,
     locale: APP_LOCALE_DEFAULT,
     fallbackLocale: APP_LOCALE_FALLBACK,
     silentFallbackWarn: true,
-    messages,
+    messages
 })
 
 const getIso31661Alpha2Code = (locale: Locale): string => {
