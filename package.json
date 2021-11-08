@@ -25,6 +25,7 @@
         "@fortawesome/vue-fontawesome": "prerelease",
         "@vee-validate/i18n": "^4.4.7",
         "@vee-validate/rules": "^4.4.7",
+        "@vueuse/core": "^6.8.0",
         "animate.css": "^4.1.1",
         "daisyui": "1.14.0",
         "flag-icon-css": "^3.5.0",
@@ -32,7 +33,6 @@
         "vee-validate": "4.5",
         "vite-plugin-html": "^2.1.1",
         "vue": "3.2.6",
-        "vue-composable": "^1.0.0-beta.24",
         "vue-i18n": "next",
         "vue-router": "4",
         "vue3-tabs-component": "^1.0.3"

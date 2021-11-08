@@ -13,6 +13,7 @@ specifiers:
   '@vee-validate/rules': ^4.4.7
   '@vitejs/plugin-vue': ^1.3.0
   '@vue/compiler-sfc': ^3.0.5
+  '@vueuse/core': ^6.8.0
   animate.css: ^4.1.1
   autoprefixer: latest
   daisyui: 1.14.0
@@ -30,7 +31,6 @@ specifiers:
   vite-plugin-html: ^2.1.1
   vite-tsconfig-paths: ^3.3.17
   vue: 3.2.6
-  vue-composable: ^1.0.0-beta.24
   vue-i18n: next
   vue-router: '4'
   vue-tsc: ^0.2.2
@@ -44,6 +44,7 @@ dependencies:
   '@fortawesome/vue-fontawesome': 3.0.0-5_66a1e84ff33f29ee5b45418d0633c4d8
   '@vee-validate/i18n': 4.5.3
   '@vee-validate/rules': 4.5.3
+  '@vueuse/core': 6.8.0_vue@3.2.6
   animate.css: 4.1.1
   daisyui: 1.14.0
   flag-icon-css: 3.5.0
@@ -51,7 +52,6 @@ dependencies:
   vee-validate: 4.5.3_vue@3.2.6
   vite-plugin-html: 2.1.1_vite@2.6.10
   vue: 3.2.6
-  vue-composable: 1.0.0-beta.24
   vue-i18n: 9.2.0-beta.17_vue@3.2.6
   vue-router: 4.0.12_vue@3.2.6
   vue3-tabs-component: 1.0.3_vue@3.2.6
@@ -563,6 +563,37 @@ packages:
 
   /@vue/shared/3.2.6:
     resolution: {integrity: sha512-uwX0Qs2e6kdF+WmxwuxJxOnKs/wEkMArtYpHSm7W+VY/23Tl8syMRyjnzEeXrNCAP0/8HZxEGkHJsjPEDNRuHw==}
+    dev: false
+
+  /@vueuse/core/6.8.0_vue@3.2.6:
+    resolution: {integrity: sha512-C6KMBus29L/mVtA5eK26WAqj6tyPlugrKaPLi2uLtbV//BHjbxe1uo3gVXCc5SwouDEdc7zswlGPw/l0/++NRg==}
+    peerDependencies:
+      '@vue/composition-api': ^1.1.0
+      vue: ^2.6.0 || ^3.2.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      vue:
+        optional: true
+    dependencies:
+      '@vueuse/shared': 6.8.0_vue@3.2.6
+      vue: 3.2.6
+      vue-demi: 0.12.1_vue@3.2.6
+    dev: false
+
+  /@vueuse/shared/6.8.0_vue@3.2.6:
+    resolution: {integrity: sha512-+YjehQ8Qe4Qgyq8iTToVOzp4sZBAZvScv3AGJSMi6HYbe54+nyjrRfS8DN4fA0eUahyftHKZ00WKgMe7TS5N0w==}
+    peerDependencies:
+      '@vue/composition-api': ^1.1.0
+      vue: ^2.6.0 || ^3.2.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      vue:
+        optional: true
+    dependencies:
+      vue: 3.2.6
+      vue-demi: 0.12.1_vue@3.2.6
     dev: false
 
   /acorn-jsx/5.3.2_acorn@7.4.1:
@@ -5043,12 +5074,19 @@ packages:
       vscode-typescript-languageservice: 0.27.25
     dev: true
 
-  /vue-composable/1.0.0-beta.24:
-    resolution: {integrity: sha512-rVxqIk+CCBDNlu7MK59FB6hIHbjpaNszSZ3o1fReXiDKpdw2AAnSWx5vqUpJgC4yGlUzBMJ2eUQIjij5/wr8Kg==}
+  /vue-demi/0.12.1_vue@3.2.6:
+    resolution: {integrity: sha512-QL3ny+wX8c6Xm1/EZylbgzdoDolye+VpCXRhI2hug9dJTP3OUJ3lmiKN3CsVV3mOJKwFi0nsstbgob0vG7aoIw==}
+    engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
     dependencies:
-      '@vue/devtools-api': 6.0.0-beta.19
+      vue: 3.2.6
     dev: false
 
   /vue-eslint-parser/7.11.0_eslint@7.32.0:
