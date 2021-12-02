@@ -1,6 +1,19 @@
-type Schema = Record<string, string>
-type Feedback = FeedbackClassic | FeedbackBug
 enum FeedbackType { CLASSIC, BUG }
+
+type Schema = Record<string, string>
+
+type Feedback = FeedbackClassic | FeedbackBug
+
+type FeedbackResponseError = {
+    email?: string,
+    message?: string
+}
+
+type FeedbackResponse = {
+    success: boolean,
+    issue_url?: string,
+    errors?: FeedbackResponseError
+}
 
 /**
  * @todo Migrate to lib
@@ -23,7 +36,8 @@ interface FeedbackClassic extends FeedbackBase {
 interface FeedbackBug extends FeedbackBase {
     description: string,
     reproduce: string,
-    expected: string
+    expected: string,
+    screenshot: any,
 }
 
 const baseSchema: Schema = { email: 'email' }
@@ -76,12 +90,28 @@ class FeedbackFormBug extends FeedbackForm<FeedbackBug> {
             ...this.schema,
             description: 'required',
             reproduce: 'required',
-            expected: 'required'
+            expected: 'required',
+            screenshot: 'image'
         }
     }
 
-    getMessage(): string { return 'to implement' }
+    getMessage(): string {
+        return !this.feedback ? '' : `
+
+### Describe the bug
+
+${this.feedback.description}
+
+### Steps to reproduce the behavior
+
+${this.feedback.reproduce}
+
+### Expected behavior
+
+${this.feedback.expected}
+        `
+    }
 }
 
-export type { Schema, Feedback, FeedbackForm }
+export type { Schema, Feedback, FeedbackForm, FeedbackResponse }
 export { FeedbackType, FeedbackFormClassic, FeedbackFormBug }

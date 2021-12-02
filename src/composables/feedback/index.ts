@@ -1,14 +1,13 @@
 import { ref, computed, watch } from 'vue'
 import { useForm, useField } from 'vee-validate'
+import router from '@/config/router'
+import { N8N_FEEDBACK_PATH } from '@/config/env'
 import { useNotify } from '@/plugins/notify'
-import { N8N_URL, N8N_FEEDBACK_PATH } from '@/config/env'
-import { useApi } from '@api/index'
+import { useN8N } from '@api/n8n'
 import type { Feedback, Schema } from './types'
-import { FeedbackType, FeedbackFormClassic, FeedbackFormBug } from './types'
+import { FeedbackType, FeedbackResponse, FeedbackFormClassic, FeedbackFormBug } from './types'
 
 type Fields = Record<string, any>
-
-interface N8nResponse { issue_url: string }
 
 let globalSubmit = () => {},
     globalReset = () => {}
@@ -49,27 +48,55 @@ function useFeedback(type: FeedbackType) {
     globalSubmit = handleSubmit(values => {
         form.feedback = values as Feedback
         form.feedback.version = __APP_VERSION__
+        form.feedback.screen = router.currentRoute.value.name as string
+        form.feedback.os = navigator.userAgent // TODO: software adaptation / rename OS key to user agent?
 
-        const { result, error, post } = useApi<N8nResponse>(N8N_URL)
+        console.log(values)
 
-        try {
-            post(N8N_FEEDBACK_PATH, form.toJson())
-                .then(() => console.log('OK !'))
-                .catch(() => "NOT OK !")
+        return new Promise((resolve, reject) => {
+            resolve(true)
+            return
 
-            console.log(result.value)
-            console.log(error.value)
+            const { post } = useN8N(N8N_FEEDBACK_PATH),
+                { error, data,  onFetchResponse, onFetchError } = post<FeedbackResponse>(form.toJson())
+                
+            onFetchResponse(() => {
 
-            notifySuccess({
-                title: "Super !",
-                description: "Le feedback a bien été envoyé, bisous",
+                if (!!error.value || !data.value || !!data.value && !data.value.success) {
+
+                    notifyError({
+                        title: "Erreur",
+                        description: "Une erreur est survenue",
+                    })
+
+                    reject()
+                    return
+                }
+
+                notifySuccess({
+                    title: "Super !",
+                    description: `
+Le feedback a bien été envoyé, nous vous remercions ! 💖
+Vous pouvez suivre l'évolution de votre retour :
+<a class="btn btn-link btn-xs" href="${data.value.issue_url}" target="_blank">Ouvrir le ticket</a>.
+                    `,
+                }, {
+                    timeout: -1,
+                    showCloseButton: true
+                })
+
+                resolve(null)
             })
-        } catch (error) {
-            notifyError({
-                title: "Problème...",
-                description: error as string,
+                
+            onFetchError(() => {
+                notifyError({
+                    title: "Erreur",
+                    description: error.value as string,
+                })
+
+                reject()
             })
-        }
+        })
     })
 
     Object.keys(schema.value).forEach(fieldName => {

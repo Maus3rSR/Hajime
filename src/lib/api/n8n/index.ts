@@ -5,11 +5,7 @@ const api = createApi(N8N_URL)
 
 export function useN8N(workflowName: string) {
     return {
-        get: <T>() => {
-            return api.get<T>(workflowName)
-        },
-        post: <T>(data: BodyInit) => {
-            return api.post<T>(workflowName, data)
-        }
+        get: <T>() => api.get<T>(workflowName),
+        post: <T>(data: BodyInit) => api.post<T>(workflowName, data)
     }
 }

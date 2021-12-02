@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { ref, shallowRef } from 'vue'
+import type { ModalFormComponent } from '@/plugins/modal'
 import type { FeedbackType as FeedbackTypeDefinition } from '@/composables/feedback'
 import { FeedbackType, useGlobalFeedback } from '@/composables/feedback'
 import * as formComponents from './form'
@@ -30,7 +31,7 @@ const // Initialization
         },
     ],
     // Refs
-    modal = ref<Component>(),
+    modal = ref<ModalFormComponent>(),
     feedbackForm = shallowRef<FeedbackFormComponent>(feedbackForms[0]),
     // Composables
     { submitting, validated, submit, reset } = useGlobalFeedback(),
@@ -45,7 +46,12 @@ const // Initialization
 
         feedbackForm.value = form
     },
-    submitForm = () => submit(), // Do not use directly onto event, it won't work
+    submitForm = async () => {
+        try {
+            await submit()
+            modal.value?.close()
+        } catch (e) {}
+    },
     cancelForm = () => reset() // Do not use directly onto event, it won't work
 </script>
 
@@ -54,7 +60,7 @@ const // Initialization
     <button
         v-bind="$attrs"
         class="btn btn-xs btn-primary"
-        @click="modal.show()"
+        @click="modal?.show()"
     >
         <FontAwesomeIcon
             :icon="['far', 'handshake']"

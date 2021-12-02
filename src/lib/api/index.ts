@@ -1,20 +1,11 @@
-import type { Ref } from 'vue'
 import type { UseFetchOptions, UseFetchReturn } from '@vueuse/core'
 import { createFetch } from '@vueuse/core'
 
-enum METHOD {
-    GET = "GET",
-    POST = "POST",
-    PUT = "PUT",
-    DELETE = "DELETE",
-}
-type ApiResponse<T> = UseFetchReturn<T>
-
 interface Api {
-    get<T>(path: string): ApiResponse<T>,
-    post<T>(path: string, data: BodyInit): ApiResponse<T>,
-    put<T>(path: string, data: BodyInit): ApiResponse<T>,
-    delete<T>(path: string): ApiResponse<T>
+    get<T>(path: string): UseFetchReturn<T>,
+    post<T>(path: string, data: BodyInit): UseFetchReturn<T>,
+    put<T>(path: string, data: BodyInit): UseFetchReturn<T>,
+    delete<T>(path: string): UseFetchReturn<T>
 }
 
 const fetchOptions: RequestInit = {
@@ -39,16 +30,16 @@ export function createApi(baseUrl: string, options: UseFetchOptions = {}): Api {
 
     return {
         get: <T>(path: string) => {
-            return useFetch<T>(path).get()
+            return useFetch<T>(path).get().json()
         },
         post: <T>(path: string, data: BodyInit) => {
-            return useFetch<T>(path).post(data)
+            return useFetch<T>(path).post(data).json()
         },
         put: <T>(path: string, data: BodyInit) => {
-            return useFetch<T>(path).post(data)
+            return useFetch<T>(path).post(data).json()
         },
         delete: <T>(path: string) => {
-            return useFetch<T>(path).delete()
+            return useFetch<T>(path).delete().json()
         }
     }
 }

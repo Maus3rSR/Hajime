@@ -94,6 +94,7 @@ const { fields, errors, submit } = useFeedback(FeedbackType.BUG)
                     type="file"
                     name="screenshot"
                     class="input input-bordered input-sm"
+                    @change="(value) => fields.screenshot.value = value"
                 >
             </div>
         </div>

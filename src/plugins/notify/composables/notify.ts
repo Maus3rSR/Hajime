@@ -2,8 +2,6 @@ import { inject } from 'vue'
 import type { ContentObject, ToastOptions } from 'mosha-vue-toastify/dist/types'
 import { createToast } from 'mosha-vue-toastify'
 
-type NotifierFunction = (content: ContentObject) => void
-
 enum ToastType {
     DEFAULT = 'default',
     INFO = 'info',
@@ -11,6 +9,9 @@ enum ToastType {
     WARNING = 'warning',
     DANGER = 'danger'
 }
+
+type NotifierFunction = (content: ContentObject, overrideOptions?: NotifierOptions) => void
+type NotifierOptions = Pick<ToastOptions, "timeout" | "showCloseButton" | "hideProgressBar" | "swipeClose" | "onClose">
 
 interface Notifier {
     info: NotifierFunction,
@@ -28,29 +29,33 @@ const defaultOptions: ToastOptions = {
 
 export function createNotify(): Notifier {
     const // Api
-        info = (content: ContentObject) => {
+        info = (content: ContentObject, overrideOptions?: NotifierOptions) => {
             createToast(content, {
                 type: ToastType.INFO,
-                ...defaultOptions
+                ...defaultOptions,
+                ...overrideOptions
             })
         },
-        success = (content: ContentObject) => {
+        success = (content: ContentObject, overrideOptions?: NotifierOptions) => {
             createToast(content, {
                 type: ToastType.SUCCESS,
-                ...defaultOptions
+                ...defaultOptions,
+                ...overrideOptions
             })
         },
-        warning = (content: ContentObject) => {
+        warning = (content: ContentObject, overrideOptions?: NotifierOptions) => {
             createToast(content, {
                 type: ToastType.WARNING,
-                ...defaultOptions
+                ...defaultOptions,
+                ...overrideOptions
             })
         },
-        error = (content: ContentObject) => {
+        error = (content: ContentObject, overrideOptions?: NotifierOptions) => {
             createToast(content, {
                 type: ToastType.DANGER,
                 timeout: 10000,
-                ...defaultOptions
+                ...defaultOptions,
+                ...overrideOptions
             })
         },
         danger = error // alias
@@ -61,6 +66,5 @@ export function createNotify(): Notifier {
 export function useNotify(): Notifier {
     const notify: Notifier | undefined = inject('notify')
     if (!notify) throw new Error('notify was not provided')
-
     return notify
 }

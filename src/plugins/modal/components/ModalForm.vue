@@ -19,6 +19,7 @@ const // Initialization
     // Methods
     show = () => (showModal.value = true),
     close = () => {
+        console.log("CLOSE MODAL")
         showModal.value = false
     },
     submit = (e: Event) => emit('submit', e),
@@ -27,7 +28,7 @@ const // Initialization
         close()
     }
 
-defineExpose({ show })
+defineExpose({ show, close })
 </script>
 
 <template>
