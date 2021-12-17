@@ -17,11 +17,8 @@ const // Initialization
     showModal = ref<boolean>(false),
     // Computed
     // Methods
-    show = () => (showModal.value = true),
-    close = () => {
-        console.log("CLOSE MODAL")
-        showModal.value = false
-    },
+    show = () => showModal.value = true,
+    close = () => showModal.value = false,
     submit = (e: Event) => emit('submit', e),
     cancel = () => {
         emit('cancel')

@@ -51,14 +51,10 @@ function useFeedback(type: FeedbackType) {
         form.feedback.screen = router.currentRoute.value.name as string
         form.feedback.os = navigator.userAgent // TODO: software adaptation / rename OS key to user agent?
 
-        console.log(values)
-
         return new Promise((resolve, reject) => {
-            resolve(true)
-            return
 
             const { post } = useN8N(N8N_FEEDBACK_PATH),
-                { error, data,  onFetchResponse, onFetchError } = post<FeedbackResponse>(form.toJson())
+                { error, data,  onFetchResponse, onFetchError } = post<FeedbackResponse>(form.toFormData())
                 
             onFetchResponse(() => {
 
