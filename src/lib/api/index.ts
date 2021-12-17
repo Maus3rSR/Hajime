@@ -11,7 +11,6 @@ interface Api {
 const fetchOptions: RequestInit = {
     headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
     }
 }
 
@@ -33,10 +32,10 @@ export function createApi(baseUrl: string, options: UseFetchOptions = {}): Api {
             return useFetch<T>(path).get().json()
         },
         post: <T>(path: string, data: BodyInit) => {
-            return useFetch<T>(path).post(data).json()
+            return useFetch<T>(path).post(data).formData().json()
         },
         put: <T>(path: string, data: BodyInit) => {
-            return useFetch<T>(path).post(data).json()
+            return useFetch<T>(path).post(data).formData().json()
         },
         delete: <T>(path: string) => {
             return useFetch<T>(path).delete().json()

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { FeedbackType, useFeedback } from '@/composables/feedback'
 const { fields, errors, submit } = useFeedback(FeedbackType.BUG)
+
+const onFileChange = (event: Event) => {
+    if (!(event.target instanceof HTMLInputElement) || !event.target.files) return
+    fields.screenshot.value = event.target.files[0]
+}
 </script>
 
 <template>
@@ -94,8 +99,12 @@ const { fields, errors, submit } = useFeedback(FeedbackType.BUG)
                     type="file"
                     name="screenshot"
                     class="input input-bordered input-sm"
-                    @change="(value) => fields.screenshot.value = value"
+                    @change="onFileChange"
                 >
+
+                <span v-if="errors.screenshot" class="alert alert-error mt-2">
+                    {{ errors.screenshot }}
+                </span>
             </div>
         </div>
     </form>

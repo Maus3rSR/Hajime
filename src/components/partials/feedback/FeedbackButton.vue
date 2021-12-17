@@ -49,6 +49,7 @@ const // Initialization
     submitForm = async () => {
         try {
             await submit()
+            reset()
             modal.value?.close()
         } catch (e) {}
     },

@@ -37,7 +37,7 @@ interface FeedbackBug extends FeedbackBase {
     description: string,
     reproduce: string,
     expected: string,
-    screenshot: any,
+    screenshot: File,
 }
 
 const baseSchema: Schema = { email: 'email' }
@@ -46,13 +46,13 @@ abstract class FeedbackForm<T extends Feedback> implements Jsonable {
     schema: Schema
     feedback?: T
 
-    get values(): Record<string, string | undefined> {
+    get values(): Record<string, string | File | undefined> {
         return {
             email: this.feedback?.email,
             version: this.feedback?.version,
             os: this.feedback?.os,
             screen: this.feedback?.screen,
-            message: this.getMessage()
+            message: this.getMessage(),
         }
     }
 
@@ -61,6 +61,15 @@ abstract class FeedbackForm<T extends Feedback> implements Jsonable {
     }
 
     abstract getMessage(): string
+
+    toFormData(): FormData {
+        const formData = new FormData()
+
+        for (const [key, value] of Object.entries(this.values))
+            formData.append(key, value || '')
+
+        return formData
+    }
 
     toJson() {
         return JSON.stringify(this.values)
@@ -92,6 +101,13 @@ class FeedbackFormBug extends FeedbackForm<FeedbackBug> {
             reproduce: 'required',
             expected: 'required',
             screenshot: 'image'
+        }
+    }
+
+    get values(): Record<string, string | File | undefined> {
+        return {
+            ...super.values,
+            screenshot: this.feedback?.screenshot
         }
     }
 
