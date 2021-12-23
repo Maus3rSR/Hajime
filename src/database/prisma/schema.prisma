@@ -1,0 +1,252 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["extendedIndexes"]
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "sqlite"
+//   TODO: Define the path
+  url      = "file:./dev.db" 
+}
+
+//----------------------------------------------//
+//// Polymorphic models
+//----------------------------------------------//
+
+model Metas {
+    id          Int         @id @default(autoincrement())
+    metaable    String 
+    metaable_id Int 
+    key         String      //'Examples: repulse_favorite, repulse_club, repulse_country, thrid_place, loser_bracket'
+    value       String?
+    created_at  DateTime    @default(now())
+    updated_at  DateTime    @default(now())
+    deleted_at  DateTime?
+
+    @@index([metaable, metaable_id])
+}
+
+model Lockings {
+    id          Int         @id @default(autoincrement())
+    lockable    String
+    lockable_id Int
+    role        String      @default("Master") //other examples : Shiaijo
+    scope       String?     //'Example: fighter_list locking for a category'
+    created_at  DateTime    @default(now())
+    updated_at  DateTime    @default(now())
+    deleted_at  DateTime?
+
+    @@index([lockable, lockable_id])
+}
+
+//----------------------------------------------//
+//// Basics Settings
+//----------------------------------------------//
+
+model Formulas {
+    id                  Int         @id @default(autoincrement())
+    name                String      // 'It will be i18n and stored as a JSON object'
+    type                String?     //examples: Single_elimination, Double_elimination, Round_robin
+    is_qualification    Boolean     @default(false)
+    stages              Stages[]
+}
+
+model MartialArts {
+    id              Int             @id @default(autoincrement()) 
+    name            String          //Note: 'Kendo, Iaido, Jodo, Chanbara, Naginata'
+    competition     Competitions[]  
+    score           Scores[]
+}
+
+model Scores {
+    id              Int             @id @default(autoincrement())
+    martialArt      MartialArts     @relation(fields: [martialArtId], references: [id])
+    martialArtId    Int     
+    scoreFights     ScoreFights[]
+    code            String
+    name            String
+    visible         Boolean         @default(true)
+}
+
+//----------------------------------------------//
+//// Brackets management
+//----------------------------------------------//
+
+model Competitions {
+    id              Int                 @id @default(autoincrement())
+    martialArt      MartialArts         @relation(fields: [martialArtId], references: [id])
+    martialArtId    Int
+    name            String
+    place           String?
+    owner           String?
+    start_date      DateTime?
+    end_date        DateTime?
+    categories      Categories[]
+    teams           Teams[]
+    fighters        Fighters[]
+    type            String              @default("Individual") //other examples: Team
+    created_at      DateTime            @default(now())
+    updated_at      DateTime            @default(now())
+    deleted_at      DateTime?
+}
+
+model Categories {
+    id              Int             @id @default(autoincrement())
+    competition     Competitions    @relation(fields: [competition_id], references: [id])
+    competition_id  Int             
+    name            String
+    teams           Teams[]
+    stages          Stages[]
+    created_at      DateTime        @default(now())
+    updated_at      DateTime        @default(now())
+    deleted_at      DateTime?
+}
+
+model Stages {
+    id                      Int         @id @default(autoincrement())
+    formula                 Formulas    @relation(fields: [formula_id], references: [id])
+    formula_id              Int         
+    category                Categories  @relation(fields: [category_id], references: [id])
+    category_id             Int         
+    groups                  Groups[]
+    rounds                  Rounds[]
+    number                  Int
+    reversed_marking_board  Boolean     @default(false)
+    created_at              DateTime    @default(now())
+    updated_at              DateTime    @default(now())
+    deleted_at              DateTime?
+}
+
+model Groups {
+    id          Int         @id @default(autoincrement())
+    stage       Stages      @relation(fields: [stage_id], references: [id])
+    stage_id    Int         
+    number      Int 
+    rounds      Rounds[]
+    encounters  Encounters[]
+    created_at  DateTime    @default(now())
+    updated_at  DateTime    @default(now())
+    deleted_at  DateTime?   
+}
+
+model Rounds {
+    id          Int         @id @default(autoincrement())
+    stage       Stages      @relation(fields: [stage_id], references: [id])
+    stage_id    Int         
+    group       Groups      @relation(fields: [group_id], references: [id])
+    group_id    Int         
+    number      Int
+    encounters  Encounters[]
+    created_at  DateTime    @default(now())
+    updated_at  DateTime    @default(now())
+    deleted_at  DateTime?
+}
+
+model Encounters {
+    id          Int         @id @default(autoincrement())
+    round       Rounds      @relation(fields: [round_id], references: [id])
+    round_id    Int         
+    group       Groups      @relation(fields: [group_id], references: [id])
+    group_id    Int         
+    team1       Teams       @relation(name: "team1", fields: [team1_id], references: [id])
+    team1_id    Int         
+    team2       Teams       @relation(name: "team2", fields: [team2_id], references: [id])
+    team2_id    Int         
+    winner      Teams       @relation(name: "winnerEncounter", fields: [winner_id], references: [id])
+    winner_id   Int         
+    fights      Fights[]
+    created_at  DateTime    @default(now())
+    updated_at  DateTime    @default(now())
+    deleted_at  DateTime?   
+}
+
+model Fights {
+    id              Int         @id @default(autoincrement())
+    encounter       Encounters  @relation(fields: [encounter_id], references: [id])
+    encounter_id    Int         
+    fighter1        Fighters    @relation(name: "fighter1", fields: [fighter1_id], references: [id])
+    fighter1_id     Int         
+    fighter2        Fighters    @relation(name: "fighter2", fields: [fighter2_id], references: [id])
+    fighter2_id     Int         
+    winner          Teams       @relation(fields: [winner_id], references: [id])
+    winner_id       Int         
+    score           ScoreFights[]
+    sudden_death    Boolean     @default(false)
+    added_manually  Boolean     @default(false)
+    created_at      DateTime    @default(now())
+    updated_at      DateTime    @default(now())
+    deleted_at      DateTime?
+}
+
+model ScoreFights {
+    id              Int         @id @default(autoincrement())
+    fight           Fights      @relation(fields: [fightId], references: [id])
+    fightId        Int         
+    score_type      Scores      @relation(fields: [score_type_id], references: [id])
+    score_type_id   Int         
+    from_fighter    Fighters    @relation(name: "fromFighter", fields: [from_fighter_id], references: [id])
+    from_fighter_id Int         
+    on_fighter      Fighters?   @relation(name: "onFighter", fields: [on_fighter_id], references: [id])
+    on_fighter_id   Int?        // Note: 'null can happen for vacant fighter']
+    created_at      DateTime    @default(now())
+    updated_at      DateTime    @default(now())
+    deleted_at      DateTime?
+}
+
+//----------------------------------------------//
+//// Peoples management
+//----------------------------------------------//
+
+model Teams {
+    id              Int             @id @default(autoincrement())
+    name            String      
+    created_at      DateTime        @default(now())
+    updated_at      DateTime        @default(now())
+    deleted_at      DateTime?
+    competition     Competitions    @relation(fields: [competition_id], references: [id])
+    competition_id  Int         
+    category        Categories      @relation(fields: [category_id], references: [id])
+    category_id     Int         
+    country         Countries       @relation(fields: [country_id], references: [id])
+    country_id      Int         
+    encounters1     Encounters[]    @relation("team1")
+    encounters2     Encounters[]    @relation("team2")
+    winnerEncounter Encounters[]    @relation("winnerEncounter")
+    winnerFight     Fights[]   
+    fighters        Fighters[]
+}
+
+model Fighters {
+    id                  Int             @id @default(autoincrement())
+    name                String
+    licence             String?
+    club                String?
+    grade               Int?
+    birthday            DateTime?
+    is_valid            Boolean         @default(false)
+    created_at          DateTime        @default(now())
+    updated_at          DateTime        @default(now())
+    deleted_at          DateTime?
+    team                Teams           @relation(fields: [team_id], references: [id])
+    team_id             Int         
+    country             Countries       @relation(fields: [country_id], references: [id])
+    country_id          Int         
+    competition         Competitions    @relation(fields: [competition_id], references: [id])
+    competition_id      Int             //'Should we keep competition_id?'
+    fight1              Fights[]        @relation("fighter1")
+    fight2              Fights[]        @relation("fighter2")
+    scoresFromFighter   ScoreFights[]   @relation("fromFighter")
+    scoresOnFighter     ScoreFights[]   @relation("onFighter")
+}
+
+model Countries {
+    id          Int     @id @default(autoincrement())
+    name        String  
+    iso         String  //ISO 639-1 codes
+    teams       Teams[]
+    fighters    Fighters[]
+}
