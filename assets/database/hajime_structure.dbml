@@ -1,0 +1,201 @@
+Project Hajime {
+  database_type: 'SQLite, MySQL'
+  Note: 'Competition Software Management'
+}
+
+//----------------------------------------------//
+//// Polymorphic tables
+
+Table metas {
+  id INT [pk, not null, increment]
+  metaable VARCHAR(50) [not null]
+  metaable_id INT [not null]
+  key VARCHAR(50) [Note: 'Examples: repulse_favorite, repulse_club, repulse_country, thrid_place, loser_bracket .']
+  value VARCHAR(255)
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+  indexes {
+    metaable
+    metaable_id
+  }
+}
+
+Table lockings {
+  id INT [pk, not null, increment]
+  lockable VARCHAR(255) [not null]
+  lockable_id INT [not null]
+  role ROLES
+  scope VARCHAR(255) [Note: 'Example: fighter_list locking for a category']
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+  indexes {
+    lockable
+    lockable_id
+  }
+}
+
+enum ROLES {
+  Master [Note: 'Main table']
+  Shiaijo [Note: 'Shiaijo table']
+}
+
+//----------------------------------------------//
+//// Brackets management
+
+Table formulas {
+  id INT [pk, not null, increment]
+  name TEXT [Note: 'It will be i18n and stored as a JSON object']
+  type COMPETITION_FORMULAS
+  is_qualification BOOLEAN [default: false]
+}
+
+enum COMPETITION_FORMULAS {
+  SINGLE_ELIMINATION
+  DOUBLE_ELIMINATION
+  ROUND_ROBIN
+}
+
+Table competitions {
+  id INT [pk, not null, increment]
+  martial_art_id INT [not null, ref:> martial_arts.id]
+  name VARCHAR(255) [not null]
+  place VARCHAR(255)
+  owner VARCHAR(50)
+  start_date DATE
+  end_date DATE
+  type COMPETITION_TYPE [not null]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+enum COMPETITION_TYPE {
+  INDIVIDUAL
+  TEAM
+}
+
+Table martial_arts {
+  id INT [pk, not null, increment]
+  name VARCHAR(50) [not null, Note: 'Kendo, Iaido, Jodo, Chanbara, Naginata']
+}
+
+Table categories {
+  id INT [pk, not null, increment]
+  competition_id INT [not null, ref:> competitions.id]
+  name VARCHAR(255) [not null]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table stages {
+  id INT [pk, not null, increment]
+  formula_id INT [not null, ref:> formulas.id]
+  category_id INT [not null, ref:> categories.id]
+  number INT [not null]
+  reversed_marking_board BOOLEAN [default: false]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table groups {
+  id INT [pk, not null, increment]
+  stage_id INT [not null, ref:> stages.id]
+  number INT [not null]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table rounds {
+  id INT [pk, not null, increment]
+  stage_id INT [not null, ref:> stages.id]
+  group_id INT [ref:> groups.id]
+  number INT [not null]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table encounters {
+  id INT [pk, not null, increment]
+  round_id INT [not null, ref:> rounds.id]
+  group_id INT [not null, ref:> groups.id]
+  team1_id INT [not null, ref:> teams.id]
+  team2_id INT [not null, ref:> teams.id]
+  winner_id INT [ref:> teams.id]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table fights {
+  id INT [pk, not null, increment]
+  encounter_id INT [not null, ref:> encounters.id]
+  fighter1_id INT [ref:> fighters.id]
+  fighter2_id INT [ref:> fighters.id]
+  winner_id INT [ref:> teams.id]
+  sudden_death BOOLEAN [default: false]
+  added_manually BOOLEAN [default: false]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table score_fights {
+  id INT [pk, not null, increment]
+  fight_id INT [not null, ref:> fights.id]
+  score_type_id INT [not null, ref:> scores.id]
+  from_fighter_id INT [not null, ref:> fighters.id]
+  on_fighter_id INT [ref:> fighters.id, Note: 'null can happen for vacant fighter']
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table scores {
+  id INT [pk, not null, increment]
+  martial_art_id INT [not null, ref:> martial_arts.id]
+  code VARCHAR(10) [not null]
+  name VARCHAR(50) [not null]
+  visible BOOLEAN [default: true]
+}
+
+//----------------------------------------------//
+//// Peoples management
+
+Table teams {
+  id INT [pk, not null, increment]
+  competition_id INT [not null, ref:> competitions.id]
+  category_id INT [not null, ref:> categories.id]
+  country_id INT [ref:> countries.id]
+  name VARCHAR(255) [not null]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table fighters {
+  id INT [pk, not null, increment]
+  team_id INT [not null, ref:> teams.id]
+  country_id INT [not null, ref:> countries.id]
+  competition_id INT [not null, ref:> competitions.id] //'Should we keep competition_id?'
+  name VARCHAR(255) [not null]
+  licence VARCHAR(255)
+  club VARCHAR(255)
+  grade INT
+  birthday DATE
+  is_valid BOOLEAN [default: false]
+  created_at DATETIME [not null]
+  updated_at DATETIME [not null]
+  deleted_at DATETIME
+}
+
+Table countries {
+  id INT [pk, not null, increment]
+  name VARCHAR(255) [not null]
+  iso VARCHAR(2) [not null]
+}
