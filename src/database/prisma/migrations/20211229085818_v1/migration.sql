@@ -118,7 +118,7 @@ CREATE TABLE "Encounters" (
     "group_id" INTEGER NOT NULL,
     "team1_id" INTEGER NOT NULL,
     "team2_id" INTEGER NOT NULL,
-    "winner_id" INTEGER NOT NULL,
+    "winner_id" INTEGER,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" DATETIME,
@@ -126,7 +126,7 @@ CREATE TABLE "Encounters" (
     CONSTRAINT "Encounters_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "Groups" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Encounters_team1_id_fkey" FOREIGN KEY ("team1_id") REFERENCES "Teams" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Encounters_team2_id_fkey" FOREIGN KEY ("team2_id") REFERENCES "Teams" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Encounters_winner_id_fkey" FOREIGN KEY ("winner_id") REFERENCES "Teams" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Encounters_winner_id_fkey" FOREIGN KEY ("winner_id") REFERENCES "Teams" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -135,7 +135,7 @@ CREATE TABLE "Fights" (
     "encounter_id" INTEGER NOT NULL,
     "fighter1_id" INTEGER NOT NULL,
     "fighter2_id" INTEGER NOT NULL,
-    "winner_id" INTEGER NOT NULL,
+    "winner_id" INTEGER,
     "sudden_death" BOOLEAN NOT NULL DEFAULT false,
     "added_manually" BOOLEAN NOT NULL DEFAULT false,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -144,7 +144,7 @@ CREATE TABLE "Fights" (
     CONSTRAINT "Fights_encounter_id_fkey" FOREIGN KEY ("encounter_id") REFERENCES "Encounters" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Fights_fighter1_id_fkey" FOREIGN KEY ("fighter1_id") REFERENCES "Fighters" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Fights_fighter2_id_fkey" FOREIGN KEY ("fighter2_id") REFERENCES "Fighters" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Fights_winner_id_fkey" FOREIGN KEY ("winner_id") REFERENCES "Teams" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Fights_winner_id_fkey" FOREIGN KEY ("winner_id") REFERENCES "Teams" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -172,10 +172,10 @@ CREATE TABLE "Teams" (
     "deleted_at" DATETIME,
     "competition_id" INTEGER NOT NULL,
     "category_id" INTEGER NOT NULL,
-    "country_id" INTEGER NOT NULL,
+    "country_id" INTEGER,
     CONSTRAINT "Teams_competition_id_fkey" FOREIGN KEY ("competition_id") REFERENCES "Competitions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Teams_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "Categories" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Teams_country_id_fkey" FOREIGN KEY ("country_id") REFERENCES "Countries" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Teams_country_id_fkey" FOREIGN KEY ("country_id") REFERENCES "Countries" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -190,11 +190,11 @@ CREATE TABLE "Fighters" (
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" DATETIME,
-    "team_id" INTEGER NOT NULL,
-    "country_id" INTEGER NOT NULL,
+    "team_id" INTEGER,
+    "country_id" INTEGER,
     "competition_id" INTEGER NOT NULL,
-    CONSTRAINT "Fighters_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "Teams" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "Fighters_country_id_fkey" FOREIGN KEY ("country_id") REFERENCES "Countries" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Fighters_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "Teams" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "Fighters_country_id_fkey" FOREIGN KEY ("country_id") REFERENCES "Countries" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "Fighters_competition_id_fkey" FOREIGN KEY ("competition_id") REFERENCES "Competitions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 

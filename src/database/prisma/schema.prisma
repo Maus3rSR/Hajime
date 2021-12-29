@@ -156,8 +156,8 @@ model Encounters {
     team1_id    Int         
     team2       Teams       @relation(name: "team2", fields: [team2_id], references: [id])
     team2_id    Int         
-    winner      Teams       @relation(name: "winnerEncounter", fields: [winner_id], references: [id])
-    winner_id   Int         
+    winner      Teams?      @relation(name: "winnerEncounter", fields: [winner_id], references: [id])
+    winner_id   Int?         
     fights      Fights[]
     created_at  DateTime    @default(now())
     updated_at  DateTime    @default(now())
@@ -172,8 +172,8 @@ model Fights {
     fighter1_id     Int         
     fighter2        Fighters    @relation(name: "fighter2", fields: [fighter2_id], references: [id])
     fighter2_id     Int         
-    winner          Teams       @relation(fields: [winner_id], references: [id])
-    winner_id       Int         
+    winner          Teams?      @relation(fields: [winner_id], references: [id])
+    winner_id       Int?         
     score           ScoreFights[]
     sudden_death    Boolean     @default(false)
     added_manually  Boolean     @default(false)
@@ -185,13 +185,13 @@ model Fights {
 model ScoreFights {
     id              Int         @id @default(autoincrement())
     fight           Fights      @relation(fields: [fightId], references: [id])
-    fightId        Int         
+    fightId         Int         
     score_type      Scores      @relation(fields: [score_type_id], references: [id])
     score_type_id   Int         
     from_fighter    Fighters    @relation(name: "fromFighter", fields: [from_fighter_id], references: [id])
     from_fighter_id Int         
     on_fighter      Fighters?   @relation(name: "onFighter", fields: [on_fighter_id], references: [id])
-    on_fighter_id   Int?        // Note: 'null can happen for vacant fighter']
+    on_fighter_id   Int?        // Note: 'null can happen for vacant fighter'
     created_at      DateTime    @default(now())
     updated_at      DateTime    @default(now())
     deleted_at      DateTime?
@@ -211,8 +211,8 @@ model Teams {
     competition_id  Int         
     category        Categories      @relation(fields: [category_id], references: [id])
     category_id     Int         
-    country         Countries       @relation(fields: [country_id], references: [id])
-    country_id      Int         
+    country         Countries?      @relation(fields: [country_id], references: [id])
+    country_id      Int?         
     encounters1     Encounters[]    @relation("team1")
     encounters2     Encounters[]    @relation("team2")
     winnerEncounter Encounters[]    @relation("winnerEncounter")
@@ -231,10 +231,10 @@ model Fighters {
     created_at          DateTime        @default(now())
     updated_at          DateTime        @default(now())
     deleted_at          DateTime?
-    team                Teams           @relation(fields: [team_id], references: [id])
-    team_id             Int         
-    country             Countries       @relation(fields: [country_id], references: [id])
-    country_id          Int         
+    team                Teams?          @relation(fields: [team_id], references: [id])
+    team_id             Int?         
+    country             Countries?      @relation(fields: [country_id], references: [id])
+    country_id          Int?         
     competition         Competitions    @relation(fields: [competition_id], references: [id])
     competition_id      Int             //'Should we keep competition_id?'
     fight1              Fights[]        @relation("fighter1")
@@ -246,7 +246,7 @@ model Fighters {
 model Countries {
     id          Int     @id @default(autoincrement())
     name        String  
-    iso         String  //ISO 639-1 codes
+    iso         String  //ISO 639-1 Alpha-2 codes
     teams       Teams[]
     fighters    Fighters[]
 }
