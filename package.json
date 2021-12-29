@@ -1,5 +1,6 @@
 {
     "name": "hajime",
+    "type": "module",
     "version": "0.1.2-prealpha",
     "description": "Hajime - Weapon Martial Art Software Management (only for Kendo from now)",
     "author": {
@@ -16,6 +17,10 @@
         "dev": "vite",
         "build": "vue-tsc --noEmit && vite build",
         "serve": "vite preview"
+    },
+    "prisma": {
+        "schema": "src/database/prisma/schema.prisma",
+        "seed": "node --loader ts-node/esm src/database/seed.ts"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -38,9 +43,11 @@
         "vue3-tabs-component": "^1.0.3"
     },
     "devDependencies": {
+        "@prisma/client": "^3.7.0",
         "@tauri-apps/api": "^1.0.0-beta.6",
         "@tauri-apps/cli": "^1.0.0-beta.9",
         "@tauri-apps/tauri-forage": "^1.0.0-beta.2",
+        "@types/node": "^17.0.4",
         "@vitejs/plugin-vue": "^1.3.0",
         "@vue/compiler-sfc": "^3.0.5",
         "autoprefixer": "latest",
@@ -49,8 +56,10 @@
         "eslint-plugin-vue": "^7.16.0",
         "postcss": "latest",
         "prettier": "^2.3.2",
+        "prisma": "^3.7.0",
         "tailwindcss": "latest",
-        "typescript": "^4.3.2",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.4.4",
         "vite": "^2.4.4",
         "vite-tsconfig-paths": "^3.3.17",
         "vue-tsc": "^0.2.2"
