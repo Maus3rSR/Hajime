@@ -7,13 +7,14 @@
         "distDir": "/src",
         "devPath": "http://localhost:3000/",
         "beforeDevCommand": "",
-        "beforeBuildCommand": ""
+        "beforeBuildCommand": "",
+        "withGlobalTauri": true
     },
     "tauri": {
         "bundle": {
             "active": true,
             "targets": "all",
-            "identifier": "com.tauri.dev",
+            "identifier": "software.hajime.dev",
             "icon": [
                 "icons/32x32.png",
                 "icons/128x128.png",
@@ -23,10 +24,10 @@
             ],
             "resources": [],
             "externalBin": [],
-            "copyright": "",
+            "copyright": "Kevin UNFRICHT <unfricht.kevin@hotmail.fr>",
             "category": "DeveloperTool",
-            "shortDescription": "",
-            "longDescription": "",
+            "shortDescription": "Hajime - Weapon Martial Art Software Management",
+            "longDescription": "Hajime - Weapon Martial Art Software Management",
             "deb": {
                 "depends": [],
                 "useBootstrapper": false
@@ -51,15 +52,13 @@
         "allowlist": {
             "all": true
         },
-        "windows": [
-            {
-                "title": "Hajime",
-                "width": 800,
-                "height": 600,
-                "resizable": true,
-                "fullscreen": false
-            }
-        ],
+        "windows": [{
+            "title": "Hajime",
+            "width": 800,
+            "height": 600,
+            "resizable": true,
+            "fullscreen": false
+        }],
         "security": {
             "csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline'"
         }
