@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import { ref, shallowRef } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { ModalFormComponent } from '@/plugins/modal'
 import type { FeedbackType as FeedbackTypeDefinition } from '@/composables/feedback'
 import { FeedbackType, useGlobalFeedback } from '@/composables/feedback'
@@ -18,6 +19,7 @@ const // Initialization
     /**
      * @TODO handle default tab
      */
+    { t } = useI18n(),
     feedbackForms: FeedbackFormArray = [
         {
             name: 'Bug',

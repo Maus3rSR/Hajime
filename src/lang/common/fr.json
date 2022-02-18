@@ -42,6 +42,7 @@
             "occured": "Un problème est survenu lors",
             "validated": "C'est déjà validé"
         },
+        "email": "courriel",
         "fight": "Combat",
         "fighter": "Combattant",
         "fighters": "Combattants",
@@ -53,6 +54,7 @@
         "grade": "Grade",
         "later": "Plus tard",
         "license": "Licence",
+        "message": "message",
         "name": "Nom",
         "no": "Non",
         "of": {
@@ -73,6 +75,8 @@
         "presence": "Présence",
         "readonly": "Lecture seule",
         "status": "Statut",
+        "screenshot": "Capture d'écran",
+        "screenshots": "Captures d'écran",
         "substitute": "Remplaçant",
         "team": "Équipe",
         "team-new": "Nouvelle équipe",

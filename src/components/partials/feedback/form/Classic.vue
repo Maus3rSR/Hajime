@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { FeedbackType, useFeedback } from '@/composables/feedback'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n()
 const { fields, errors, submit } = useFeedback(FeedbackType.CLASSIC)
 </script>
 
@@ -9,7 +12,7 @@ const { fields, errors, submit } = useFeedback(FeedbackType.CLASSIC)
             <div class="form-control col-span-2">
                 <label class="label">
                     <span class="label-text">
-                        Message
+                        {{ t('common.message') }}
                         <span class="text-error">*</span>
                     </span>
                 </label>
@@ -29,7 +32,7 @@ const { fields, errors, submit } = useFeedback(FeedbackType.CLASSIC)
             <div class="form-control col-span-2">
                 <label class="label">
                     <span class="label-text">
-                        Email <i>(if you want to be notified)</i>
+                        {{ t('common.email') }} <i>( {{ t('feedback.wantNotified') }} )</i>
                     </span>
                 </label>
     

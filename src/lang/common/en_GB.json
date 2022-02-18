@@ -34,6 +34,7 @@
         "date": "Date",
         "date-birth": "Birthdate",
         "draw-random": "Random draw",
+        "email": "E-mail",
         "entry": "Entry",
         "error": {
             "forbidden": "You have no rights",
@@ -53,6 +54,7 @@
         "grade": "Grade",
         "later": "Later",
         "license": "License",
+        "message": "message",
         "name": "Name",
         "no": "No",
         "of": {
@@ -73,6 +75,8 @@
         "presence": "Présence",
         "readonly": "Readonly",
         "status": "Status",
+        "screenshot": "Screenshot",
+        "screenshots": "Screenshots",
         "substitute": "Substitute",
         "team": "Team",
         "team-new": "New team",

@@ -1,0 +1,8 @@
+{
+    "feedback": {
+        "describeBug": "Describe the bug",
+        "expected": "Expected behavior",
+        "stepsReproduce": "Steps to reproduce the behavior",
+        "wantNotified": "if you want to be notified"
+    }
+}

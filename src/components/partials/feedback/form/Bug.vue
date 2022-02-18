@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { FeedbackType, useFeedback } from '@/composables/feedback'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const { fields, errors, submit } = useFeedback(FeedbackType.BUG)
 
 const onFileChange = (event: Event) => {
@@ -14,7 +18,7 @@ const onFileChange = (event: Event) => {
             <div class="form-control col-span-2">
                 <label class="label">
                     <span class="label-text">
-                        Describe the bug
+                        {{ t('feedback.describeBug') }}
                         <span class="text-error">*</span>
                     </span>
                 </label>
@@ -34,7 +38,7 @@ const onFileChange = (event: Event) => {
             <div class="form-control col-span-2 sm:col-auto">
                 <label class="label">
                     <span class="label-text">
-                        Steps to reproduce the behavior
+                        {{ t('feedback.stepsReproduce') }}
                         <span class="text-error">*</span>
                     </span>
                 </label>
@@ -54,7 +58,7 @@ const onFileChange = (event: Event) => {
             <div class="form-control col-span-2 sm:col-auto">
                 <label class="label">
                     <span class="label-text">
-                        Expected behavior
+                        {{ t('feedback.expected') }}
                         <span class="text-error">*</span>
                     </span>
                 </label>
@@ -74,7 +78,7 @@ const onFileChange = (event: Event) => {
             <div class="form-control col-span-2">
                 <label class="label">
                     <span class="label-text">
-                        Email <i>(if you want to be notified)</i>
+                        {{ t('common.email') }} <i>( {{ t('feedback.wantNotified') }} )</i>
                     </span>
                 </label>
     
@@ -93,7 +97,7 @@ const onFileChange = (event: Event) => {
         
             <div class="form-control col-span-2">
                 <label class="label">
-                    <span class="label-text">Screenshot</span>
+                    <span class="label-text">{{ t('common.screenshot') }}</span>
                 </label>
                 <input
                     type="file"
